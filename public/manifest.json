@@ -1,0 +1,16 @@
+{
+  "name": "CAR PULL - Lagos Commuter & Roadside Resilience",
+  "short_name": "CAR PULL",
+  "description": "Mobile-First Commuter & Roadside Resilience PWA for Lagos",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FFFFFF",
+  "theme_color": "#7C3AED",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

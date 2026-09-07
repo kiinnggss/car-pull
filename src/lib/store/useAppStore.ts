@@ -1,0 +1,641 @@
+// CAR PULL: Application State Store (Zustand)
+// Location: /src/lib/store/useAppStore.ts
+
+import { create } from 'zustand';
+import {
+  User,
+  UserRole,
+  CorridorDriver,
+  EmergencyProvider,
+  EmergencyIncident,
+  IncidentType,
+  SafeZone,
+  CommuteMatch,
+  WaitingRider,
+  TrafficAlert,
+} from '../types';
+import {
+  mockCurrentUser,
+  mockCorridorDrivers,
+  mockEmergencyProviders,
+  mockSafeZones,
+  mockCorridorRiders,
+  mockTrafficAlerts,
+} from '../mockData';
+import {
+  calculateTripCost,
+  passesPhase1Filter,
+  calculateProviderDispatchScore,
+  MARKET_PMS_PRICE_PER_LITER,
+} from '../utils';
+
+export interface EscrowTransaction {
+  id: string;
+  type: 'HOLD_CARPOOL' | 'RELEASE_CARPOOL' | 'HOLD_EMERGENCY' | 'RELEASE_EMERGENCY' | 'FLAKE_PENALTY' | 'TOPUP' | 'WITHDRAWAL';
+  amountNgn: number;
+  reference: string;
+  description: string;
+  timestamp: string;
+  status: 'held' | 'released' | 'refunded';
+}
+
+interface AppState {
+  // Current User & Profile
+  user: User;
+  activeRole: 'rider' | 'driver';
+  setActiveRole: (role: 'rider' | 'driver') => void;
+  updateUserKyc: (status: User['kycStatus']) => void;
+  toggleFemaleOnly: () => void;
+
+  // Carpool Corridor & Deck State
+  drivers: CorridorDriver[];
+  activeDriverIndex: number;
+  currentDriver: CorridorDriver | null;
+  selectedSafeZone: SafeZone;
+  setSelectedSafeZone: (safeZone: SafeZone) => void;
+  safeZones: SafeZone[];
+
+  // Quick Bid & Pricing State
+  customBidNgn: number;
+  setCustomBidNgn: (amount: number) => void;
+  adjustBid: (deltaNgn: number) => void;
+  resetBidToFairShare: () => void;
+
+  // Swipe Deck Actions
+  swipeLeft: () => void;
+  swipeRight: () => void;
+  resetDeck: () => void;
+
+  // Active Matches & Commute Lock
+  activeMatches: CommuteMatch[];
+  weeklyLockedCommutes: string[]; // driver IDs
+  lockWeeklyCommute: (driverId: string) => void;
+  unlockWeeklyCommute: (driverId: string) => void;
+
+  // Emergency SOS & Roadside Dispatch State
+  isSosActive: boolean;
+  activeIncident: EmergencyIncident | null;
+  selectedIssueType: IncidentType | null;
+  candidateProviders: (EmergencyProvider & {
+    score: number;
+    compatible: boolean;
+    incompatibilityReason?: string;
+  })[];
+  selectedProvider: EmergencyProvider | null;
+  isAssistanceShieldVisible: boolean;
+  sosCountdownSeconds: number;
+
+  // Emergency Actions
+  triggerSosBeacon: () => void;
+  selectIncidentIssue: (issue: IncidentType) => void;
+  acceptProviderBid: (provider: EmergencyProvider) => void;
+  cancelEmergency: () => void;
+  decrementSosCountdown: () => void;
+  setShieldVisibility: (visible: boolean) => void;
+
+  // Escrow & Wallet Management
+  escrowBalanceNgn: number;
+  heldEscrowNgn: number;
+  escrowTransactions: EscrowTransaction[];
+  releaseEscrow: (reference: string) => void;
+  simulateFlakePenalty: (type: 'rider_flake' | 'driver_flake') => void;
+  topUpWallet: (amountNgn: number) => void;
+  withdrawFunds: (amountNgn: number, bankName: string, accountNumber: string, accountName: string) => boolean;
+
+  // Corridor Direction & Traffic State
+  commuteDirection: 'morning' | 'evening';
+  setCommuteDirection: (dir: 'morning' | 'evening') => void;
+  toggleCommuteDirection: () => void;
+  trafficAlerts: TrafficAlert[];
+
+  // Driver Carpool Management
+  driverVehicle: {
+    make: string;
+    model: string;
+    year: number;
+    color: string;
+    plate_number: string;
+    total_seats: number;
+  };
+  availableSeats: number;
+  corridorRiders: WaitingRider[];
+  acceptedRiders: WaitingRider[];
+  acceptRiderIntoCarpool: (riderId: string) => void;
+  removeRiderFromCarpool: (riderId: string) => void;
+
+  // Offline Verification
+  offlinePin: string;
+
+  // Fastest Flatbed Action
+  dispatchFastestFlatbed: () => void;
+
+  // UI Navigation
+  activeTab: 'deck' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet';
+  setActiveTab: (tab: 'deck' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet') => void;
+}
+
+export const useAppStore = create<AppState>((set, get) => ({
+  user: mockCurrentUser,
+  activeRole: 'rider',
+  setActiveRole: (role) => set({ activeRole: role }),
+  updateUserKyc: (status) =>
+    set((state) => ({ user: { ...state.user, kycStatus: status } })),
+  toggleFemaleOnly: () =>
+    set((state) => ({
+      user: { ...state.user, isFemaleCommuteOnly: !state.user.isFemaleCommuteOnly },
+    })),
+
+  drivers: mockCorridorDrivers,
+  activeDriverIndex: 0,
+  currentDriver: mockCorridorDrivers[0] || null,
+  selectedSafeZone: mockSafeZones[0],
+  setSelectedSafeZone: (safeZone) => set({ selectedSafeZone: safeZone }),
+  safeZones: mockSafeZones,
+
+  customBidNgn: mockCorridorDrivers[0]?.corridor.fuel_split_ngn || 1500,
+  setCustomBidNgn: (amount) => set({ customBidNgn: amount }),
+  adjustBid: (deltaNgn) =>
+    set((state) => {
+      const newAmount = Math.max(500, state.customBidNgn + deltaNgn);
+      return { customBidNgn: newAmount };
+    }),
+  resetBidToFairShare: () =>
+    set((state) => {
+      const driver = state.drivers[state.activeDriverIndex];
+      return { customBidNgn: driver?.corridor.fuel_split_ngn || 1500 };
+    }),
+
+  swipeLeft: () => {
+    set((state) => {
+      const nextIndex = state.activeDriverIndex + 1;
+      const nextDriver = nextIndex < state.drivers.length ? state.drivers[nextIndex] : null;
+      return {
+        activeDriverIndex: nextIndex,
+        currentDriver: nextDriver,
+        customBidNgn: nextDriver?.corridor.fuel_split_ngn || 2000,
+      };
+    });
+  },
+
+  swipeRight: () => {
+    const state = get();
+    const currentDriver = state.drivers[state.activeDriverIndex];
+    if (!currentDriver) return;
+
+    const agreedFare = state.customBidNgn;
+    const escrowRef = `ESC-CP-${Date.now().toString().slice(-6)}`;
+
+    // Create match and place escrow hold
+    const newMatch: CommuteMatch = {
+      id: `match-${Date.now()}`,
+      corridorId: 'corridor-ajah-vi-01',
+      driverId: currentDriver.id,
+      riderId: state.user.id,
+      driverName: currentDriver.name,
+      riderName: state.user.fullName,
+      driverAvatar: currentDriver.avatar,
+      fareNgn: agreedFare,
+      hasAc: true,
+      pickupSafeZone: state.selectedSafeZone,
+      status: 'locked',
+      scheduledFor: 'Tomorrow, 06:45 AM',
+    };
+
+    const newTransaction: EscrowTransaction = {
+      id: `tx-${Date.now()}`,
+      type: 'HOLD_CARPOOL',
+      amountNgn: agreedFare,
+      reference: escrowRef,
+      description: `Held for ${currentDriver.name} (${state.selectedSafeZone.name} -> VI)`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'held',
+    };
+
+    const nextIndex = state.activeDriverIndex + 1;
+    const nextDriver = nextIndex < state.drivers.length ? state.drivers[nextIndex] : null;
+
+    set({
+      activeDriverIndex: nextIndex,
+      currentDriver: nextDriver,
+      customBidNgn: nextDriver?.corridor.fuel_split_ngn || 2000,
+      activeMatches: [newMatch, ...state.activeMatches],
+      escrowBalanceNgn: Math.max(0, state.escrowBalanceNgn - agreedFare),
+      heldEscrowNgn: state.heldEscrowNgn + agreedFare,
+      escrowTransactions: [newTransaction, ...state.escrowTransactions],
+    });
+  },
+
+  resetDeck: () => {
+    set({
+      activeDriverIndex: 0,
+      currentDriver: mockCorridorDrivers[0] || null,
+      customBidNgn: mockCorridorDrivers[0]?.corridor.fuel_split_ngn || 2000,
+    });
+  },
+
+  activeMatches: [
+    {
+      id: 'match-prev-01',
+      corridorId: 'corridor-ajah-vi-01',
+      driverId: 'driver-101',
+      riderId: mockCurrentUser.id,
+      driverName: 'Babatunde Adeleke',
+      riderName: mockCurrentUser.fullName,
+      driverAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      fareNgn: 2000,
+      hasAc: true,
+      pickupSafeZone: mockSafeZones[0],
+      status: 'locked',
+      scheduledFor: 'Monday, 06:45 AM',
+      isWeeklyLocked: true,
+    },
+  ],
+  weeklyLockedCommutes: ['driver-101'],
+  lockWeeklyCommute: (driverId) =>
+    set((state) => ({
+      weeklyLockedCommutes: state.weeklyLockedCommutes.includes(driverId)
+        ? state.weeklyLockedCommutes
+        : [...state.weeklyLockedCommutes, driverId],
+      activeMatches: state.activeMatches.map((m) =>
+        m.driverId === driverId ? { ...m, isWeeklyLocked: true } : m
+      ),
+    })),
+  unlockWeeklyCommute: (driverId) =>
+    set((state) => ({
+      weeklyLockedCommutes: state.weeklyLockedCommutes.filter((id) => id !== driverId),
+      activeMatches: state.activeMatches.map((m) =>
+        m.driverId === driverId ? { ...m, isWeeklyLocked: false } : m
+      ),
+    })),
+
+  // Emergency SOS Initial State
+  isSosActive: false,
+  activeIncident: null,
+  selectedIssueType: null,
+  candidateProviders: [],
+  selectedProvider: null,
+  isAssistanceShieldVisible: false,
+  sosCountdownSeconds: 720, // 12 minutes default
+
+  triggerSosBeacon: () => {
+    set({
+      isSosActive: true,
+      selectedIssueType: null,
+      selectedProvider: null,
+      isAssistanceShieldVisible: false,
+      activeTab: 'sos',
+    });
+  },
+
+  selectIncidentIssue: (issue) => {
+    // Current user's car drivetrain assumed FWD Sedan or AWD
+    const mockUserVehicle = { drivetrain: 'AWD' as const, category: 'suv' as const };
+
+    // Run Two-Phase Dispatch Scoring
+    const scoredProviders = mockEmergencyProviders.map((prov) => {
+      const phase1 = passesPhase1Filter(mockUserVehicle, prov, issue);
+      const isOpposing = prov.distance_km > 3.0; // Simulated median barrier
+      const { score } = calculateProviderDispatchScore(prov, isOpposing, true);
+
+      return {
+        ...prov,
+        score,
+        compatible: phase1.compatible,
+        incompatibilityReason: phase1.reason,
+      };
+    }).sort((a, b) => {
+      // Prioritize compatible first, then lowest score
+      if (a.compatible && !b.compatible) return -1;
+      if (!a.compatible && b.compatible) return 1;
+      return a.score - b.score;
+    });
+
+    const incident: EmergencyIncident = {
+      id: `INC-LAG-${Date.now().toString().slice(-5)}`,
+      commuterId: get().user.id,
+      incidentType: issue,
+      locationDescription: 'Lekki-Epe Expressway, 200m before Chevron Toll Gate, Westbound',
+      coordinates: { lat: 6.4428, lng: 3.5186 },
+      escrowAmountNgn: 0,
+      escrowHeld: false,
+      escrowReleased: false,
+      status: 'bidding_open',
+      dispatchAuthCode: `LASG-EMG-${Math.floor(100000 + Math.random() * 900000)}`,
+      assistanceShieldActive: false,
+      countdownSeconds: 840,
+    };
+
+    set({
+      selectedIssueType: issue,
+      candidateProviders: scoredProviders,
+      activeIncident: incident,
+    });
+  },
+
+  acceptProviderBid: (provider) => {
+    const state = get();
+    if (!state.activeIncident) return;
+
+    const escrowRef = `ESC-SOS-${Date.now().toString().slice(-6)}`;
+    const cost = provider.flat_quote_ngn;
+
+    const updatedIncident: EmergencyIncident = {
+      ...state.activeIncident,
+      assignedProvider: provider,
+      escrowAmountNgn: cost,
+      escrowHeld: true,
+      status: 'en_route',
+      assistanceShieldActive: true,
+      countdownSeconds: provider.traffic_eta_minutes * 60,
+    };
+
+    const newTx: EscrowTransaction = {
+      id: `tx-sos-${Date.now()}`,
+      type: 'HOLD_EMERGENCY',
+      amountNgn: cost,
+      reference: escrowRef,
+      description: `Emergency Escrow Hold: ${provider.name} (${provider.truck_type})`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'held',
+    };
+
+    set({
+      selectedProvider: provider,
+      activeIncident: updatedIncident,
+      isAssistanceShieldVisible: true,
+      sosCountdownSeconds: provider.traffic_eta_minutes * 60,
+      escrowBalanceNgn: Math.max(0, state.escrowBalanceNgn - cost),
+      heldEscrowNgn: state.heldEscrowNgn + cost,
+      escrowTransactions: [newTx, ...state.escrowTransactions],
+    });
+  },
+
+  cancelEmergency: () => {
+    set({
+      isSosActive: false,
+      activeIncident: null,
+      selectedIssueType: null,
+      selectedProvider: null,
+      isAssistanceShieldVisible: false,
+      activeTab: 'deck',
+    });
+  },
+
+  decrementSosCountdown: () => {
+    set((state) => ({
+      sosCountdownSeconds: Math.max(0, state.sosCountdownSeconds - 1),
+    }));
+  },
+
+  setShieldVisibility: (visible) => set({ isAssistanceShieldVisible: visible }),
+
+  // Escrow Wallet State
+  escrowBalanceNgn: 45000,
+  heldEscrowNgn: 2000,
+  escrowTransactions: [
+    {
+      id: 'tx-seed-01',
+      type: 'TOPUP',
+      amountNgn: 50000,
+      reference: 'PAYSTACK-TOPUP-9921',
+      description: 'Bank Card Top-up (Paystack Auto-Fund)',
+      timestamp: '08:15 AM',
+      status: 'released',
+    },
+    {
+      id: 'tx-seed-02',
+      type: 'HOLD_CARPOOL',
+      amountNgn: 2000,
+      reference: 'ESC-CP-49102',
+      description: 'Held for Babatunde Adeleke (Monday Commute)',
+      timestamp: '09:30 AM',
+      status: 'held',
+    },
+  ],
+
+  releaseEscrow: (reference) => {
+    set((state) => {
+      const tx = state.escrowTransactions.find((t) => t.reference === reference);
+      if (!tx || tx.status !== 'held') return state;
+
+      return {
+        heldEscrowNgn: Math.max(0, state.heldEscrowNgn - tx.amountNgn),
+        escrowTransactions: state.escrowTransactions.map((t) =>
+          t.reference === reference ? { ...t, status: 'released' as const } : t
+        ),
+      };
+    });
+  },
+
+  simulateFlakePenalty: (type) => {
+    const state = get();
+    if (type === 'rider_flake') {
+      // ₦1,000 cancellation fee debited
+      const tx: EscrowTransaction = {
+        id: `tx-flake-${Date.now()}`,
+        type: 'FLAKE_PENALTY',
+        amountNgn: 1000,
+        reference: `FLAKE-RIDER-${Date.now().toString().slice(-4)}`,
+        description: 'Late Cancellation Flake Penalty (Debited to Driver)',
+        timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+        status: 'released',
+      };
+      set({
+        escrowBalanceNgn: Math.max(0, state.escrowBalanceNgn - 1000),
+        escrowTransactions: [tx, ...state.escrowTransactions],
+      });
+    } else {
+      // Driver flaked - Rider receives ₦2,500 Uber/Bolt voucher credit
+      const tx: EscrowTransaction = {
+        id: `tx-flake-${Date.now()}`,
+        type: 'FLAKE_PENALTY',
+        amountNgn: 2500,
+        reference: `UBER-BOLT-VOUCH-${Date.now().toString().slice(-4)}`,
+        description: 'Driver Flake Relief: Instant ₦2,500 Uber/Bolt Code Credited',
+        timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+        status: 'released',
+      };
+      set({
+        escrowBalanceNgn: state.escrowBalanceNgn + 2500,
+        escrowTransactions: [tx, ...state.escrowTransactions],
+      });
+    }
+  },
+
+  topUpWallet: (amountNgn) => {
+    const tx: EscrowTransaction = {
+      id: `tx-top-${Date.now()}`,
+      type: 'TOPUP',
+      amountNgn,
+      reference: `PAYSTACK-${Date.now().toString().slice(-6)}`,
+      description: 'Paystack Direct Bank Funding',
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'released',
+    };
+    set((state) => ({
+      escrowBalanceNgn: state.escrowBalanceNgn + amountNgn,
+      escrowTransactions: [tx, ...state.escrowTransactions],
+    }));
+  },
+
+  withdrawFunds: (amountNgn, bankName, accountNumber, accountName) => {
+    const state = get();
+    if (amountNgn <= 0 || amountNgn > state.escrowBalanceNgn) return false;
+
+    const tx: EscrowTransaction = {
+      id: `tx-wth-${Date.now()}`,
+      type: 'WITHDRAWAL',
+      amountNgn,
+      reference: `NIP-${Date.now().toString().slice(-6)}`,
+      description: `NIBSS Instant Transfer to ${bankName} (${accountNumber}) - ${accountName}`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'released',
+    };
+
+    set({
+      escrowBalanceNgn: state.escrowBalanceNgn - amountNgn,
+      escrowTransactions: [tx, ...state.escrowTransactions],
+    });
+    return true;
+  },
+
+  // Corridor Direction & Traffic State
+  commuteDirection: 'morning',
+  setCommuteDirection: (dir) => set({ commuteDirection: dir }),
+  toggleCommuteDirection: () =>
+    set((state) => ({
+      commuteDirection: state.commuteDirection === 'morning' ? 'evening' : 'morning',
+      activeDriverIndex: 0,
+      currentDriver: state.drivers[0] || null,
+    })),
+  trafficAlerts: mockTrafficAlerts,
+
+  // Driver Carpool Management
+  driverVehicle: {
+    make: 'Toyota',
+    model: 'Camry',
+    year: 2021,
+    color: 'Midnight Black',
+    plate_number: 'APP-842-EY',
+    total_seats: 3,
+  },
+  availableSeats: 3,
+  corridorRiders: mockCorridorRiders,
+  acceptedRiders: [],
+  acceptRiderIntoCarpool: (riderId) => {
+    const state = get();
+    if (state.availableSeats <= 0) return;
+    const rider = state.corridorRiders.find((r) => r.id === riderId);
+    if (!rider) return;
+
+    const newAccepted = [...state.acceptedRiders, { ...rider, status: 'accepted' as const }];
+    const newAvailable = state.availableSeats - 1;
+
+    // Prorated fuel split based on riders in car
+    const riderCount = newAccepted.length;
+    const proratedFare = riderCount === 1 ? 2000 : riderCount === 2 ? 1400 : 1000;
+
+    const newMatch: CommuteMatch = {
+      id: `match-driver-${Date.now()}-${rider.id}`,
+      corridorId: 'corridor-ajah-vi-01',
+      driverId: state.user.id,
+      riderId: rider.id,
+      driverName: state.user.fullName,
+      riderName: rider.name,
+      driverAvatar: state.user.avatarUrl,
+      fareNgn: proratedFare,
+      hasAc: true,
+      pickupSafeZone: rider.pickupSafeZone,
+      status: 'locked',
+      scheduledFor: `${state.commuteDirection === 'morning' ? 'Morning' : 'Evening'}, ${rider.departure_time}`,
+    };
+
+    const newTx: EscrowTransaction = {
+      id: `tx-rider-hold-${Date.now()}`,
+      type: 'HOLD_CARPOOL',
+      amountNgn: proratedFare,
+      reference: `ESC-RIDER-${Date.now().toString().slice(-5)}`,
+      description: `Held from ${rider.name} (${rider.pickupSafeZone.name} -> VI)`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'held',
+    };
+
+    set({
+      availableSeats: newAvailable,
+      acceptedRiders: newAccepted,
+      corridorRiders: state.corridorRiders.map((r) =>
+        r.id === riderId ? { ...r, status: 'accepted' as const } : r
+      ),
+      activeMatches: [newMatch, ...state.activeMatches],
+      escrowTransactions: [newTx, ...state.escrowTransactions],
+      heldEscrowNgn: state.heldEscrowNgn + proratedFare,
+    });
+  },
+
+  removeRiderFromCarpool: (riderId) => {
+    const state = get();
+    const rider = state.acceptedRiders.find((r) => r.id === riderId);
+    if (!rider) return;
+
+    const newAccepted = state.acceptedRiders.filter((r) => r.id !== riderId);
+    set({
+      availableSeats: Math.min(3, state.availableSeats + 1),
+      acceptedRiders: newAccepted,
+      corridorRiders: state.corridorRiders.map((r) =>
+        r.id === riderId ? { ...r, status: 'waiting' as const } : r
+      ),
+      activeMatches: state.activeMatches.filter((m) => m.riderId !== riderId),
+    });
+  },
+
+  // Offline Verification PIN
+  offlinePin: '4892',
+
+  // Fastest Flatbed Action
+  dispatchFastestFlatbed: () => {
+    const state = get();
+    const flatbed = mockEmergencyProviders.find((p) => p.category === 'flatbed_tow') || mockEmergencyProviders[0];
+    
+    const incident: EmergencyIncident = {
+      id: `inc-fast-${Date.now()}`,
+      commuterId: state.user.id,
+      incidentType: 'total_mechanical_tow',
+      locationDescription: 'Lekki-Epe Expressway, near Jakande / Sandfill',
+      coordinates: { lat: 6.4428, lng: 3.5186 },
+      assignedProvider: flatbed,
+      escrowAmountNgn: flatbed.flat_quote_ngn,
+      escrowHeld: true,
+      escrowReleased: false,
+      status: 'en_route',
+      dispatchAuthCode: `LASG-EMG-${Math.floor(100000 + Math.random() * 900000)}`,
+      assistanceShieldActive: true,
+      countdownSeconds: flatbed.traffic_eta_minutes * 60,
+    };
+
+    const newTx: EscrowTransaction = {
+      id: `tx-sos-${Date.now()}`,
+      type: 'HOLD_EMERGENCY',
+      amountNgn: flatbed.flat_quote_ngn,
+      reference: `ESC-SOS-${Date.now().toString().slice(-6)}`,
+      description: `Fast Flatbed Dispatch: ${flatbed.name} (${flatbed.truck_type})`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'held',
+    };
+
+    set({
+      isSosActive: true,
+      selectedIssueType: 'total_mechanical_tow',
+      selectedProvider: flatbed,
+      activeIncident: incident,
+      isAssistanceShieldVisible: true,
+      sosCountdownSeconds: flatbed.traffic_eta_minutes * 60,
+      escrowBalanceNgn: Math.max(0, state.escrowBalanceNgn - flatbed.flat_quote_ngn),
+      heldEscrowNgn: state.heldEscrowNgn + flatbed.flat_quote_ngn,
+      escrowTransactions: [newTx, ...state.escrowTransactions],
+      activeTab: 'sos',
+    });
+  },
+
+  activeTab: 'deck',
+  setActiveTab: (tab) => set({ activeTab: tab }),
+}));
