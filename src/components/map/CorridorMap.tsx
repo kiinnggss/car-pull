@@ -103,10 +103,9 @@ export const CorridorMap: React.FC = () => {
       // Position zoom control in top-right for mobile thumb friendliness
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      // CartoDB Positron Tiles: Light & Crisp styling matching the CAR PULL white/purple theme
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-        attribution: '&copy; <a href="https://carto.com/">CARTO</a> &copy; <a href="https://openstreetmap.org">OSM</a>',
-        subdomains: 'abcd',
+      // OpenStreetMap standard tiles: Zero watermark, 100% free and open
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
         maxZoom: 19,
       }).addTo(map);
 
