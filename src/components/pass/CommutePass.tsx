@@ -17,6 +17,7 @@ import {
   Building2,
   ExternalLink,
 } from 'lucide-react';
+import { getAssetPath } from '@/lib/assets';
 
 export const CommutePass: React.FC = () => {
   const {
@@ -96,7 +97,7 @@ ${acceptedRiders.length > 0 ? acceptedRiders.map((r, i) => `• Co-Rider ${i + 1
         <div className="flex items-center justify-between border-b border-emerald-100/80 pb-2.5">
           <div className="flex items-center gap-2">
             <img
-              src="/logo.png"
+              src={getAssetPath('/logo.png')}
               alt="CAR PULL Seal"
               className="w-8 h-8 rounded-xl object-cover shadow-2xs border border-emerald-300 flex-shrink-0"
             />

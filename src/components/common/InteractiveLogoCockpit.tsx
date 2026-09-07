@@ -16,6 +16,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { getAssetPath } from '@/lib/assets';
 
 // Lightweight, zero-dependency browser Web Audio sound effects
 const playCockpitTone = (freq: number, type: OscillatorType = 'sine', duration = 0.1) => {
@@ -167,7 +168,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
         {/* 3D Interactive Logo Display with Clickable Hotspots */}
         <div className="relative w-full aspect-square max-w-[290px] mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-amber-500/20 via-teal-500/10 to-amber-700/20 p-2 shadow-inner border border-zinc-200/80">
           <img
-            src="/logo.png"
+            src={getAssetPath('/logo.png')}
             alt="CAR PULL Interactive Logo"
             className="w-full h-full object-contain select-none pointer-events-none rounded-2xl drop-shadow-md"
           />

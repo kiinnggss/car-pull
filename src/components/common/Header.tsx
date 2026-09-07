@@ -5,6 +5,7 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import { ShieldCheck, Lock, Compass, Sun, Moon, AlertCircle, ChevronRight, Sparkles } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { InteractiveLogoCockpit } from './InteractiveLogoCockpit';
+import { getAssetPath } from '@/lib/assets';
 
 export const Header: React.FC = () => {
   const {
@@ -38,7 +39,7 @@ export const Header: React.FC = () => {
             title="Tap to open Interactive Logo Cockpit"
           >
             <img
-              src="/logo.png"
+              src={getAssetPath('/logo.png')}
               alt="CAR PULL Logo"
               className="w-9 h-9 rounded-[14px] object-cover"
             />

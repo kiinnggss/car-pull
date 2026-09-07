@@ -1,11 +1,17 @@
 import type { NextConfig } from 'next';
 
+const isProd = process.env.NODE_ENV === 'production';
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? (isProd ? '/car-pull' : '');
+
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: '/home/joyboy/projects/car-pull',
-  },
+  output: 'export',
+  basePath: basePath,
+  trailingSlash: true,
   images: {
     unoptimized: true,
+  },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
   },
 };
 

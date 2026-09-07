@@ -1,13 +1,15 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/car-pull' : '');
+
 export const metadata: Metadata = {
   title: 'CAR PULL - Lagos Commuter & Roadside Resilience PWA',
   description: 'Double opt-in commuter carpooling and emergency roadside assistance along the Ajah - Lekki - Victoria Island - Marina corridor.',
-  manifest: '/manifest.json',
+  manifest: `${basePath}/manifest.json`,
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: `${basePath}/logo.png`,
+    apple: `${basePath}/logo.png`,
   },
   appleWebApp: {
     capable: true,
