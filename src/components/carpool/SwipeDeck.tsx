@@ -7,7 +7,8 @@ import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { FairShareIndicator } from './FairShareIndicator';
 import { SafeZoneSelector } from './SafeZoneSelector';
-import { RefreshCw, MapPin, CheckCircle, Sparkles, Calendar, Navigation } from 'lucide-react';
+import { RoutePlannerBar } from './RoutePlannerBar';
+import { RefreshCw, MapPin, CheckCircle, Sparkles, Calendar, Navigation, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatNgn } from '@/lib/utils';
 
@@ -71,14 +72,17 @@ export const SwipeDeck: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full max-w-[390px] mx-auto pb-24 px-3 space-y-2.5">
+      {/* Custom Origin & Destination Route Planner */}
+      <RoutePlannerBar />
+
       {/* Seamless Integrated Safe Zone Filter Pill & Live Map Switcher */}
       <div className="w-full flex items-center justify-between gap-1.5">
         <div className="flex-1 flex items-center justify-between bg-zinc-50 border border-zinc-200/80 rounded-2xl px-3 py-1.5 text-xs shadow-2xs">
-          <div className="flex items-center gap-2 overflow-hidden">
-            <MapPin className="w-4 h-4 text-[#7C3AED] flex-shrink-0" />
+          <div className="flex items-center gap-1.5 overflow-hidden">
+            <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
             <div className="truncate">
               <span className="text-[9px] text-zinc-400 block font-semibold uppercase tracking-wider leading-none">
-                Safe Zone
+                CCTV Safe Pickup
               </span>
               <span className="font-bold text-zinc-800 truncate block text-[11px] leading-tight">
                 {selectedSafeZone.name}

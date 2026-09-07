@@ -52,6 +52,26 @@ export interface Coordinates {
   lng: number;
 }
 
+export interface LagosLocation {
+  id: string;
+  name: string;
+  area: string;
+  coordinates: Coordinates;
+  nearestSafeZoneId?: string;
+  isPopularPickup?: boolean;
+  isPopularDropoff?: boolean;
+}
+
+export interface CommuteRoute {
+  origin: string;
+  originCoords: Coordinates;
+  destination: string;
+  destinationCoords: Coordinates;
+  distanceKm: number;
+  estimatedMinutes: number;
+  recommendedFuelSplitNgn: number;
+}
+
 export interface SafeZone {
   id: string;
   name: string;

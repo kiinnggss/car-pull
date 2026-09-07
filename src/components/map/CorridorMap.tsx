@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
+import { RoutePlannerBar } from '../carpool/RoutePlannerBar';
 
 // Lagos Ajah -> Lekki Toll -> Victoria Island -> Marina Expressway Polyline
 const LAGOS_CORRIDOR_COORDS: [number, number][] = [
@@ -74,6 +75,7 @@ export const CorridorMap: React.FC = () => {
     commuteDirection,
     toggleCommuteDirection,
     setActiveTab,
+    riderRoute,
   } = useAppStore();
 
   // Initialize interactive Leaflet map inside useEffect
@@ -253,6 +255,53 @@ export const CorridorMap: React.FC = () => {
         trafficLayer.addLayer(alertMarker);
       }
 
+      // Add Custom Rider Route Markers (Origin A 🟢 & Destination B 🟣)
+      if (riderRoute.originCoords) {
+        const originHtml = `
+          <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
+            <span class="absolute -inset-1 rounded-full bg-emerald-500/40 animate-ping"></span>
+            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-emerald-400">
+              A
+            </div>
+            <span class="mt-0.5 bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.2 rounded shadow-xs whitespace-nowrap">
+              PICKUP
+            </span>
+          </div>
+        `;
+        const originIcon = L.divIcon({
+          html: originHtml,
+          className: 'custom-origin-pin',
+          iconSize: [32, 40],
+          iconAnchor: [16, 20],
+        });
+        L.marker([riderRoute.originCoords.lat, riderRoute.originCoords.lng], { icon: originIcon })
+          .addTo(map)
+          .bindPopup(`<b>Pickup Location:</b><br/>${riderRoute.origin}`);
+      }
+
+      if (riderRoute.destinationCoords) {
+        const destHtml = `
+          <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
+            <span class="absolute -inset-1 rounded-full bg-purple-500/40 animate-ping"></span>
+            <div class="w-8 h-8 rounded-full bg-[#7C3AED] text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-purple-400">
+              B
+            </div>
+            <span class="mt-0.5 bg-[#6D28D9] text-white text-[8px] font-black px-1.5 py-0.2 rounded shadow-xs whitespace-nowrap">
+              DROPOFF
+            </span>
+          </div>
+        `;
+        const destIcon = L.divIcon({
+          html: destHtml,
+          className: 'custom-dest-pin',
+          iconSize: [32, 40],
+          iconAnchor: [16, 20],
+        });
+        L.marker([riderRoute.destinationCoords.lat, riderRoute.destinationCoords.lng], { icon: destIcon })
+          .addTo(map)
+          .bindPopup(`<b>Destination:</b><br/>${riderRoute.destination}`);
+      }
+
       mapInstanceRef.current = map;
       if (isMounted) {
         setMapReady(true);
@@ -271,7 +320,7 @@ export const CorridorMap: React.FC = () => {
         mapInstanceRef.current = null;
       }
     };
-  }, [selectedSafeZone.id, commuteDirection]);
+  }, [selectedSafeZone.id, commuteDirection, riderRoute.origin, riderRoute.destination]);
 
   // Recenter map to view entire Lagos corridor
   const handleFitCorridor = () => {
@@ -337,6 +386,9 @@ export const CorridorMap: React.FC = () => {
             <span className="text-[9px] bg-white/80 px-1 py-0.2 rounded font-black">⇌</span>
           </button>
         </div>
+
+        {/* Dynamic Route Planner Pill */}
+        <RoutePlannerBar />
 
         {/* Quick Map Action Pills */}
         <div className="flex items-center justify-between px-1">

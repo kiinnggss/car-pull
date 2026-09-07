@@ -1,7 +1,7 @@
 // CAR PULL: High-Fidelity Mock Data (Lagos Ajah -> VI -> Marina Corridor)
 // Location: /src/lib/mockData.ts
 
-import { SafeZone, CorridorDriver, EmergencyProvider, User, WaitingRider, TrafficAlert } from './types';
+import { SafeZone, CorridorDriver, EmergencyProvider, User, WaitingRider, TrafficAlert, LagosLocation, CommuteRoute } from './types';
 
 export const mockCurrentUser: User = {
   id: 'usr-current-001',
@@ -74,6 +74,165 @@ export const mockSafeZones: SafeZone[] = [
     is_active: true,
   },
 ];
+
+export const mockLagosLocations: LagosLocation[] = [
+  {
+    id: 'loc-ajah',
+    name: 'Ajah Jubilee Bridge / Langbasa',
+    area: 'Ajah / Eti-Osa',
+    coordinates: { lat: 6.4678, lng: 3.5683 },
+    nearestSafeZoneId: 'sz-3',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-sangotedo',
+    name: 'Sangotedo / Novare Mall Bay',
+    area: 'Lekki-Epe Expressway',
+    coordinates: { lat: 6.4800, lng: 3.6150 },
+    nearestSafeZoneId: 'sz-3',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-vgc',
+    name: 'Victoria Garden City (VGC)',
+    area: 'Lekki-Epe Expressway',
+    coordinates: { lat: 6.4552, lng: 3.5594 },
+    nearestSafeZoneId: 'sz-3',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-ikota',
+    name: 'Ikota Shopping Complex / Mega Chicken',
+    area: 'Ikota / Lekki-Epe',
+    coordinates: { lat: 6.4510, lng: 3.5450 },
+    nearestSafeZoneId: 'sz-1',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-chevron',
+    name: 'Chevron Drive / Alternative Route',
+    area: 'Lekki Peninsula',
+    coordinates: { lat: 6.4485, lng: 3.5385 },
+    nearestSafeZoneId: 'sz-1',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-jakande',
+    name: 'Jakande Roundabout / Circle Mall',
+    area: 'Jakande / Lekki',
+    coordinates: { lat: 6.4428, lng: 3.5186 },
+    nearestSafeZoneId: 'sz-1',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-agungi',
+    name: 'Agungi Bus Stop',
+    area: 'Lekki-Epe Expressway',
+    coordinates: { lat: 6.4395, lng: 3.5012 },
+    nearestSafeZoneId: 'sz-1',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-igbo-efon',
+    name: 'Igbo-Efon / Chisco Bus Stop',
+    area: 'Lekki',
+    coordinates: { lat: 6.4380, lng: 3.4885 },
+    nearestSafeZoneId: 'sz-4',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-ikate',
+    name: 'Ikate Elegushi / Meadow Hall',
+    area: 'Lekki Phase 1 Axis',
+    coordinates: { lat: 6.4372, lng: 3.4750 },
+    nearestSafeZoneId: 'sz-4',
+    isPopularPickup: true,
+  },
+  {
+    id: 'loc-lekki1',
+    name: 'Lekki Phase 1 (Admiralty Way)',
+    area: 'Lekki Phase 1',
+    coordinates: { lat: 6.4420, lng: 3.4530 },
+    nearestSafeZoneId: 'sz-4',
+    isPopularPickup: true,
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-sandfill',
+    name: 'Mobil Sandfill / Maroko',
+    area: 'Lekki / Victoria Island Approach',
+    coordinates: { lat: 6.4312, lng: 3.4510 },
+    nearestSafeZoneId: 'sz-4',
+    isPopularPickup: true,
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-vi-adetokunbo',
+    name: 'Victoria Island (Ademola Adetokunbo / Eko Hotel)',
+    area: 'Victoria Island',
+    coordinates: { lat: 6.4310, lng: 3.4320 },
+    nearestSafeZoneId: 'sz-6',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-vi-adeola',
+    name: 'Victoria Island (Adeola Odeku / Civic Center)',
+    area: 'Victoria Island',
+    coordinates: { lat: 6.4350, lng: 3.4280 },
+    nearestSafeZoneId: 'sz-6',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-vi-danmole',
+    name: 'Victoria Island (Danmole / Access Bank HQ)',
+    area: 'Victoria Island',
+    coordinates: { lat: 6.4290, lng: 3.4285 },
+    nearestSafeZoneId: 'sz-6',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-falomo',
+    name: 'Ikoyi (Falomo Roundabout / Bourdillon)',
+    area: 'Ikoyi',
+    coordinates: { lat: 6.4460, lng: 3.4350 },
+    nearestSafeZoneId: 'sz-5',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-kingsway',
+    name: 'Ikoyi (Alfred Rewane / Kingsway Road)',
+    area: 'Ikoyi',
+    coordinates: { lat: 6.4530, lng: 3.4400 },
+    nearestSafeZoneId: 'sz-5',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-marina-cms',
+    name: 'Marina Terminal (CMS Bus Stop / Ferry Jetty)',
+    area: 'Marina / Lagos Island',
+    coordinates: { lat: 6.4530, lng: 3.3958 },
+    nearestSafeZoneId: 'sz-6',
+    isPopularDropoff: true,
+  },
+  {
+    id: 'loc-broad-street',
+    name: 'Broad Street Financial District',
+    area: 'Marina / Lagos Island',
+    coordinates: { lat: 6.4545, lng: 3.3910 },
+    nearestSafeZoneId: 'sz-6',
+    isPopularDropoff: true,
+  },
+];
+
+export const defaultCommuteRoute: CommuteRoute = {
+  origin: 'Ajah Jubilee Bridge / Langbasa',
+  originCoords: { lat: 6.4678, lng: 3.5683 },
+  destination: 'Victoria Island (Adeola Odeku / Civic Center)',
+  destinationCoords: { lat: 6.4350, lng: 3.4280 },
+  distanceKm: 26.5,
+  estimatedMinutes: 45,
+  recommendedFuelSplitNgn: 1600,
+};
 
 export const mockCorridorDrivers: CorridorDriver[] = [
   {

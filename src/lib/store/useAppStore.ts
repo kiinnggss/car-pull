@@ -13,6 +13,9 @@ import {
   CommuteMatch,
   WaitingRider,
   TrafficAlert,
+  LagosLocation,
+  CommuteRoute,
+  Coordinates,
 } from '../types';
 import {
   mockCurrentUser,
@@ -21,6 +24,8 @@ import {
   mockSafeZones,
   mockCorridorRiders,
   mockTrafficAlerts,
+  mockLagosLocations,
+  defaultCommuteRoute,
 } from '../mockData';
 import {
   calculateTripCost,
@@ -46,6 +51,13 @@ interface AppState {
   setActiveRole: (role: 'rider' | 'driver') => void;
   updateUserKyc: (status: User['kycStatus']) => void;
   toggleFemaleOnly: () => void;
+
+  // Rider Custom Route (Location & Destination)
+  riderRoute: CommuteRoute;
+  lagosLocations: LagosLocation[];
+  setRiderOrigin: (origin: string, coords?: Coordinates) => void;
+  setRiderDestination: (destination: string, coords?: Coordinates) => void;
+  swapRiderRoute: () => void;
 
   // Carpool Corridor & Deck State
   drivers: CorridorDriver[];
@@ -147,6 +159,104 @@ export const useAppStore = create<AppState>((set, get) => ({
     set((state) => ({
       user: { ...state.user, isFemaleCommuteOnly: !state.user.isFemaleCommuteOnly },
     })),
+
+  riderRoute: defaultCommuteRoute,
+  lagosLocations: mockLagosLocations,
+
+  setRiderOrigin: (origin: string, coords?: Coordinates) => {
+    const loc = get().lagosLocations.find(
+      (l) => l.name.toLowerCase().includes(origin.toLowerCase()) || origin.toLowerCase().includes(l.name.toLowerCase())
+    );
+    const defaultCoords = coords || loc?.coordinates || { lat: 6.4678, lng: 3.5683 };
+    const currentDest = get().riderRoute.destinationCoords;
+
+    const dLat = (currentDest.lat - defaultCoords.lat) * 111;
+    const dLng = (currentDest.lng - defaultCoords.lng) * 111 * Math.cos(defaultCoords.lat * (Math.PI / 180));
+    const distKm = Math.max(4, Math.round(Math.sqrt(dLat * dLat + dLng * dLng) * 1.3 * 10) / 10);
+    const estMinutes = Math.round(distKm * 1.8);
+    const fairSplit = Math.round((distKm * 65 + 400) / 50) * 50;
+
+    const safeZones = get().safeZones;
+    let nearestZone = safeZones[0];
+    let minDistance = Infinity;
+    safeZones.forEach((sz) => {
+      const dist = Math.hypot(sz.coordinates.lat - defaultCoords.lat, sz.coordinates.lng - defaultCoords.lng);
+      if (dist < minDistance) {
+        minDistance = dist;
+        nearestZone = sz;
+      }
+    });
+
+    set((state) => ({
+      selectedSafeZone: nearestZone,
+      customBidNgn: fairSplit,
+      riderRoute: {
+        ...state.riderRoute,
+        origin,
+        originCoords: defaultCoords,
+        distanceKm: distKm,
+        estimatedMinutes: estMinutes,
+        recommendedFuelSplitNgn: fairSplit,
+      },
+    }));
+  },
+
+  setRiderDestination: (destination: string, coords?: Coordinates) => {
+    const loc = get().lagosLocations.find(
+      (l) => l.name.toLowerCase().includes(destination.toLowerCase()) || destination.toLowerCase().includes(l.name.toLowerCase())
+    );
+    const defaultCoords = coords || loc?.coordinates || { lat: 6.4350, lng: 3.4280 };
+    const currentOrigin = get().riderRoute.originCoords;
+
+    const dLat = (defaultCoords.lat - currentOrigin.lat) * 111;
+    const dLng = (defaultCoords.lng - currentOrigin.lng) * 111 * Math.cos(currentOrigin.lat * (Math.PI / 180));
+    const distKm = Math.max(4, Math.round(Math.sqrt(dLat * dLat + dLng * dLng) * 1.3 * 10) / 10);
+    const estMinutes = Math.round(distKm * 1.8);
+    const fairSplit = Math.round((distKm * 65 + 400) / 50) * 50;
+
+    set((state) => ({
+      customBidNgn: fairSplit,
+      riderRoute: {
+        ...state.riderRoute,
+        destination,
+        destinationCoords: defaultCoords,
+        distanceKm: distKm,
+        estimatedMinutes: estMinutes,
+        recommendedFuelSplitNgn: fairSplit,
+      },
+    }));
+  },
+
+  swapRiderRoute: () => {
+    const current = get().riderRoute;
+    const newOrigin = current.destination;
+    const newOriginCoords = current.destinationCoords;
+    const newDest = current.origin;
+    const newDestCoords = current.originCoords;
+
+    const safeZones = get().safeZones;
+    let nearestZone = safeZones[0];
+    let minDistance = Infinity;
+    safeZones.forEach((sz) => {
+      const dist = Math.hypot(sz.coordinates.lat - newOriginCoords.lat, sz.coordinates.lng - newOriginCoords.lng);
+      if (dist < minDistance) {
+        minDistance = dist;
+        nearestZone = sz;
+      }
+    });
+
+    set((state) => ({
+      commuteDirection: state.commuteDirection === 'morning' ? 'evening' : 'morning',
+      selectedSafeZone: nearestZone,
+      riderRoute: {
+        ...state.riderRoute,
+        origin: newOrigin,
+        originCoords: newOriginCoords,
+        destination: newDest,
+        destinationCoords: newDestCoords,
+      },
+    }));
+  },
 
   drivers: mockCorridorDrivers,
   activeDriverIndex: 0,
