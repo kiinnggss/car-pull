@@ -12,9 +12,18 @@ import { EscrowWallet } from '@/components/wallet/EscrowWallet';
 import { EmergencyBeacon } from '@/components/sos/EmergencyBeacon';
 import { CommutePass } from '@/components/pass/CommutePass';
 import { CorridorMap } from '@/components/map/CorridorMap';
+import { AuthLanding } from '@/components/auth/AuthLanding';
 
 export default function Home() {
-  const { activeTab, activeRole } = useAppStore();
+  const { activeTab, activeRole, isAuthenticated } = useAppStore();
+
+  if (!isAuthenticated) {
+    return (
+      <main className="w-full max-w-[430px] min-h-screen bg-white border-x border-zinc-200 relative flex flex-col justify-between shadow-xl text-zinc-900 overflow-x-hidden">
+        <AuthLanding />
+      </main>
+    );
+  }
 
   return (
     <main className="w-full max-w-[430px] min-h-screen bg-white border-x border-zinc-200 relative flex flex-col justify-between shadow-xl text-zinc-900 overflow-x-hidden">

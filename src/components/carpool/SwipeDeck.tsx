@@ -75,37 +75,25 @@ export const SwipeDeck: React.FC = () => {
       {/* Custom Origin & Destination Route Planner */}
       <RoutePlannerBar />
 
-      {/* Seamless Integrated Safe Zone Filter Pill & Live Map Switcher */}
-      <div className="w-full flex items-center justify-between gap-1.5">
-        <div className="flex-1 flex items-center justify-between bg-zinc-50 border border-zinc-200/80 rounded-2xl px-3 py-1.5 text-xs shadow-2xs">
-          <div className="flex items-center gap-1.5 overflow-hidden">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-            <div className="truncate">
-              <span className="text-[9px] text-zinc-400 block font-semibold uppercase tracking-wider leading-none">
-                CCTV Safe Pickup
-              </span>
-              <span className="font-bold text-zinc-800 truncate block text-[11px] leading-tight">
-                {selectedSafeZone.name}
-              </span>
-            </div>
+      {/* Clean Single CCTV Safe Zone Hub Indicator */}
+      <div
+        onClick={() => setShowSafeZoneModal(true)}
+        className="w-full flex items-center justify-between bg-zinc-50 hover:bg-zinc-100/80 border border-zinc-200/80 rounded-2xl px-3.5 py-2 text-xs shadow-2xs cursor-pointer transition-colors"
+      >
+        <div className="flex items-center gap-2 overflow-hidden">
+          <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+          <div className="truncate">
+            <span className="text-[9px] text-zinc-400 block font-semibold uppercase tracking-wider leading-none">
+              Off-Street CCTV Safe Pickup Hub
+            </span>
+            <span className="font-bold text-zinc-800 truncate block text-[11px] leading-tight mt-0.5">
+              {selectedSafeZone.name}
+            </span>
           </div>
-          <button
-            onClick={() => setShowSafeZoneModal(true)}
-            className="text-xs font-bold text-[#7C3AED] hover:underline px-1.5 py-0.5 rounded-lg flex-shrink-0 ml-1"
-          >
-            Change
-          </button>
         </div>
-
-        {/* Quick Switch to Live Map */}
-        <button
-          onClick={() => setActiveTab('map')}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all flex-shrink-0"
-          title="Open interactive Lagos Corridor Map"
-        >
-          <Navigation className="w-3.5 h-3.5 text-amber-300" />
-          <span>Live Map</span>
-        </button>
+        <span className="text-[11px] font-bold text-[#7C3AED] px-2 py-0.5 rounded-lg bg-purple-50 flex-shrink-0">
+          Change
+        </span>
       </div>
 
       {/* Tinder-Style Framer Motion Swipeable Card Deck */}
@@ -223,8 +211,15 @@ export const SwipeDeck: React.FC = () => {
               <h3 className="text-base font-black text-zinc-900">
                 Matched with {lastMatchedDriver.name}!
               </h3>
+              <div className="flex items-center justify-center gap-1.5 py-1">
+                <span className="text-xs font-bold text-zinc-800">
+                  {lastMatchedDriver.vehicle.make} {lastMatchedDriver.vehicle.model}
+                </span>
+                <span className="font-mono text-[11px] font-black text-[#7C3AED] bg-purple-100 px-2 py-0.5 rounded-md border border-purple-200">
+                  {lastMatchedDriver.vehicle.plate_number}
+                </span>
+              </div>
               <p className="text-xs text-zinc-500">
-                Seat reserved on <strong>{lastMatchedDriver.vehicle.make}</strong>.
                 Escrow hold of <strong>{formatNgn(customBidNgn)}</strong> secured.
               </p>
             </div>

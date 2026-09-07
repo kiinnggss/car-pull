@@ -17,6 +17,7 @@ import {
   DollarSign,
   Building2,
   Navigation,
+  X,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -24,6 +25,7 @@ export const DriverSeatDeck: React.FC = () => {
   const {
     user,
     driverVehicle,
+    updateDriverCar,
     availableSeats,
     corridorRiders,
     acceptedRiders,
@@ -35,6 +37,13 @@ export const DriverSeatDeck: React.FC = () => {
   } = useAppStore();
 
   const [copiedManifest, setCopiedManifest] = useState(false);
+  const [showCarModal, setShowCarModal] = useState(false);
+  const [carMake, setCarMake] = useState(driverVehicle.make);
+  const [carModel, setCarModel] = useState(driverVehicle.model);
+  const [carPlate, setCarPlate] = useState(driverVehicle.plate_number);
+  const [carYear, setCarYear] = useState(driverVehicle.year.toString());
+  const [carColor, setCarColor] = useState(driverVehicle.color);
+  const [carSeats, setCarSeats] = useState(driverVehicle.total_seats);
 
   const totalSeats = driverVehicle.total_seats;
   const filledSeats = acceptedRiders.length;
@@ -113,9 +122,18 @@ ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickup
                   {driverVehicle.plate_number}
                 </span>
               </div>
-              <span className="text-[10px] text-zinc-500 font-medium">
-                {driverVehicle.color} • AC Active • {commuteDirection === 'morning' ? 'Ajah ➔ VI' : 'VI ➔ Ajah'}
-              </span>
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="text-[10px] text-zinc-500 font-medium">
+                  {driverVehicle.color} • AC Active
+                </span>
+                <span className="text-zinc-300">•</span>
+                <button
+                  onClick={() => setShowCarModal(true)}
+                  className="text-[10px] font-bold text-[#7C3AED] hover:underline"
+                >
+                  Edit Car
+                </button>
+              </div>
             </div>
           </div>
 
@@ -326,6 +344,130 @@ ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickup
             ))}
         </div>
       </div>
+
+      {/* Edit / Register Car Modal */}
+      {showCarModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-[360px] bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 space-y-4">
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
+              <h3 className="text-sm font-black text-zinc-900 flex items-center gap-1.5">
+                <Car className="w-4 h-4 text-[#7C3AED]" />
+                Driver Car Registration
+              </h3>
+              <button
+                onClick={() => setShowCarModal(false)}
+                className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                updateDriverCar({
+                  make: carMake.trim() || 'Toyota',
+                  model: carModel.trim() || 'Corolla',
+                  year: parseInt(carYear) || 2022,
+                  color: carColor.trim() || 'Silver',
+                  plate_number: carPlate.trim().toUpperCase() || 'APP-842-EY',
+                  total_seats: Number(carSeats) || 3,
+                });
+                setShowCarModal(false);
+                confetti({
+                  particleCount: 30,
+                  spread: 60,
+                  origin: { y: 0.7 },
+                  colors: ['#7C3AED', '#10B981', '#F59E0B'],
+                });
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] font-bold text-zinc-500 block mb-0.5">Car Brand / Make</label>
+                  <input
+                    type="text"
+                    value={carMake}
+                    onChange={(e) => setCarMake(e.target.value)}
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-2.5 py-1.5 font-bold text-zinc-900 focus:outline-none"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-zinc-500 block mb-0.5">Model</label>
+                  <input
+                    type="text"
+                    value={carModel}
+                    onChange={(e) => setCarModel(e.target.value)}
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-2.5 py-1.5 font-bold text-zinc-900 focus:outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-purple-900 block mb-0.5">Plate Number *</label>
+                <input
+                  type="text"
+                  value={carPlate}
+                  onChange={(e) => setCarPlate(e.target.value)}
+                  className="w-full bg-purple-50 border-2 border-[#7C3AED] rounded-xl px-2.5 py-1.5 font-mono font-black text-purple-900 uppercase focus:outline-none"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[10px] font-bold text-zinc-500 block mb-0.5">Year</label>
+                  <input
+                    type="text"
+                    value={carYear}
+                    onChange={(e) => setCarYear(e.target.value)}
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-2.5 py-1.5 font-bold text-zinc-900 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] font-bold text-zinc-500 block mb-0.5">Color</label>
+                  <input
+                    type="text"
+                    value={carColor}
+                    onChange={(e) => setCarColor(e.target.value)}
+                    className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-2.5 py-1.5 font-bold text-zinc-900 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-[10px] font-bold text-zinc-500 block mb-1">Available Passenger Seats</label>
+                <div className="flex gap-2">
+                  {[1, 2, 3, 4].map((num) => (
+                    <button
+                      key={num}
+                      type="button"
+                      onClick={() => setCarSeats(num)}
+                      className={`flex-1 py-1.5 rounded-xl text-xs font-black transition-all ${
+                        carSeats === num
+                          ? 'bg-[#7C3AED] text-white shadow-xs'
+                          : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                      }`}
+                    >
+                      {num}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-2.5 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95 mt-2"
+              >
+                Save & Update Vehicle
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

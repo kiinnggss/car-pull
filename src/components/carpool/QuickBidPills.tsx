@@ -76,10 +76,17 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
               <span>Ceiling Locked</span>
             </>
           ) : (
-            <>
-              <Check className="w-4 h-4 text-emerald-200" />
-              <span>Accept ({formatNgn(customBidNgn)})</span>
-            </>
+            <div className="flex flex-col items-center leading-tight">
+              <span className="flex items-center gap-1">
+                <Check className="w-3.5 h-3.5 text-emerald-200" />
+                <span>Accept ({formatNgn(customBidNgn)})</span>
+              </span>
+              {currentDriver && (
+                <span className="text-[10px] text-purple-200 font-mono">
+                  {currentDriver.vehicle.make} • {currentDriver.vehicle.plate_number}
+                </span>
+              )}
+            </div>
           )}
         </button>
       </div>

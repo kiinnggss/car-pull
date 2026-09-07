@@ -13,6 +13,7 @@ import {
   Unlock,
   KeyRound,
   QrCode,
+  Car,
 } from 'lucide-react';
 
 export const MatchesList: React.FC = () => {
@@ -120,6 +121,19 @@ export const MatchesList: React.FC = () => {
                   </span>
                   <span className="text-[9px] text-zinc-400 uppercase font-mono">Escrow Held</span>
                 </div>
+              </div>
+
+              {/* Vehicle Brand and Plate Number */}
+              <div className="flex items-center justify-between bg-zinc-50 border border-zinc-200/80 rounded-2xl px-3 py-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <Car className="w-4 h-4 text-[#7C3AED]" />
+                  <span className="font-bold text-zinc-900">
+                    {match.vehicleMake || 'Toyota'} {match.vehicleModel || 'Camry'}
+                  </span>
+                </div>
+                <span className="font-mono text-[11px] font-black text-[#7C3AED] bg-purple-100 px-2 py-0.5 rounded-lg border border-purple-200">
+                  {match.plateNumber || 'APP-842-EY'}
+                </span>
               </div>
 
               {/* Pickup Safe Zone - Inline Flow */}

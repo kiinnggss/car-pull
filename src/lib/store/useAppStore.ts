@@ -45,6 +45,27 @@ export interface EscrowTransaction {
 }
 
 interface AppState {
+  // Authentication & Session
+  isAuthenticated: boolean;
+  login: (emailOrPhone?: string, role?: 'rider' | 'driver') => void;
+  logout: () => void;
+  registerRider: (data: { fullName: string; email: string; phone: string; employer: string }) => void;
+  registerDriver: (data: {
+    fullName: string;
+    email: string;
+    phone: string;
+    employer: string;
+    vehicle: {
+      make: string;
+      model: string;
+      year: number;
+      color: string;
+      plate_number: string;
+      total_seats: number;
+      has_ac: boolean;
+    };
+  }) => void;
+
   // Current User & Profile
   user: User;
   activeRole: 'rider' | 'driver';
@@ -129,6 +150,14 @@ interface AppState {
     plate_number: string;
     total_seats: number;
   };
+  updateDriverCar: (car: {
+    make: string;
+    model: string;
+    year: number;
+    color: string;
+    plate_number: string;
+    total_seats: number;
+  }) => void;
   availableSeats: number;
   corridorRiders: WaitingRider[];
   acceptedRiders: WaitingRider[];
@@ -150,6 +179,88 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
+  // Authentication & Session
+  isAuthenticated: false,
+  login: (emailOrPhone, role) => {
+    if (role) {
+      set({ isAuthenticated: true, activeRole: role });
+    } else {
+      set({ isAuthenticated: true });
+    }
+  },
+  logout: () => {
+    set({ isAuthenticated: false, activeTab: 'deck' });
+  },
+  registerRider: (data) => {
+    set((state) => ({
+      isAuthenticated: true,
+      activeRole: 'rider',
+      user: {
+        ...state.user,
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber: data.phone,
+        employer: data.employer || 'Corporate Executive',
+        employerDomain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
+      },
+    }));
+  },
+  registerDriver: (data) => {
+    const newDriverProfile: CorridorDriver = {
+      id: `driver-custom-${Date.now()}`,
+      name: data.fullName,
+      avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
+      employer: data.employer || 'Corporate Professional',
+      employer_domain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
+      alumni: 'Lagos Professional Network',
+      rating: 5.0,
+      trips_completed: 1,
+      vehicle: {
+        make: data.vehicle.make,
+        model: data.vehicle.model,
+        year: data.vehicle.year,
+        color: data.vehicle.color,
+        plate_number: data.vehicle.plate_number,
+        category: 'sedan',
+        drivetrain: 'FWD',
+        has_ac: data.vehicle.has_ac,
+      },
+      corridor: {
+        origin: 'Ajah Jubilee Bridge / Langbasa',
+        destination: 'Victoria Island (Adeola Odeku)',
+        departure_time: '07:00 AM',
+        available_seats: data.vehicle.total_seats,
+        fuel_split_ngn: 2000,
+        ac_included: data.vehicle.has_ac,
+      },
+      vibe_tags: ['AC On', 'Quiet Commute', 'Executive'],
+    };
+
+    set((state) => ({
+      isAuthenticated: true,
+      activeRole: 'driver',
+      activeTab: 'deck',
+      user: {
+        ...state.user,
+        fullName: data.fullName,
+        email: data.email,
+        phoneNumber: data.phone,
+        employer: data.employer || 'Corporate Executive',
+        employerDomain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
+      },
+      driverVehicle: {
+        make: data.vehicle.make,
+        model: data.vehicle.model,
+        year: data.vehicle.year,
+        color: data.vehicle.color,
+        plate_number: data.vehicle.plate_number,
+        total_seats: data.vehicle.total_seats,
+      },
+      availableSeats: data.vehicle.total_seats,
+      drivers: [newDriverProfile, ...state.drivers],
+    }));
+  },
+
   user: mockCurrentUser,
   activeRole: 'rider',
   setActiveRole: (role) => set({ activeRole: role }),
@@ -307,6 +418,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       driverName: currentDriver.name,
       riderName: state.user.fullName,
       driverAvatar: currentDriver.avatar,
+      vehicleMake: currentDriver.vehicle.make,
+      vehicleModel: currentDriver.vehicle.model,
+      plateNumber: currentDriver.vehicle.plate_number,
       fareNgn: agreedFare,
       hasAc: true,
       pickupSafeZone: state.selectedSafeZone,
@@ -355,6 +469,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       driverName: 'Babatunde Adeleke',
       riderName: mockCurrentUser.fullName,
       driverAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+      vehicleMake: 'Toyota',
+      vehicleModel: 'Camry',
+      plateNumber: 'APP-842-EY',
       fareNgn: 2000,
       hasAc: true,
       pickupSafeZone: mockSafeZones[0],
@@ -632,6 +749,12 @@ export const useAppStore = create<AppState>((set, get) => ({
     plate_number: 'APP-842-EY',
     total_seats: 3,
   },
+  updateDriverCar: (car) => {
+    set({
+      driverVehicle: car,
+      availableSeats: car.total_seats,
+    });
+  },
   availableSeats: 3,
   corridorRiders: mockCorridorRiders,
   acceptedRiders: [],
@@ -656,6 +779,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       driverName: state.user.fullName,
       riderName: rider.name,
       driverAvatar: state.user.avatarUrl,
+      vehicleMake: state.driverVehicle.make,
+      vehicleModel: state.driverVehicle.model,
+      plateNumber: state.driverVehicle.plate_number,
       fareNgn: proratedFare,
       hasAc: true,
       pickupSafeZone: rider.pickupSafeZone,

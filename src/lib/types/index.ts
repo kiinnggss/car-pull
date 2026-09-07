@@ -142,6 +142,9 @@ export interface CommuteMatch {
   driverName: string;
   riderName: string;
   driverAvatar: string;
+  vehicleMake?: string;
+  vehicleModel?: string;
+  plateNumber?: string;
   fareNgn: number;
   hasAc: boolean;
   pickupSafeZone: SafeZone;
