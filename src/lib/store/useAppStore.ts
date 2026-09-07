@@ -129,9 +129,12 @@ interface AppState {
   // Fastest Flatbed Action
   dispatchFastestFlatbed: () => void;
 
+  // Corridor Driver Selection
+  selectDriverById: (driverId: string) => void;
+
   // UI Navigation
-  activeTab: 'deck' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet';
-  setActiveTab: (tab: 'deck' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet') => void;
+  activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet';
+  setActiveTab: (tab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet') => void;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -634,6 +637,19 @@ export const useAppStore = create<AppState>((set, get) => ({
       escrowTransactions: [newTx, ...state.escrowTransactions],
       activeTab: 'sos',
     });
+  },
+
+  selectDriverById: (driverId: string) => {
+    const drivers = get().drivers;
+    const idx = drivers.findIndex((d) => d.id === driverId);
+    if (idx !== -1) {
+      set({
+        activeDriverIndex: idx,
+        currentDriver: drivers[idx],
+        customBidNgn: drivers[idx].corridor.fuel_split_ngn,
+        activeTab: 'deck',
+      });
+    }
   },
 
   activeTab: 'deck',

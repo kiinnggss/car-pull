@@ -16,6 +16,7 @@ import {
   Sparkles,
   DollarSign,
   Building2,
+  Navigation,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -30,6 +31,7 @@ export const DriverSeatDeck: React.FC = () => {
     removeRiderFromCarpool,
     commuteDirection,
     offlinePin,
+    setActiveTab,
   } = useAppStore();
 
   const [copiedManifest, setCopiedManifest] = useState(false);
@@ -77,7 +79,24 @@ ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickup
   };
 
   return (
-    <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in">
+    <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in">
+      {/* Top Driver Controls & Live Map Switcher */}
+      <div className="w-full flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-xl text-xs">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="font-bold text-emerald-800 text-[10px]">Driver Mode Active</span>
+        </div>
+
+        <button
+          onClick={() => setActiveTab('map')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all"
+          title="View route and pickups on live corridor map"
+        >
+          <Navigation className="w-3.5 h-3.5 text-amber-300" />
+          <span>Live Route Map</span>
+        </button>
+      </div>
+
       {/* Driver Vehicle & Dynamic Seat Card */}
       <div className="bg-gradient-to-b from-purple-50/70 to-white rounded-3xl p-4 border border-purple-100/80 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">

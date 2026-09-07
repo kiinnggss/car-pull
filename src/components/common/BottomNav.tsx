@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { Compass, CalendarCheck, QrCode, Wallet, AlertOctagon } from 'lucide-react';
+import { Compass, CalendarCheck, QrCode, Wallet, AlertOctagon, Navigation } from 'lucide-react';
 
 export const BottomNav: React.FC = () => {
   const { activeTab, setActiveTab, activeMatches, isSosActive, triggerSosBeacon } = useAppStore();
@@ -12,17 +12,24 @@ export const BottomNav: React.FC = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/98 border-t border-zinc-200 px-2 py-2 shadow-lg">
       <div className="flex items-center justify-around">
-        {/* Tab 1: Corridor Swipe Deck */}
+        {/* Tab 1: Corridor Swipe Deck & Live Map Toggle */}
         <button
-          onClick={() => setActiveTab('deck')}
+          onClick={() => setActiveTab(activeTab === 'deck' ? 'map' : 'deck')}
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[48px] ${
-            activeTab === 'deck'
+            activeTab === 'deck' || activeTab === 'map'
               ? 'text-[#7C3AED] font-bold'
               : 'text-zinc-500 hover:text-zinc-900'
           }`}
+          title="Tap to toggle between Card Deck and Live Corridor Map"
         >
-          <Compass className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#7C3AED]' : ''}`} />
-          <span className="text-[10px] mt-1 tracking-tight">Corridor</span>
+          {activeTab === 'map' ? (
+            <Navigation className="w-5 h-5 text-[#7C3AED]" />
+          ) : (
+            <Compass className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#7C3AED]' : ''}`} />
+          )}
+          <span className="text-[10px] mt-1 tracking-tight">
+            {activeTab === 'map' ? 'Live Map' : 'Corridor'}
+          </span>
         </button>
 
         {/* Tab 2: Matches & Daily Locks */}

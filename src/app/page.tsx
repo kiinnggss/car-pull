@@ -11,6 +11,7 @@ import { SafeZoneSelector } from '@/components/carpool/SafeZoneSelector';
 import { EscrowWallet } from '@/components/wallet/EscrowWallet';
 import { EmergencyBeacon } from '@/components/sos/EmergencyBeacon';
 import { CommutePass } from '@/components/pass/CommutePass';
+import { CorridorMap } from '@/components/map/CorridorMap';
 
 export default function Home() {
   const { activeTab, activeRole } = useAppStore();
@@ -23,6 +24,7 @@ export default function Home() {
       {/* Primary Dynamic Content Area */}
       <div className="flex-1 w-full pt-3">
         {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
+        {activeTab === 'map' && <CorridorMap />}
         {activeTab === 'matches' && <MatchesList />}
         {activeTab === 'pass' && <CommutePass />}
         {activeTab === 'safezones' && (

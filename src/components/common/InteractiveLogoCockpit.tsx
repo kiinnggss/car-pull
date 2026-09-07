@@ -86,13 +86,9 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
 
     switch (id) {
       case 'pin':
-        setLastActionMessage(`📍 Safe Zones: Opening hub selector (Active: ${selectedSafeZone.name})`);
-        if (onOpenSafeZoneModal) {
-          onClose();
-          onOpenSafeZoneModal();
-        } else {
-          setActiveTab('deck');
-        }
+        setLastActionMessage(`🗺️ Live Corridor Map: Viewing route & CCTV Safe Zones (Active: ${selectedSafeZone.name})`);
+        setActiveTab('map');
+        onClose();
         break;
 
       case 'arrow':
@@ -292,7 +288,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
               className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-xl font-bold flex items-center gap-1.5 transition-colors text-left"
             >
               <MapPin className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-              <span className="truncate">1. Safe Zone Hub</span>
+              <span className="truncate">1. Live Route Map</span>
             </button>
 
             <button

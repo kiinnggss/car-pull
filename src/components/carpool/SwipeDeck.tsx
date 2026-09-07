@@ -7,7 +7,7 @@ import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { FairShareIndicator } from './FairShareIndicator';
 import { SafeZoneSelector } from './SafeZoneSelector';
-import { RefreshCw, MapPin, CheckCircle, Sparkles, Calendar } from 'lucide-react';
+import { RefreshCw, MapPin, CheckCircle, Sparkles, Calendar, Navigation } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatNgn } from '@/lib/utils';
 
@@ -24,6 +24,7 @@ export const SwipeDeck: React.FC = () => {
     swipeRight,
     resetDeck,
     lockWeeklyCommute,
+    setActiveTab,
   } = useAppStore();
 
   const [showSafeZoneModal, setShowSafeZoneModal] = useState(false);
@@ -70,24 +71,36 @@ export const SwipeDeck: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center w-full max-w-[390px] mx-auto pb-24 px-3 space-y-2.5">
-      {/* Seamless Integrated Safe Zone Filter Pill */}
-      <div className="w-full flex items-center justify-between bg-zinc-50 rounded-2xl px-3 py-2 text-xs">
-        <div className="flex items-center gap-2 overflow-hidden">
-          <MapPin className="w-4 h-4 text-[#7C3AED] flex-shrink-0" />
-          <div className="truncate">
-            <span className="text-[10px] text-zinc-400 block font-semibold uppercase tracking-wider">
-              Pickup Safe Zone
-            </span>
-            <span className="font-bold text-zinc-800 truncate block text-[11px]">
-              {selectedSafeZone.name}
-            </span>
+      {/* Seamless Integrated Safe Zone Filter Pill & Live Map Switcher */}
+      <div className="w-full flex items-center justify-between gap-1.5">
+        <div className="flex-1 flex items-center justify-between bg-zinc-50 border border-zinc-200/80 rounded-2xl px-3 py-1.5 text-xs shadow-2xs">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <MapPin className="w-4 h-4 text-[#7C3AED] flex-shrink-0" />
+            <div className="truncate">
+              <span className="text-[9px] text-zinc-400 block font-semibold uppercase tracking-wider leading-none">
+                Safe Zone
+              </span>
+              <span className="font-bold text-zinc-800 truncate block text-[11px] leading-tight">
+                {selectedSafeZone.name}
+              </span>
+            </div>
           </div>
+          <button
+            onClick={() => setShowSafeZoneModal(true)}
+            className="text-xs font-bold text-[#7C3AED] hover:underline px-1.5 py-0.5 rounded-lg flex-shrink-0 ml-1"
+          >
+            Change
+          </button>
         </div>
+
+        {/* Quick Switch to Live Map */}
         <button
-          onClick={() => setShowSafeZoneModal(true)}
-          className="text-xs font-bold text-[#7C3AED] hover:underline px-2 py-1 rounded-lg flex-shrink-0 ml-1"
+          onClick={() => setActiveTab('map')}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all flex-shrink-0"
+          title="Open interactive Lagos Corridor Map"
         >
-          Change
+          <Navigation className="w-3.5 h-3.5 text-amber-300" />
+          <span>Live Map</span>
         </button>
       </div>
 
