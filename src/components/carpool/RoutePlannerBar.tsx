@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { SafeZoneSelector } from './SafeZoneSelector';
+import { DeparturesSheet } from './DeparturesSheet';
 
 export const RoutePlannerBar: React.FC = () => {
   const {
@@ -25,10 +26,12 @@ export const RoutePlannerBar: React.FC = () => {
     swapRiderRoute,
     lagosLocations,
     selectedSafeZone,
+    drivers,
   } = useAppStore();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showSafeZoneModal, setShowSafeZoneModal] = useState(false);
+  const [showDeparturesSheet, setShowDeparturesSheet] = useState(false);
   const [originQuery, setOriginQuery] = useState(riderRoute.origin);
   const [destQuery, setDestQuery] = useState(riderRoute.destination);
   const [activeInput, setActiveInput] = useState<'origin' | 'dest'>('origin');
@@ -135,13 +138,23 @@ export const RoutePlannerBar: React.FC = () => {
           </div>
 
           <div className="flex items-center justify-between pt-1.5 mt-1 border-t border-[#EFE8DC] text-[10px]">
-            <span className="text-[#70665A] font-semibold flex items-center gap-1">
-              <Clock className="w-3 h-3 text-[#70665A]" />
-              {riderRoute.distanceKm} km • ~{riderRoute.estimatedMinutes} mins
-            </span>
-            <span className="text-[#0D6E6E] font-black bg-teal-50 px-2 py-0.2 rounded-full border border-teal-200">
-              Fair Split: ₦{riderRoute.recommendedFuelSplitNgn.toLocaleString()}
-            </span>
+            <button
+              onClick={() => setShowDeparturesSheet(true)}
+              className="flex items-center gap-1 text-[#0D6E6E] hover:text-[#094E4E] bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1 rounded-lg border border-teal-200/80 font-bold transition-all active:scale-95 shadow-2xs"
+              title="Browse morning departure times in corridor schedule"
+            >
+              <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
+              <span>{drivers.length} Departures ▾</span>
+            </button>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[#70665A] font-semibold text-[10px]">
+                {riderRoute.distanceKm} km
+              </span>
+              <span className="text-[#DDD4C5]">•</span>
+              <span className="text-[#0D6E6E] font-black bg-teal-50 px-2 py-0.5 rounded-lg border border-teal-200">
+                Fair Split: ₦{riderRoute.recommendedFuelSplitNgn.toLocaleString()}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -297,6 +310,12 @@ export const RoutePlannerBar: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Calm Drawer: Corridor Departures Sheet */}
+      <DeparturesSheet
+        isOpen={showDeparturesSheet}
+        onClose={() => setShowDeparturesSheet(false)}
+      />
     </>
   );
 };

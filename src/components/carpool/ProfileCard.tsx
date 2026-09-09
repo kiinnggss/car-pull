@@ -1,8 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { CorridorDriver, SafeZone } from '@/lib/types';
 import { ShieldCheck, Snowflake, Clock, Users, Car, MapPin, Star } from 'lucide-react';
+import { DriverTrustModal } from './DriverTrustModal';
 
 interface ProfileCardProps {
   driver: CorridorDriver;
@@ -10,6 +11,8 @@ interface ProfileCardProps {
 }
 
 export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) => {
+  const [showTrustModal, setShowTrustModal] = useState(false);
+
   return (
     <div className="relative w-full h-[350px] rounded-2xl bg-white overflow-hidden shadow-sm flex flex-col justify-between select-none border border-[#DDD4C5] transform-gpu">
       {/* Driver Visual with Smooth Seamless Fade into Card */}
@@ -26,10 +29,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
       {/* Floating Header Badges - Deep Logo Colors */}
       <div className="relative z-10 p-2.5 flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <span className="inline-flex items-center gap-1 bg-[#0D6E6E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs">
+          <button
+            onClick={() => setShowTrustModal(true)}
+            className="inline-flex items-center gap-1 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs transition-all active:scale-95"
+            title="Tap to view verified trust credentials"
+          >
             <ShieldCheck className="w-3 h-3" />
-            Verified
-          </span>
+            <span>Verified</span>
+          </button>
 
           {driver.vehicle.has_ac && (
             <span className="inline-flex items-center gap-1 bg-[#0F766E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs">
@@ -110,6 +117,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           ))}
         </div>
       </div>
+
+      {/* Verified Corporate Commuter Trust Sheet */}
+      <DriverTrustModal
+        driver={driver}
+        isOpen={showTrustModal}
+        onClose={() => setShowTrustModal(false)}
+      />
     </div>
   );
 };
