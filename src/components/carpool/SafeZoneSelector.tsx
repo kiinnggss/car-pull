@@ -51,7 +51,7 @@ export const SafeZoneSelector: React.FC = () => {
       {/* List of Verified Safe Zones */}
       <div className="space-y-2">
         <label className="text-xs font-bold text-zinc-600 uppercase tracking-wider block px-1">
-          Select Off-Street Pickup Hub (Ajah ➔ VI)
+          Select Off-Street Pickup Hub (Ajah → VI)
         </label>
         {safeZones.map((zone) => {
           const isSelected = selectedSafeZone.id === zone.id;

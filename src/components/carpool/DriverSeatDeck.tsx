@@ -18,6 +18,7 @@ import {
   Building2,
   Navigation,
   X,
+  Star,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -61,20 +62,20 @@ export const DriverSeatDeck: React.FC = () => {
   };
 
   const shareToWhatsApp = () => {
-    const text = `🚗 *CAR PULL - DRIVER COMMUTE MANIFEST*
-📅 ${commuteDirection === 'morning' ? 'Morning Outbound' : 'Evening Return'} Commute
-🛡️ *Status:* Lagos State Transport Law Sec 44 Compliant
+    const text = `*CAR PULL - DRIVER COMMUTE MANIFEST*
+Direction: ${commuteDirection === 'morning' ? 'Morning Outbound' : 'Evening Return'} Commute
+Status: Lagos State Transport Law Sec 44 Compliant
 
-👤 *Driver:* ${user.fullName} (${user.employer})
-🚘 *Vehicle:* ${driverVehicle.make} ${driverVehicle.model} (${driverVehicle.color})
-🔢 *Plate Number:* ${driverVehicle.plate_number}
-🔑 *Offline Pickup PIN:* ${offlinePin}
-💺 *Capacity:* ${filledSeats}/${totalSeats} Seats Filled (Offset: ${formatNgn(totalFuelOffset)})
+• Driver: ${user.fullName} (${user.employer})
+• Vehicle: ${driverVehicle.make} ${driverVehicle.model} (${driverVehicle.color})
+• Plate Number: ${driverVehicle.plate_number}
+• Pickup PIN: ${offlinePin}
+• Capacity: ${filledSeats}/${totalSeats} Seats Filled (Offset: ${formatNgn(totalFuelOffset)})
 
-👥 *Confirmed Passengers:*
+Confirmed Passengers:
 ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickupSafeZone.name}`).join('\n')}
 
-*CAR PULL Zero-Cash Escrow Active*`;
+CAR PULL Zero-Cash Escrow Active`;
 
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(text);
@@ -296,7 +297,7 @@ ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickup
                       <div className="flex items-center gap-1 text-[10px] text-zinc-500 font-medium">
                         <Building2 className="w-3 h-3 text-zinc-400" />
                         <span>{rider.employer}</span>
-                        <span>• ★ {rider.rating}</span>
+                        <span className="flex items-center gap-0.5">• <Star className="w-3 h-3 fill-amber-400 text-amber-400 inline" /> {rider.rating}</span>
                       </div>
                     </div>
                   </div>
@@ -358,7 +359,7 @@ ${acceptedRiders.map((r, i) => `${i + 1}. ${r.name} (${r.employer}) - ${r.pickup
                 onClick={() => setShowCarModal(false)}
                 className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
               >
-                ✕
+                <X className="w-3.5 h-3.5" />
               </button>
             </div>
 

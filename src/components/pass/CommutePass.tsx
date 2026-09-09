@@ -57,21 +57,21 @@ export const CommutePass: React.FC = () => {
   const activeVehicleModel = activeRole === 'driver' ? `${driverVehicle.make} ${driverVehicle.model}` : 'Toyota Camry (2021)';
 
   const sharePassWhatsApp = () => {
-    const text = `🛡️ *LAGOS STATE NON-COMMERCIAL COMMUTE CERTIFICATE*
-📜 *Statutory Authority:* Lagos State Transport Sector Reform Law 2018 (Cap T1, Section 44)
-🛡️ *Status:* Verified Non-Commercial Carpool (Exempt from Commercial Taxi Licensing)
+    const text = `*LAGOS STATE NON-COMMERCIAL COMMUTE CERTIFICATE*
+Statutory Authority: Lagos State Transport Sector Reform Law 2018 (Cap T1, Section 44)
+Status: Verified Non-Commercial Carpool (Exempt from Commercial Taxi Licensing)
 
-🚘 *Vehicle:* ${activeVehicleModel} | Plate: *${activeVehiclePlate}*
-👤 *Driver:* ${activeDriverName} (${user.employer})
-🔢 *Offline Security PIN:* ${offlinePin}
-📅 *Audit Timestamp:* ${currentTime}
+• Vehicle: ${activeVehicleModel} | Plate: *${activeVehiclePlate}*
+• Driver: ${activeDriverName} (${user.employer})
+• Security PIN: ${offlinePin}
+• Audit Timestamp: ${currentTime}
 
-👥 *Manifest:*
+Manifest:
 • Driver: ${activeDriverName} (NIN/BVN Verified)
 ${acceptedRiders.length > 0 ? acceptedRiders.map((r, i) => `• Co-Rider ${i + 1}: ${r.name} (${r.employer})`).join('\n') : '• Co-Rider: Femi Adeyemi (Dangote Group)'}
 
-⚖️ *Zero-Profit Audit:* Fuel split capped at 1.2x PMS consumption. Not for hire.
-📞 *LASTMA Extortion Hotline:* 0800-00-LASTMA | *LASEMA:* 112 / 767`;
+Zero-Profit Audit: Fuel split capped at 1.2x PMS consumption. Not for hire.
+Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(text);
@@ -99,7 +99,7 @@ ${acceptedRiders.length > 0 ? acceptedRiders.map((r, i) => `• Co-Rider ${i + 1
             <img
               src={getAssetPath('/logo.png')}
               alt="CAR PULL Seal"
-              className="w-8 h-8 rounded-xl object-cover shadow-2xs border border-emerald-300 flex-shrink-0"
+              className="w-8 h-8 rounded-lg object-contain bg-white p-0.5 shadow-2xs border border-emerald-300 flex-shrink-0"
             />
             <div>
               <span className="text-[9px] uppercase tracking-widest text-emerald-800 font-extrabold block">
@@ -218,7 +218,7 @@ ${acceptedRiders.length > 0 ? acceptedRiders.map((r, i) => `• Co-Rider ${i + 1
             <div className="flex items-center justify-between">
               <span className="text-zinc-500 font-medium">Commute Corridor:</span>
               <span className="font-bold text-zinc-900">
-                {commuteDirection === 'morning' ? 'Ajah ➔ VI ➔ Marina' : 'VI / Marina ➔ Ajah'}
+                {commuteDirection === 'morning' ? 'Ajah → VI → Marina' : 'VI / Marina → Ajah'}
               </span>
             </div>
             <div className="flex items-center justify-between">

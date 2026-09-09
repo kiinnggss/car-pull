@@ -86,26 +86,26 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
 
     switch (id) {
       case 'pin':
-        setLastActionMessage(`🗺️ Live Corridor Map: Viewing route & CCTV Safe Zones (Active: ${selectedSafeZone.name})`);
+        setLastActionMessage(`Live Corridor Map: Viewing route & CCTV Safe Zones (Active: ${selectedSafeZone.name})`);
         setActiveTab('map');
         onClose();
         break;
 
       case 'arrow':
         toggleCommuteDirection();
-        const nextDir = commuteDirection === 'morning' ? 'Evening Return (VI ➔ Ajah)' : 'Morning Outbound (Ajah ➔ VI)';
-        setLastActionMessage(`🔁 Switched Route to: ${nextDir}`);
+        const nextDir = commuteDirection === 'morning' ? 'Evening Return (VI → Ajah)' : 'Morning Outbound (Ajah → VI)';
+        setLastActionMessage(`Switched Route to: ${nextDir}`);
         break;
 
       case 'circle':
         resetDeck();
         setActiveTab('deck');
-        setLastActionMessage('🔄 Corridor Deck refreshed to top driver');
+        setLastActionMessage('Corridor Deck refreshed to top driver');
         break;
 
       case 'shield':
         setActiveTab('pass');
-        setLastActionMessage('🛡️ Opening LASTMA Sec 44 Anti-Extortion Pass');
+        setLastActionMessage('Opening LASTMA Sec 44 Anti-Extortion Pass');
         onClose();
         break;
 
@@ -114,8 +114,8 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
         setActiveRole(nextRole);
         setLastActionMessage(
           nextRole === 'driver'
-            ? `🚗 Switched to DRIVER Mode (${driverVehicle.plate_number})`
-            : '🎒 Switched to RIDER Mode'
+            ? `Switched to DRIVER Mode (${driverVehicle.plate_number})`
+            : 'Switched to RIDER Mode'
         );
         confetti({
           particleCount: 35,

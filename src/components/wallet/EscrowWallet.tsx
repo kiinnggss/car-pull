@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   AlertCircle,
   HelpCircle,
+  X,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -242,9 +243,9 @@ export const EscrowWallet: React.FC = () => {
               </div>
               <button
                 onClick={() => setShowWithdrawModal(false)}
-                className="text-xs text-zinc-400 hover:text-zinc-800 font-bold"
+                className="p-1 text-zinc-400 hover:text-zinc-800 rounded-lg hover:bg-zinc-100"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
@@ -385,9 +386,9 @@ export const EscrowWallet: React.FC = () => {
               </h3>
               <button
                 onClick={() => setShowInfoModal(false)}
-                className="text-xs text-zinc-400 hover:text-zinc-800 font-bold"
+                className="p-1 text-zinc-400 hover:text-zinc-800 rounded-lg hover:bg-zinc-100"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 

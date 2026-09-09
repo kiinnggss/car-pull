@@ -28,16 +28,16 @@ export const MatchesList: React.FC = () => {
   } = useAppStore();
 
   const handleShareWhatsApp = (match: any) => {
-    const text = `🚗 *CAR PULL COMMUTE CONFIRMATION*
-📅 Scheduled: ${match.scheduledFor}
-🛡️ *Status:* Verified Non-Commercial (Lagos Law Sec 44)
+    const text = `*CAR PULL COMMUTE CONFIRMATION*
+Scheduled: ${match.scheduledFor}
+Status: Verified Non-Commercial (Lagos Law Sec 44)
 
-👤 *Driver:* ${match.driverName} (NIN/BVN Checked)
-📍 *Pickup Safe Zone:* ${match.pickupSafeZone.name}
-🔑 *Offline Pickup PIN:* ${offlinePin}
-💰 *Fair Share Fuel Split:* ${formatNgn(match.fareNgn)} (Escrow Held)
+• Driver: ${match.driverName} (NIN/BVN Checked)
+• Pickup Safe Zone: ${match.pickupSafeZone.name}
+• Offline Pickup PIN: ${offlinePin}
+• Fair Share Fuel Split: ${formatNgn(match.fareNgn)} (Escrow Held)
 
-*Zero Cash • Monitored Corridor • CCTV Safe Zone*`;
+Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
       navigator.clipboard.writeText(text);

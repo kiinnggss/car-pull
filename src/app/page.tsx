@@ -19,19 +19,19 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen bg-white border-x border-zinc-200 relative flex flex-col justify-between shadow-xl text-zinc-900 overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen bg-[#FAF8F5] border-x border-[#E7E2D8] relative flex flex-col justify-between shadow-xl text-[#1C1917] overflow-x-hidden">
         <AuthLanding />
       </main>
     );
   }
 
   return (
-    <main className="w-full max-w-[430px] min-h-screen bg-white border-x border-zinc-200 relative flex flex-col justify-between shadow-xl text-zinc-900 overflow-x-hidden">
+    <main className="w-full max-w-[430px] min-h-screen bg-[#FAF8F5] border-x border-[#E7E2D8] relative flex flex-col justify-between shadow-xl text-[#1C1917] overflow-x-hidden">
       {/* Top Application Header */}
       <Header />
 
       {/* Primary Dynamic Content Area */}
-      <div className="flex-1 w-full pt-3">
+      <div className="flex-1 w-full pt-2">
         {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
         {activeTab === 'map' && <CorridorMap />}
         {activeTab === 'matches' && <MatchesList />}

@@ -11,6 +11,7 @@ import {
   FileCheck,
   CheckCircle2,
   XCircle,
+  X,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 
@@ -49,7 +50,7 @@ export const AssistanceShield: React.FC = () => {
 
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `🚨 CAR PULL EMERGENCY CLEARANCE: I am broken down at ${activeIncident.locationDescription}. Official recovery vehicle EN ROUTE: ${selectedProvider.truck_type} (${selectedProvider.plate_number}), Operator: ${selectedProvider.operator_name} (${selectedProvider.phone}). Authorization Code: ${activeIncident.dispatchAuthCode}. Protected under Lagos State Transport Recovery Act.`
+      `CAR PULL EMERGENCY CLEARANCE: I am broken down at ${activeIncident.locationDescription}. Official recovery vehicle EN ROUTE: ${selectedProvider.truck_type} (${selectedProvider.plate_number}), Operator: ${selectedProvider.operator_name} (${selectedProvider.phone}). Authorization Code: ${activeIncident.dispatchAuthCode}. Protected under Lagos State Transport Recovery Act.`
     );
     window.open(`https://wa.me/?text=${text}`, '_blank');
   };
@@ -155,7 +156,7 @@ export const AssistanceShield: React.FC = () => {
                 : 'bg-[#7C3AED] text-white'
             }`}
           >
-            {receiptApproved ? 'Approved ✓' : 'Review'}
+            {receiptApproved ? 'Approved' : 'Review'}
           </button>
         </div>
       </div>
@@ -199,9 +200,9 @@ export const AssistanceShield: React.FC = () => {
               </h3>
               <button
                 onClick={() => setShowReceiptModal(false)}
-                className="text-xs text-zinc-400 hover:text-zinc-900 font-bold"
+                className="p-1 text-zinc-400 hover:text-zinc-900 rounded-lg hover:bg-zinc-100"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 

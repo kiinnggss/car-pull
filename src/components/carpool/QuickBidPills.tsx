@@ -18,72 +18,70 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
   const isLocked = !breakdown.isLegal;
 
   return (
-    <div className="w-full space-y-2.5">
-      {/* Quick Bid Counter Pill Actions */}
-      <div className="flex items-center gap-2">
-        {/* Decrease Pill (-₦500) */}
-        <button
-          onClick={() => adjustBid(-500)}
-          disabled={customBidNgn <= 500}
-          className="flex-1 min-h-[44px] bg-zinc-100 hover:bg-zinc-200 disabled:opacity-40 disabled:cursor-not-allowed border border-zinc-200 rounded-xl flex items-center justify-center gap-1 text-xs font-bold text-zinc-800 active:scale-95 transition-all shadow-2xs"
-        >
-          <Minus className="w-3.5 h-3.5 text-zinc-600" />
-          <span>-₦500</span>
-        </button>
+    <div className="w-full space-y-1.5">
+      {/* Dense Stepper Row: Compact Fair-Split Bid Adjuster */}
+      <div className="flex items-center justify-between bg-white border border-[#E7E2D8] rounded-xl px-2 py-1 shadow-2xs">
+        <span className="text-[10px] font-bold text-[#78716C] uppercase tracking-wider pl-1">
+          Your Split
+        </span>
 
-        {/* Current Bid Display Chip */}
-        <div className="px-3 min-h-[44px] bg-zinc-50 border border-[#7C3AED]/40 rounded-xl flex flex-col items-center justify-center shadow-2xs">
-          <span className="text-[9px] text-zinc-500 uppercase tracking-wider font-semibold">Your Bid</span>
-          <span className={`text-sm font-black ${isLocked ? 'text-red-600' : 'text-zinc-900'}`}>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => adjustBid(-500)}
+            disabled={customBidNgn <= 500}
+            className="w-7 h-7 rounded-lg bg-[#FAF8F5] hover:bg-[#F4F0E8] disabled:opacity-30 border border-[#E7E2D8] flex items-center justify-center text-[#1C1917] active:scale-95 transition-all"
+            title="Decrease split by ₦500"
+          >
+            <Minus className="w-3 h-3 text-[#78716C]" />
+          </button>
+
+          <span className={`text-xs font-black min-w-[65px] text-center ${isLocked ? 'text-red-600' : 'text-[#1C1917]'}`}>
             {formatNgn(customBidNgn)}
           </span>
-        </div>
 
-        {/* Increase Pill (+₦500) */}
-        <button
-          onClick={() => adjustBid(500)}
-          className="flex-1 min-h-[44px] bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 rounded-xl flex items-center justify-center gap-1 text-xs font-bold text-zinc-800 active:scale-95 transition-all shadow-2xs"
-        >
-          <Plus className="w-3.5 h-3.5 text-[#7C3AED]" />
-          <span>+₦500</span>
-        </button>
+          <button
+            onClick={() => adjustBid(500)}
+            className="w-7 h-7 rounded-lg bg-[#FAF8F5] hover:bg-[#F4F0E8] border border-[#E7E2D8] flex items-center justify-center text-[#7C3AED] active:scale-95 transition-all"
+            title="Increase split by ₦500"
+          >
+            <Plus className="w-3 h-3 text-[#7C3AED]" />
+          </button>
+        </div>
       </div>
 
-      {/* Main Dual Action Buttons: Pass vs Accept Seat */}
-      <div className="grid grid-cols-2 gap-2.5">
-        {/* Pass Button */}
+      {/* Streamlined Dual Action Buttons: Thumb-Friendly Ergonomics */}
+      <div className="flex items-center gap-2">
+        {/* Pass Corridor Button (Secondary) */}
         <button
           onClick={onPass}
-          className="min-h-[48px] bg-zinc-100 hover:bg-red-50 border border-zinc-200 hover:border-red-300 text-zinc-700 hover:text-red-600 rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-all active:scale-95 shadow-2xs"
+          className="w-2/5 min-h-[44px] bg-white hover:bg-red-50/70 border border-[#E7E2D8] hover:border-red-200 text-[#78716C] hover:text-red-600 rounded-xl flex items-center justify-center gap-1.5 font-bold text-xs transition-all active:scale-95 shadow-2xs"
         >
-          <X className="w-4 h-4 text-red-500" />
-          <span>Pass Corridor</span>
+          <X className="w-3.5 h-3.5 text-[#A89F91] group-hover:text-red-500" />
+          <span>Pass</span>
         </button>
 
-        {/* Accept / Counter Button */}
+        {/* Accept Seat Button (Primary Focus CTA) */}
         <button
           onClick={onAccept}
           disabled={isLocked}
-          className={`min-h-[48px] rounded-2xl flex items-center justify-center gap-2 font-bold text-xs transition-all active:scale-95 shadow-md ${
+          className={`flex-1 min-h-[44px] rounded-xl flex items-center justify-center gap-1.5 font-bold text-xs transition-all active:scale-[0.98] shadow-xs ${
             isLocked
-              ? 'bg-zinc-100 text-zinc-400 border border-zinc-300 cursor-not-allowed'
-              : 'bg-[#7C3AED] hover:bg-[#6D28D9] text-white shadow-[#7C3AED]/25 border border-[#A855F7]'
+              ? 'bg-zinc-100 text-zinc-400 border border-zinc-200 cursor-not-allowed'
+              : 'bg-[#7C3AED] hover:bg-[#6D28D9] text-white shadow-[#7C3AED]/20'
           }`}
         >
           {isLocked ? (
             <>
-              <Lock className="w-4 h-4 text-red-500" />
-              <span>Ceiling Locked</span>
+              <Lock className="w-3.5 h-3.5 text-red-500" />
+              <span>Ceiling Exceeded</span>
             </>
           ) : (
-            <div className="flex flex-col items-center leading-tight">
-              <span className="flex items-center gap-1">
-                <Check className="w-3.5 h-3.5 text-emerald-200" />
-                <span>Accept ({formatNgn(customBidNgn)})</span>
-              </span>
+            <div className="flex items-center gap-1.5 leading-tight">
+              <Check className="w-3.5 h-3.5 text-emerald-200" />
+              <span>Accept Ride</span>
               {currentDriver && (
-                <span className="text-[10px] text-purple-200 font-mono">
-                  {currentDriver.vehicle.make} • {currentDriver.vehicle.plate_number}
+                <span className="text-[10px] text-purple-200 font-mono font-bold bg-white/15 px-1.5 py-0.2 rounded">
+                  {currentDriver.vehicle.plate_number}
                 </span>
               )}
             </div>

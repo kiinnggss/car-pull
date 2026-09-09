@@ -16,6 +16,8 @@ import {
   Flame,
   ArrowRight,
   Maximize2,
+  X,
+  Star,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
@@ -255,7 +257,7 @@ export const CorridorMap: React.FC = () => {
         trafficLayer.addLayer(alertMarker);
       }
 
-      // Add Custom Rider Route Markers (Origin A 🟢 & Destination B 🟣)
+      // Add Custom Rider Route Markers (Origin A and Destination B)
       if (riderRoute.originCoords) {
         const originHtml = `
           <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
@@ -382,7 +384,7 @@ export const CorridorMap: React.FC = () => {
             }`}
             title="Tap to switch between AM Outbound and PM Return corridors"
           >
-            <span>{commuteDirection === 'morning' ? '☀️ AM: Ajah ➔ VI' : '🌙 PM: VI ➔ Ajah'}</span>
+            <span>{commuteDirection === 'morning' ? 'AM: Ajah → VI' : 'PM: VI → Ajah'}</span>
             <span className="text-[9px] bg-white/80 px-1 py-0.2 rounded font-black">⇌</span>
           </button>
         </div>
@@ -456,7 +458,7 @@ export const CorridorMap: React.FC = () => {
               onClick={() => setInspectedZone(null)}
               className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
             >
-              ✕
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -515,7 +517,7 @@ export const CorridorMap: React.FC = () => {
               <div>
                 <div className="flex items-center gap-1.5">
                   <h4 className="text-xs font-black text-zinc-900">{inspectedDriver.name}</h4>
-                  <span className="text-[10px] text-amber-500 font-black">★ {inspectedDriver.rating}</span>
+                  <span className="text-[10px] text-zinc-900 font-black flex items-center gap-0.5"><Star className="w-3 h-3 fill-amber-400 text-amber-400 inline" /> {inspectedDriver.rating}</span>
                 </div>
                 <p className="text-[10px] font-bold text-purple-700">
                   {inspectedDriver.employer} <span className="text-zinc-400 font-normal">(@{inspectedDriver.employer_domain})</span>
@@ -529,7 +531,7 @@ export const CorridorMap: React.FC = () => {
               onClick={() => setInspectedDriver(null)}
               className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
             >
-              ✕
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -584,7 +586,7 @@ export const CorridorMap: React.FC = () => {
               onClick={() => setInspectedAlert(null)}
               className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
             >
-              ✕
+              <X className="w-3.5 h-3.5" />
             </button>
           </div>
 

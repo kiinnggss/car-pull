@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { EmergencyProvider } from '@/lib/types';
-import { ShieldCheck, Truck, Clock, AlertTriangle, Lock, Zap } from 'lucide-react';
+import { ShieldCheck, Truck, Clock, AlertTriangle, Lock, Zap, Star } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 
 interface ProviderDispatchDeckProps {
@@ -116,8 +116,9 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                   LASDRI Certified
                 </span>
 
-                <span className="text-amber-600 font-semibold">
-                  ⭐ {prov.rating}
+                <span className="text-amber-600 font-bold flex items-center gap-0.5">
+                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
+                  <span>{prov.rating}</span>
                 </span>
               </div>
 
