@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
   MapPin,
@@ -12,13 +13,15 @@ import {
   Sparkles,
   Volume2,
   VolumeX,
-  CheckCircle2,
-  HelpCircle,
+  ArrowLeft,
+  Activity,
+  Lock,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { getAssetPath } from '@/lib/assets';
+import { formatNgn } from '@/lib/utils';
 
-// Lightweight, zero-dependency browser Web Audio sound effects
+// Lightweight browser Web Audio sound effects
 const playCockpitTone = (freq: number, type: OscillatorType = 'sine', duration = 0.1) => {
   try {
     const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
@@ -38,7 +41,7 @@ const playCockpitTone = (freq: number, type: OscillatorType = 'sine', duration =
     osc.start();
     osc.stop(ctx.currentTime + duration);
   } catch (e) {
-    // Silently ignore if audio context is restricted
+    // Ignore audio restriction
   }
 };
 
@@ -64,13 +67,48 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
     resetDeck,
     selectedSafeZone,
     driverVehicle,
+    offlinePin,
+    escrowBalanceNgn,
   } = useAppStore();
 
   const [hoveredHotspot, setHoveredHotspot] = useState<HotspotId>(null);
-  const [lastActionMessage, setLastActionMessage] = useState<string>('Tap any button on the 3D logo');
+  const [lastActionMessage, setLastActionMessage] = useState<string>(
+    'Tap any symbol on the logo or use the buttons below to trigger corridor telemetry.'
+  );
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Browser back-button integration: popping state closes modal instead of closing the app
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Push a history state so physical / swipe back navigates back a step
+    window.history.pushState({ modal: 'cockpit' }, '');
+
+    const handlePopState = () => {
+      onClose();
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !mounted) return null;
+
+  const handleBack = () => {
+    // If modal pushed state, trigger browser back or close directly
+    if (window.history.state?.modal === 'cockpit') {
+      window.history.back();
+    } else {
+      onClose();
+    }
+  };
 
   const handleAction = (id: NonNullable<HotspotId>) => {
     if (soundEnabled) {
@@ -86,26 +124,33 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
 
     switch (id) {
       case 'pin':
-        setLastActionMessage(`Live Corridor Map: Viewing route & CCTV Safe Zones (Active: ${selectedSafeZone.name})`);
+        setLastActionMessage(
+          `Navigating to Live Corridor Map with geofenced safe pickup zone: ${selectedSafeZone.name}.`
+        );
         setActiveTab('map');
         onClose();
         break;
 
       case 'arrow':
         toggleCommuteDirection();
-        const nextDir = commuteDirection === 'morning' ? 'Evening Return (VI → Ajah)' : 'Morning Outbound (Ajah → VI)';
-        setLastActionMessage(`Switched Route to: ${nextDir}`);
+        const nextDir =
+          commuteDirection === 'morning'
+            ? 'Evening Return (VI → Ajah Marina Corridor)'
+            : 'Morning Outbound (Ajah → Victoria Island Expressway)';
+        setLastActionMessage(`Commute corridor switched to: ${nextDir}`);
         break;
 
       case 'circle':
         resetDeck();
         setActiveTab('deck');
-        setLastActionMessage('Corridor Deck refreshed to top driver');
+        setLastActionMessage('Deck reloaded. Verified commuter queue refreshed.');
         break;
 
       case 'shield':
         setActiveTab('pass');
-        setLastActionMessage('Opening LASTMA Sec 44 Anti-Extortion Pass');
+        setLastActionMessage(
+          `Opening Lagos State Transport Sector Reform Act (Cap T1, Sec 44) Non-Commercial Certificate.`
+        );
         onClose();
         break;
 
@@ -114,71 +159,83 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
         setActiveRole(nextRole);
         setLastActionMessage(
           nextRole === 'driver'
-            ? `Switched to DRIVER Mode (${driverVehicle.plate_number})`
-            : 'Switched to RIDER Mode'
+            ? `Switched to DRIVER Mode: Vehicle ${driverVehicle.make} ${driverVehicle.model} (${driverVehicle.plate_number}).`
+            : 'Switched to RIDER Mode: Commuter route searching active.'
         );
         confetti({
           particleCount: 35,
-          spread: 45,
+          spread: 50,
           origin: { y: 0.6 },
-          colors: ['#F59E0B', '#10B981', '#7C3AED'],
+          colors: ['#D97706', '#0D6E6E', '#7C3AED'],
         });
         break;
     }
   };
 
-  return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 animate-in fade-in duration-200">
-      <div className="w-full max-w-[370px] bg-white rounded-3xl p-4.5 space-y-3.5 shadow-2xl border border-zinc-100 max-h-[92vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
-          <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-xl bg-purple-100 text-[#7C3AED]">
-              <Sparkles className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="text-sm font-black text-zinc-900">CAR PULL Interactive Cockpit</h3>
-              <span className="text-[10px] text-zinc-400 font-medium">
-                Hardware Touch Console
+  return createPortal(
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain">
+      <div className="min-h-full flex items-center justify-center py-2">
+        <div className="w-full max-w-[390px] bg-[#FAF8F3] rounded-3xl p-3.5 space-y-2.5 shadow-2xl border border-[#DDD4C5] my-auto animate-in zoom-in-95 duration-150">
+          {/* Header with Back Button (Takes you back a step instead of closing app) */}
+          <div className="flex items-center justify-between border-b border-[#DDD4C5] pb-2">
+            <button
+              onClick={handleBack}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-stone-100 text-[#141210] border border-[#DDD4C5] font-bold text-xs transition-all active:scale-95 shadow-2xs"
+              title="Go back a step"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
+              <span>Back</span>
+            </button>
+
+            <div className="text-center">
+              <h3 className="text-sm font-serif font-black text-[#141210] tracking-tight">
+                Logo Cockpit Console
+              </h3>
+              <span className="text-[10px] text-[#70665A] font-semibold block">
+                Interactive Telemetry &amp; Hardware
               </span>
             </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setSoundEnabled(!soundEnabled)}
+                className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 transition-colors"
+                title={soundEnabled ? 'Mute audio feedback' : 'Enable audio feedback'}
+              >
+                {soundEnabled ? (
+                  <Volume2 className="w-4 h-4 text-[#0D6E6E]" />
+                ) : (
+                  <VolumeX className="w-4 h-4 text-stone-400" />
+                )}
+              </button>
+              <button
+                onClick={handleBack}
+                className="w-7 h-7 rounded-full bg-white hover:bg-stone-200 text-stone-700 font-bold text-xs flex items-center justify-center border border-[#DDD4C5] transition-colors"
+                title="Close console"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-700 transition-colors"
-              title={soundEnabled ? 'Mute UI sounds' : 'Enable UI sounds'}
-            >
-              {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-600" /> : <VolumeX className="w-4 h-4" />}
-            </button>
-            <button
-              onClick={onClose}
-              className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-600 font-bold text-xs flex items-center justify-center transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
+          {/* 3D Interactive Logo Display with Calibrated Touch Hotspots */}
+          <div className="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-[#D97706]/15 via-[#0D6E6E]/15 to-[#C25E2E]/20 p-1 shadow-inner border border-[#C25E2E]/30 flex items-center justify-center">
+            <img
+              src={getAssetPath('/logo.png')}
+              alt="CAR PULL Interactive Logo"
+              className="w-full h-full object-contain select-none pointer-events-none rounded-xl drop-shadow-sm"
+            />
 
-        {/* 3D Interactive Logo Display with Clickable Hotspots */}
-        <div className="relative w-full aspect-square max-w-[290px] mx-auto rounded-3xl overflow-hidden bg-gradient-to-br from-amber-500/20 via-teal-500/10 to-amber-700/20 p-2 shadow-inner border border-zinc-200/80">
-          <img
-            src={getAssetPath('/logo.png')}
-            alt="CAR PULL Interactive Logo"
-            className="w-full h-full object-contain select-none pointer-events-none rounded-2xl drop-shadow-md"
-          />
-
-          {/* HOTSPOT 1: Top-Left Orange Map Pin -> Safe Zones */}
+          {/* HOTSPOT 1: Top-Left Orange Pin -> Safe Zones */}
           <button
             onClick={() => handleAction('pin')}
             onMouseEnter={() => setHoveredHotspot('pin')}
             onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '22.5%', left: '32%', width: '15.5%', height: '16.5%' }}
-            className={`absolute rounded-2xl cursor-pointer transition-all active:scale-90 ${
+            style={{ top: '10%', left: '20%', width: '28%', height: '26%' }}
+            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
               hoveredHotspot === 'pin'
-                ? 'ring-4 ring-amber-400 bg-amber-400/30 shadow-lg scale-105'
-                : 'hover:bg-amber-400/20'
+                ? 'ring-3 ring-amber-400 bg-amber-400/35 shadow-md scale-105'
+                : 'hover:bg-amber-400/25'
             }`}
             title="Safe Zones: Select CCTV Pickup Hub"
             aria-label="Select Pickup Safe Zone"
@@ -186,33 +243,33 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             <span className="sr-only">Safe Zones</span>
           </button>
 
-          {/* HOTSPOT 2: Top-Right Teal Arrow -> Toggle AM/PM Route */}
+          {/* HOTSPOT 2: Top-Right Teal Box -> Toggle AM/PM Route */}
           <button
             onClick={() => handleAction('arrow')}
             onMouseEnter={() => setHoveredHotspot('arrow')}
             onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '22.5%', left: '56%', width: '15.5%', height: '16.5%' }}
-            className={`absolute rounded-2xl cursor-pointer transition-all active:scale-90 ${
+            style={{ top: '10%', left: '52%', width: '28%', height: '26%' }}
+            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
               hoveredHotspot === 'arrow'
-                ? 'ring-4 ring-teal-400 bg-teal-400/30 shadow-lg scale-105'
-                : 'hover:bg-teal-400/20'
+                ? 'ring-3 ring-teal-400 bg-teal-400/35 shadow-md scale-105'
+                : 'hover:bg-teal-400/25'
             }`}
-            title="Commute Direction: Toggle Morning/Evening"
+            title="Toggle AM/PM Commute Corridor"
             aria-label="Toggle AM/PM Commute Route"
           >
             <span className="sr-only">Route Direction</span>
           </button>
 
-          {/* HOTSPOT 3: Bottom-Left White 'C' / Speedometer -> Deck & Reset */}
+          {/* HOTSPOT 3: Mid-Left White Ring 'C' -> Deck Reset */}
           <button
             onClick={() => handleAction('circle')}
             onMouseEnter={() => setHoveredHotspot('circle')}
             onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '42%', left: '32%', width: '15.5%', height: '16%' }}
-            className={`absolute rounded-full cursor-pointer transition-all active:scale-90 ${
+            style={{ top: '38%', left: '20%', width: '28%', height: '26%' }}
+            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
               hoveredHotspot === 'circle'
-                ? 'ring-4 ring-cyan-300 bg-cyan-300/30 shadow-lg scale-105'
-                : 'hover:bg-white/20'
+                ? 'ring-3 ring-cyan-300 bg-cyan-300/35 shadow-md scale-105'
+                : 'hover:bg-cyan-300/25'
             }`}
             title="Corridor Matches: Reset & Refresh Deck"
             aria-label="Refresh Corridor Deck"
@@ -220,18 +277,18 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             <span className="sr-only">Corridor Deck</span>
           </button>
 
-          {/* HOTSPOT 4: Bottom-Right Golden Shield -> LASTMA Sec 44 Pass */}
+          {/* HOTSPOT 4: Mid-Right Golden Shield -> LASTMA Sec 44 Pass */}
           <button
             onClick={() => handleAction('shield')}
             onMouseEnter={() => setHoveredHotspot('shield')}
             onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '41%', left: '56.5%', width: '15.5%', height: '17%' }}
-            className={`absolute rounded-2xl cursor-pointer transition-all active:scale-90 ${
+            style={{ top: '38%', left: '52%', width: '28%', height: '26%' }}
+            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
               hoveredHotspot === 'shield'
-                ? 'ring-4 ring-yellow-400 bg-yellow-400/30 shadow-lg scale-105'
-                : 'hover:bg-yellow-400/20'
+                ? 'ring-3 ring-yellow-400 bg-yellow-400/35 shadow-md scale-105'
+                : 'hover:bg-yellow-400/25'
             }`}
-            title="LASTMA Sec 44 Non-Commercial Pass"
+            title="LASTMA Sec 44 Non-Commercial Certificate"
             aria-label="Open LASTMA Sec 44 Pass"
           >
             <span className="sr-only">LASTMA Pass</span>
@@ -242,89 +299,122 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             onClick={() => handleAction('car')}
             onMouseEnter={() => setHoveredHotspot('car')}
             onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '59%', left: '25.5%', width: '49%', height: '15%' }}
-            className={`absolute rounded-2xl cursor-pointer transition-all active:scale-95 ${
+            style={{ top: '66%', left: '14%', width: '72%', height: '28%' }}
+            className={`absolute rounded-xl cursor-pointer transition-all active:scale-95 ${
               hoveredHotspot === 'car'
-                ? 'ring-4 ring-purple-400 bg-purple-400/30 shadow-lg scale-102'
-                : 'hover:bg-purple-400/20'
+                ? 'ring-3 ring-[#0D6E6E] bg-[#0D6E6E]/30 shadow-md scale-102'
+                : 'hover:bg-[#0D6E6E]/20'
             }`}
-            title="Toggle Role: Rider ⇄ Driver"
+            title="Switch Between Rider and Driver Mode"
             aria-label="Toggle Rider or Driver Role"
           >
             <span className="sr-only">Switch Rider/Driver</span>
           </button>
         </div>
 
-        {/* Dynamic LCD Action Feedback HUD */}
-        <div className="bg-zinc-900 rounded-2xl p-3 text-white space-y-1.5 font-mono text-xs">
-          <div className="flex items-center justify-between text-[10px] text-zinc-400">
-            <span className="flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              COCKPIT TELEMETRY
+        {/* FULLY VISIBLE LCD COCKPIT TELEMETRY HUD (Multi-line, High-Contrast) */}
+        <div className="bg-[#101918] border border-[#0D6E6E]/50 rounded-2xl p-3 text-white space-y-2 font-mono shadow-md">
+          {/* Status Bar */}
+          <div className="flex items-center justify-between text-[10px] text-teal-300/80 border-b border-teal-900/60 pb-1.5">
+            <span className="flex items-center gap-1.5 font-bold tracking-wider">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              LIVE TELEMETRY
             </span>
-            <span>{hoveredHotspot ? `HOVER: [${hoveredHotspot.toUpperCase()}]` : 'READY'}</span>
+            <span className="text-[9px] bg-teal-950/80 text-teal-300 px-1.5 py-0.5 rounded border border-teal-800">
+              {hoveredHotspot ? `HOTSPOT: [${hoveredHotspot.toUpperCase()}]` : 'ONLINE'}
+            </span>
           </div>
 
-          <p className="text-emerald-300 text-[11px] font-bold truncate">
-            {lastActionMessage}
-          </p>
+          {/* Action Message Feed - No Truncation, Multi-line visible */}
+          <div className="bg-black/40 rounded-xl p-2 border border-teal-900/40">
+            <span className="text-[9px] uppercase tracking-widest text-[#D97706] font-bold block mb-0.5">
+              Action Status:
+            </span>
+            <p className="text-emerald-300 text-[11px] font-sans font-bold leading-snug break-words">
+              {lastActionMessage}
+            </p>
+          </div>
 
-          <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-1 border-t border-zinc-800">
-            <span>Role: <strong className="text-white uppercase">{activeRole}</strong></span>
-            <span>Dir: <strong className="text-white uppercase">{commuteDirection}</strong></span>
-            <span>Hub: <strong className="text-white">{selectedSafeZone.name.split(' ')[0]}</strong></span>
+          {/* 4-Box Telemetry Matrix - Dense, Clean, High Contrast */}
+          <div className="grid grid-cols-2 gap-1.5 text-[10px]">
+            <div className="bg-teal-950/60 border border-teal-800/60 rounded-xl p-1.5">
+              <span className="text-teal-400 text-[8px] font-bold uppercase block">Mode</span>
+              <span className="text-white font-black uppercase text-[11px]">{activeRole}</span>
+            </div>
+            <div className="bg-amber-950/60 border border-amber-800/60 rounded-xl p-1.5">
+              <span className="text-amber-400 text-[8px] font-bold uppercase block">Corridor</span>
+              <span className="text-white font-black text-[11px]">
+                {commuteDirection === 'morning' ? 'AM: Ajah ➔ VI' : 'PM: VI ➔ Ajah'}
+              </span>
+            </div>
+            <div className="bg-teal-950/60 border border-teal-800/60 rounded-xl p-1.5 col-span-2">
+              <div className="flex items-center justify-between">
+                <div>
+                  <span className="text-teal-400 text-[8px] font-bold uppercase block">CCTV Safe Hub</span>
+                  <span className="text-white font-bold text-[11px] leading-tight block">
+                    {selectedSafeZone.name}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-emerald-400 text-[8px] font-bold uppercase block">Escrow Held</span>
+                  <span className="text-white font-black text-[11px]">{formatNgn(escrowBalanceNgn)}</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Explicit Touch Function Chips (Accessibility & Quick Actions) */}
+        {/* Logo Hardware Control Buttons */}
         <div className="space-y-1.5">
-          <span className="text-[10px] text-zinc-400 uppercase tracking-wider font-bold block px-1">
-            Logo Hardware Controls:
+          <span className="text-[10px] text-[#70665A] uppercase tracking-wider font-extrabold block px-0.5">
+            1-Tap Hardware Shortcuts:
           </span>
 
-          <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+          <div className="grid grid-cols-2 gap-1.5 text-xs">
             <button
               onClick={() => handleAction('pin')}
-              className="p-2 bg-amber-50 hover:bg-amber-100 text-amber-900 rounded-xl font-bold flex items-center gap-1.5 transition-colors text-left"
+              className="p-2 bg-white hover:bg-amber-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
             >
-              <MapPin className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-              <span className="truncate">1. Live Route Map</span>
+              <MapPin className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
+              <span className="text-[11px]">1. Route Map</span>
             </button>
 
             <button
               onClick={() => handleAction('arrow')}
-              className="p-2 bg-teal-50 hover:bg-teal-100 text-teal-900 rounded-xl font-bold flex items-center gap-1.5 transition-colors text-left"
+              className="p-2 bg-white hover:bg-teal-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
             >
-              <Compass className="w-3.5 h-3.5 text-teal-600 flex-shrink-0" />
-              <span className="truncate">2. AM/PM Route</span>
+              <Compass className="w-3.5 h-3.5 text-[#0D6E6E] flex-shrink-0" />
+              <span className="text-[11px]">2. AM/PM Route</span>
             </button>
 
             <button
               onClick={() => handleAction('circle')}
-              className="p-2 bg-cyan-50 hover:bg-cyan-100 text-cyan-900 rounded-xl font-bold flex items-center gap-1.5 transition-colors text-left"
+              className="p-2 bg-white hover:bg-cyan-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-cyan-600 flex-shrink-0" />
-              <span className="truncate">3. Deck & Reset</span>
+              <RefreshCw className="w-3.5 h-3.5 text-cyan-700 flex-shrink-0" />
+              <span className="text-[11px]">3. Refresh Deck</span>
             </button>
 
             <button
               onClick={() => handleAction('shield')}
-              className="p-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-900 rounded-xl font-bold flex items-center gap-1.5 transition-colors text-left"
+              className="p-2 bg-white hover:bg-emerald-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-              <span className="truncate">4. LASTMA Pass</span>
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+              <span className="text-[11px]">4. Sec 44 Pass</span>
             </button>
           </div>
 
           <button
             onClick={() => handleAction('car')}
-            className="w-full p-2.5 bg-purple-50 hover:bg-purple-100 text-[#7C3AED] rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-colors mt-1"
+            className="w-full p-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.99] shadow-xs"
           >
-            <Car className="w-4 h-4" />
-            <span>5. Car Profile: Switch to {activeRole === 'rider' ? 'Driver' : 'Rider'} Mode</span>
+            <Car className="w-3.5 h-3.5 text-[#FBBF24]" />
+            <span>Switch to {activeRole === 'rider' ? 'Driver Mode' : 'Rider Mode'}</span>
           </button>
         </div>
       </div>
     </div>
-  );
+  </div>,
+  document.body
+);
 };

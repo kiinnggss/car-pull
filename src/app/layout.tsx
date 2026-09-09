@@ -1,5 +1,20 @@
 import type { Metadata, Viewport } from 'next';
+import { Plus_Jakarta_Sans, Playfair_Display } from 'next/font/google';
 import './globals.css';
+
+const sans = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+const serif = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
+  weight: ['600', '700', '800', '900'],
+});
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/car-pull' : '');
 
@@ -23,7 +38,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#FFFFFF',
+  themeColor: '#F6F2EA',
 };
 
 export default function RootLayout({
@@ -32,8 +47,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-[#F4F4F5]">
-      <body className="min-h-screen bg-[#F4F4F5] text-zinc-900 antialiased flex flex-col items-center">
+    <html lang="en" className={`${sans.variable} ${serif.variable}`}>
+      <body className="min-h-screen bg-[#EFE9DF] text-[#141210] font-sans antialiased flex flex-col items-center">
         {children}
       </body>
     </html>

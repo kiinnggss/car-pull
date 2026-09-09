@@ -8,7 +8,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-sans)', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+        serif: ['var(--font-serif)', 'Playfair Display', 'Georgia', 'serif'],
+      },
       colors: {
+        logo: {
+          teal: '#0D6E6E',
+          'teal-dark': '#094E4E',
+          'teal-light': '#14B8A6',
+          amber: '#D97706',
+          terracotta: '#C25E2E',
+          cream: '#FFFDF9',
+        },
         brand: {
           primary: '#7C3AED',
           dark: '#6D28D9',
@@ -16,21 +28,15 @@ const config: Config = {
           subtle: 'rgba(124, 58, 237, 0.08)',
         },
         surface: {
-          canvas: '#FFFFFF',
-          card: '#F8FAFC',
-          elevated: '#F1F5F9',
-          divider: '#E2E8F0',
+          canvas: '#F6F2EA',
+          card: '#FFFFFF',
+          elevated: '#FAF6EE',
+          divider: '#DDD4C5',
         },
         text: {
-          primary: '#09090B',
-          secondary: '#64748B',
-          tertiary: '#94A3B8',
-        },
-        status: {
-          sos: '#EF4444',
-          warning: '#F59E0B',
-          success: '#10B981',
-          ac: '#06B6D4',
+          primary: '#141210',
+          secondary: '#3D362F',
+          tertiary: '#70665A',
         },
       },
     },

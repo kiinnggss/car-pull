@@ -10,22 +10,22 @@ export const BottomNav: React.FC = () => {
   const matchCount = activeMatches.length;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#FAF8F5]/98 backdrop-blur-md border-t border-[#E7E2D8] px-2 py-1.5 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#F6F2EA]/98 backdrop-blur-md border-t border-[#DDD4C5] px-2 py-1.5 shadow-lg">
       <div className="flex items-center justify-around">
         {/* Tab 1: Corridor Swipe Deck & Live Map Toggle */}
         <button
           onClick={() => setActiveTab(activeTab === 'deck' ? 'map' : 'deck')}
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
             activeTab === 'deck' || activeTab === 'map'
-              ? 'text-[#7C3AED] font-black'
-              : 'text-[#78716C] hover:text-[#1C1917]'
+              ? 'text-[#0D6E6E] font-black'
+              : 'text-[#70665A] hover:text-[#141210]'
           }`}
           title="Tap to toggle between Card Deck and Live Corridor Map"
         >
           {activeTab === 'map' ? (
-            <Navigation className="w-5 h-5 text-[#7C3AED]" />
+            <Navigation className="w-5 h-5 text-[#0D6E6E]" />
           ) : (
-            <Compass className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#7C3AED]' : ''}`} />
+            <Compass className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#0D6E6E]' : ''}`} />
           )}
           <span className="text-[10px] mt-0.5 tracking-tight font-bold">
             {activeTab === 'map' ? 'Live Map' : 'Corridor'}
@@ -37,14 +37,14 @@ export const BottomNav: React.FC = () => {
           onClick={() => setActiveTab('matches')}
           className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
             activeTab === 'matches'
-              ? 'text-[#7C3AED] font-black'
-              : 'text-[#78716C] hover:text-[#1C1917]'
+              ? 'text-[#0D6E6E] font-black'
+              : 'text-[#70665A] hover:text-[#141210]'
           }`}
         >
           <div className="relative">
-            <CalendarCheck className={`w-5 h-5 ${activeTab === 'matches' ? 'text-[#7C3AED]' : ''}`} />
+            <CalendarCheck className={`w-5 h-5 ${activeTab === 'matches' ? 'text-[#0D6E6E]' : ''}`} />
             {matchCount > 0 && (
-              <span className="absolute -top-1 -right-2 bg-[#7C3AED] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
+              <span className="absolute -top-1 -right-2 bg-[#0D6E6E] text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center border border-white">
                 {matchCount}
               </span>
             )}
@@ -70,11 +70,11 @@ export const BottomNav: React.FC = () => {
           onClick={() => setActiveTab('pass')}
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
             activeTab === 'pass'
-              ? 'text-[#7C3AED] font-black'
-              : 'text-[#78716C] hover:text-[#1C1917]'
+              ? 'text-[#0D6E6E] font-black'
+              : 'text-[#70665A] hover:text-[#141210]'
           }`}
         >
-          <QrCode className={`w-5 h-5 ${activeTab === 'pass' ? 'text-[#7C3AED]' : ''}`} />
+          <QrCode className={`w-5 h-5 ${activeTab === 'pass' ? 'text-[#0D6E6E]' : ''}`} />
           <span className="text-[10px] mt-0.5 tracking-tight font-bold">Pass</span>
         </button>
 
@@ -83,11 +83,11 @@ export const BottomNav: React.FC = () => {
           onClick={() => setActiveTab('wallet')}
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
             activeTab === 'wallet'
-              ? 'text-[#7C3AED] font-black'
-              : 'text-[#78716C] hover:text-[#1C1917]'
+              ? 'text-[#0D6E6E] font-black'
+              : 'text-[#70665A] hover:text-[#141210]'
           }`}
         >
-          <Wallet className={`w-5 h-5 ${activeTab === 'wallet' ? 'text-[#7C3AED]' : ''}`} />
+          <Wallet className={`w-5 h-5 ${activeTab === 'wallet' ? 'text-[#0D6E6E]' : ''}`} />
           <span className="text-[10px] mt-0.5 tracking-tight font-bold">Escrow</span>
         </button>
       </div>

@@ -5,6 +5,7 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import { formatNgn } from '@/lib/utils';
 import {
   Users,
+  ArrowLeft,
   Car,
   MapPin,
   Clock,
@@ -99,7 +100,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
         <button
           onClick={() => setActiveTab('map')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all"
           title="View route and pickups on live corridor map"
         >
           <Navigation className="w-3.5 h-3.5 text-amber-300" />
@@ -108,10 +109,10 @@ CAR PULL Zero-Cash Escrow Active`;
       </div>
 
       {/* Driver Vehicle & Dynamic Seat Card */}
-      <div className="bg-gradient-to-b from-purple-50/70 to-white rounded-3xl p-4 border border-purple-100/80 shadow-2xs space-y-3">
+      <div className="bg-gradient-to-b from-purple-50/70 to-white rounded-3xl p-4 border border-[#DDD4C5] shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-purple-100 text-[#7C3AED]">
+            <div className="p-2 rounded-xl bg-teal-50 text-[#0D6E6E]">
               <Car className="w-5 h-5" />
             </div>
             <div>
@@ -130,7 +131,7 @@ CAR PULL Zero-Cash Escrow Active`;
                 <span className="text-zinc-300">•</span>
                 <button
                   onClick={() => setShowCarModal(true)}
-                  className="text-[10px] font-bold text-[#7C3AED] hover:underline"
+                  className="text-[10px] font-bold text-[#0D6E6E] hover:underline"
                 >
                   Edit Car
                 </button>
@@ -164,7 +165,7 @@ CAR PULL Zero-Cash Escrow Active`;
                 key={idx}
                 className={`p-2 rounded-xl border text-center transition-all ${
                   isFilled
-                    ? 'bg-purple-50/80 border-purple-200 text-[#7C3AED]'
+                    ? 'bg-purple-50/80 border-purple-200 text-[#0D6E6E]'
                     : 'bg-zinc-50/70 border-zinc-200/80 text-zinc-400 border-dashed'
                 }`}
               >
@@ -226,7 +227,7 @@ CAR PULL Zero-Cash Escrow Active`;
                 className="bg-white rounded-2xl p-3 border border-purple-100 shadow-2xs flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-purple-100 text-[#7C3AED] font-black text-xs flex items-center justify-center flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-teal-50 text-[#0D6E6E] font-black text-xs flex items-center justify-center flex-shrink-0">
                     {rider.name.split(' ').map((n) => n[0]).join('')}
                   </div>
                   <div>
@@ -237,7 +238,7 @@ CAR PULL Zero-Cash Escrow Active`;
                       </span>
                     </h5>
                     <span className="text-[10px] text-zinc-500 flex items-center gap-1 mt-0.5">
-                      <MapPin className="w-2.5 h-2.5 text-[#7C3AED]" />
+                      <MapPin className="w-2.5 h-2.5 text-[#0D6E6E]" />
                       {rider.pickupSafeZone.name}
                     </span>
                   </div>
@@ -303,7 +304,7 @@ CAR PULL Zero-Cash Escrow Active`;
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs font-black text-[#7C3AED] block">
+                    <span className="text-xs font-black text-[#0D6E6E] block">
                       +{formatNgn(rider.bidNgn)}
                     </span>
                     <span className="text-[9px] text-zinc-400 font-medium">Fair Split Offer</span>
@@ -318,7 +319,7 @@ CAR PULL Zero-Cash Escrow Active`;
                     <span className="truncate">{rider.pickupSafeZone.name}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                    <Clock className="w-3 h-3 text-[#7C3AED] flex-shrink-0" />
+                    <Clock className="w-3 h-3 text-[#0D6E6E] flex-shrink-0" />
                     <span className="font-bold text-zinc-800">Drop:</span>
                     <span className="truncate">{rider.destination} ({rider.departure_time})</span>
                   </div>
@@ -351,10 +352,21 @@ CAR PULL Zero-Cash Escrow Active`;
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 animate-in fade-in duration-150">
           <div className="w-full max-w-[360px] bg-white rounded-3xl p-5 shadow-2xl border border-zinc-200 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-100 pb-2.5">
-              <h3 className="text-sm font-black text-zinc-900 flex items-center gap-1.5">
-                <Car className="w-4 h-4 text-[#7C3AED]" />
-                Driver Car Registration
-              </h3>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowCarModal(false)}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-stone-100 hover:bg-stone-200 text-[#141210] font-bold text-xs shadow-2xs active:scale-95 transition-all"
+                  title="Go back"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
+                  <span>Back</span>
+                </button>
+                <h3 className="text-sm font-serif font-black text-zinc-900 flex items-center gap-1.5">
+                  <Car className="w-4 h-4 text-[#0D6E6E]" />
+                  Car Details
+                </h3>
+              </div>
               <button
                 onClick={() => setShowCarModal(false)}
                 className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"

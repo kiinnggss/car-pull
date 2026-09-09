@@ -16,6 +16,7 @@ import {
   Users,
   Building2,
   ExternalLink,
+  ArrowLeft,
 } from 'lucide-react';
 import { getAssetPath } from '@/lib/assets';
 
@@ -28,6 +29,7 @@ export const CommutePass: React.FC = () => {
     activeMatches,
     offlinePin,
     commuteDirection,
+    setActiveTab,
   } = useAppStore();
 
   const [currentTime, setCurrentTime] = useState('');
@@ -86,6 +88,20 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in">
+      {/* Back to Deck Quick Navigation */}
+      <div className="flex items-center justify-between">
+        <button
+          onClick={() => setActiveTab('deck')}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE5D8] hover:bg-[#E3DCCE] text-[#0D6E6E] border border-[#DDD4C5] font-bold text-xs shadow-2xs active:scale-95 transition-all"
+        >
+          <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
+          <span>Back to Corridor Deck</span>
+        </button>
+        <span className="text-[10px] font-mono font-bold text-[#141210]/60">
+          ESCROW AUDITED
+        </span>
+      </div>
+
       {/* Official Government Compliance Shield Card */}
       <div className="bg-gradient-to-b from-emerald-50/80 via-white to-white rounded-3xl p-4.5 border border-emerald-200/80 shadow-xs space-y-3.5 relative overflow-hidden">
         {/* Subtle Watermark */}
@@ -105,7 +121,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
               <span className="text-[9px] uppercase tracking-widest text-emerald-800 font-extrabold block">
                 Lagos State Transport Reform Act
               </span>
-              <h3 className="text-xs font-black text-zinc-900 leading-tight">
+              <h3 className="text-xs font-serif font-black text-[#141210] leading-tight">
                 Non-Commercial Commute Certificate
               </h3>
             </div>

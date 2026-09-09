@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { Header } from '@/components/common/Header';
 import { BottomNav } from '@/components/common/BottomNav';
@@ -15,23 +15,44 @@ import { CorridorMap } from '@/components/map/CorridorMap';
 import { AuthLanding } from '@/components/auth/AuthLanding';
 
 export default function Home() {
-  const { activeTab, activeRole, isAuthenticated } = useAppStore();
+  const { activeTab, setActiveTab, activeRole, isAuthenticated } = useAppStore();
+
+  // Browser & Device back-button handling:
+  // When user is on any secondary tab, pressing back navigates back to 'deck' instead of exiting the PWA
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    if (activeTab !== 'deck') {
+      window.history.pushState({ tab: activeTab }, '');
+    }
+
+    const handlePopState = (e: PopStateEvent) => {
+      if (activeTab !== 'deck') {
+        setActiveTab('deck');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [activeTab, setActiveTab, isAuthenticated]);
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen bg-[#FAF8F5] border-x border-[#E7E2D8] relative flex flex-col justify-between shadow-xl text-[#1C1917] overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
         <AuthLanding />
       </main>
     );
   }
 
   return (
-    <main className="w-full max-w-[430px] min-h-screen bg-[#FAF8F5] border-x border-[#E7E2D8] relative flex flex-col justify-between shadow-xl text-[#1C1917] overflow-x-hidden">
+    <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
       {/* Top Application Header */}
       <Header />
 
       {/* Primary Dynamic Content Area */}
-      <div className="flex-1 w-full pt-2">
+      <div className="flex-1 w-full pt-1.5">
         {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
         {activeTab === 'map' && <CorridorMap />}
         {activeTab === 'matches' && <MatchesList />}
