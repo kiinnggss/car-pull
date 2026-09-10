@@ -47,12 +47,12 @@ export default function Home() {
   }
 
   return (
-    <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
       {/* Top Application Header */}
       <Header />
 
       {/* Primary Dynamic Content Area */}
-      <div className="flex-1 w-full pt-1.5">
+      <div className="flex-1 w-full pt-1 pb-[70px] flex flex-col min-h-0 overflow-y-auto no-scrollbar">
         {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
         {activeTab === 'map' && <CorridorMap />}
         {activeTab === 'matches' && <MatchesList />}

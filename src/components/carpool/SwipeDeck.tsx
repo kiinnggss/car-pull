@@ -89,12 +89,14 @@ export const SwipeDeck: React.FC = () => {
   const hasCardsLeft = currentDriver !== null && activeDriverIndex < drivers.length;
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[390px] mx-auto pb-24 px-3 space-y-1.5">
-      {/* Unified Transit Console (Route + Safe Hub integrated seamlessly) */}
-      <RoutePlannerBar />
+    <div className="flex-1 flex flex-col justify-between w-full max-w-[400px] mx-auto px-3 h-full min-h-0">
+      {/* Top: Transit Console */}
+      <div className="w-full pt-0.5 flex-shrink-0">
+        <RoutePlannerBar />
+      </div>
 
-      {/* Tinder-Style Framer Motion Swipeable Card Deck (Streamlined 325px) */}
-      <div className="relative w-full h-[325px] flex items-center justify-center">
+      {/* Center: Expansive Swipeable Profile Card Deck */}
+      <div className="relative w-full flex-1 min-h-[320px] max-h-[480px] my-2 flex items-center justify-center">
         <AnimatePresence mode="popLayout">
           {hasCardsLeft ? (
             <motion.div
@@ -131,7 +133,7 @@ export const SwipeDeck: React.FC = () => {
             </motion.div>
           ) : (
             /* Empty State Deck */
-            <div className="w-full h-full rounded-2xl bg-white border border-[#DDD4C5] flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-xs">
+            <div className="w-full h-full min-h-[320px] rounded-2xl bg-white border border-[#DDD4C5] flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-xs">
               <div className="w-12 h-12 rounded-full bg-teal-50 border border-teal-200 flex items-center justify-center text-[#0D6E6E]">
                 <Sparkles className="w-6 h-6" />
               </div>
@@ -153,9 +155,11 @@ export const SwipeDeck: React.FC = () => {
         </AnimatePresence>
       </div>
 
-      {/* Flowing Unified Action & Cost Audit Console (Directly below Card, Never Offscreen) */}
+      {/* Bottom: Flowing Split Stepper & Primary Thumb Action Console */}
       {hasCardsLeft && (
-        <QuickBidPills onAccept={triggerAccept} onPass={swipeLeft} />
+        <div className="w-full flex-shrink-0 pb-1">
+          <QuickBidPills onAccept={triggerAccept} onPass={swipeLeft} />
+        </div>
       )}
 
       {/* Match Confirmation Modal with Back Button */}
