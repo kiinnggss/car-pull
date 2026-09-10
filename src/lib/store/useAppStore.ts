@@ -16,6 +16,7 @@ import {
   LagosLocation,
   CommuteRoute,
   Coordinates,
+  TripCategory,
 } from '../types';
 import {
   mockCurrentUser,
@@ -81,6 +82,8 @@ interface AppState {
   swapRiderRoute: () => void;
 
   // Carpool Corridor & Deck State
+  activeTripMode: TripCategory;
+  setActiveTripMode: (mode: TripCategory) => void;
   drivers: CorridorDriver[];
   activeDriverIndex: number;
   currentDriver: CorridorDriver | null;
@@ -369,6 +372,22 @@ export const useAppStore = create<AppState>((set, get) => ({
     }));
   },
 
+  activeTripMode: 'all',
+  setActiveTripMode: (mode: TripCategory) => {
+    let filtered = mockCorridorDrivers;
+    if (mode !== 'all') {
+      filtered = mockCorridorDrivers.filter((d) => d.trip_type === mode);
+      if (filtered.length === 0) filtered = mockCorridorDrivers;
+    }
+    set({
+      activeTripMode: mode,
+      drivers: filtered,
+      activeDriverIndex: 0,
+      currentDriver: filtered[0] || null,
+      customBidNgn: filtered[0]?.corridor.fuel_split_ngn || 1500,
+    });
+  },
+
   drivers: mockCorridorDrivers,
   activeDriverIndex: 0,
   currentDriver: mockCorridorDrivers[0] || null,
@@ -409,7 +428,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     const agreedFare = state.customBidNgn;
     const escrowRef = `ESC-CP-${Date.now().toString().slice(-6)}`;
 
-    // Create match and place escrow hold
+    // Create match and place escrow hold with rich social connection details
     const newMatch: CommuteMatch = {
       id: `match-${Date.now()}`,
       corridorId: 'corridor-ajah-vi-01',
@@ -425,7 +444,11 @@ export const useAppStore = create<AppState>((set, get) => ({
       hasAc: true,
       pickupSafeZone: state.selectedSafeZone,
       status: 'locked',
-      scheduledFor: 'Tomorrow, 06:45 AM',
+      scheduledFor: currentDriver.corridor.departure_time,
+      trip_type: currentDriver.trip_type || 'social',
+      trip_purpose: currentDriver.trip_purpose || 'Community Carpool Ride',
+      conversation_vibe: currentDriver.conversation_vibe || 'Great Banter',
+      interests: currentDriver.interests || ['Afrobeats', 'Tech'],
     };
 
     const newTransaction: EscrowTransaction = {
@@ -453,14 +476,42 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   resetDeck: () => {
+    const mode = get().activeTripMode;
+    let filtered = mockCorridorDrivers;
+    if (mode !== 'all') {
+      filtered = mockCorridorDrivers.filter((d) => d.trip_type === mode);
+      if (filtered.length === 0) filtered = mockCorridorDrivers;
+    }
     set({
+      drivers: filtered,
       activeDriverIndex: 0,
-      currentDriver: mockCorridorDrivers[0] || null,
-      customBidNgn: mockCorridorDrivers[0]?.corridor.fuel_split_ngn || 2000,
+      currentDriver: filtered[0] || null,
+      customBidNgn: filtered[0]?.corridor.fuel_split_ngn || 1500,
     });
   },
 
   activeMatches: [
+    {
+      id: 'match-prev-02',
+      corridorId: 'corridor-lekki-oniru-02',
+      driverId: 'driver-107',
+      riderId: mockCurrentUser.id,
+      driverName: 'Damilola Fashola',
+      riderName: mockCurrentUser.fullName,
+      driverAvatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
+      vehicleMake: 'Mercedes-Benz',
+      vehicleModel: 'GLA 250',
+      plateNumber: 'LSR-210-DK',
+      fareNgn: 1200,
+      hasAc: true,
+      pickupSafeZone: mockSafeZones[4],
+      status: 'locked',
+      scheduledFor: 'Today, 02:30 PM',
+      trip_type: 'social',
+      trip_purpose: 'Sunset drinks, food & beach volleyball at Landmark',
+      conversation_vibe: 'High Energy & Fun',
+      interests: ['Afrobeats', 'Design & Art', 'Beach Volleyball', 'Foodie'],
+    },
     {
       id: 'match-prev-01',
       corridorId: 'corridor-ajah-vi-01',
@@ -478,6 +529,10 @@ export const useAppStore = create<AppState>((set, get) => ({
       status: 'locked',
       scheduledFor: 'Monday, 06:45 AM',
       isWeeklyLocked: true,
+      trip_type: 'commute',
+      trip_purpose: 'Morning corporate run to Flutterwave HQ in VI',
+      conversation_vibe: 'Tech Banter & Chill',
+      interests: ['FinTech', 'Afrobeats', 'Formula 1', 'Startups'],
     },
   ],
   weeklyLockedCommutes: ['driver-101'],

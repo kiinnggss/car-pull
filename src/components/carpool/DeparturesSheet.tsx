@@ -81,7 +81,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
               Corridor Schedule
             </h3>
             <span className="text-[10px] text-[#70665A] font-semibold block">
-              {commuteDirection === 'morning' ? 'AM Outbound: Ajah → VI' : 'PM Return: VI → Ajah'}
+              Flexible Timetable &amp; Community Rides
             </span>
           </div>
 

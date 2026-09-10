@@ -20,8 +20,11 @@ import {
   Navigation,
   X,
   Star,
+  MessageCircle,
+  Compass,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { IcebreakerChatModal } from './IcebreakerChatModal';
 
 export const DriverSeatDeck: React.FC = () => {
   const {
@@ -40,6 +43,7 @@ export const DriverSeatDeck: React.FC = () => {
 
   const [copiedManifest, setCopiedManifest] = useState(false);
   const [showCarModal, setShowCarModal] = useState(false);
+  const [selectedChatRider, setSelectedChatRider] = useState<any | null>(null);
   const [carMake, setCarMake] = useState(driverVehicle.make);
   const [carModel, setCarModel] = useState(driverVehicle.model);
   const [carPlate, setCarPlate] = useState(driverVehicle.plate_number);
@@ -249,6 +253,13 @@ CAR PULL Zero-Cash Escrow Active`;
                     {formatNgn(currentSeatPrice)}
                   </span>
                   <button
+                    onClick={() => setSelectedChatRider(rider)}
+                    className="p-1.5 text-[#0D6E6E] hover:text-[#094E4E] rounded-lg hover:bg-teal-50 transition-colors"
+                    title="Say hello to passenger"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
+                  </button>
+                  <button
                     onClick={() => removeRiderFromCarpool(rider.id)}
                     className="p-1.5 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
                     title="Remove rider"
@@ -262,7 +273,7 @@ CAR PULL Zero-Cash Escrow Active`;
         </div>
       )}
 
-      {/* Waiting Corporate Riders Pool */}
+      {/* Waiting Lagos Riders Pool */}
       <div className="space-y-2">
         <div className="flex items-center justify-between px-1">
           <h4 className="text-xs font-black text-zinc-800 uppercase tracking-wider">
@@ -311,6 +322,16 @@ CAR PULL Zero-Cash Escrow Active`;
                   </div>
                 </div>
 
+                {/* Trip Purpose / Social Reason */}
+                {rider.trip_purpose && (
+                  <div className="bg-[#FAF7F0] border border-[#DDD4C5] px-2 py-1 rounded-xl flex items-center gap-1.5 text-xs text-[#141210]">
+                    <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
+                    <span className="text-[10px] font-semibold truncate">
+                      {rider.trip_purpose}
+                    </span>
+                  </div>
+                )}
+
                 {/* Pickup & Destination */}
                 <div className="bg-zinc-50 p-2 rounded-xl text-[10px] space-y-1 text-zinc-600">
                   <div className="flex items-center gap-1.5">
@@ -325,23 +346,48 @@ CAR PULL Zero-Cash Escrow Active`;
                   </div>
                 </div>
 
+                {/* Social Vibes and Interest Pills */}
+                <div className="flex items-center gap-1 flex-wrap">
+                  {rider.conversation_vibe && (
+                    <span className="text-[8px] font-bold text-[#0D6E6E] bg-teal-50 px-1.5 py-0.2 rounded">
+                      {rider.conversation_vibe}
+                    </span>
+                  )}
+                  {rider.interests?.slice(0, 2).map((item, idx) => (
+                    <span key={idx} className="text-[8px] font-medium text-[#70665A] bg-stone-100 px-1 rounded">
+                      #{item}
+                    </span>
+                  ))}
+                </div>
+
                 {rider.notes && (
                   <p className="text-[10px] text-zinc-400 italic px-1">"{rider.notes}"</p>
                 )}
 
-                {/* Accept Passenger CTA */}
-                <button
-                  onClick={() => handleAccept(rider.id)}
-                  disabled={availableSeats <= 0}
-                  className="w-full py-2 bg-[#7C3AED] hover:bg-[#6D28D9] disabled:bg-zinc-100 disabled:text-zinc-400 text-white text-xs font-bold rounded-xl shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>
-                    {availableSeats > 0
-                      ? `Accept Passenger (${availableSeats} Seat${availableSeats > 1 ? 's' : ''} Left)`
-                      : 'Car Capacity Full'}
-                  </span>
-                </button>
+                {/* Action Buttons: Say Hello & Accept Passenger */}
+                <div className="grid grid-cols-3 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedChatRider(rider)}
+                    className="py-2 bg-white hover:bg-amber-50 text-[#0D6E6E] border border-[#DDD4C5] text-xs font-bold rounded-xl shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1"
+                    title="Say hello to rider"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
+                    <span>Chat</span>
+                  </button>
+                  <button
+                    onClick={() => handleAccept(rider.id)}
+                    disabled={availableSeats <= 0}
+                    className="col-span-2 py-2 bg-[#0D6E6E] hover:bg-[#094E4E] disabled:bg-zinc-100 disabled:text-zinc-400 text-white text-xs font-bold rounded-xl shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>
+                      {availableSeats > 0
+                        ? `Accept (${availableSeats} Left)`
+                        : 'Capacity Full'}
+                    </span>
+                  </button>
+                </div>
               </div>
             ))}
         </div>
@@ -480,6 +526,20 @@ CAR PULL Zero-Cash Escrow Active`;
             </form>
           </div>
         </div>
+      )}
+
+      {/* Driver-to-Passenger Icebreaker Chat Modal */}
+      {selectedChatRider && (
+        <IcebreakerChatModal
+          isOpen={!!selectedChatRider}
+          onClose={() => setSelectedChatRider(null)}
+          personName={selectedChatRider.name}
+          personAvatar={selectedChatRider.avatar}
+          tripPurpose={selectedChatRider.trip_purpose}
+          conversationVibe={selectedChatRider.conversation_vibe}
+          interests={selectedChatRider.interests}
+          phone={selectedChatRider.phone}
+        />
       )}
     </div>
   );

@@ -17,8 +17,11 @@ import {
   ArrowLeft,
   CheckCircle2,
   ShieldCheck,
+  MessageCircle,
+  Compass,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { IcebreakerChatModal } from './IcebreakerChatModal';
 
 export const MatchesList: React.FC = () => {
   const {
@@ -32,6 +35,7 @@ export const MatchesList: React.FC = () => {
   } = useAppStore();
 
   const [boardedMatchIds, setBoardedMatchIds] = useState<string[]>([]);
+  const [selectedChatMatch, setSelectedChatMatch] = useState<any | null>(null);
 
   const toggleBoarded = (id: string) => {
     if (boardedMatchIds.includes(id)) {
@@ -153,6 +157,16 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 </div>
               </div>
 
+              {/* Trip Purpose / Human Context */}
+              {match.trip_purpose && (
+                <div className="bg-[#FAF7F0] border border-[#DDD4C5] px-2.5 py-1 rounded-xl flex items-center gap-1.5 text-xs text-[#141210]">
+                  <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
+                  <span className="text-[10.5px] font-semibold truncate leading-tight">
+                    {match.trip_purpose}
+                  </span>
+                </div>
+              )}
+
               {/* Vehicle Brand and Plate Number */}
               <div className="flex items-center justify-between bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5 text-xs">
                 <div className="flex items-center gap-1.5">
@@ -177,37 +191,48 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 </span>
               </div>
 
+              {/* Say Hello & Break the Ice CTA */}
+              <button
+                onClick={() => setSelectedChatMatch(match)}
+                className="w-full py-2 bg-[#EEF7F7] hover:bg-teal-100/70 text-[#0D6E6E] border border-[#0D6E6E]/30 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-2xs"
+              >
+                <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
+                <span>Say Hello / Break the Ice</span>
+              </button>
+
               {/* Weekly Commute Lock Action Strip */}
-              <div className="bg-[#FAF6EE] border border-[#DDD4C5] rounded-xl p-2 flex items-center justify-between text-xs">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#0D6E6E]" />
-                  <span className="font-bold text-[#141210] text-[11px]">
-                    Mon–Fri Routine
-                  </span>
+              {match.trip_type === 'commute' && (
+                <div className="bg-[#FAF6EE] border border-[#DDD4C5] rounded-xl p-2 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#0D6E6E]" />
+                    <span className="font-bold text-[#141210] text-[11px]">
+                      Mon–Fri Routine
+                    </span>
+                  </div>
+                  <button
+                    onClick={() =>
+                      isWeeklyLocked
+                        ? unlockWeeklyCommute(match.driverId)
+                        : lockWeeklyCommute(match.driverId)
+                    }
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all active:scale-95 shadow-2xs ${
+                      isWeeklyLocked
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-white text-[#141210] border border-[#DDD4C5] hover:bg-stone-100'
+                    }`}
+                  >
+                    {isWeeklyLocked ? (
+                      <>
+                        <Lock className="w-3 h-3" /> Locked
+                      </>
+                    ) : (
+                      <>
+                        <Unlock className="w-3 h-3 text-[#70665A]" /> Lock Routine
+                      </>
+                    )}
+                  </button>
                 </div>
-                <button
-                  onClick={() =>
-                    isWeeklyLocked
-                      ? unlockWeeklyCommute(match.driverId)
-                      : lockWeeklyCommute(match.driverId)
-                  }
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all active:scale-95 shadow-2xs ${
-                    isWeeklyLocked
-                      ? 'bg-emerald-600 text-white'
-                      : 'bg-white text-[#141210] border border-[#DDD4C5] hover:bg-stone-100'
-                  }`}
-                >
-                  {isWeeklyLocked ? (
-                    <>
-                      <Lock className="w-3 h-3" /> Locked
-                    </>
-                  ) : (
-                    <>
-                      <Unlock className="w-3 h-3 text-[#70665A]" /> Lock Routine
-                    </>
-                  )}
-                </button>
-              </div>
+              )}
 
               {/* In-Transit Status & Boarding Check-In */}
               <div>
@@ -256,6 +281,20 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           );
         })}
       </div>
+
+      {/* Icebreaker Chat Modal */}
+      {selectedChatMatch && (
+        <IcebreakerChatModal
+          isOpen={!!selectedChatMatch}
+          onClose={() => setSelectedChatMatch(null)}
+          personName={selectedChatMatch.driverName}
+          personAvatar={selectedChatMatch.driverAvatar}
+          tripPurpose={selectedChatMatch.trip_purpose}
+          conversationVibe={selectedChatMatch.conversation_vibe}
+          interests={selectedChatMatch.interests}
+          vehiclePlate={selectedChatMatch.plateNumber}
+        />
+      )}
     </div>
   );
 };

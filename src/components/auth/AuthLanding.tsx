@@ -111,10 +111,10 @@ export const AuthLanding: React.FC = () => {
             <span>CAR PULL LAGOS</span>
           </div>
           <h1 className="text-xl sm:text-2xl font-serif font-black text-[#141210] tracking-tight mt-1">
-            Executive Corridor Carpooling
+            Community &amp; Social Carpooling
           </h1>
-          <p className="text-[11px] text-[#70665A] max-w-[300px] mx-auto leading-tight mt-0.5">
-            Share verified fuel splits along the Ajah → VI → Marina corporate corridor.
+          <p className="text-[11px] text-[#70665A] max-w-[320px] mx-auto leading-tight mt-0.5">
+            Ride together, meet great people, and share fuel splits across Lagos—any day, any time.
           </p>
         </div>
       </div>
@@ -276,7 +276,7 @@ export const AuthLanding: React.FC = () => {
 
                 <div className="space-y-0.5">
                   <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
-                    Work Email (Corporate Domain)
+                    Email Address
                   </label>
                   <div className="flex items-center gap-1.5 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5">
                     <Mail className="w-3.5 h-3.5 text-[#70665A]" />
@@ -284,7 +284,7 @@ export const AuthLanding: React.FC = () => {
                       type="email"
                       value={riderEmail}
                       onChange={(e) => setRiderEmail(e.target.value)}
-                      placeholder="chioma@company.com"
+                      placeholder="chioma@example.com"
                       className="w-full bg-transparent text-xs font-bold text-[#141210] placeholder:text-[#A89F91] focus:outline-none"
                       required
                     />
@@ -310,7 +310,7 @@ export const AuthLanding: React.FC = () => {
 
                   <div className="space-y-0.5">
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
-                      Employer
+                      Work / Community
                     </label>
                     <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
                       <Building2 className="w-3 h-3 text-[#70665A]" />
@@ -318,7 +318,7 @@ export const AuthLanding: React.FC = () => {
                         type="text"
                         value={riderCompany}
                         onChange={(e) => setRiderCompany(e.target.value)}
-                        placeholder="e.g. KPMG"
+                        placeholder="e.g. Designer, Tech, Studio"
                         className="w-full bg-transparent text-xs font-bold text-[#141210] placeholder:text-[#A89F91] focus:outline-none"
                       />
                     </div>
@@ -349,7 +349,7 @@ export const AuthLanding: React.FC = () => {
                         type="text"
                         value={driverName}
                         onChange={(e) => setDriverName(e.target.value)}
-                        placeholder="Full Name"
+                        placeholder="e.g. Tunde Balogun"
                         className="w-full bg-transparent text-xs font-bold text-[#141210] placeholder:text-[#A89F91] focus:outline-none"
                         required
                       />
@@ -358,7 +358,7 @@ export const AuthLanding: React.FC = () => {
 
                   <div className="space-y-0.5">
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
-                      Workplace
+                      Work / Field
                     </label>
                     <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
                       <Building2 className="w-3 h-3 text-[#70665A]" />
@@ -366,7 +366,7 @@ export const AuthLanding: React.FC = () => {
                         type="text"
                         value={driverCompany}
                         onChange={(e) => setDriverCompany(e.target.value)}
-                        placeholder="e.g. Stanbic IBTC"
+                        placeholder="e.g. Tech Lead, Architect"
                         className="w-full bg-transparent text-xs font-bold text-[#141210] placeholder:text-[#A89F91] focus:outline-none"
                       />
                     </div>
@@ -375,7 +375,7 @@ export const AuthLanding: React.FC = () => {
 
                 <div className="space-y-0.5">
                   <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
-                    Work Email
+                    Email Address
                   </label>
                   <div className="flex items-center gap-1.5 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5">
                     <Mail className="w-3.5 h-3.5 text-[#70665A]" />
@@ -383,7 +383,7 @@ export const AuthLanding: React.FC = () => {
                       type="email"
                       value={driverEmail}
                       onChange={(e) => setDriverEmail(e.target.value)}
-                      placeholder="driver@company.com"
+                      placeholder="tunde@example.com"
                       className="w-full bg-transparent text-xs font-bold text-[#141210] placeholder:text-[#A89F91] focus:outline-none"
                     />
                   </div>

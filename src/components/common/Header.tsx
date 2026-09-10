@@ -2,10 +2,19 @@
 
 import React, { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { Lock, Sun, Moon, Sparkles, LogOut, ChevronDown, ArrowRightLeft, ArrowLeft } from 'lucide-react';
+import { Lock, Sparkles, LogOut, ChevronDown, ArrowLeft, Coffee, Zap, Moon, Briefcase } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { InteractiveLogoCockpit } from './InteractiveLogoCockpit';
 import { getAssetPath } from '@/lib/assets';
+import { TripCategory } from '@/lib/types';
+
+const TRIP_MODES: { id: TripCategory; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+  { id: 'all', label: 'All Rides', icon: Sparkles },
+  { id: 'social', label: 'Social & Beach', icon: Coffee },
+  { id: 'spontaneous', label: 'Leaving Now', icon: Zap },
+  { id: 'nightlife', label: 'Night Out', icon: Moon },
+  { id: 'commute', label: 'Commute', icon: Briefcase },
+];
 
 export const Header: React.FC = () => {
   const {
@@ -15,8 +24,8 @@ export const Header: React.FC = () => {
     escrowBalanceNgn,
     activeTab,
     setActiveTab,
-    commuteDirection,
-    toggleCommuteDirection,
+    activeTripMode,
+    setActiveTripMode,
     logout,
   } = useAppStore();
 
@@ -141,36 +150,34 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Secondary Row: Direction Toggle & Escrow Chip */}
-      <div className="flex items-center justify-between pt-0.5 text-xs">
-        {/* Direction Toggle Chip */}
-        <button
-          onClick={toggleCommuteDirection}
-          className={`flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-xl border transition-all active:scale-95 shadow-2xs ${
-            commuteDirection === 'morning'
-              ? 'bg-[#FFF9EE] border-[#C25E2E]/30 text-[#C25E2E] hover:bg-[#FFF3DC]'
-              : 'bg-[#EEF7F7] border-[#0D6E6E]/30 text-[#0D6E6E] hover:bg-[#E0F2F1]'
-          }`}
-          title="Toggle Morning / Evening commute corridor"
-        >
-          {commuteDirection === 'morning' ? (
-            <>
-              <Sun className="w-3.5 h-3.5 text-[#D97706]" />
-              <span>AM Outbound (Ajah → VI)</span>
-            </>
-          ) : (
-            <>
-              <Moon className="w-3.5 h-3.5 text-[#0D6E6E]" />
-              <span>PM Return (VI → Ajah)</span>
-            </>
-          )}
-          <ArrowRightLeft className="w-3 h-3 text-[#70665A] ml-0.5" />
-        </button>
+      {/* Secondary Row: Adaptable Trip Vibe & Anytime Filter + Escrow Balance */}
+      <div className="flex items-center justify-between gap-1.5 pt-0.5">
+        {/* Horizontal Scrollable Vibe Pills */}
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 flex-1 min-w-0">
+          {TRIP_MODES.map((mode) => {
+            const isActive = activeTripMode === mode.id;
+            const Icon = mode.icon;
+            return (
+              <button
+                key={mode.id}
+                onClick={() => setActiveTripMode(mode.id)}
+                className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active:scale-95 shadow-2xs border ${
+                  isActive
+                    ? 'bg-[#0D6E6E] text-white border-[#0D6E6E]'
+                    : 'bg-white text-[#70665A] border-[#DDD4C5] hover:text-[#141210] hover:bg-stone-50'
+                }`}
+              >
+                <Icon className={`w-3 h-3 ${isActive ? 'text-amber-300' : 'text-[#C25E2E]'}`} />
+                <span>{mode.label}</span>
+              </button>
+            );
+          })}
+        </div>
 
         {/* Escrow Balance Chip */}
         <button
           onClick={() => setActiveTab('wallet')}
-          className="flex items-center gap-1 bg-[#F5EEFB] hover:bg-purple-100 text-[#6D28D9] text-[11px] font-black px-2.5 py-1 rounded-xl border border-[#7C3AED]/30 transition-all active:scale-95 shadow-2xs"
+          className="flex-shrink-0 flex items-center gap-1 bg-[#F5EEFB] hover:bg-purple-100 text-[#6D28D9] text-[11px] font-black px-2.5 py-1 rounded-xl border border-[#7C3AED]/30 transition-all active:scale-95 shadow-2xs"
           title="Open Escrow Wallet"
         >
           <Lock className="w-3 h-3 text-[#7C3AED]" />

@@ -81,6 +81,8 @@ export interface SafeZone {
   is_active?: boolean;
 }
 
+export type TripCategory = 'all' | 'social' | 'nightlife' | 'commute' | 'spontaneous';
+
 export interface CorridorDriver {
   id: string;
   name: string;
@@ -110,6 +112,12 @@ export interface CorridorDriver {
     distance_km?: number;
   };
   vibe_tags: string[];
+  trip_type?: TripCategory;
+  trip_purpose?: string;
+  conversation_vibe?: string;
+  interests?: string[];
+  music_vibe?: string;
+  social_handle?: string;
 }
 
 export interface EmergencyProvider {
@@ -151,6 +159,10 @@ export interface CommuteMatch {
   status: MatchStatus;
   scheduledFor: string;
   isWeeklyLocked?: boolean;
+  trip_type?: TripCategory;
+  trip_purpose?: string;
+  conversation_vibe?: string;
+  interests?: string[];
 }
 
 export interface EmergencyIncident {
@@ -183,6 +195,11 @@ export interface WaitingRider {
   isFemaleOnly: boolean;
   notes?: string;
   status: 'waiting' | 'accepted';
+  trip_type?: TripCategory;
+  trip_purpose?: string;
+  conversation_vibe?: string;
+  interests?: string[];
+  social_handle?: string;
 }
 
 export interface TrafficAlert {

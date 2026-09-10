@@ -6,9 +6,10 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { RoutePlannerBar } from './RoutePlannerBar';
-import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X } from 'lucide-react';
+import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X, MessageCircle, Compass } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatNgn } from '@/lib/utils';
+import { IcebreakerChatModal } from './IcebreakerChatModal';
 
 export const SwipeDeck: React.FC = () => {
   const {
@@ -23,9 +24,11 @@ export const SwipeDeck: React.FC = () => {
     swipeRight,
     resetDeck,
     lockWeeklyCommute,
+    setActiveTab,
   } = useAppStore();
 
   const [lastMatchedDriver, setLastMatchedDriver] = useState<any | null>(null);
+  const [showChatModal, setShowChatModal] = useState(false);
 
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-15, 15]);
@@ -69,8 +72,8 @@ export const SwipeDeck: React.FC = () => {
       {/* Unified Transit Console (Route + Safe Hub integrated seamlessly) */}
       <RoutePlannerBar />
 
-      {/* Tinder-Style Framer Motion Swipeable Card Deck (Dense 350px) */}
-      <div className="relative w-full h-[350px] flex items-center justify-center">
+      {/* Tinder-Style Framer Motion Swipeable Card Deck (Dense 360px) */}
+      <div className="relative w-full h-[360px] flex items-center justify-center">
         <AnimatePresence mode="popLayout">
           {hasCardsLeft ? (
             <motion.div
@@ -114,7 +117,7 @@ export const SwipeDeck: React.FC = () => {
               <div className="space-y-1">
                 <h3 className="text-sm font-serif font-black text-[#141210]">All Commuters Reviewed</h3>
                 <p className="text-[11px] text-[#70665A] max-w-[240px] mx-auto">
-                  No more active drivers on the Ajah → VI corridor for this commute window.
+                  No more active drivers on this corridor for the selected trip mode.
                 </p>
               </div>
               <button
@@ -147,7 +150,7 @@ export const SwipeDeck: React.FC = () => {
                 <span>Back</span>
               </button>
               <span className="text-[9px] font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
-                Matched & Escrow Held
+                Connected &amp; Escrow Held
               </span>
               <button
                 onClick={() => setLastMatchedDriver(null)}
@@ -157,10 +160,32 @@ export const SwipeDeck: React.FC = () => {
               </button>
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-1.5">
+              <div className="w-14 h-14 mx-auto rounded-2xl overflow-hidden border-2 border-[#0D6E6E] shadow-sm">
+                <img
+                  src={lastMatchedDriver.avatar}
+                  alt={lastMatchedDriver.name}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
               <h3 className="text-base font-serif font-black text-[#141210]">
-                Matched with {lastMatchedDriver.name}!
+                Connected with {lastMatchedDriver.name}!
               </h3>
+
+              {lastMatchedDriver.trip_purpose && (
+                <div className="bg-[#EEF7F7] border border-[#0D6E6E]/25 rounded-xl px-2.5 py-1 text-[11px] text-[#0D6E6E] font-semibold flex items-center justify-center gap-1.5">
+                  <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
+                  <span className="truncate">{lastMatchedDriver.trip_purpose}</span>
+                </div>
+              )}
+
+              {lastMatchedDriver.interests && lastMatchedDriver.interests.length > 0 && (
+                <p className="text-[10px] text-[#70665A]">
+                  Shared vibes: <strong>{lastMatchedDriver.interests.slice(0, 3).join(', ')}</strong>
+                </p>
+              )}
+
               <div className="flex items-center justify-center gap-1.5 py-0.5">
                 <span className="text-xs font-bold text-[#141210]">
                   {lastMatchedDriver.vehicle.make} {lastMatchedDriver.vehicle.model}
@@ -174,36 +199,67 @@ export const SwipeDeck: React.FC = () => {
               </p>
             </div>
 
-            {/* Commute Lock Option */}
-            <div className="bg-white border border-[#DDD4C5] rounded-xl p-2.5 text-left space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-bold text-[#141210] flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-[#0D6E6E]" />
-                  Lock Mon–Fri Routine
-                </span>
-                <button
-                  onClick={() => {
-                    lockWeeklyCommute(lastMatchedDriver.id);
-                    setLastMatchedDriver(null);
-                  }}
-                  className="text-[10px] font-bold bg-[#0D6E6E] text-white px-2 py-0.5 rounded-md"
-                >
-                  Lock Routine
-                </button>
-              </div>
-              <p className="text-[9px] text-[#70665A] leading-tight">
-                Auto-reserves daily seat at {lastMatchedDriver.corridor.departure_time} with daily escrow release.
-              </p>
-            </div>
+            {/* Social Connection CTA: Say Hello & Break the Ice */}
+            <div className="space-y-1.5">
+              <button
+                onClick={() => setShowChatModal(true)}
+                className="w-full py-2.5 px-3 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-xs font-black rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+              >
+                <MessageCircle className="w-4 h-4 text-amber-300" />
+                <span>Say Hello / Break the Ice</span>
+              </button>
 
-            <button
-              onClick={() => setLastMatchedDriver(null)}
-              className="w-full py-2 bg-[#ECE5D8] hover:bg-[#DDD4C5] text-[#141210] font-bold text-xs rounded-xl transition-colors"
-            >
-              Continue Browsing
-            </button>
+              {/* Routine Lock for Commute trips */}
+              {lastMatchedDriver.trip_type === 'commute' && (
+                <div className="bg-white border border-[#DDD4C5] rounded-xl p-2 text-left space-y-1">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-[#141210] flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-[#0D6E6E]" />
+                      Lock Mon–Fri Routine
+                    </span>
+                    <button
+                      onClick={() => {
+                        lockWeeklyCommute(lastMatchedDriver.id);
+                        setLastMatchedDriver(null);
+                      }}
+                      className="text-[10px] font-bold bg-[#0D6E6E] text-white px-2 py-0.5 rounded-md"
+                    >
+                      Lock Routine
+                    </button>
+                  </div>
+                  <p className="text-[9px] text-[#70665A] leading-tight">
+                    Auto-reserves daily seat at {lastMatchedDriver.corridor.departure_time}.
+                  </p>
+                </div>
+              )}
+
+              <button
+                onClick={() => setLastMatchedDriver(null)}
+                className="w-full py-1.5 bg-[#ECE5D8] hover:bg-[#DDD4C5] text-[#141210] font-bold text-xs rounded-xl transition-colors"
+              >
+                Keep Browsing
+              </button>
+            </div>
           </div>
         </div>
+      )}
+
+      {/* Icebreaker & Chat Sheet */}
+      {showChatModal && lastMatchedDriver && (
+        <IcebreakerChatModal
+          isOpen={showChatModal}
+          onClose={() => {
+            setShowChatModal(false);
+            setLastMatchedDriver(null);
+          }}
+          personName={lastMatchedDriver.name}
+          personAvatar={lastMatchedDriver.avatar}
+          tripPurpose={lastMatchedDriver.trip_purpose}
+          conversationVibe={lastMatchedDriver.conversation_vibe}
+          musicVibe={lastMatchedDriver.music_vibe}
+          interests={lastMatchedDriver.interests}
+          vehiclePlate={lastMatchedDriver.vehicle.plate_number}
+        />
       )}
     </div>
   );
