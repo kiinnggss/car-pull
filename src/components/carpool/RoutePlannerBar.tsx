@@ -17,6 +17,7 @@ import {
 import confetti from 'canvas-confetti';
 import { SafeZoneSelector } from './SafeZoneSelector';
 import { DeparturesSheet } from './DeparturesSheet';
+import { triggerHaptic } from '@/lib/haptics';
 
 export const RoutePlannerBar: React.FC = () => {
   const {
@@ -90,90 +91,62 @@ export const RoutePlannerBar: React.FC = () => {
 
   return (
     <>
-      {/* FLOWING UNIFIED TRANSIT CONSOLE: Merges Route and Safe Zone Hub into ONE flowing card */}
-      <div className="w-full bg-white rounded-2xl shadow-xs border border-[#DDD4C5] text-xs overflow-hidden">
-        {/* Top Tier: Origin & Destination Route Pill */}
-        <div className="p-2.5 pb-2">
-          <div className="flex items-center justify-between gap-1.5">
-            <button
-              onClick={() => {
-                setOriginQuery(riderRoute.origin);
-                setDestQuery(riderRoute.destination);
-                setIsModalOpen(true);
-              }}
-              className="flex-1 flex items-center gap-2 text-left hover:bg-[#F8F5EE] p-1.5 rounded-xl transition-colors"
-            >
-              <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0D6E6E] ring-2 ring-teal-100" />
-                <span className="w-0.5 h-2 bg-[#DDD4C5]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#C25E2E] ring-2 ring-amber-100" />
-              </div>
-
-              <div className="flex-1 min-w-0 space-y-0.5">
-                <div className="flex items-center gap-1 text-[11px] font-bold text-[#141210] truncate">
-                  <span className="text-[9px] text-[#70665A] font-extrabold uppercase tracking-wider">
-                    FROM:
-                  </span>
-                  <span className="truncate">{riderRoute.origin}</span>
-                </div>
-                <div className="flex items-center gap-1 text-[11px] font-black text-[#0D6E6E] truncate">
-                  <span className="text-[9px] text-[#0D6E6E]/80 font-extrabold uppercase tracking-wider">
-                    TO:
-                  </span>
-                  <span className="truncate">{riderRoute.destination}</span>
-                </div>
-              </div>
-
-              <ChevronDown className="w-3.5 h-3.5 text-[#70665A] flex-shrink-0" />
-            </button>
-
-            {/* Quick Swap Direction Button */}
-            <button
-              onClick={swapRiderRoute}
-              className="w-8 h-8 rounded-xl bg-[#F8F5EE] hover:bg-amber-50 hover:text-[#C25E2E] text-[#70665A] flex items-center justify-center transition-all active:scale-90 border border-[#DDD4C5] flex-shrink-0"
-              title="Swap Origin and Destination"
-            >
-              <ArrowRightLeft className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between pt-1.5 mt-1 border-t border-[#EFE8DC] text-[10px]">
-            <button
-              onClick={() => setShowDeparturesSheet(true)}
-              className="flex items-center gap-1 text-[#0D6E6E] hover:text-[#094E4E] bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1 rounded-lg border border-teal-200/80 font-bold transition-all active:scale-95 shadow-2xs"
-              title="Browse morning departure times in corridor schedule"
-            >
-              <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
-              <span>{drivers.length} Departures ▾</span>
-            </button>
-            <div className="flex items-center gap-1.5">
-              <span className="text-[#70665A] font-semibold text-[10px]">
-                {riderRoute.distanceKm} km
-              </span>
-              <span className="text-[#DDD4C5]">•</span>
-              <span className="text-[#0D6E6E] font-black bg-teal-50 px-2 py-0.5 rounded-lg border border-teal-200">
-                Fair Split: ₦{riderRoute.recommendedFuelSplitNgn.toLocaleString()}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Flowing Bottom Tier: CCTV Safe Pickup Hub (Flows directly from route box) */}
-        <div
-          onClick={() => setShowSafeZoneModal(true)}
-          className="bg-[#F8F5EE] hover:bg-[#F2ECE0] border-t border-[#DDD4C5] px-3 py-1.5 flex items-center justify-between cursor-pointer transition-colors"
+      {/* Sleek Native Executive Transit Capsule (44px) */}
+      <div className="w-full bg-white rounded-2xl shadow-2xs border border-[#DDD4C5] p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
+        {/* Left: Route Summary & Hub (Tap to edit route) */}
+        <button
+          onClick={() => {
+            triggerHaptic('tap');
+            setOriginQuery(riderRoute.origin);
+            setDestQuery(riderRoute.destination);
+            setIsModalOpen(true);
+          }}
+          className="flex items-center gap-2 text-left hover:bg-[#F8F5EE] p-1.5 rounded-xl min-w-0 flex-1 transition-colors active-press"
+          title="Tap to change commute route"
         >
-          <div className="flex items-center gap-1.5 overflow-hidden">
-            <ShieldCheck className="w-3.5 h-3.5 text-[#0D6E6E] flex-shrink-0" />
-            <div className="truncate">
-              <span className="font-bold text-[#141210] truncate block text-[11px] leading-tight">
-                CCTV Hub: <strong className="text-[#0D6E6E]">{selectedSafeZone.name}</strong>
-              </span>
-            </div>
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <span className="w-2 h-2 rounded-full bg-[#0D6E6E] ring-2 ring-teal-100" />
+            <span className="text-[#DDD4C5] text-[10px] font-bold">➔</span>
+            <span className="w-2 h-2 rounded-full bg-[#C25E2E] ring-2 ring-amber-100" />
           </div>
-          <span className="text-[9px] font-black text-[#0D6E6E] bg-white px-2 py-0.5 rounded-md border border-[#DDD4C5] flex-shrink-0 shadow-2xs">
-            Change
-          </span>
+
+          <div className="min-w-0 truncate">
+            <div className="flex items-center gap-1">
+              <span className="font-serif font-black text-xs text-[#141210] truncate">
+                {riderRoute.origin.split('/')[0].trim()} ➔ {riderRoute.destination.split('(')[0].trim()}
+              </span>
+              <ChevronDown className="w-3 h-3 text-[#70665A] flex-shrink-0" />
+            </div>
+            <span className="text-[10px] text-[#70665A] font-semibold truncate block">
+              Hub: <strong className="text-[#0D6E6E]">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm}km
+            </span>
+          </div>
+        </button>
+
+        {/* Right: Departures & Hub Switch Shortcuts */}
+        <div className="flex items-center gap-1 flex-shrink-0">
+          <button
+            onClick={() => {
+              triggerHaptic('tap');
+              setShowDeparturesSheet(true);
+            }}
+            className="flex items-center gap-1 text-[#0D6E6E] hover:text-[#094E4E] bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1.5 rounded-xl border border-teal-200/80 font-bold text-[10.5px] active-press shadow-2xs"
+            title="Browse corridor departures schedule"
+          >
+            <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
+            <span>{drivers.length} Dep</span>
+          </button>
+
+          <button
+            onClick={() => {
+              triggerHaptic('tap');
+              setShowSafeZoneModal(true);
+            }}
+            className="p-1.5 rounded-xl bg-[#F8F5EE] hover:bg-teal-50 text-[#0D6E6E] border border-[#DDD4C5] active-press shadow-2xs"
+            title="Change CCTV Safe Hub"
+          >
+            <ShieldCheck className="w-4 h-4 text-[#0D6E6E]" />
+          </button>
         </div>
       </div>
 

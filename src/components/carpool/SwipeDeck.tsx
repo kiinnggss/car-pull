@@ -89,12 +89,12 @@ export const SwipeDeck: React.FC = () => {
   const hasCardsLeft = currentDriver !== null && activeDriverIndex < drivers.length;
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[390px] mx-auto pb-20 px-3 space-y-2">
+    <div className="flex flex-col items-center w-full max-w-[390px] mx-auto pb-24 px-3 space-y-1.5">
       {/* Unified Transit Console (Route + Safe Hub integrated seamlessly) */}
       <RoutePlannerBar />
 
-      {/* Tinder-Style Framer Motion Swipeable Card Deck (Dense 360px) */}
-      <div className="relative w-full h-[360px] flex items-center justify-center">
+      {/* Tinder-Style Framer Motion Swipeable Card Deck (Streamlined 325px) */}
+      <div className="relative w-full h-[325px] flex items-center justify-center">
         <AnimatePresence mode="popLayout">
           {hasCardsLeft ? (
             <motion.div

@@ -110,103 +110,117 @@ export const Header: React.FC = () => {
           </button>
         </div>
 
-        {/* Profile Avatar & Dropdown */}
-        <div className="relative">
+        {/* Profile Avatar & Wallet Chip */}
+        <div className="flex items-center gap-1.5">
           <button
             onClick={() => {
               triggerHaptic('tap');
-              setShowProfileMenu(!showProfileMenu);
+              setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 p-1 rounded-xl bg-white hover:bg-stone-100 border border-[#DDD4C5] transition-all active:scale-95 shadow-2xs"
-            title="Account & Sign Out"
+            className="flex items-center gap-1 bg-[#F5EEFB] hover:bg-purple-100 text-[#6D28D9] text-[10.5px] font-black px-2 py-1 rounded-xl border border-[#7C3AED]/30 transition-all active-press shadow-2xs"
+            title="Open Escrow Wallet"
           >
-            <div className="w-7 h-7 rounded-lg bg-[#0D6E6E]/10 text-[#0D6E6E] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25">
-              <span>{user.fullName ? user.fullName.charAt(0) : 'U'}</span>
-            </div>
-            <ChevronDown className="w-3.5 h-3.5 text-[#70665A]" />
+            <Lock className="w-2.5 h-2.5 text-[#7C3AED]" />
+            <span>{formatNgn(escrowBalanceNgn)}</span>
           </button>
 
-          {/* Profile Dropdown */}
-          {showProfileMenu && (
-            <div className="absolute right-0 top-10 w-52 bg-white rounded-2xl p-2.5 shadow-2xl border border-[#DDD4C5] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-              <div className="border-b border-[#DDD4C5] pb-2 mb-2">
-                <span className="text-xs font-serif font-black text-[#141210] block truncate">
-                  {user.fullName}
-                </span>
-                <span className="text-[10px] text-[#70665A] block truncate">
-                  {user.employer} (@{user.employerDomain})
-                </span>
+          <div className="relative">
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowProfileMenu(!showProfileMenu);
+              }}
+              className="flex items-center gap-1 p-1 rounded-xl bg-white hover:bg-stone-100 border border-[#DDD4C5] transition-all active-press shadow-2xs"
+              title="Account & Sign Out"
+            >
+              <div className="w-7 h-7 rounded-lg bg-[#0D6E6E]/10 text-[#0D6E6E] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25">
+                <span>{user.fullName ? user.fullName.charAt(0) : 'U'}</span>
               </div>
+              <ChevronDown className="w-3.5 h-3.5 text-[#70665A]" />
+            </button>
 
-              <div className="space-y-1">
-                <button
-                  onClick={() => {
-                    triggerHaptic('tap');
-                    setShowCockpit(true);
-                    setShowProfileMenu(false);
-                  }}
-                  className="w-full px-2 py-1.5 rounded-xl hover:bg-amber-50 text-left text-xs font-bold text-[#141210] flex items-center gap-2 transition-colors"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
-                  <span>3D Cockpit Console</span>
-                </button>
+            {/* Profile Dropdown */}
+            {showProfileMenu && (
+              <div className="absolute right-0 top-10 w-52 bg-white rounded-2xl p-2.5 shadow-2xl border border-[#DDD4C5] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="border-b border-[#DDD4C5] pb-2 mb-2">
+                  <span className="text-xs font-serif font-black text-[#141210] block truncate">
+                    {user.fullName}
+                  </span>
+                  <span className="text-[10px] text-[#70665A] block truncate">
+                    {user.employer} (@{user.employerDomain})
+                  </span>
+                </div>
 
-                <button
-                  onClick={() => {
-                    triggerHaptic('tap');
-                    setShowProfileMenu(false);
-                    logout();
-                  }}
-                  className="w-full px-2 py-1.5 rounded-xl hover:bg-red-50 text-left text-xs font-bold text-red-600 flex items-center gap-2 transition-colors"
-                >
-                  <LogOut className="w-3.5 h-3.5 text-red-500" />
-                  <span>Sign Out</span>
-                </button>
+                <div className="space-y-1 text-xs">
+                  <button
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      setActiveTab('wallet');
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 text-[#141210] font-bold flex items-center justify-between"
+                  >
+                    <span>Escrow Balance</span>
+                    <span className="text-[#0D6E6E] font-black font-mono text-[11px]">
+                      {formatNgn(escrowBalanceNgn)}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      setActiveTab('pass');
+                      setShowProfileMenu(false);
+                    }}
+                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 text-[#141210] font-bold flex items-center justify-between"
+                  >
+                    <span>Sec 44 Digital Pass</span>
+                    <span className="text-[9px] bg-emerald-50 text-emerald-700 px-1.5 py-0.2 rounded font-mono font-bold">
+                      VERIFIED
+                    </span>
+                  </button>
+                  <div className="border-t border-[#DDD4C5] pt-1 mt-1">
+                    <button
+                      onClick={() => {
+                        triggerHaptic('tap');
+                        logout();
+                        setShowProfileMenu(false);
+                      }}
+                      className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-red-50 text-red-600 font-bold flex items-center gap-1.5"
+                    >
+                      <LogOut className="w-3.5 h-3.5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 
-      {/* Secondary Row: Adaptable Trip Vibe & Anytime Filter + Escrow Balance */}
-      <div className="flex items-center justify-between gap-1.5 pt-0.5">
-        {/* Horizontal Scrollable Vibe Pills */}
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 flex-1 min-w-0">
-          {TRIP_MODES.map((mode) => {
-            const isActive = activeTripMode === mode.id;
-            const Icon = mode.icon;
-            return (
-              <button
-                key={mode.id}
-                onClick={() => {
-                  triggerHaptic('switch');
-                  setActiveTripMode(mode.id);
-                }}
-                className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active:scale-95 shadow-2xs border ${
-                  isActive
-                    ? 'bg-[#0D6E6E] text-white border-[#0D6E6E]'
-                    : 'bg-white text-[#70665A] border-[#DDD4C5] hover:text-[#141210] hover:bg-stone-50'
-                }`}
-              >
-                <Icon className={`w-3 h-3 ${isActive ? 'text-amber-300' : 'text-[#C25E2E]'}`} />
-                <span>{mode.label}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Escrow Balance Chip */}
-        <button
-          onClick={() => {
-            triggerHaptic('tap');
-            setActiveTab('wallet');
-          }}
-          className="flex-shrink-0 flex items-center gap-1 bg-[#F5EEFB] hover:bg-purple-100 text-[#6D28D9] text-[11px] font-black px-2.5 py-1 rounded-xl border border-[#7C3AED]/30 transition-all active:scale-95 shadow-2xs"
-          title="Open Escrow Wallet"
-        >
-          <Lock className="w-3 h-3 text-[#7C3AED]" />
-          <span>{formatNgn(escrowBalanceNgn)}</span>
-        </button>
+      {/* Secondary Row: Trip Mode Filters with Full Horizontal Scroll */}
+      <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 pt-1 w-full">
+        {TRIP_MODES.map((mode) => {
+          const isActive = activeTripMode === mode.id;
+          const Icon = mode.icon;
+          return (
+            <button
+              key={mode.id}
+              onClick={() => {
+                triggerHaptic('switch');
+                setActiveTripMode(mode.id);
+              }}
+              className={`flex items-center gap-1 px-3 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active-press shadow-2xs border ${
+                isActive
+                  ? 'bg-[#0D6E6E] text-white border-[#0D6E6E]'
+                  : 'bg-white text-[#70665A] border-[#DDD4C5] hover:text-[#141210] hover:bg-stone-50'
+              }`}
+            >
+              <Icon className={`w-3 h-3 ${isActive ? 'text-amber-300' : 'text-[#C25E2E]'}`} />
+              <span>{mode.label}</span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Interactive 3D Logo Hardware Cockpit Console Modal */}
