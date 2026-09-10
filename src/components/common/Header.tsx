@@ -2,18 +2,19 @@
 
 import React, { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { Lock, Sparkles, LogOut, ChevronDown, ArrowLeft, Coffee, Zap, Moon, Briefcase } from 'lucide-react';
+import { Lock, Sparkles, LogOut, ChevronDown, ArrowLeft, Sun, Zap, Moon, Compass } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { InteractiveLogoCockpit } from './InteractiveLogoCockpit';
 import { getAssetPath } from '@/lib/assets';
 import { TripCategory } from '@/lib/types';
+import { triggerHaptic } from '@/lib/haptics';
 
 const TRIP_MODES: { id: TripCategory; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
   { id: 'all', label: 'All Rides', icon: Sparkles },
-  { id: 'social', label: 'Social & Beach', icon: Coffee },
-  { id: 'spontaneous', label: 'Leaving Now', icon: Zap },
-  { id: 'nightlife', label: 'Night Out', icon: Moon },
-  { id: 'commute', label: 'Commute', icon: Briefcase },
+  { id: 'leaving_now', label: 'Leaving Soon', icon: Zap },
+  { id: 'morning', label: 'Morning Travel', icon: Sun },
+  { id: 'evening', label: 'Evening Return', icon: Moon },
+  { id: 'flexible', label: 'Anytime / Day', icon: Compass },
 ];
 
 export const Header: React.FC = () => {
@@ -40,7 +41,10 @@ export const Header: React.FC = () => {
         <div className="flex items-center gap-1.5">
           {activeTab !== 'deck' ? (
             <button
-              onClick={() => setActiveTab('deck')}
+              onClick={() => {
+                triggerHaptic('tap');
+                setActiveTab('deck');
+              }}
               className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white hover:bg-stone-100 text-[#0D6E6E] border border-[#0D6E6E]/30 font-bold text-xs shadow-2xs active:scale-95 transition-all"
               title="Return to Corridor Deck"
             >
@@ -49,7 +53,10 @@ export const Header: React.FC = () => {
             </button>
           ) : (
             <button
-              onClick={() => setShowCockpit(true)}
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowCockpit(true);
+              }}
               className="p-1 rounded-xl bg-white border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
               title="Tap to open Interactive Logo Cockpit"
             >
@@ -76,7 +83,10 @@ export const Header: React.FC = () => {
         {/* Dense Role Switcher (Rider / Driver) */}
         <div className="flex bg-[#ECE5D8] p-0.5 rounded-xl border border-[#DDD4C5]">
           <button
-            onClick={() => setActiveRole('rider')}
+            onClick={() => {
+              triggerHaptic('switch');
+              setActiveRole('rider');
+            }}
             className={`text-xs px-2.5 py-1 rounded-lg transition-all ${
               activeRole === 'rider'
                 ? 'bg-white text-[#141210] shadow-2xs font-black'
@@ -86,7 +96,10 @@ export const Header: React.FC = () => {
             Rider
           </button>
           <button
-            onClick={() => setActiveRole('driver')}
+            onClick={() => {
+              triggerHaptic('switch');
+              setActiveRole('driver');
+            }}
             className={`text-xs px-2.5 py-1 rounded-lg transition-all ${
               activeRole === 'driver'
                 ? 'bg-[#0D6E6E] text-white shadow-2xs font-black'
@@ -100,7 +113,10 @@ export const Header: React.FC = () => {
         {/* Profile Avatar & Dropdown */}
         <div className="relative">
           <button
-            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            onClick={() => {
+              triggerHaptic('tap');
+              setShowProfileMenu(!showProfileMenu);
+            }}
             className="flex items-center gap-1 p-1 rounded-xl bg-white hover:bg-stone-100 border border-[#DDD4C5] transition-all active:scale-95 shadow-2xs"
             title="Account & Sign Out"
           >
@@ -125,6 +141,7 @@ export const Header: React.FC = () => {
               <div className="space-y-1">
                 <button
                   onClick={() => {
+                    triggerHaptic('tap');
                     setShowCockpit(true);
                     setShowProfileMenu(false);
                   }}
@@ -136,6 +153,7 @@ export const Header: React.FC = () => {
 
                 <button
                   onClick={() => {
+                    triggerHaptic('tap');
                     setShowProfileMenu(false);
                     logout();
                   }}
@@ -160,7 +178,10 @@ export const Header: React.FC = () => {
             return (
               <button
                 key={mode.id}
-                onClick={() => setActiveTripMode(mode.id)}
+                onClick={() => {
+                  triggerHaptic('switch');
+                  setActiveTripMode(mode.id);
+                }}
                 className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active:scale-95 shadow-2xs border ${
                   isActive
                     ? 'bg-[#0D6E6E] text-white border-[#0D6E6E]'
@@ -176,7 +197,10 @@ export const Header: React.FC = () => {
 
         {/* Escrow Balance Chip */}
         <button
-          onClick={() => setActiveTab('wallet')}
+          onClick={() => {
+            triggerHaptic('tap');
+            setActiveTab('wallet');
+          }}
           className="flex-shrink-0 flex items-center gap-1 bg-[#F5EEFB] hover:bg-purple-100 text-[#6D28D9] text-[11px] font-black px-2.5 py-1 rounded-xl border border-[#7C3AED]/30 transition-all active:scale-95 shadow-2xs"
           title="Open Escrow Wallet"
         >

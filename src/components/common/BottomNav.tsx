@@ -3,6 +3,7 @@
 import React from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { Compass, CalendarCheck, QrCode, Wallet, AlertOctagon, Navigation } from 'lucide-react';
+import { triggerHaptic } from '@/lib/haptics';
 
 export const BottomNav: React.FC = () => {
   const { activeTab, setActiveTab, activeMatches, isSosActive, triggerSosBeacon } = useAppStore();
@@ -10,12 +11,15 @@ export const BottomNav: React.FC = () => {
   const matchCount = activeMatches.length;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#F6F2EA]/98 backdrop-blur-md border-t border-[#DDD4C5] px-2 py-1.5 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#F6F2EA]/98 backdrop-blur-md border-t border-[#DDD4C5] px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom">
       <div className="flex items-center justify-around">
         {/* Tab 1: Corridor Swipe Deck & Live Map Toggle */}
         <button
-          onClick={() => setActiveTab(activeTab === 'deck' ? 'map' : 'deck')}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab(activeTab === 'deck' ? 'map' : 'deck');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
             activeTab === 'deck' || activeTab === 'map'
               ? 'text-[#0D6E6E] font-black'
               : 'text-[#70665A] hover:text-[#141210]'
@@ -34,8 +38,11 @@ export const BottomNav: React.FC = () => {
 
         {/* Tab 2: Matches & Daily Locks */}
         <button
-          onClick={() => setActiveTab('matches')}
-          className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab('matches');
+          }}
+          className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
             activeTab === 'matches'
               ? 'text-[#0D6E6E] font-black'
               : 'text-[#70665A] hover:text-[#141210]'
@@ -54,8 +61,11 @@ export const BottomNav: React.FC = () => {
 
         {/* Central Distress Beacon Button */}
         <button
-          onClick={triggerSosBeacon}
-          className={`flex flex-col items-center justify-center px-3 py-1 rounded-xl min-h-[44px] transition-all transform active:scale-95 ${
+          onClick={() => {
+            triggerHaptic('sos');
+            triggerSosBeacon();
+          }}
+          className={`flex flex-col items-center justify-center px-3 py-1 rounded-xl min-h-[44px] transition-all transform active-press ${
             isSosActive || activeTab === 'sos'
               ? 'bg-red-600 text-white shadow-md shadow-red-600/30'
               : 'bg-red-50 border border-red-200 text-red-600 hover:bg-red-100'
@@ -67,8 +77,11 @@ export const BottomNav: React.FC = () => {
 
         {/* Tab 4: LASTMA Non-Commercial Pass */}
         <button
-          onClick={() => setActiveTab('pass')}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab('pass');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
             activeTab === 'pass'
               ? 'text-[#0D6E6E] font-black'
               : 'text-[#70665A] hover:text-[#141210]'
@@ -80,8 +93,11 @@ export const BottomNav: React.FC = () => {
 
         {/* Tab 5: Zero-Cash Escrow Wallet */}
         <button
-          onClick={() => setActiveTab('wallet')}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] ${
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab('wallet');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
             activeTab === 'wallet'
               ? 'text-[#0D6E6E] font-black'
               : 'text-[#70665A] hover:text-[#141210]'

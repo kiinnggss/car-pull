@@ -1,15 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence, PanInfo } from 'framer-motion';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { RoutePlannerBar } from './RoutePlannerBar';
-import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X, MessageCircle, Compass } from 'lucide-react';
+import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X, MessageCircle, Compass, Share2, Users, ExternalLink } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatNgn } from '@/lib/utils';
 import { IcebreakerChatModal } from './IcebreakerChatModal';
+import { triggerHaptic } from '@/lib/haptics';
 
 export const SwipeDeck: React.FC = () => {
   const {
@@ -37,6 +38,20 @@ export const SwipeDeck: React.FC = () => {
   const acceptStampOpacity = useTransform(x, [40, 110], [0, 1]);
   const passStampOpacity = useTransform(x, [-40, -110], [0, 1]);
 
+  // Physical sensory notch: trigger haptic tick when crossing decision threshold
+  useEffect(() => {
+    let hasTicked = false;
+    const unsubscribe = x.on('change', (latest) => {
+      if (Math.abs(latest) > 85 && !hasTicked) {
+        triggerHaptic('tick');
+        hasTicked = true;
+      } else if (Math.abs(latest) <= 85) {
+        hasTicked = false;
+      }
+    });
+    return () => unsubscribe();
+  }, [x]);
+
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     const swipeThreshold = 100;
     const velocityThreshold = 400;
@@ -44,14 +59,20 @@ export const SwipeDeck: React.FC = () => {
     if (info.offset.x > swipeThreshold || info.velocity.x > velocityThreshold) {
       triggerAccept();
     } else if (info.offset.x < -swipeThreshold || info.velocity.x < -velocityThreshold) {
-      swipeLeft();
+      triggerPass();
     }
+  };
+
+  const triggerPass = () => {
+    triggerHaptic('tap');
+    swipeLeft();
   };
 
   const triggerAccept = () => {
     if (!currentDriver) return;
     const matched = currentDriver;
     setLastMatchedDriver(matched);
+    triggerHaptic('match');
 
     requestAnimationFrame(() => {
       confetti({
@@ -140,11 +161,14 @@ export const SwipeDeck: React.FC = () => {
       {/* Match Confirmation Modal with Back Button */}
       {lastMatchedDriver && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[340px] bg-[#FAF8F3] rounded-2xl p-4 text-center space-y-3 shadow-2xl border border-[#DDD5C7]">
+          <div className="w-full max-w-[350px] bg-[#FAF8F3] rounded-2xl p-4 text-center space-y-3 shadow-2xl border border-[#DDD5C7]">
             <div className="flex items-center justify-between border-b border-[#DDD5C7] pb-2">
               <button
-                onClick={() => setLastMatchedDriver(null)}
-                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#DDD5C7] text-xs font-bold text-[#141210] shadow-2xs"
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setLastMatchedDriver(null);
+                }}
+                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#DDD5C7] text-xs font-bold text-[#141210] shadow-2xs active:scale-95"
               >
                 <ArrowLeft className="w-3 h-3 text-[#C25E2E]" />
                 <span>Back</span>
@@ -153,8 +177,11 @@ export const SwipeDeck: React.FC = () => {
                 Connected &amp; Escrow Held
               </span>
               <button
-                onClick={() => setLastMatchedDriver(null)}
-                className="p-1 rounded-lg text-stone-500 hover:text-stone-900"
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setLastMatchedDriver(null);
+                }}
+                className="p-1 rounded-lg text-stone-500 hover:text-stone-900 active:scale-95"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -173,6 +200,14 @@ export const SwipeDeck: React.FC = () => {
                 Connected with {lastMatchedDriver.name}!
               </h3>
 
+              {/* Mutual Spark */}
+              {lastMatchedDriver.mutual_spark && (
+                <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#B45309] bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full">
+                  <Sparkles className="w-3 h-3 text-amber-500" />
+                  <span>{lastMatchedDriver.mutual_spark}</span>
+                </div>
+              )}
+
               {lastMatchedDriver.trip_purpose && (
                 <div className="bg-[#EEF7F7] border border-[#0D6E6E]/25 rounded-xl px-2.5 py-1 text-[11px] text-[#0D6E6E] font-semibold flex items-center justify-center gap-1.5">
                   <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
@@ -180,10 +215,21 @@ export const SwipeDeck: React.FC = () => {
                 </div>
               )}
 
-              {lastMatchedDriver.interests && lastMatchedDriver.interests.length > 0 && (
-                <p className="text-[10px] text-[#70665A]">
-                  Shared vibes: <strong>{lastMatchedDriver.interests.slice(0, 3).join(', ')}</strong>
-                </p>
+              {/* Cabin Co-Riders Preview in Modal */}
+              {lastMatchedDriver.cabin_passengers && lastMatchedDriver.cabin_passengers.length > 0 && (
+                <div className="bg-white border border-[#DDD4C5] p-2 rounded-xl text-left space-y-1">
+                  <span className="text-[9px] font-extrabold text-[#70665A] uppercase tracking-wider block">
+                    Cabin Mates on This Trip:
+                  </span>
+                  <div className="flex items-center gap-2">
+                    {lastMatchedDriver.cabin_passengers.map((p: any) => (
+                      <div key={p.id} className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] px-2 py-0.5 rounded-lg">
+                        <img src={p.avatar} alt={p.name} className="w-4 h-4 rounded-full object-cover" />
+                        <span className="text-[10px] font-bold text-[#141210]">{p.name} ({p.role})</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
 
               <div className="flex items-center justify-center gap-1.5 py-0.5">
@@ -200,41 +246,41 @@ export const SwipeDeck: React.FC = () => {
             </div>
 
             {/* Social Connection CTA: Say Hello & Break the Ice */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 pt-1">
               <button
-                onClick={() => setShowChatModal(true)}
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setShowChatModal(true);
+                }}
                 className="w-full py-2.5 px-3 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-xs font-black rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
               >
                 <MessageCircle className="w-4 h-4 text-amber-300" />
                 <span>Say Hello / Break the Ice</span>
               </button>
 
-              {/* Routine Lock for Commute trips */}
-              {lastMatchedDriver.trip_type === 'commute' && (
-                <div className="bg-white border border-[#DDD4C5] rounded-xl p-2 text-left space-y-1">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#141210] flex items-center gap-1">
-                      <Calendar className="w-3.5 h-3.5 text-[#0D6E6E]" />
-                      Lock Mon–Fri Routine
-                    </span>
-                    <button
-                      onClick={() => {
-                        lockWeeklyCommute(lastMatchedDriver.id);
-                        setLastMatchedDriver(null);
-                      }}
-                      className="text-[10px] font-bold bg-[#0D6E6E] text-white px-2 py-0.5 rounded-md"
-                    >
-                      Lock Routine
-                    </button>
-                  </div>
-                  <p className="text-[9px] text-[#70665A] leading-tight">
-                    Auto-reserves daily seat at {lastMatchedDriver.corridor.departure_time}.
-                  </p>
-                </div>
-              )}
+              {/* Digital Handshake / LinkedIn Exchange */}
+              <button
+                onClick={() => {
+                  triggerHaptic('success');
+                  const url = lastMatchedDriver.linkedin_handle
+                    ? `https://linkedin.com/in/${lastMatchedDriver.linkedin_handle}`
+                    : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(lastMatchedDriver.name)}`;
+                  window.open(url, '_blank');
+                }}
+                className="w-full py-2 px-3 bg-white hover:bg-[#0A66C2]/10 text-[#0A66C2] border border-[#0A66C2]/30 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-2xs active-press transition-all"
+              >
+                <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
+                  in
+                </span>
+                <span>Stay in Touch on LinkedIn</span>
+                <ExternalLink className="w-3 h-3 text-[#0A66C2]" />
+              </button>
 
               <button
-                onClick={() => setLastMatchedDriver(null)}
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setLastMatchedDriver(null);
+                }}
                 className="w-full py-1.5 bg-[#ECE5D8] hover:bg-[#DDD4C5] text-[#141210] font-bold text-xs rounded-xl transition-colors"
               >
                 Keep Browsing

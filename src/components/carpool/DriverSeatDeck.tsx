@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { IcebreakerChatModal } from './IcebreakerChatModal';
+import { triggerHaptic } from '@/lib/haptics';
 
 export const DriverSeatDeck: React.FC = () => {
   const {
@@ -51,12 +52,19 @@ export const DriverSeatDeck: React.FC = () => {
   const [carColor, setCarColor] = useState(driverVehicle.color);
   const [carSeats, setCarSeats] = useState(driverVehicle.total_seats);
 
+  const moodLabels = {
+    chat: { label: '💬 Chat & Network', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
+    easy: { label: '☕ Easy Flow', bg: 'bg-amber-50 text-amber-800 border-amber-200' },
+    quiet: { label: '🎧 Quiet & Unwind', bg: 'bg-stone-100 text-stone-700 border-stone-200' },
+  };
+
   const totalSeats = driverVehicle.total_seats;
   const filledSeats = acceptedRiders.length;
   const currentSeatPrice = filledSeats === 0 ? 2000 : filledSeats === 1 ? 2000 : filledSeats === 2 ? 1400 : 1000;
   const totalFuelOffset = filledSeats === 0 ? 0 : filledSeats * currentSeatPrice;
 
   const handleAccept = (riderId: string) => {
+    triggerHaptic('match');
     acceptRiderIntoCarpool(riderId);
     confetti({
       particleCount: 35,
@@ -67,6 +75,7 @@ export const DriverSeatDeck: React.FC = () => {
   };
 
   const shareToWhatsApp = () => {
+    triggerHaptic('success');
     const text = `*CAR PULL - DRIVER COMMUTE MANIFEST*
 Direction: ${commuteDirection === 'morning' ? 'Morning Outbound' : 'Evening Return'} Commute
 Status: Lagos State Transport Law Sec 44 Compliant
@@ -103,8 +112,11 @@ CAR PULL Zero-Cash Escrow Active`;
         </div>
 
         <button
-          onClick={() => setActiveTab('map')}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] text-white text-xs font-black shadow-xs hover:shadow-sm active:scale-95 transition-all"
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab('map');
+          }}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] text-white text-xs font-black shadow-xs hover:shadow-sm active-press transition-all"
           title="View route and pickups on live corridor map"
         >
           <Navigation className="w-3.5 h-3.5 text-amber-300" />
@@ -134,8 +146,11 @@ CAR PULL Zero-Cash Escrow Active`;
                 </span>
                 <span className="text-zinc-300">•</span>
                 <button
-                  onClick={() => setShowCarModal(true)}
-                  className="text-[10px] font-bold text-[#0D6E6E] hover:underline"
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    setShowCarModal(true);
+                  }}
+                  className="text-[10px] font-bold text-[#0D6E6E] hover:underline active-press"
                 >
                   Edit Car
                 </button>
@@ -202,7 +217,7 @@ CAR PULL Zero-Cash Escrow Active`;
           {filledSeats > 0 && (
             <button
               onClick={shareToWhatsApp}
-              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-[10px] font-bold shadow-2xs active:scale-95 transition-all ml-2"
+              className="flex items-center gap-1 px-2.5 py-1.5 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-xl text-[10px] font-bold shadow-2xs active-press transition-all ml-2"
               title="Broadcast trip manifest to WhatsApp"
             >
               <Share2 className="w-3 h-3" />
@@ -253,15 +268,21 @@ CAR PULL Zero-Cash Escrow Active`;
                     {formatNgn(currentSeatPrice)}
                   </span>
                   <button
-                    onClick={() => setSelectedChatRider(rider)}
-                    className="p-1.5 text-[#0D6E6E] hover:text-[#094E4E] rounded-lg hover:bg-teal-50 transition-colors"
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      setSelectedChatRider(rider);
+                    }}
+                    className="p-1.5 text-[#0D6E6E] hover:text-[#094E4E] rounded-lg hover:bg-teal-50 transition-colors active-press"
                     title="Say hello to passenger"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
                   </button>
                   <button
-                    onClick={() => removeRiderFromCarpool(rider.id)}
-                    className="p-1.5 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors"
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      removeRiderFromCarpool(rider.id);
+                    }}
+                    className="p-1.5 text-zinc-400 hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors active-press"
                     title="Remove rider"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -322,6 +343,23 @@ CAR PULL Zero-Cash Escrow Active`;
                   </div>
                 </div>
 
+                {/* Mutual Spark & Mood Indicators */}
+                {(rider.mutual_spark || rider.ride_mood) && (
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {rider.mutual_spark && (
+                      <span className="inline-flex items-center gap-1 text-[9px] font-bold text-[#C25E2E] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200/70">
+                        <Sparkles className="w-2.5 h-2.5 text-[#C25E2E]" />
+                        {rider.mutual_spark}
+                      </span>
+                    )}
+                    {rider.ride_mood && moodLabels[rider.ride_mood] && (
+                      <span className={`inline-flex items-center text-[9px] font-bold px-2 py-0.5 rounded-full border ${moodLabels[rider.ride_mood].bg}`}>
+                        {moodLabels[rider.ride_mood].label}
+                      </span>
+                    )}
+                  </div>
+                )}
+
                 {/* Trip Purpose / Social Reason */}
                 {rider.trip_purpose && (
                   <div className="bg-[#FAF7F0] border border-[#DDD4C5] px-2 py-1 rounded-xl flex items-center gap-1.5 text-xs text-[#141210]">
@@ -346,13 +384,13 @@ CAR PULL Zero-Cash Escrow Active`;
                   </div>
                 </div>
 
-                {/* Social Vibes and Interest Pills */}
+                {/* Social Vibes and Talk About Chips */}
                 <div className="flex items-center gap-1 flex-wrap">
-                  {rider.conversation_vibe && (
-                    <span className="text-[8px] font-bold text-[#0D6E6E] bg-teal-50 px-1.5 py-0.2 rounded">
-                      {rider.conversation_vibe}
+                  {rider.talk_about?.map((topic, idx) => (
+                    <span key={idx} className="text-[8px] font-bold text-[#0D6E6E] bg-teal-50 px-1.5 py-0.2 rounded border border-teal-100">
+                      {topic}
                     </span>
-                  )}
+                  ))}
                   {rider.interests?.slice(0, 2).map((item, idx) => (
                     <span key={idx} className="text-[8px] font-medium text-[#70665A] bg-stone-100 px-1 rounded">
                       #{item}
@@ -368,8 +406,11 @@ CAR PULL Zero-Cash Escrow Active`;
                 <div className="grid grid-cols-3 gap-1.5">
                   <button
                     type="button"
-                    onClick={() => setSelectedChatRider(rider)}
-                    className="py-2 bg-white hover:bg-amber-50 text-[#0D6E6E] border border-[#DDD4C5] text-xs font-bold rounded-xl shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1"
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      setSelectedChatRider(rider);
+                    }}
+                    className="py-2 bg-white hover:bg-amber-50 text-[#0D6E6E] border border-[#DDD4C5] text-xs font-bold rounded-xl shadow-2xs active-press transition-all flex items-center justify-center gap-1"
                     title="Say hello to rider"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
@@ -378,7 +419,7 @@ CAR PULL Zero-Cash Escrow Active`;
                   <button
                     onClick={() => handleAccept(rider.id)}
                     disabled={availableSeats <= 0}
-                    className="col-span-2 py-2 bg-[#0D6E6E] hover:bg-[#094E4E] disabled:bg-zinc-100 disabled:text-zinc-400 text-white text-xs font-bold rounded-xl shadow-2xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                    className="col-span-2 py-2 bg-[#0D6E6E] hover:bg-[#094E4E] disabled:bg-zinc-100 disabled:text-zinc-400 text-white text-xs font-bold rounded-xl shadow-2xs active-press transition-all flex items-center justify-center gap-1.5"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>
@@ -401,8 +442,11 @@ CAR PULL Zero-Cash Escrow Active`;
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => setShowCarModal(false)}
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-stone-100 hover:bg-stone-200 text-[#141210] font-bold text-xs shadow-2xs active:scale-95 transition-all"
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    setShowCarModal(false);
+                  }}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-stone-100 hover:bg-stone-200 text-[#141210] font-bold text-xs shadow-2xs active-press transition-all"
                   title="Go back"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
@@ -414,8 +458,11 @@ CAR PULL Zero-Cash Escrow Active`;
                 </h3>
               </div>
               <button
-                onClick={() => setShowCarModal(false)}
-                className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setShowCarModal(false);
+                }}
+                className="w-7 h-7 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs active-press"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -424,6 +471,7 @@ CAR PULL Zero-Cash Escrow Active`;
             <form
               onSubmit={(e) => {
                 e.preventDefault();
+                triggerHaptic('success');
                 updateDriverCar({
                   make: carMake.trim() || 'Toyota',
                   model: carModel.trim() || 'Corolla',
@@ -504,8 +552,11 @@ CAR PULL Zero-Cash Escrow Active`;
                     <button
                       key={num}
                       type="button"
-                      onClick={() => setCarSeats(num)}
-                      className={`flex-1 py-1.5 rounded-xl text-xs font-black transition-all ${
+                      onClick={() => {
+                        triggerHaptic('switch');
+                        setCarSeats(num);
+                      }}
+                      className={`flex-1 py-1.5 rounded-xl text-xs font-black transition-all active-press ${
                         carSeats === num
                           ? 'bg-[#7C3AED] text-white shadow-xs'
                           : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
@@ -519,7 +570,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
               <button
                 type="submit"
-                className="w-full py-2.5 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-black text-xs rounded-xl shadow-md transition-all active:scale-95 mt-2"
+                className="w-full py-2.5 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-black text-xs rounded-xl shadow-md transition-all active-press mt-2"
               >
                 Save & Update Vehicle
               </button>
@@ -539,6 +590,7 @@ CAR PULL Zero-Cash Escrow Active`;
           conversationVibe={selectedChatRider.conversation_vibe}
           interests={selectedChatRider.interests}
           phone={selectedChatRider.phone}
+          linkedinHandle={selectedChatRider.linkedin_handle}
         />
       )}
     </div>

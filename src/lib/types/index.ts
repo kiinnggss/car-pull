@@ -81,7 +81,17 @@ export interface SafeZone {
   is_active?: boolean;
 }
 
-export type TripCategory = 'all' | 'social' | 'nightlife' | 'commute' | 'spontaneous';
+export type TripCategory = 'all' | 'leaving_now' | 'morning' | 'evening' | 'flexible' | 'commute';
+
+export type RideMood = 'chat' | 'easy' | 'quiet';
+
+export interface CabinPassenger {
+  id: string;
+  name: string;
+  role: string;
+  avatar: string;
+  seatNumber: number;
+}
 
 export interface CorridorDriver {
   id: string;
@@ -115,9 +125,14 @@ export interface CorridorDriver {
   trip_type?: TripCategory;
   trip_purpose?: string;
   conversation_vibe?: string;
+  ride_mood?: RideMood;
+  mutual_spark?: string;
+  talk_about?: string[];
+  cabin_passengers?: CabinPassenger[];
   interests?: string[];
   music_vibe?: string;
   social_handle?: string;
+  linkedin_handle?: string;
 }
 
 export interface EmergencyProvider {
@@ -162,7 +177,12 @@ export interface CommuteMatch {
   trip_type?: TripCategory;
   trip_purpose?: string;
   conversation_vibe?: string;
+  ride_mood?: RideMood;
+  mutual_spark?: string;
+  talk_about?: string[];
+  cabin_passengers?: CabinPassenger[];
   interests?: string[];
+  linkedin_handle?: string;
 }
 
 export interface EmergencyIncident {
@@ -198,8 +218,12 @@ export interface WaitingRider {
   trip_type?: TripCategory;
   trip_purpose?: string;
   conversation_vibe?: string;
+  ride_mood?: RideMood;
+  mutual_spark?: string;
+  talk_about?: string[];
   interests?: string[];
   social_handle?: string;
+  linkedin_handle?: string;
 }
 
 export interface TrafficAlert {
