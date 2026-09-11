@@ -31,13 +31,13 @@ export default function Home() {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    if (activeTab !== 'deck') {
+    if (activeTab !== 'map') {
       window.history.pushState({ tab: activeTab }, '');
     }
 
     const handlePopState = (e: PopStateEvent) => {
-      if (activeTab !== 'deck') {
-        setActiveTab('deck');
+      if (activeTab !== 'map') {
+        setActiveTab('map');
       }
     };
 

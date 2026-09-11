@@ -21,6 +21,9 @@ import {
   ChatMessage,
   ChatThread,
   DriverSchedule,
+  StreetLocation,
+  StreetCarpoolRide,
+  NeighborhoodRider,
 } from '../types';
 import {
   mockCurrentUser,
@@ -32,6 +35,11 @@ import {
   mockLagosLocations,
   defaultCommuteRoute,
 } from '../mockData';
+import {
+  mockStreetLocations,
+  mockEverydayRides,
+  mockNeighborhoodRiders,
+} from '../mockEverydayRides';
 import {
   calculateTripCost,
   passesPhase1Filter,
@@ -201,6 +209,20 @@ interface AppState {
   unreadChatCount: number;
   getOrCreateThreadForDriver: (driver: CorridorDriver | { id: string; name: string; avatar: string; vehicle?: any; employer?: string; phone?: string; safeZoneName?: string; plateNumber?: string }) => string;
   getOrCreateThreadForRider: (rider: WaitingRider) => string;
+
+  // Everyday Street-Level Discovery State
+  userStreet: StreetLocation;
+  setUserStreet: (street: StreetLocation) => void;
+  setUserStreetByNameOrCoords: (name: string, coords: Coordinates, area?: string) => void;
+  selectedDestination: string;
+  setSelectedDestination: (destination: string) => void;
+  selectedDayFilter: 'all' | 'now' | 'today' | 'tomorrow' | 'weekend';
+  setSelectedDayFilter: (filter: 'all' | 'now' | 'today' | 'tomorrow' | 'weekend') => void;
+  everydayRides: StreetCarpoolRide[];
+  streetLocations: StreetLocation[];
+  neighborhoodRiders: NeighborhoodRider[];
+  bookEverydayRide: (rideId: string) => string | undefined;
+  postDriverStreetRide: (ride: Partial<StreetCarpoolRide>) => void;
 
   // UI Navigation
   activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats';
@@ -1422,7 +1444,151 @@ export const useAppStore = create<AppState>()(
     return threadId;
   },
 
-  activeTab: 'deck',
+  // Everyday Street-Level Discovery State
+  userStreet: mockStreetLocations[0],
+  setUserStreet: (street) => set({ userStreet: street }),
+  setUserStreetByNameOrCoords: (name, coords, area) =>
+    set({
+      userStreet: {
+        id: `st-${Date.now()}`,
+        name,
+        area: area || 'Lagos',
+        coordinates: coords,
+      },
+    }),
+  selectedDestination: 'all',
+  setSelectedDestination: (dest) => set({ selectedDestination: dest }),
+  selectedDayFilter: 'all',
+  setSelectedDayFilter: (filter) => set({ selectedDayFilter: filter }),
+  everydayRides: mockEverydayRides,
+  streetLocations: mockStreetLocations,
+  neighborhoodRiders: mockNeighborhoodRiders,
+
+  bookEverydayRide: (rideId: string) => {
+    const state = get();
+    const ride = state.everydayRides.find((r) => r.id === rideId);
+    if (!ride) return undefined;
+
+    const fare = ride.fuelSplitNgn;
+    const newBalance = Math.max(0, state.escrowBalanceNgn - fare);
+    const newHeld = state.heldEscrowNgn + fare;
+
+    const updatedRides = state.everydayRides.map((r) =>
+      r.id === rideId
+        ? {
+            ...r,
+            availableSeats: Math.max(0, r.availableSeats - 1),
+            status: (r.availableSeats <= 1 ? 'full' : 'active') as any,
+          }
+        : r
+    );
+
+    const newMatch: CommuteMatch = {
+      id: `match-st-${Date.now()}`,
+      corridorId: 'everyday-street-corridor',
+      driverId: ride.driverId,
+      riderId: state.user.id,
+      driverName: ride.driverName,
+      riderName: state.user.fullName,
+      driverAvatar: ride.driverAvatar,
+      vehicleMake: ride.vehicle.make,
+      vehicleModel: ride.vehicle.model,
+      plateNumber: ride.vehicle.plateNumber,
+      fareNgn: fare,
+      hasAc: ride.vehicle.hasAc,
+      pickupSafeZone: {
+        id: `sz-st-${Date.now()}`,
+        name: ride.pickupStreetCorner,
+        zone_type: 'gated_estate_gate',
+        address: ride.originStreet,
+        coordinates: ride.originCoords,
+        is_active: true,
+      },
+      status: 'locked',
+      scheduledFor: `${ride.departureDay} • ${ride.departureTime}`,
+      trip_purpose: `Street carpool from ${ride.originStreet} to ${ride.destination}`,
+      interests: ride.interests,
+      linkedin_handle: ride.linkedinHandle,
+    };
+
+    const threadId = state.getOrCreateThreadForDriver({
+      id: ride.driverId,
+      name: ride.driverName,
+      avatar: ride.driverAvatar,
+      plateNumber: ride.vehicle.plateNumber,
+      safeZoneName: ride.pickupStreetCorner,
+      employer: ride.driverRole,
+    });
+
+    set((s) => ({
+      escrowBalanceNgn: newBalance,
+      heldEscrowNgn: newHeld,
+      everydayRides: updatedRides,
+      activeMatches: [newMatch, ...s.activeMatches],
+      escrowTransactions: [
+        {
+          id: `tx-escrow-${Date.now()}`,
+          type: 'HOLD_CARPOOL',
+          amountNgn: fare,
+          reference: `STREET-CP-${Date.now().toString().slice(-6)}`,
+          description: `Escrow hold for ride with ${ride.driverName} (${ride.departureDay})`,
+          timestamp: 'Just now',
+          status: 'held',
+        },
+        ...s.escrowTransactions,
+      ],
+    }));
+
+    return threadId;
+  },
+
+  postDriverStreetRide: (rideData: Partial<StreetCarpoolRide>) => {
+    const state = get();
+    const user = state.user;
+    const vehicle = state.driverVehicle;
+
+    const newRide: StreetCarpoolRide = {
+      id: `ride-driver-${Date.now()}`,
+      driverId: user.id,
+      driverName: user.fullName,
+      driverAvatar: user.avatarUrl,
+      driverRole: user.employer || 'Verified Driver',
+      driverRating: user.ratingScore,
+      driverTrips: user.tripsCompleted,
+      vehicle: {
+        make: vehicle.make || 'Toyota',
+        model: vehicle.model || 'Camry',
+        color: vehicle.color || 'Midnight Black',
+        plateNumber: vehicle.plate_number || 'APP-842-EY',
+        hasAc: true,
+      },
+      originStreet: rideData.originStreet || state.userStreet.name,
+      originCoords: rideData.originCoords || state.userStreet.coordinates,
+      destination: rideData.destination || 'Victoria Island',
+      destinationCoords: rideData.destinationCoords || { lat: 6.4350, lng: 3.4280 },
+      routePath: [
+        [state.userStreet.coordinates.lat, state.userStreet.coordinates.lng],
+        [6.4420, 3.4530],
+        [6.4350, 3.4280],
+      ],
+      departureDay: (rideData.departureDay as any) || 'Today',
+      departureTime: rideData.departureTime || 'In 20 mins',
+      departureCategory: (rideData.departureCategory as any) || 'today',
+      availableSeats: rideData.availableSeats || 3,
+      totalSeats: rideData.totalSeats || 3,
+      fuelSplitNgn: rideData.fuelSplitNgn || 1500,
+      pickupWalkMinutes: 2,
+      pickupStreetCorner: `Gate / corner of ${rideData.originStreet || state.userStreet.name}`,
+      status: 'active',
+      interests: ['Work', 'Afrobeats', 'Lagos Life'],
+    };
+
+    set((s) => ({
+      everydayRides: [newRide, ...s.everydayRides],
+    }));
+  },
+
+  activeTab: 'map',
   setActiveTab: (tab) => set({ activeTab: tab }),
 }),
   {
@@ -1437,6 +1603,10 @@ export const useAppStore = create<AppState>()(
       user: state.user,
       activeRole: state.activeRole,
       theme: state.theme,
+      userStreet: state.userStreet,
+      selectedDestination: state.selectedDestination,
+      selectedDayFilter: state.selectedDayFilter,
+      everydayRides: state.everydayRides,
       riderRoute: state.riderRoute,
       activeMatches: state.activeMatches,
       weeklyLockedCommutes: state.weeklyLockedCommutes,

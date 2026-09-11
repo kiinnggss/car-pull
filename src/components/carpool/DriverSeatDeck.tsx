@@ -44,6 +44,8 @@ export const DriverSeatDeck: React.FC = () => {
     driverSchedule,
     updateDriverSchedule,
     getOrCreateThreadForRider,
+    userStreet,
+    postDriverStreetRide,
   } = useAppStore();
 
   const [copiedManifest, setCopiedManifest] = useState(false);
@@ -231,7 +233,7 @@ CAR PULL Zero-Cash Escrow Active`;
         </div>
       </div>
 
-      {/* Driver Commute Schedule & Fuel Split Controls */}
+      {/* Driver Everyday Schedule & Route Controls */}
       <div className="bg-gradient-to-b from-stone-50 to-white dark:from-stone-900/70 dark:to-[#1A1816] rounded-3xl p-4 border border-[#DDD4C5] dark:border-stone-800 shadow-2xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -239,13 +241,39 @@ CAR PULL Zero-Cash Escrow Active`;
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-black text-zinc-900 dark:text-stone-100">Daily Commute Schedule</h4>
-              <span className="text-[10px] text-zinc-500 dark:text-stone-400">Lekki-Ikoyi Link & Epe Corridor</span>
+              <h4 className="text-xs font-black text-zinc-900 dark:text-stone-100">Everyday Drive Schedule</h4>
+              <span className="text-[10px] text-zinc-500 dark:text-stone-400">From {userStreet.name}</span>
             </div>
           </div>
           <span className="text-[10px] font-bold text-[#0D6E6E] dark:text-emerald-400 bg-teal-50 dark:bg-teal-950/40 px-2 py-0.5 rounded-full border border-teal-200 dark:border-teal-800/60">
-            Autopilot
+            Open to Street Riders
           </span>
+        </div>
+
+        {/* Departure Day Selector */}
+        <div>
+          <label className="text-[10px] font-bold text-zinc-500 dark:text-stone-400 block mb-1">
+            Trip Day
+          </label>
+          <div className="grid grid-cols-4 gap-1.5">
+            {['Today', 'Tomorrow', 'Saturday', 'Sunday'].map((day) => (
+              <button
+                key={day}
+                type="button"
+                onClick={() => {
+                  triggerHaptic('switch');
+                  updateDriverSchedule({ departureDay: day });
+                }}
+                className={`py-1.5 rounded-xl text-[11px] font-black transition-all ${
+                  (driverSchedule?.departureDay || 'Today') === day
+                    ? 'bg-[#0D6E6E] text-white shadow-xs'
+                    : 'bg-zinc-100 dark:bg-stone-800 text-zinc-700 dark:text-stone-300 border border-zinc-200 dark:border-stone-700'
+                }`}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-2 text-xs">
@@ -276,6 +304,9 @@ CAR PULL Zero-Cash Escrow Active`;
               <option value="Marina / CMS">Marina / CMS</option>
               <option value="Ikoyi (Kingsway)">Ikoyi (Kingsway)</option>
               <option value="Lekki Phase 1">Lekki Phase 1</option>
+              <option value="Ikeja City Mall">Ikeja City Mall</option>
+              <option value="Landmark Beach">Landmark Beach</option>
+              <option value="Yaba Tech Hubs">Yaba Tech Hubs</option>
             </select>
           </div>
         </div>
@@ -310,6 +341,35 @@ CAR PULL Zero-Cash Escrow Active`;
             ))}
           </div>
         </div>
+
+        {/* Publish Ride to Live Street Map Button */}
+        <button
+          type="button"
+          onClick={() => {
+            triggerHaptic('match');
+            postDriverStreetRide({
+              originStreet: userStreet.name,
+              originCoords: userStreet.coordinates,
+              destination: driverSchedule?.destination || 'Victoria Island',
+              departureDay: (driverSchedule?.departureDay as any) || 'Today',
+              departureTime: driverSchedule?.departureTime || '07:30 AM',
+              fuelSplitNgn: driverSchedule?.fuelSplitNgn || 1500,
+              availableSeats: 3,
+              totalSeats: 3,
+            });
+            confetti({
+              particleCount: 40,
+              spread: 50,
+              origin: { y: 0.6 },
+              colors: ['#0D6E6E', '#10B981', '#F59E0B'],
+            });
+            setActiveTab('map');
+          }}
+          className="w-full py-2.5 bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-sm active-press transition-all"
+        >
+          <Navigation className="w-3.5 h-3.5 text-amber-300" />
+          <span>Publish Ride to Street Discovery Map</span>
+        </button>
       </div>
 
       {/* Confirmed Passengers in Carpool */}

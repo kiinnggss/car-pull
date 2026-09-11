@@ -20,30 +20,24 @@ export const BottomNav: React.FC = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#F6F2EA]/98 dark:bg-[#141210]/98 backdrop-blur-md border-t border-[#DDD4C5] dark:border-stone-800 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
       <div className="flex items-center justify-around">
-        {/* Tab 1: Corridor Swipe Deck & Live Map Toggle */}
+        {/* Tab 1: Street Carpool Discovery Map */}
         <button
           onClick={() => {
             triggerHaptic('switch');
-            setActiveTab(activeTab === 'deck' ? 'map' : 'deck');
+            setActiveTab('map');
           }}
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
-            activeTab === 'deck' || activeTab === 'map'
+            activeTab === 'map' || activeTab === 'deck'
               ? 'text-[#0D6E6E] dark:text-[#14B8A6] font-black'
               : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200'
           }`}
-          title="Tap to toggle between Card Deck and Live Corridor Map"
+          title="Street-level carpool discovery map"
         >
-          {activeTab === 'map' ? (
-            <Navigation className="w-5 h-5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-          ) : (
-            <Compass className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#0D6E6E] dark:text-[#14B8A6]' : ''}`} />
-          )}
-          <span className="text-[10px] mt-0.5 tracking-tight font-bold">
-            {activeTab === 'map' ? 'Live Map' : 'Corridor'}
-          </span>
+          <Navigation className={`w-5 h-5 ${activeTab === 'map' || activeTab === 'deck' ? 'text-[#0D6E6E] dark:text-[#14B8A6]' : ''}`} />
+          <span className="text-[10px] mt-0.5 tracking-tight font-bold">Map</span>
         </button>
 
-        {/* Tab 2: Matches & Daily Locks */}
+        {/* Tab 2: Booked Rides */}
         <button
           onClick={() => {
             triggerHaptic('switch');
@@ -63,7 +57,7 @@ export const BottomNav: React.FC = () => {
               </span>
             )}
           </div>
-          <span className="text-[10px] mt-0.5 tracking-tight font-bold">Matches</span>
+          <span className="text-[10px] mt-0.5 tracking-tight font-bold">Rides</span>
         </button>
 
         {/* Central Distress Beacon Button */}

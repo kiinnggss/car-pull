@@ -266,8 +266,65 @@ export interface ChatThread {
 export interface DriverSchedule {
   origin: string;
   destination: string;
+  departureDay?: string; // 'Today' | 'Tomorrow' | 'Saturday' | 'Sunday' | etc.
   departureTime: string;
   availableSeats: number;
   fuelSplitNgn: number;
   hasAc: boolean;
 }
+
+export interface StreetLocation {
+  id: string;
+  name: string;
+  area: string;
+  coordinates: Coordinates;
+  popularNearbySpots?: string[];
+}
+
+export interface StreetCarpoolRide {
+  id: string;
+  driverId: string;
+  driverName: string;
+  driverAvatar: string;
+  driverRole: string;
+  driverRating: number;
+  driverTrips: number;
+  vehicle: {
+    make: string;
+    model: string;
+    color: string;
+    plateNumber: string;
+    hasAc: boolean;
+  };
+  originStreet: string;
+  originCoords: Coordinates;
+  destination: string;
+  destinationCoords: Coordinates;
+  routePath: [number, number][];
+  departureDay: 'Today' | 'Tomorrow' | 'Saturday' | 'Sunday' | 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday';
+  departureTime: string;
+  departureCategory: 'leaving_now' | 'today' | 'tomorrow' | 'weekend' | 'anyday';
+  availableSeats: number;
+  totalSeats: number;
+  fuelSplitNgn: number;
+  pickupWalkMinutes: number;
+  pickupStreetCorner: string;
+  status: 'active' | 'full' | 'in_transit' | 'completed';
+  cabinPassengers?: CabinPassenger[];
+  interests?: string[];
+  linkedinHandle?: string;
+  passesNearUser?: boolean;
+}
+
+export interface NeighborhoodRider {
+  id: string;
+  name: string;
+  avatar: string;
+  employer: string;
+  streetName: string;
+  coordinates: Coordinates;
+  destination: string;
+  departureTime: string;
+  bidNgn: number;
+}
+

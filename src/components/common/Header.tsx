@@ -45,21 +45,21 @@ export const Header: React.FC = () => {
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          {activeTab !== 'deck' ? (
+          {activeTab !== 'map' ? (
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 if (isInChatThread) {
                   setActiveThreadId(null);
                 } else {
-                  setActiveTab('deck');
+                  setActiveTab('map');
                 }
               }}
               className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/40 font-bold text-xs shadow-2xs active:scale-95 transition-all"
-              title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Corridor Deck'}
+              title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
-              <span>{isInChatThread ? 'Inbox' : 'Deck'}</span>
+              <span>{isInChatThread ? 'Inbox' : 'Map'}</span>
             </button>
           ) : (
             <div className="flex items-center gap-1.5">

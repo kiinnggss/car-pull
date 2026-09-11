@@ -39,6 +39,7 @@ export const MatchesList: React.FC = () => {
     chatThreads,
     getOrCreateThreadForDriver,
     completeCommuteTrip,
+    setUserStreetByNameOrCoords,
   } = useAppStore();
 
   const [boardedMatchIds, setBoardedMatchIds] = useState<string[]>([]);
@@ -91,11 +92,11 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
       <div className="flex items-center justify-between pt-1">
         <div>
           <h2 className="text-base font-serif font-black text-[#141210] dark:text-[#EDE8E1] flex items-center gap-1.5">
-            <Calendar className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
-            Your Commute Matches
+            <Car className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
+            Your Booked Rides
           </h2>
           <p className="text-[11px] text-[#70665A] dark:text-stone-400 font-medium">
-            Locked escrow &amp; CCTV safe hubs
+            Live street pickups &amp; escrow secured
           </p>
         </div>
         <span className="text-xs font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs flex-shrink-0">
@@ -230,16 +231,29 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 </span>
               </div>
 
-              {/* Pickup Safe Zone */}
-              <div className="flex items-center justify-between text-xs py-0.5 px-1 text-[#70665A] dark:text-stone-400">
+              {/* Pickup Safe Zone with 1-Tap Map Navigation */}
+              <button
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setUserStreetByNameOrCoords(
+                    match.pickupSafeZone.name,
+                    match.pickupSafeZone.coordinates || { lat: 6.4480, lng: 3.4720 },
+                    match.pickupSafeZone.address || 'Pickup Point'
+                  );
+                  setActiveTab('map');
+                }}
+                className="w-full flex items-center justify-between text-xs py-1.5 px-2 bg-[#F8F5EE] dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-800 border border-[#DDD4C5] dark:border-stone-800 rounded-xl text-left transition-colors active-press group"
+              >
                 <span className="flex items-center gap-1.5 truncate">
-                  <MapPin className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400 flex-shrink-0" />
-                  <span className="text-[11px]">Pickup: <strong className="text-[#141210] dark:text-[#EDE8E1]">{match.pickupSafeZone.name}</strong></span>
+                  <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                  <span className="text-[11px] truncate">
+                    Pickup: <strong className="text-[#141210] dark:text-[#EDE8E1]">{match.pickupSafeZone.name}</strong>
+                  </span>
                 </span>
-                <span className="text-[9px] font-black text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.2 rounded-full border border-teal-200 dark:border-teal-800 flex-shrink-0 ml-1">
-                  CCTV Guarded
+                <span className="text-[9px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] flex items-center gap-0.5 group-hover:underline flex-shrink-0 ml-1">
+                  View on Map &rarr;
                 </span>
-              </div>
+              </button>
 
               {/* Dynamic Chat & LinkedIn Actions */}
               <div className="grid grid-cols-3 gap-1.5">
@@ -286,42 +300,18 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 </button>
               </div>
 
-              {/* Weekly Commute Lock Action Strip */}
-              {(match.trip_type === 'commute' || match.trip_type === 'morning' || match.trip_type === 'evening') && (
-                <div className="bg-[#FAF6EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-xl p-2 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5">
-                    <Calendar className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                    <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
-                      Mon–Fri Routine
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => {
-                      triggerHaptic('switch');
-                      if (isWeeklyLocked) {
-                        unlockWeeklyCommute(match.driverId);
-                      } else {
-                        lockWeeklyCommute(match.driverId);
-                      }
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold flex items-center gap-1 transition-all active-press shadow-2xs ${
-                      isWeeklyLocked
-                        ? 'bg-emerald-600 text-white'
-                        : 'bg-white dark:bg-[#141210] text-[#141210] dark:text-stone-200 border border-[#DDD4C5] dark:border-stone-700 hover:bg-stone-100 dark:hover:bg-stone-800'
-                    }`}
-                  >
-                    {isWeeklyLocked ? (
-                      <>
-                        <Lock className="w-3 h-3" /> Locked
-                      </>
-                    ) : (
-                      <>
-                        <Unlock className="w-3 h-3 text-[#70665A] dark:text-stone-400" /> Lock Routine
-                      </>
-                    )}
-                  </button>
+              {/* Everyday Carpool Schedule Info */}
+              <div className="bg-[#FAF6EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-xl p-2 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                  <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
+                    Ride Schedule
+                  </span>
                 </div>
-              )}
+                <span className="text-[10px] font-bold font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md border border-teal-200 dark:border-teal-800">
+                  {match.scheduledFor}
+                </span>
+              </div>
 
               {/* In-Transit Status & Trip Completion with Escrow Release */}
               {isCompleted ? (

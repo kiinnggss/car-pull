@@ -1,86 +1,103 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { SafeZone, CorridorDriver, TrafficAlert } from '@/lib/types';
+import { StreetCarpoolRide, StreetLocation, NeighborhoodRider } from '@/lib/types';
 import {
   MapPin,
-  ShieldCheck,
   Car,
   Compass,
-  Layers,
-  AlertTriangle,
   CheckCircle2,
   Navigation,
   Clock,
-  Flame,
   ArrowRight,
-  Maximize2,
   X,
   Star,
+  Users,
+  MessageCircle,
+  Sparkles,
+  Search,
+  Crosshair,
+  Filter,
+  Calendar,
+  ShieldCheck,
+  ChevronDown,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
-import { RoutePlannerBar } from '../carpool/RoutePlannerBar';
-
-// Lagos Ajah -> Lekki Toll -> Victoria Island -> Marina Expressway Polyline
-const LAGOS_CORRIDOR_COORDS: [number, number][] = [
-  [6.4678, 3.5683], // Ajah Jubilee Bridge / Langbasa
-  [6.4552, 3.5594], // VGC Security Bay
-  [6.4485, 3.5385], // Chevron Drive Junction
-  [6.4428, 3.5186], // Jakande / TotalEnergies Mega Station
-  [6.4395, 3.5012], // Agungi Bus Stop
-  [6.4380, 3.4885], // Igbo-Efon / Chisco
-  [6.4372, 3.4750], // Ikate Elegushi
-  [6.4360, 3.4610], // Maroko / Lekki Phase 1
-  [6.4312, 3.4510], // Mobil Sandfill
-  [6.4420, 3.4430], // Lekki 1st Toll Gate (Admiralty)
-  [6.4460, 3.4350], // Lekki-Ikoyi Link Bridge / Falomo Roundabout
-  [6.4350, 3.4280], // Ozumba Mbadiwe / Civic Center
-  [6.4300, 3.4210], // Adeola Odeku / Ahmadu Bello Way
-  [6.4400, 3.4080], // Bonny Camp / CMS Marina Approach
-  [6.4530, 3.3958], // Marina Terminal / CMS
-];
-
-// Lekki 1st Toll bottleneck congestion coordinates
-const TOLL_BOTTLENECK_COORDS: [number, number][] = [
-  [6.4360, 3.4610],
-  [6.4312, 3.4510],
-  [6.4420, 3.4430],
-];
-
-// Live driver approximate locations along the corridor (staggered to avoid pin overlaps)
-const DRIVER_GEO_LOCATIONS: { [id: string]: [number, number] } = {
-  'driver-101': [6.4405, 3.5040], // Between Jakande & Agungi
-  'driver-102': [6.4465, 3.5320], // Near Chevron Drive
-  'driver-103': [6.4520, 3.5510], // Near VGC
-  'driver-104': [6.4340, 3.4570], // Near Sandfill / Lekki Phase 1
-  'driver-105': [6.4315, 3.4240], // Near Ozumba Mbadiwe / VI
-};
+import { triggerHaptic } from '@/lib/haptics';
 
 export const CorridorMap: React.FC = () => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
-  const [mapReady, setMapReady] = useState(false);
-  const [activeOverlay, setActiveOverlay] = useState<'all' | 'safezones' | 'drivers' | 'traffic'>('all');
-  const [inspectedZone, setInspectedZone] = useState<SafeZone | null>(null);
-  const [inspectedDriver, setInspectedDriver] = useState<CorridorDriver | null>(null);
-  const [inspectedAlert, setInspectedAlert] = useState<TrafficAlert | null>(null);
+  const markersRef = useRef<{ [key: string]: any }>({});
+  const polylinesRef = useRef<any[]>([]);
 
   const {
-    safeZones,
-    selectedSafeZone,
-    setSelectedSafeZone,
-    drivers,
-    selectDriverById,
-    trafficAlerts,
-    commuteDirection,
-    toggleCommuteDirection,
+    userStreet,
+    setUserStreet,
+    setUserStreetByNameOrCoords,
+    selectedDestination,
+    setSelectedDestination,
+    selectedDayFilter,
+    setSelectedDayFilter,
+    everydayRides,
+    streetLocations,
+    neighborhoodRiders,
+    bookEverydayRide,
+    activeRole,
+    postDriverStreetRide,
     setActiveTab,
-    riderRoute,
+    setActiveThreadId,
+    getOrCreateThreadForDriver,
   } = useAppStore();
 
-  // Initialize interactive Leaflet map inside useEffect
+  const [selectedRide, setSelectedRide] = useState<StreetCarpoolRide | null>(null);
+  const [selectedRider, setSelectedRider] = useState<NeighborhoodRider | null>(null);
+  const [showStreetPicker, setShowStreetPicker] = useState(false);
+  const [showDestPicker, setShowDestPicker] = useState(false);
+  const [searchStreetText, setSearchStreetText] = useState('');
+  const [isLocating, setIsLocating] = useState(false);
+  const [bookedSuccessRide, setBookedSuccessRide] = useState<StreetCarpoolRide | null>(null);
+
+  // Filter everyday rides based on destination and day filter
+  const filteredRides = useMemo(() => {
+    return everydayRides.filter((ride) => {
+      // Destination filter
+      if (selectedDestination !== 'all') {
+        const matchesDest =
+          ride.destination.toLowerCase().includes(selectedDestination.toLowerCase()) ||
+          selectedDestination.toLowerCase().includes(ride.destination.toLowerCase());
+        if (!matchesDest) return false;
+      }
+
+      // Day filter
+      if (selectedDayFilter === 'now') {
+        return ride.departureCategory === 'leaving_now';
+      }
+      if (selectedDayFilter === 'today') {
+        return ride.departureCategory === 'today' || ride.departureCategory === 'leaving_now';
+      }
+      if (selectedDayFilter === 'tomorrow') {
+        return ride.departureCategory === 'tomorrow';
+      }
+      if (selectedDayFilter === 'weekend') {
+        return ride.departureCategory === 'weekend';
+      }
+
+      return true;
+    });
+  }, [everydayRides, selectedDestination, selectedDayFilter]);
+
+  // If no ride selected, default to the first matching ride that passes near user
+  useEffect(() => {
+    if (!selectedRide && filteredRides.length > 0) {
+      const nearest = filteredRides.find((r) => r.passesNearUser) || filteredRides[0];
+      setSelectedRide(nearest);
+    }
+  }, [filteredRides, selectedRide]);
+
+  // Leaflet map initialization
   useEffect(() => {
     let isMounted = true;
 
@@ -89,228 +106,53 @@ export const CorridorMap: React.FC = () => {
 
       const L = (await import('leaflet')).default;
 
-      // Check if map instance is already bound to the container
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
       }
 
-      // Initialize map centered on the Lekki-Epe expressway corridor
+      // Center map around user's street
+      const initialCenter: [number, number] = [userStreet.coordinates.lat, userStreet.coordinates.lng];
+
       const map = L.map(mapContainerRef.current, {
-        center: [6.443, 3.488],
-        zoom: 12,
+        center: initialCenter,
+        zoom: 13,
         minZoom: 10,
-        maxZoom: 17,
+        maxZoom: 18,
         zoomControl: false,
       });
 
-      // Position zoom control in top-right for mobile thumb friendliness
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      // OpenStreetMap standard tiles: Zero watermark, 100% free and open
+      // OpenStreetMap standard tiles
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
       }).addTo(map);
 
-      // Glow halo corridor path
-      L.polyline(LAGOS_CORRIDOR_COORDS, {
-        color: '#C4B5FD',
-        weight: 8,
-        opacity: 0.6,
-        lineCap: 'round',
-        lineJoin: 'round',
-      }).addTo(map);
+      // Map click handler: allows tapping anywhere on the map to set your street pin
+      map.on('click', (e: any) => {
+        triggerHaptic('tap');
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
 
-      // Main Electric Purple corridor route
-      L.polyline(LAGOS_CORRIDOR_COORDS, {
-        color: '#7C3AED',
-        weight: 4,
-        opacity: 0.9,
-        dashArray: commuteDirection === 'morning' ? '8, 6' : undefined,
-        lineCap: 'round',
-        lineJoin: 'round',
-      }).addTo(map);
-
-      // Amber/Red Bottleneck Congestion section around Lekki 1st Toll
-      L.polyline(TOLL_BOTTLENECK_COORDS, {
-        color: '#EF4444',
-        weight: 6,
-        opacity: 0.85,
-        lineCap: 'round',
-        lineJoin: 'round',
-      }).addTo(map);
-
-      // Layer groups for filtering
-      const safeZoneLayer = L.layerGroup().addTo(map);
-      const driverLayer = L.layerGroup().addTo(map);
-      const trafficLayer = L.layerGroup().addTo(map);
-
-      // Add Safe Zone CCTV Hub Markers
-      safeZones.forEach((zone) => {
-        const isSelected = zone.id === selectedSafeZone.id;
-        const iconHtml = `
-          <div class="relative flex items-center justify-center cursor-pointer transform hover:scale-110 transition-transform">
-            ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-amber-400/40 animate-ping"></span>' : ''}
-            <div class="w-8 h-8 rounded-2xl flex items-center justify-center shadow-lg border-2 ${
-              isSelected
-                ? 'bg-amber-500 border-white text-zinc-950 ring-2 ring-amber-400'
-                : 'bg-[#7C3AED] border-white text-white'
-            }">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-            </div>
-            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-white/95 px-1.5 py-0.5 rounded-md text-[9px] font-black text-zinc-900 border border-zinc-200 shadow-xs whitespace-nowrap">
-              ${zone.name.split(' ')[0]}
-            </span>
-          </div>
-        `;
-
-        const icon = L.divIcon({
-          html: iconHtml,
-          className: 'custom-safezone-pin',
-          iconSize: [32, 32],
-          iconAnchor: [16, 16],
+        // Find nearest known street location or name it
+        let closest = streetLocations[0];
+        let minD = Infinity;
+        streetLocations.forEach((st) => {
+          const d = Math.hypot(st.coordinates.lat - lat, st.coordinates.lng - lng);
+          if (d < minD) {
+            minD = d;
+            closest = st;
+          }
         });
 
-        const marker = L.marker([zone.coordinates.lat, zone.coordinates.lng], { icon });
-        marker.on('click', () => {
-          setInspectedZone(zone);
-          setInspectedDriver(null);
-          setInspectedAlert(null);
-        });
-        safeZoneLayer.addLayer(marker);
+        const streetName = minD < 0.015 ? closest.name : `Street near ${closest.area}`;
+        setUserStreetByNameOrCoords(streetName, { lat, lng }, closest.area);
       });
-
-      // Add Active Corridor Drivers
-      drivers.slice(0, 5).forEach((driver) => {
-        const coords = DRIVER_GEO_LOCATIONS[driver.id] || [6.4428, 3.5186];
-        const iconHtml = `
-          <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-            <div class="relative w-9 h-9 rounded-2xl border-2 border-white bg-zinc-900 shadow-lg overflow-hidden ring-2 ring-[#7C3AED]/40">
-              <img src="${driver.avatar}" class="w-full h-full object-cover" alt="${driver.name}" />
-              <div class="absolute bottom-0 right-0 bg-[#7C3AED] text-white p-0.5 rounded-tl-md">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 h-2.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
-                  <circle cx="7" cy="17" r="2"/>
-                  <path d="M9 17h6"/>
-                  <circle cx="17" cy="17" r="2"/>
-                </svg>
-              </div>
-            </div>
-            <div class="mt-0.5 bg-zinc-900 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-xs border border-zinc-700 whitespace-nowrap flex items-center gap-1">
-              <span>₦${driver.corridor.fuel_split_ngn.toLocaleString()}</span>
-              <span class="text-emerald-400">● ${driver.corridor.available_seats}s</span>
-            </div>
-          </div>
-        `;
-
-        const icon = L.divIcon({
-          html: iconHtml,
-          className: 'custom-driver-pin',
-          iconSize: [36, 44],
-          iconAnchor: [18, 22],
-        });
-
-        const marker = L.marker(coords, { icon });
-        marker.on('click', () => {
-          setInspectedDriver(driver);
-          setInspectedZone(null);
-          setInspectedAlert(null);
-        });
-        driverLayer.addLayer(marker);
-      });
-
-      // Add Bottleneck / Traffic Hazard Marker at Lekki 1st Toll
-      const tollAlert = trafficAlerts.find((a) => a.location.includes('Toll')) || trafficAlerts[0];
-      if (tollAlert) {
-        const alertHtml = `
-          <div class="relative flex items-center justify-center cursor-pointer animate-bounce">
-            <span class="absolute -inset-1 rounded-full bg-red-500/40 animate-ping"></span>
-            <div class="w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-red-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/>
-                <line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-            </div>
-            <span class="absolute -bottom-5 left-1/2 -translate-x-1/2 bg-red-700 text-white px-1.5 py-0.5 rounded text-[8px] font-black shadow-xs whitespace-nowrap">
-              +20m Toll Jam
-            </span>
-          </div>
-        `;
-
-        const alertIcon = L.divIcon({
-          html: alertHtml,
-          className: 'custom-traffic-pin',
-          iconSize: [32, 32],
-          iconAnchor: [16, 16],
-        });
-
-        const alertMarker = L.marker([6.4385, 3.4470], { icon: alertIcon });
-        alertMarker.on('click', () => {
-          setInspectedAlert(tollAlert);
-          setInspectedZone(null);
-          setInspectedDriver(null);
-        });
-        trafficLayer.addLayer(alertMarker);
-      }
-
-      // Add Custom Rider Route Markers (Origin A and Destination B)
-      if (riderRoute.originCoords) {
-        const originHtml = `
-          <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-            <span class="absolute -inset-1 rounded-full bg-emerald-500/40 animate-ping"></span>
-            <div class="w-8 h-8 rounded-full bg-emerald-600 text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-emerald-400">
-              A
-            </div>
-            <span class="mt-0.5 bg-emerald-700 text-white text-[8px] font-black px-1.5 py-0.2 rounded shadow-xs whitespace-nowrap">
-              PICKUP
-            </span>
-          </div>
-        `;
-        const originIcon = L.divIcon({
-          html: originHtml,
-          className: 'custom-origin-pin',
-          iconSize: [32, 40],
-          iconAnchor: [16, 20],
-        });
-        L.marker([riderRoute.originCoords.lat, riderRoute.originCoords.lng], { icon: originIcon })
-          .addTo(map)
-          .bindPopup(`<b>Pickup Location:</b><br/>${riderRoute.origin}`);
-      }
-
-      if (riderRoute.destinationCoords) {
-        const destHtml = `
-          <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-            <span class="absolute -inset-1 rounded-full bg-purple-500/40 animate-ping"></span>
-            <div class="w-8 h-8 rounded-full bg-[#7C3AED] text-white font-black text-xs flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-purple-400">
-              B
-            </div>
-            <span class="mt-0.5 bg-[#6D28D9] text-white text-[8px] font-black px-1.5 py-0.2 rounded shadow-xs whitespace-nowrap">
-              DROPOFF
-            </span>
-          </div>
-        `;
-        const destIcon = L.divIcon({
-          html: destHtml,
-          className: 'custom-dest-pin',
-          iconSize: [32, 40],
-          iconAnchor: [16, 20],
-        });
-        L.marker([riderRoute.destinationCoords.lat, riderRoute.destinationCoords.lng], { icon: destIcon })
-          .addTo(map)
-          .bindPopup(`<b>Destination:</b><br/>${riderRoute.destination}`);
-      }
 
       mapInstanceRef.current = map;
-      if (isMounted) {
-        setMapReady(true);
-        setTimeout(() => {
-          map.invalidateSize();
-        }, 200);
-      }
+      renderMapElements(L, map);
     }
 
     initMap();
@@ -322,281 +164,582 @@ export const CorridorMap: React.FC = () => {
         mapInstanceRef.current = null;
       }
     };
-  }, [selectedSafeZone.id, commuteDirection, riderRoute.origin, riderRoute.destination]);
+  }, []);
 
-  // Recenter map to view entire Lagos corridor
-  const handleFitCorridor = () => {
-    if (!mapInstanceRef.current) return;
-    mapInstanceRef.current.fitBounds(LAGOS_CORRIDOR_COORDS, { padding: [30, 30] });
-  };
+  // Re-render markers and polylines whenever userStreet or filteredRides change
+  useEffect(() => {
+    async function updateLayers() {
+      if (!mapInstanceRef.current) return;
+      const L = (await import('leaflet')).default;
+      renderMapElements(L, mapInstanceRef.current);
+    }
+    updateLayers();
+  }, [userStreet, filteredRides, selectedRide]);
 
-  // Focus on current selected safe zone
-  const handleFocusSelectedSafeZone = () => {
-    if (!mapInstanceRef.current) return;
-    mapInstanceRef.current.flyTo(
-      [selectedSafeZone.coordinates.lat, selectedSafeZone.coordinates.lng],
-      14,
-      { duration: 1.2 }
-    );
-    setInspectedZone(selectedSafeZone);
-  };
+  const renderMapElements = (L: any, map: any) => {
+    // Clear previous polylines & markers
+    polylinesRef.current.forEach((p) => p.remove());
+    polylinesRef.current = [];
 
-  // Select safe zone as active pickup point with celebratory haptics
-  const handleConfirmSafeZone = (zone: SafeZone) => {
-    setSelectedSafeZone(zone);
-    confetti({
-      particleCount: 30,
-      spread: 60,
-      origin: { y: 0.8 },
-      colors: ['#7C3AED', '#F59E0B', '#10B981'],
+    Object.values(markersRef.current).forEach((m) => m.remove());
+    markersRef.current = {};
+
+    const userCoords: [number, number] = [userStreet.coordinates.lat, userStreet.coordinates.lng];
+
+    // 1. User Street Pin with 500m walking radius halo
+    const userWalkingCircle = L.circle(userCoords, {
+      radius: 400,
+      color: '#0D6E6E',
+      fillColor: '#14B8A6',
+      fillOpacity: 0.12,
+      weight: 1.5,
+      dashArray: '4, 4',
+    }).addTo(map);
+    polylinesRef.current.push(userWalkingCircle);
+
+    const userPinHtml = `
+      <div class="relative flex flex-col items-center">
+        <span class="absolute -inset-2 rounded-full bg-emerald-400/40 animate-ping"></span>
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-emerald-400 z-20">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <span class="mt-1 bg-stone-900 text-white px-2 py-0.5 rounded-full text-[9px] font-black border border-stone-700 shadow-md whitespace-nowrap z-20">
+          Your Street
+        </span>
+      </div>
+    `;
+
+    const userIcon = L.divIcon({
+      html: userPinHtml,
+      className: 'custom-user-pin',
+      iconSize: [36, 48],
+      iconAnchor: [18, 24],
+    });
+
+    const userMarker = L.marker(userCoords, { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
+    markersRef.current['user-pin'] = userMarker;
+
+    // 2. Draw Everyday Carpool Routes & Drivers
+    filteredRides.forEach((ride) => {
+      const isSelected = selectedRide?.id === ride.id;
+      const isPasses = ride.passesNearUser;
+
+      // Polyline styles
+      const routeColor = isSelected ? '#0D6E6E' : isPasses ? '#14B8A6' : '#8B5CF6';
+      const routeWeight = isSelected ? 6 : isPasses ? 4.5 : 3;
+      const routeOpacity = isSelected ? 0.95 : isPasses ? 0.8 : 0.45;
+
+      const polyline = L.polyline(ride.routePath, {
+        color: routeColor,
+        weight: routeWeight,
+        opacity: routeOpacity,
+        lineCap: 'round',
+        lineJoin: 'round',
+      }).addTo(map);
+
+      polyline.on('click', () => {
+        triggerHaptic('tap');
+        setSelectedRide(ride);
+        setSelectedRider(null);
+      });
+      polylinesRef.current.push(polyline);
+
+      // Driver vehicle marker at route origin / current spot
+      const driverCoords = ride.routePath[0];
+      const vehicleHtml = `
+        <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
+          ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-teal-400/50 animate-ping"></span>' : ''}
+          <div class="relative w-8 h-8 rounded-full border-2 ${isSelected ? 'border-amber-400 ring-2 ring-teal-500' : 'border-white'} bg-stone-900 shadow-md overflow-hidden">
+            <img src="${ride.driverAvatar}" class="w-full h-full object-cover" alt="${ride.driverName}" />
+            <div class="absolute bottom-0 right-0 bg-[#0D6E6E] text-white p-0.5 rounded-tl-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                <circle cx="7" cy="17" r="2"/>
+                <path d="M9 17h6"/>
+                <circle cx="17" cy="17" r="2"/>
+              </svg>
+            </div>
+          </div>
+          <span class="mt-0.5 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 px-1.5 py-0.2 rounded text-[8px] font-black border border-stone-300 dark:border-stone-700 shadow-xs whitespace-nowrap">
+            ${ride.driverName.split(' ')[0]} • ${ride.availableSeats} seat${ride.availableSeats === 1 ? '' : 's'}
+          </span>
+        </div>
+      `;
+
+      const driverIcon = L.divIcon({
+        html: vehicleHtml,
+        className: 'custom-driver-pin',
+        iconSize: [36, 44],
+        iconAnchor: [18, 22],
+      });
+
+      const driverMarker = L.marker(driverCoords, { icon: driverIcon }).addTo(map);
+      driverMarker.on('click', () => {
+        triggerHaptic('tap');
+        setSelectedRide(ride);
+        setSelectedRider(null);
+      });
+      markersRef.current[`driver-${ride.id}`] = driverMarker;
+    });
+
+    // 3. Neighbors on nearby streets waiting for rides
+    neighborhoodRiders.forEach((rider) => {
+      const riderHtml = `
+        <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
+          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-stone-900 overflow-hidden shadow-sm">
+            <img src="${rider.avatar}" class="w-full h-full object-cover" alt="${rider.name}" />
+          </div>
+          <span class="bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1 rounded text-[7px] font-bold border border-amber-300 whitespace-nowrap">
+            Co-Rider: ${rider.name.split(' ')[0]}
+          </span>
+        </div>
+      `;
+
+      const riderIcon = L.divIcon({
+        html: riderHtml,
+        className: 'custom-rider-pin',
+        iconSize: [28, 36],
+        iconAnchor: [14, 18],
+      });
+
+      const riderMarker = L.marker([rider.coordinates.lat, rider.coordinates.lng], { icon: riderIcon }).addTo(map);
+      riderMarker.on('click', () => {
+        triggerHaptic('tap');
+        setSelectedRider(rider);
+      });
+      markersRef.current[`rider-${rider.id}`] = riderMarker;
     });
   };
 
+  // Center on user's current GPS location
+  const handleLocateMe = () => {
+    if (typeof navigator !== 'undefined' && navigator.geolocation) {
+      setIsLocating(true);
+      triggerHaptic('tap');
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setIsLocating(false);
+          const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          setUserStreetByNameOrCoords('Your Current GPS Location', coords, 'Current Area');
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.flyTo([coords.lat, coords.lng], 14, { duration: 1.2 });
+          }
+        },
+        () => {
+          setIsLocating(false);
+          // Fallback to Lekki Phase 1
+          setUserStreetByNameOrCoords('Admiralty Way, Lekki Phase 1', { lat: 6.4480, lng: 3.4720 }, 'Lekki Phase 1');
+        },
+        { enableHighAccuracy: true, timeout: 5000 }
+      );
+    }
+  };
+
+  const handleBookRide = (ride: StreetCarpoolRide) => {
+    triggerHaptic('match');
+    const threadId = bookEverydayRide(ride.id);
+    setBookedSuccessRide(ride);
+
+    confetti({
+      particleCount: 50,
+      spread: 60,
+      origin: { y: 0.6 },
+      colors: ['#0D6E6E', '#14B8A6', '#F59E0B'],
+    });
+
+    setTimeout(() => {
+      if (threadId) {
+        setActiveThreadId(threadId);
+        setActiveTab('chats');
+      } else {
+        setActiveTab('matches');
+      }
+    }, 1200);
+  };
+
+  const filteredLocations = streetLocations.filter(
+    (st) =>
+      st.name.toLowerCase().includes(searchStreetText.toLowerCase()) ||
+      st.area.toLowerCase().includes(searchStreetText.toLowerCase())
+  );
+
   return (
-    <div className="relative w-full h-[calc(100vh-140px)] min-h-[520px] flex flex-col bg-zinc-100 overflow-hidden">
-      {/* Top Floating Control Bar */}
-      <div className="absolute top-2 left-2 right-2 z-[500] flex flex-col gap-1.5 pointer-events-auto">
-        {/* Segmented Controls: View Mode & Corridor Direction */}
-        <div className="flex items-center justify-between gap-1 bg-white/95 backdrop-blur-md p-1 rounded-2xl shadow-md border border-zinc-200/90">
-          <div className="flex items-center gap-1">
+    <div className="relative w-full h-[calc(100vh-125px)] min-h-[500px] flex flex-col bg-[#F6F2EA] dark:bg-[#121110] overflow-hidden">
+      {/* Top Floating Transit Command Strip */}
+      <div className="absolute top-2 left-2 right-2 z-[500] space-y-1.5 max-w-[420px] mx-auto">
+        {/* Origin Street & Destination Selectors */}
+        <div className="bg-white/95 dark:bg-[#1C1A17]/95 backdrop-blur-md rounded-2xl p-2 border border-[#DDD4C5] dark:border-stone-800 shadow-md space-y-1.5">
+          {/* Row 1: Your Street Selector */}
+          <div className="flex items-center justify-between gap-1.5">
             <button
-              onClick={() => setActiveTab('deck')}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold text-zinc-600 hover:text-zinc-900 transition-colors"
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowStreetPicker(true);
+              }}
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE] dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 border border-[#DDD4C5] dark:border-stone-700 rounded-xl text-left transition-colors"
             >
-              <Layers className="w-3.5 h-3.5 text-zinc-500" />
-              <span>Cards</span>
+              <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <span className="text-[9px] uppercase font-bold text-[#70665A] dark:text-stone-400 block leading-tight">
+                  Your Street / Pickup Pin
+                </span>
+                <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate block">
+                  {userStreet.name}
+                </span>
+              </div>
+              <ChevronDown className="w-3.5 h-3.5 text-[#70665A] dark:text-stone-400 flex-shrink-0" />
             </button>
+
+            {/* Locate Me GPS Button */}
             <button
-              className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-black bg-[#7C3AED] text-white shadow-xs"
+              onClick={handleLocateMe}
+              disabled={isLocating}
+              className="p-2.5 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100 text-[#0D6E6E] dark:text-[#14B8A6] border border-teal-200 dark:border-teal-800 rounded-xl active-press transition-all flex-shrink-0"
+              title="Pin my current GPS street"
             >
-              <Navigation className="w-3.5 h-3.5 text-white" />
-              <span>Live Map</span>
+              <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
             </button>
           </div>
 
-          {/* Commute Direction Quick Toggle */}
-          <button
-            onClick={toggleCommuteDirection}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold border transition-all ${
-              commuteDirection === 'morning'
-                ? 'bg-amber-50 text-amber-900 border-amber-200 hover:bg-amber-100'
-                : 'bg-indigo-50 text-indigo-900 border-indigo-200 hover:bg-indigo-100'
-            }`}
-            title="Tap to switch between AM Outbound and PM Return corridors"
-          >
-            <span>{commuteDirection === 'morning' ? 'AM: Ajah → VI' : 'PM: VI → Ajah'}</span>
-            <span className="text-[9px] bg-white/80 px-1 py-0.2 rounded font-black">⇌</span>
-          </button>
+          {/* Row 2: "Going To" Destination Selector */}
+          <div className="flex items-center justify-between gap-1.5">
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowDestPicker(true);
+              }}
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE] dark:bg-stone-900 hover:bg-stone-100 dark:hover:bg-stone-800 border border-[#DDD4C5] dark:border-stone-700 rounded-xl text-left transition-colors"
+            >
+              <Compass className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <span className="text-[9px] uppercase font-bold text-[#70665A] dark:text-stone-400 block leading-tight">
+                  Going My Way To
+                </span>
+                <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate block">
+                  {selectedDestination === 'all' ? 'Everywhere / Any Destination' : selectedDestination}
+                </span>
+              </div>
+              <ChevronDown className="w-3.5 h-3.5 text-[#70665A] dark:text-stone-400 flex-shrink-0" />
+            </button>
+
+            {selectedDestination !== 'all' && (
+              <button
+                onClick={() => setSelectedDestination('all')}
+                className="px-2 py-1 bg-stone-100 dark:bg-stone-800 text-[10px] font-bold text-stone-600 dark:text-stone-300 rounded-lg hover:bg-stone-200"
+              >
+                Clear
+              </button>
+            )}
+          </div>
+
+          {/* Row 3: Day & Timing Filter Chips */}
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pt-0.5">
+            {[
+              { id: 'all', label: 'All Days' },
+              { id: 'now', label: '⚡ Leaving Now' },
+              { id: 'today', label: 'Today' },
+              { id: 'tomorrow', label: 'Tomorrow' },
+              { id: 'weekend', label: 'This Weekend' },
+            ].map((chip) => (
+              <button
+                key={chip.id}
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setSelectedDayFilter(chip.id as any);
+                }}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-all active-press ${
+                  selectedDayFilter === chip.id
+                    ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-900 shadow-xs'
+                    : 'bg-stone-100 dark:bg-stone-800/80 text-[#70665A] dark:text-stone-300 hover:bg-stone-200'
+                }`}
+              >
+                {chip.label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Dynamic Route Planner Pill */}
-        <RoutePlannerBar />
-
-        {/* Quick Map Action Pills */}
-        <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
-            <button
-              onClick={handleFocusSelectedSafeZone}
-              className="flex items-center gap-1 bg-white/95 text-zinc-800 text-[10px] font-bold px-2.5 py-1 rounded-xl shadow-xs border border-zinc-200 hover:bg-zinc-50 active:scale-95 transition-all flex-shrink-0"
-            >
-              <ShieldCheck className="w-3 h-3 text-[#7C3AED]" />
-              <span className="truncate max-w-[120px]">{selectedSafeZone.name.split(' ')[0]}</span>
-            </button>
-            <button
-              onClick={handleFitCorridor}
-              className="flex items-center gap-1 bg-white/95 text-zinc-800 text-[10px] font-bold px-2 py-1 rounded-xl shadow-xs border border-zinc-200 hover:bg-zinc-50 active:scale-95 transition-all flex-shrink-0"
-              title="Fit entire Lagos corridor into view"
-            >
-              <Maximize2 className="w-3 h-3 text-zinc-600" />
-              <span>Fit Route</span>
-            </button>
-          </div>
-
-          <div className="flex items-center gap-1 flex-shrink-0">
-            <span className="text-[10px] font-black bg-emerald-500 text-white px-2 py-0.5 rounded-full shadow-2xs flex items-center gap-1 animate-pulse">
-              <span className="w-1.5 h-1.5 rounded-full bg-white"></span>
-              Live GPS
-            </span>
-          </div>
+        {/* Street Tap Hint Banner */}
+        <div className="bg-stone-900/80 backdrop-blur-xs text-white text-[10px] font-medium py-1 px-3 rounded-xl flex items-center justify-between shadow-xs">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Tap anywhere on the map to set your street pin
+          </span>
+          <span className="font-bold text-teal-300">
+            {filteredRides.length} ride{filteredRides.length === 1 ? '' : 's'} near you
+          </span>
         </div>
       </div>
 
-      {/* Primary Leaflet Map Container */}
-      <div ref={mapContainerRef} className="w-full h-full z-0 flex-1" />
+      {/* Main Full-Bleed Map Canvas */}
+      <div ref={mapContainerRef} className="w-full h-full z-0" />
 
-      {/* Loading Skeleton if Map is rendering */}
-      {!mapReady && (
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-zinc-50 gap-3">
-          <div className="w-10 h-10 border-4 border-[#7C3AED] border-t-transparent rounded-full animate-spin" />
-          <p className="text-xs font-bold text-zinc-600">Loading Lagos Corridor Map...</p>
-        </div>
-      )}
-
-      {/* Floating Bottom Card: Inspected Safe Zone */}
-      {inspectedZone && (
-        <div className="absolute bottom-20 left-2 right-2 z-[500] bg-white rounded-3xl p-3.5 shadow-2xl border border-zinc-200 animate-in slide-in-from-bottom duration-200">
-          <div className="flex items-start justify-between gap-2 border-b border-zinc-100 pb-2">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-purple-100 text-[#7C3AED] flex items-center justify-center flex-shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h4 className="text-xs font-black text-zinc-900 leading-tight">
-                    {inspectedZone.name}
-                  </h4>
-                  {inspectedZone.id === selectedSafeZone.id && (
-                    <span className="bg-emerald-100 text-emerald-800 text-[8px] font-black px-1.5 py-0.2 rounded-full border border-emerald-300">
-                      CURRENT
+      {/* Bottom Floating Street Ride Card */}
+      {selectedRide && !bookedSuccessRide && (
+        <div className="absolute bottom-2 left-2 right-2 z-[500] max-w-[420px] mx-auto animate-in slide-in-from-bottom duration-200">
+          <div className="bg-white/98 dark:bg-[#1C1A17]/98 backdrop-blur-md rounded-2xl border border-[#DDD4C5] dark:border-stone-800 shadow-xl p-3 space-y-2 text-[#141210] dark:text-stone-100">
+            {/* Top row: Driver, Car, Fuel Split */}
+            <div className="flex items-start justify-between">
+              <div className="flex items-center gap-2.5">
+                <img
+                  src={selectedRide.driverAvatar}
+                  alt={selectedRide.driverName}
+                  className="w-10 h-10 rounded-xl object-cover border border-[#DDD4C5] dark:border-stone-700"
+                />
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <h4 className="text-xs font-serif font-black">{selectedRide.driverName}</h4>
+                    <span className="text-[9px] bg-teal-50 dark:bg-teal-950 text-[#0D6E6E] dark:text-[#14B8A6] font-bold px-1.5 py-0.2 rounded border border-teal-200 dark:border-teal-800">
+                      ★ {selectedRide.driverRating}
                     </span>
-                  )}
+                  </div>
+                  <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium block">
+                    {selectedRide.driverRole}
+                  </span>
                 </div>
-                <p className="text-[10px] text-zinc-500 line-clamp-1">{inspectedZone.address}</p>
               </div>
-            </div>
-            <button
-              onClick={() => setInspectedZone(null)}
-              className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          <div className="grid grid-cols-3 gap-1.5 my-2.5">
-            <div className="bg-zinc-50 p-1.5 rounded-xl border border-zinc-200/60 text-center">
-              <span className="text-[8px] text-zinc-500 block font-bold">CCTV Status</span>
-              <span className="text-[10px] font-extrabold text-emerald-600">24/7 Verified</span>
-            </div>
-            <div className="bg-zinc-50 p-1.5 rounded-xl border border-zinc-200/60 text-center">
-              <span className="text-[8px] text-zinc-500 block font-bold">Zone Type</span>
-              <span className="text-[10px] font-extrabold text-zinc-800 capitalize">
-                {inspectedZone.zone_type.replace('_', ' ')}
-              </span>
-            </div>
-            <div className="bg-zinc-50 p-1.5 rounded-xl border border-zinc-200/60 text-center">
-              <span className="text-[8px] text-zinc-500 block font-bold">Security Bay</span>
-              <span className="text-[10px] font-extrabold text-purple-700">Off-Street</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {inspectedZone.id === selectedSafeZone.id ? (
-              <div className="flex-1 py-2 bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-xs rounded-2xl flex items-center justify-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4" />
-                <span>Selected as Active Pickup Point</span>
-              </div>
-            ) : (
-              <button
-                onClick={() => handleConfirmSafeZone(inspectedZone)}
-                className="flex-1 py-2 bg-[#7C3AED] hover:bg-[#6D28D9] active:scale-98 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-1.5 shadow-md shadow-[#7C3AED]/25 transition-all"
-              >
-                <MapPin className="w-4 h-4" />
-                <span>Set as My Pickup Point</span>
-              </button>
-            )}
-            <button
-              onClick={() => setActiveTab('deck')}
-              className="px-3 py-2 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-xs rounded-2xl transition-colors"
-            >
-              View Drivers
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Floating Bottom Card: Inspected Driver Carpool */}
-      {inspectedDriver && (
-        <div className="absolute bottom-20 left-2 right-2 z-[500] bg-white rounded-3xl p-3.5 shadow-2xl border border-zinc-200 animate-in slide-in-from-bottom duration-200">
-          <div className="flex items-start justify-between gap-2 border-b border-zinc-100 pb-2">
-            <div className="flex items-center gap-2.5">
-              <img
-                src={inspectedDriver.avatar}
-                alt={inspectedDriver.name}
-                className="w-11 h-11 rounded-2xl object-cover border border-zinc-200"
-              />
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h4 className="text-xs font-black text-zinc-900">{inspectedDriver.name}</h4>
-                  <span className="text-[10px] text-zinc-900 font-black flex items-center gap-0.5"><Star className="w-3 h-3 fill-amber-400 text-amber-400 inline" /> {inspectedDriver.rating}</span>
-                </div>
-                <p className="text-[10px] font-bold text-purple-700">
-                  {inspectedDriver.employer} <span className="text-zinc-400 font-normal">(@{inspectedDriver.employer_domain})</span>
-                </p>
-                <p className="text-[9px] text-zinc-500">
-                  {inspectedDriver.vehicle.make} {inspectedDriver.vehicle.model} ({inspectedDriver.vehicle.plate_number})
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setInspectedDriver(null)}
-              className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-3 gap-1.5 my-2.5">
-            <div className="bg-purple-50/70 p-1.5 rounded-xl border border-purple-100 text-center">
-              <span className="text-[8px] text-purple-600 block font-bold">Fuel Split</span>
-              <span className="text-xs font-black text-purple-900">
-                ₦{inspectedDriver.corridor.fuel_split_ngn.toLocaleString()}
-              </span>
-            </div>
-            <div className="bg-emerald-50/70 p-1.5 rounded-xl border border-emerald-100 text-center">
-              <span className="text-[8px] text-emerald-600 block font-bold">Seats Left</span>
-              <span className="text-xs font-black text-emerald-800">
-                {inspectedDriver.corridor.available_seats} of 3
-              </span>
-            </div>
-            <div className="bg-amber-50/70 p-1.5 rounded-xl border border-amber-100 text-center">
-              <span className="text-[8px] text-amber-600 block font-bold">Departure</span>
-              <span className="text-xs font-black text-amber-900">
-                {inspectedDriver.corridor.departure_time}
-              </span>
-            </div>
-          </div>
-
-          <button
-            onClick={() => selectDriverById(inspectedDriver.id)}
-            className="w-full py-2.5 bg-gradient-to-r from-[#7C3AED] to-[#6D28D9] hover:from-[#6D28D9] hover:to-[#5B21B6] active:scale-98 text-white font-black text-xs rounded-2xl flex items-center justify-center gap-1.5 shadow-md shadow-[#7C3AED]/25 transition-all"
-          >
-            <Car className="w-4 h-4 text-amber-300" />
-            <span>Request Commute Seat (₦{inspectedDriver.corridor.fuel_split_ngn.toLocaleString()})</span>
-            <ArrowRight className="w-3.5 h-3.5 ml-1" />
-          </button>
-        </div>
-      )}
-
-      {/* Floating Bottom Card: Inspected Traffic Hazard */}
-      {inspectedAlert && (
-        <div className="absolute bottom-20 left-2 right-2 z-[500] bg-white rounded-3xl p-3.5 shadow-2xl border border-red-200 animate-in slide-in-from-bottom duration-200">
-          <div className="flex items-start justify-between gap-2 border-b border-red-100 pb-2">
-            <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-red-100 text-red-600 flex items-center justify-center flex-shrink-0">
-                <AlertTriangle className="w-5 h-5" />
-              </div>
-              <div>
-                <span className="text-[9px] uppercase font-black text-red-600 tracking-wider">
-                  Live Traffic Hazard Warning
+              <div className="text-right">
+                <span className="text-sm font-black text-[#0D6E6E] dark:text-[#14B8A6] block">
+                  {formatNgn(selectedRide.fuelSplitNgn)}
                 </span>
-                <h4 className="text-xs font-black text-zinc-900">{inspectedAlert.location}</h4>
+                <span className="text-[9px] uppercase font-mono text-[#70665A] dark:text-stone-400">
+                  Fair Share Split
+                </span>
               </div>
             </div>
-            <button
-              onClick={() => setInspectedAlert(null)}
-              className="w-6 h-6 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-500 flex items-center justify-center font-bold text-xs"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
+
+            {/* Route & Pickup Corner Callout */}
+            <div className="bg-[#FAF6EE] dark:bg-stone-900 border border-[#DDD4C5] dark:border-stone-800 rounded-xl p-2 text-xs space-y-1">
+              <div className="flex items-center justify-between text-[11px] font-bold">
+                <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                  <MapPin className="w-3.5 h-3.5 text-emerald-600" />
+                  {selectedRide.pickupStreetCorner}
+                </span>
+                <span className="text-[10px] font-semibold text-[#70665A] dark:text-stone-400">
+                  ~{selectedRide.pickupWalkMinutes} min walk
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 pt-0.5 border-t border-[#DDD4C5]/60 dark:border-stone-800">
+                <span className="flex items-center gap-1 font-semibold text-stone-800 dark:text-stone-200">
+                  <ArrowRight className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                  Heading to: <strong>{selectedRide.destination}</strong>
+                </span>
+                <span className="flex items-center gap-1 font-mono font-bold text-amber-600 dark:text-amber-400">
+                  <Clock className="w-3 h-3" />
+                  {selectedRide.departureDay} • {selectedRide.departureTime}
+                </span>
+              </div>
+            </div>
+
+            {/* Vehicle & Available Seats */}
+            <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 px-1">
+              <span className="flex items-center gap-1 font-semibold">
+                <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                {selectedRide.vehicle.make} {selectedRide.vehicle.model} ({selectedRide.vehicle.color}) • {selectedRide.vehicle.plateNumber}
+              </span>
+              <span className="font-bold text-teal-700 dark:text-teal-400">
+                {selectedRide.availableSeats} of {selectedRide.totalSeats} seats open
+              </span>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="grid grid-cols-3 gap-1.5 pt-0.5">
+              <button
+                onClick={() => handleBookRide(selectedRide)}
+                className="col-span-2 py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white dark:text-stone-950 dark:bg-[#14B8A6] text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-md active-press transition-all"
+              >
+                <Sparkles className="w-4 h-4 text-amber-300 dark:text-stone-900" />
+                <span>Join Carpool • {formatNgn(selectedRide.fuelSplitNgn)}</span>
+              </button>
+
+              <button
+                onClick={() => {
+                  triggerHaptic('tap');
+                  const threadId = getOrCreateThreadForDriver({
+                    id: selectedRide.driverId,
+                    name: selectedRide.driverName,
+                    avatar: selectedRide.driverAvatar,
+                    plateNumber: selectedRide.vehicle.plateNumber,
+                    safeZoneName: selectedRide.pickupStreetCorner,
+                    employer: selectedRide.driverRole,
+                  });
+                  setActiveThreadId(threadId);
+                  setActiveTab('chats');
+                }}
+                className="py-2.5 bg-[#FAF6EE] dark:bg-stone-800 hover:bg-stone-100 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#DDD4C5] dark:border-stone-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Chat</span>
+              </button>
+            </div>
           </div>
+        </div>
+      )}
 
-          <p className="text-xs text-zinc-700 font-medium my-2.5 leading-relaxed bg-red-50 p-2 rounded-xl border border-red-100">
-            {inspectedAlert.message}
-          </p>
+      {/* Booking Success Banner */}
+      {bookedSuccessRide && (
+        <div className="absolute bottom-4 left-3 right-3 z-[500] max-w-[400px] mx-auto bg-emerald-600 text-white rounded-2xl p-3.5 shadow-2xl flex items-center justify-between animate-in zoom-in-95">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-6 h-6 text-white" />
+            <div>
+              <h4 className="text-xs font-black">Seat Reserved!</h4>
+              <p className="text-[10px] text-emerald-100">
+                Opening chat with {bookedSuccessRide.driverName}...
+              </p>
+            </div>
+          </div>
+          <span className="font-mono text-xs font-black bg-emerald-700 px-2 py-1 rounded-lg">
+            {formatNgn(bookedSuccessRide.fuelSplitNgn)} Held
+          </span>
+        </div>
+      )}
 
-          <div className="flex items-center justify-between text-[10px] text-zinc-500 pt-1">
-            <span className="font-bold">Estimated Delay: <strong className="text-red-600 font-black">+{inspectedAlert.delayMinutes} mins</strong></span>
-            <span className="text-emerald-700 font-bold">Suggested Alternate: Marwa / Lekki Phase 1 bypass</span>
+      {/* Street Picker Modal */}
+      {showStreetPicker && (
+        <div className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-xs flex items-end justify-center p-3 animate-in fade-in">
+          <div className="w-full max-w-[400px] bg-white dark:bg-[#1C1A17] rounded-3xl p-4 border border-[#DDD4C5] dark:border-stone-800 shadow-2xl space-y-3 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
+                  Select Your Street / Area
+                </h3>
+                <p className="text-[11px] text-[#70665A] dark:text-stone-400">
+                  Find carpool rides departing from or passing your street
+                </p>
+              </div>
+              <button
+                onClick={() => setShowStreetPicker(false)}
+                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Search Input */}
+            <div className="relative">
+              <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Search street, estate, or neighborhood..."
+                value={searchStreetText}
+                onChange={(e) => setSearchStreetText(e.target.value)}
+                className="w-full pl-9 pr-3 py-2 bg-[#FAF6EE] dark:bg-stone-900 border border-[#DDD4C5] dark:border-stone-700 rounded-xl text-xs text-[#141210] dark:text-stone-100 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E]"
+              />
+            </div>
+
+            {/* Quick GPS Location Option */}
+            <button
+              onClick={() => {
+                setShowStreetPicker(false);
+                handleLocateMe();
+              }}
+              className="w-full py-2 px-3 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100/80 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl border border-teal-200 dark:border-teal-800 flex items-center justify-center gap-2"
+            >
+              <Crosshair className="w-4 h-4" />
+              <span>Use Current GPS Location</span>
+            </button>
+
+            {/* Street List */}
+            <div className="flex-1 overflow-y-auto space-y-1.5 max-h-[300px] pr-1">
+              {filteredLocations.map((st) => (
+                <button
+                  key={st.id}
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    setUserStreet(st);
+                    setShowStreetPicker(false);
+                    if (mapInstanceRef.current) {
+                      mapInstanceRef.current.flyTo([st.coordinates.lat, st.coordinates.lng], 14);
+                    }
+                  }}
+                  className={`w-full text-left p-2.5 rounded-xl border transition-colors flex items-start justify-between ${
+                    userStreet.id === st.id
+                      ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-300 dark:border-teal-700'
+                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 border-[#DDD4C5] dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
+                  }`}
+                >
+                  <div>
+                    <span className="text-xs font-bold text-[#141210] dark:text-stone-100 block">
+                      {st.name}
+                    </span>
+                    <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium">
+                      {st.area}
+                    </span>
+                  </div>
+                  {userStreet.id === st.id && (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Destination Picker Modal */}
+      {showDestPicker && (
+        <div className="fixed inset-0 z-[1000] bg-black/60 backdrop-blur-xs flex items-end justify-center p-3 animate-in fade-in">
+          <div className="w-full max-w-[400px] bg-white dark:bg-[#1C1A17] rounded-3xl p-4 border border-[#DDD4C5] dark:border-stone-800 shadow-2xl space-y-3 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
+                  Where Are You Going?
+                </h3>
+                <p className="text-[11px] text-[#70665A] dark:text-stone-400">
+                  Filter drivers whose route is heading your way
+                </p>
+              </div>
+              <button
+                onClick={() => setShowDestPicker(false)}
+                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Common Destinations List */}
+            <div className="flex-1 overflow-y-auto space-y-1.5 max-h-[350px] pr-1">
+              {[
+                { id: 'all', title: 'Anywhere / Show All Rides', desc: 'See all drivers near your street' },
+                { id: 'Victoria Island', title: 'Victoria Island', desc: 'Civic Center, Adeola Odeku, Eko Hotel' },
+                { id: 'Ikeja', title: 'Ikeja / Airport', desc: 'Ikeja City Mall, Allen Ave, GRA, MM2' },
+                { id: 'Marina', title: 'Marina / CMS', desc: 'Financial District, Broad Street, CMS Ferry' },
+                { id: 'Yaba', title: 'Yaba / Tech Cluster', desc: 'Herbert Macaulay, Unilag, Sabo' },
+                { id: 'Landmark', title: 'Landmark Beach / Oniru', desc: 'Water Corporation Dr, Shiro, Beach' },
+                { id: 'Lekki Phase 1', title: 'Lekki Phase 1', desc: 'Admiralty Way, Freedom Way, Maroko' },
+              ].map((dest) => (
+                <button
+                  key={dest.id}
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    setSelectedDestination(dest.id);
+                    setShowDestPicker(false);
+                  }}
+                  className={`w-full text-left p-2.5 rounded-xl border transition-colors flex items-start justify-between ${
+                    selectedDestination === dest.id
+                      ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-300 dark:border-teal-700'
+                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 border-[#DDD4C5] dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
+                  }`}
+                >
+                  <div>
+                    <span className="text-xs font-bold text-[#141210] dark:text-stone-100 block">
+                      {dest.title}
+                    </span>
+                    <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium">
+                      {dest.desc}
+                    </span>
+                  </div>
+                  {selectedDestination === dest.id && (
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
