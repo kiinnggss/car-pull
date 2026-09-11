@@ -370,6 +370,27 @@ export const CorridorMap: React.FC = () => {
     <div className="relative w-full h-[calc(100vh-125px)] min-h-[500px] flex flex-col bg-[#F6F2EA] dark:bg-[#121110] overflow-hidden">
       {/* Top Floating Transit Command Strip */}
       <div className="absolute top-2 left-2 right-2 z-[500] space-y-1.5 max-w-[420px] mx-auto">
+        {/* Discovery View Switcher: Swipe Cards vs Street Map */}
+        <div className="w-full flex bg-white/95 dark:bg-[#1C1A17]/95 backdrop-blur-md p-1 rounded-2xl border border-[#DDD4C5] dark:border-stone-800 shadow-md">
+          <button
+            onClick={() => {
+              triggerHaptic('switch');
+              setActiveTab('deck');
+            }}
+            className="flex-1 py-1 px-3 rounded-xl text-xs font-bold transition-all text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200 flex items-center justify-center gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Swipe Cards</span>
+          </button>
+          <button
+            onClick={() => setActiveTab('map')}
+            className="flex-1 py-1 px-3 rounded-xl text-xs font-black transition-all bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-950 shadow-xs flex items-center justify-center gap-1.5"
+          >
+            <Navigation className="w-3.5 h-3.5" />
+            <span>Street Map</span>
+          </button>
+        </div>
+
         {/* Origin Street & Destination Selectors */}
         <div className="bg-white/95 dark:bg-[#1C1A17]/95 backdrop-blur-md rounded-2xl p-2 border border-[#DDD4C5] dark:border-stone-800 shadow-md space-y-1.5">
           {/* Row 1: Your Street Selector */}

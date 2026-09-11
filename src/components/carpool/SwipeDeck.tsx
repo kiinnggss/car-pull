@@ -6,7 +6,7 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { RoutePlannerBar } from './RoutePlannerBar';
-import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X, MessageCircle, Compass, Share2, Users, ExternalLink } from 'lucide-react';
+import { RefreshCw, CheckCircle, Sparkles, Calendar, ArrowLeft, X, MessageCircle, Compass, Share2, Users, ExternalLink, Navigation } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { formatNgn } from '@/lib/utils';
 import { IcebreakerChatModal } from './IcebreakerChatModal';
@@ -91,8 +91,29 @@ export const SwipeDeck: React.FC = () => {
   return (
     <div className="flex-1 flex flex-col justify-between w-full max-w-[400px] mx-auto px-3 h-full min-h-0">
       {/* Top: Transit Console */}
-      <div className="w-full pt-0.5 flex-shrink-0">
+      <div className="w-full pt-0.5 flex-shrink-0 space-y-1.5">
         <RoutePlannerBar />
+
+        {/* Discovery View Switcher: Swipe Cards vs Street Map */}
+        <div className="w-full flex bg-[#ECE5D8] dark:bg-stone-900 p-0.5 rounded-2xl border border-[#DDD4C5] dark:border-stone-800">
+          <button
+            onClick={() => setActiveTab('deck')}
+            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-black transition-all bg-white dark:bg-[#1E1B18] text-[#0D6E6E] dark:text-[#14B8A6] shadow-xs flex items-center justify-center gap-1.5"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <span>Swipe Cards</span>
+          </button>
+          <button
+            onClick={() => {
+              triggerHaptic('switch');
+              setActiveTab('map');
+            }}
+            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200 flex items-center justify-center gap-1.5"
+          >
+            <Navigation className="w-3.5 h-3.5" />
+            <span>Street Map</span>
+          </button>
+        </div>
       </div>
 
       {/* Center: Expansive Swipeable Profile Card Deck */}

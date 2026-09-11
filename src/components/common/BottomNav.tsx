@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { Compass, CalendarCheck, QrCode, MessageCircle, AlertOctagon, Navigation } from 'lucide-react';
+import { Compass, CalendarCheck, QrCode, MessageCircle, AlertOctagon, Navigation, Sparkles } from 'lucide-react';
 import { triggerHaptic } from '@/lib/haptics';
 
 export const BottomNav: React.FC = () => {
@@ -20,20 +20,37 @@ export const BottomNav: React.FC = () => {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-[#F6F2EA]/98 dark:bg-[#141210]/98 backdrop-blur-md border-t border-[#DDD4C5] dark:border-stone-800 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
       <div className="flex items-center justify-around">
-        {/* Tab 1: Street Carpool Discovery Map */}
+        {/* Tab 1: Swipe Cards Deck */}
+        <button
+          onClick={() => {
+            triggerHaptic('switch');
+            setActiveTab('deck');
+          }}
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-h-[44px] active-press ${
+            activeTab === 'deck'
+              ? 'text-[#0D6E6E] dark:text-[#14B8A6] font-black'
+              : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200'
+          }`}
+          title="Swipe carpool cards deck"
+        >
+          <Sparkles className={`w-5 h-5 ${activeTab === 'deck' ? 'text-[#0D6E6E] dark:text-[#14B8A6]' : ''}`} />
+          <span className="text-[10px] mt-0.5 tracking-tight font-bold">Swipe</span>
+        </button>
+
+        {/* Tab 2: Street Discovery Map */}
         <button
           onClick={() => {
             triggerHaptic('switch');
             setActiveTab('map');
           }}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-press ${
-            activeTab === 'map' || activeTab === 'deck'
+          className={`flex flex-col items-center justify-center py-1 px-1.5 rounded-xl transition-all min-h-[44px] active-press ${
+            activeTab === 'map'
               ? 'text-[#0D6E6E] dark:text-[#14B8A6] font-black'
               : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200'
           }`}
           title="Street-level carpool discovery map"
         >
-          <Navigation className={`w-5 h-5 ${activeTab === 'map' || activeTab === 'deck' ? 'text-[#0D6E6E] dark:text-[#14B8A6]' : ''}`} />
+          <Navigation className={`w-5 h-5 ${activeTab === 'map' ? 'text-[#0D6E6E] dark:text-[#14B8A6]' : ''}`} />
           <span className="text-[10px] mt-0.5 tracking-tight font-bold">Map</span>
         </button>
 

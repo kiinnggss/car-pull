@@ -1588,7 +1588,7 @@ export const useAppStore = create<AppState>()(
     }));
   },
 
-  activeTab: 'map',
+  activeTab: 'deck',
   setActiveTab: (tab) => set({ activeTab: tab }),
 }),
   {
