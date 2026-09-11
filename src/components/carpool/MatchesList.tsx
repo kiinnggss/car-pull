@@ -14,7 +14,6 @@ import {
   KeyRound,
   QrCode,
   Car,
-  ArrowLeft,
   CheckCircle2,
   ShieldCheck,
   MessageCircle,
@@ -84,32 +83,20 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in">
-      {/* Back to Deck Quick Navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => {
-            triggerHaptic('tap');
-            setActiveTab('deck');
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECE5D8] hover:bg-[#E3DCCE] text-[#0D6E6E] border border-[#DDD4C5] font-bold text-xs shadow-2xs active-press transition-all"
-        >
-          <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
-          <span>Back to Corridor Deck</span>
-        </button>
-        <span className="text-xs font-bold text-[#0D6E6E] bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200">
+      {/* Header */}
+      <div className="flex items-center justify-between pt-1">
+        <div>
+          <h2 className="text-base font-serif font-black text-[#141210] flex items-center gap-1.5">
+            <Calendar className="w-4 h-4 text-[#0D6E6E]" />
+            Your Commute Matches
+          </h2>
+          <p className="text-[11px] text-[#70665A] font-medium">
+            Locked escrow &amp; CCTV safe hubs
+          </p>
+        </div>
+        <span className="text-xs font-bold text-[#0D6E6E] bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200 shadow-2xs flex-shrink-0">
           {activeMatches.length} Active {activeMatches.length === 1 ? 'Ride' : 'Rides'}
         </span>
-      </div>
-
-      {/* Header */}
-      <div>
-        <h2 className="text-base font-serif font-black text-[#141210] flex items-center gap-1.5">
-          <Calendar className="w-4 h-4 text-[#0D6E6E]" />
-          Your Commute Matches
-        </h2>
-        <p className="text-[11px] text-[#70665A] font-medium">
-          Double opt-in verified rides with locked escrow &amp; CCTV safe hubs
-        </p>
       </div>
 
       {/* Flake Penalty Test Action Bar - Minimal & Clean */}
