@@ -81,7 +81,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
   ];
 
   return (
-    <div className="w-full max-w-[390px] mx-auto h-[calc(100vh-145px)] min-h-[500px] flex flex-col justify-between animate-in fade-in">
+    <div className="w-full max-w-[390px] mx-auto px-2 h-[calc(100vh-145px)] min-h-[500px] flex flex-col justify-between animate-in fade-in">
       {/* Top Thread Navigation & Profile Header */}
       <div className="bg-white/95 dark:bg-[#1A1816]/95 backdrop-blur-md border-b border-[#DDD4C5] dark:border-stone-800 p-2.5 rounded-t-2xl flex items-center justify-between gap-2 shadow-2xs">
         <div className="flex items-center gap-2 min-w-0">
