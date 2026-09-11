@@ -47,6 +47,19 @@ html, body {
   border-radius: 9999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #0D6E6E;
+html.dark, body.dark {
+  background-color: #0A0908;
+  color: #EDE8E1;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #171513;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #2D2824;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #14B8A6;
 }

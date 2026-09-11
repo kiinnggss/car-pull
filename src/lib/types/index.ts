@@ -233,3 +233,33 @@ export interface TrafficAlert {
   delayMinutes: number;
   message: string;
 }
+
+export interface ChatMessage {
+  id: string;
+  senderId: string;
+  senderName: string;
+  text: string;
+  timestamp: string;
+  isUser: boolean;
+  status?: 'sent' | 'delivered' | 'read';
+}
+
+export interface ChatThread {
+  id: string;
+  partnerId: string;
+  partnerName: string;
+  partnerAvatar: string;
+  partnerRole: 'driver' | 'rider';
+  partnerEmployer: string;
+  vehicleMakeModel?: string;
+  vehiclePlate?: string;
+  routeSummary: string;
+  pickupSafeZoneName: string;
+  lastMessage: string;
+  lastMessageTimestamp: string;
+  unreadCount: number;
+  messages: ChatMessage[];
+  partnerPhone?: string;
+  isOnline?: boolean;
+}
+

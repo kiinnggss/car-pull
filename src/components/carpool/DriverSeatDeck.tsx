@@ -40,6 +40,7 @@ export const DriverSeatDeck: React.FC = () => {
     commuteDirection,
     offlinePin,
     setActiveTab,
+    setActiveThreadId,
   } = useAppStore();
 
   const [copiedManifest, setCopiedManifest] = useState(false);
@@ -270,10 +271,11 @@ CAR PULL Zero-Cash Escrow Active`;
                   <button
                     onClick={() => {
                       triggerHaptic('tap');
-                      setSelectedChatRider(rider);
+                      setActiveThreadId('thread-tiwa');
+                      setActiveTab('chats');
                     }}
                     className="p-1.5 text-[#0D6E6E] hover:text-[#094E4E] rounded-lg hover:bg-teal-50 transition-colors active-press"
-                    title="Say hello to passenger"
+                    title="Chat with passenger"
                   >
                     <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
                   </button>

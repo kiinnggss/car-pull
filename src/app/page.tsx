@@ -13,9 +13,18 @@ import { EmergencyBeacon } from '@/components/sos/EmergencyBeacon';
 import { CommutePass } from '@/components/pass/CommutePass';
 import { CorridorMap } from '@/components/map/CorridorMap';
 import { AuthLanding } from '@/components/auth/AuthLanding';
+import { ChatHub } from '@/components/chat/ChatHub';
 
 export default function Home() {
-  const { activeTab, setActiveTab, activeRole, isAuthenticated } = useAppStore();
+  const { activeTab, setActiveTab, activeRole, isAuthenticated, theme } = useAppStore();
+
+  // Sync theme class to document root
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDark = theme === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+    }
+  }, [theme]);
 
   // Browser & Device back-button handling:
   // When user is on any secondary tab, pressing back navigates back to 'deck' instead of exiting the PWA
@@ -40,14 +49,14 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] dark:bg-[#121110] border-x border-[#DDD4C5] dark:border-stone-800 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-x-hidden">
         <AuthLanding />
       </main>
     );
   }
 
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F6F2EA] border-x border-[#DDD4C5] relative flex flex-col justify-between shadow-2xl text-[#141210] overflow-x-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F6F2EA] dark:bg-[#121110] border-x border-[#DDD4C5] dark:border-stone-800 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-x-hidden">
       {/* Top Application Header */}
       <Header />
 
@@ -56,6 +65,7 @@ export default function Home() {
         {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
         {activeTab === 'map' && <CorridorMap />}
         {activeTab === 'matches' && <MatchesList />}
+        {activeTab === 'chats' && <ChatHub />}
         {activeTab === 'pass' && <CommutePass />}
         {activeTab === 'safezones' && (
           <div className="px-3 pb-24 max-w-[390px] mx-auto">

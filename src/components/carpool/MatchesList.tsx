@@ -35,6 +35,7 @@ export const MatchesList: React.FC = () => {
     simulateFlakePenalty,
     offlinePin,
     setActiveTab,
+    setActiveThreadId,
   } = useAppStore();
 
   const [boardedMatchIds, setBoardedMatchIds] = useState<string[]>([]);
@@ -239,12 +240,14 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 <button
                   onClick={() => {
                     triggerHaptic('tap');
-                    setSelectedChatMatch(match);
+                    const targetThreadId = match.driverId === 'drv-001' ? 'thread-babatunde' : 'thread-damilola';
+                    setActiveThreadId(targetThreadId);
+                    setActiveTab('chats');
                   }}
                   className="col-span-2 py-2 bg-[#EEF7F7] hover:bg-teal-100/70 text-[#0D6E6E] border border-[#0D6E6E]/30 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active-press transition-all shadow-2xs"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E]" />
-                  <span>Break the Ice</span>
+                  <span>Chat &amp; Pings</span>
                 </button>
 
                 <button

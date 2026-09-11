@@ -17,6 +17,8 @@ import {
   CommuteRoute,
   Coordinates,
   TripCategory,
+  ChatMessage,
+  ChatThread,
 } from '../types';
 import {
   mockCurrentUser,
@@ -176,10 +178,146 @@ interface AppState {
   // Corridor Driver Selection
   selectDriverById: (driverId: string) => void;
 
+  // Theme Mode
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+  setTheme: (theme: 'light' | 'dark') => void;
+
+  // Messenger & Chat Subsystem
+  chatThreads: ChatThread[];
+  activeThreadId: string | null;
+  setActiveThreadId: (id: string | null) => void;
+  sendChatMessage: (threadId: string, text: string) => void;
+  markThreadAsRead: (threadId: string) => void;
+  unreadChatCount: number;
+
   // UI Navigation
-  activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet';
-  setActiveTab: (tab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet') => void;
+  activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats';
+  setActiveTab: (tab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats') => void;
 }
+
+const initialChatThreads: ChatThread[] = [
+  {
+    id: 'thread-damilola',
+    partnerId: 'drv-dami-01',
+    partnerName: 'Damilola Fashola',
+    partnerAvatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+    partnerRole: 'driver',
+    partnerEmployer: 'Studio Yellow',
+    vehicleMakeModel: 'Mercedes-Benz GLA 250',
+    vehiclePlate: 'LSR-210-DK',
+    routeSummary: 'Ajah Jubilee Bridge → VI',
+    pickupSafeZoneName: 'TotalEnergies Safe Hub, Ajah',
+    lastMessage: 'AC is chilling. See you at the safe hub forecourt in 10 mins!',
+    lastMessageTimestamp: '8:18 AM',
+    unreadCount: 1,
+    partnerPhone: '+234 803 219 4481',
+    isOnline: true,
+    messages: [
+      {
+        id: 'msg-1',
+        senderId: 'drv-dami-01',
+        senderName: 'Damilola Fashola',
+        text: 'Good morning Femi! Rolling out from Jubilee Bridge around 8:25 AM.',
+        timestamp: '8:12 AM',
+        isUser: false,
+        status: 'read',
+      },
+      {
+        id: 'msg-2',
+        senderId: 'user-01',
+        senderName: 'Femi Adeyemi',
+        text: 'Morning Damilola! Perfect timing. I am at the TotalEnergies safe hub now.',
+        timestamp: '8:15 AM',
+        isUser: true,
+        status: 'read',
+      },
+      {
+        id: 'msg-3',
+        senderId: 'drv-dami-01',
+        senderName: 'Damilola Fashola',
+        text: 'AC is chilling. See you at the safe hub forecourt in 10 mins!',
+        timestamp: '8:18 AM',
+        isUser: false,
+        status: 'delivered',
+      },
+    ],
+  },
+  {
+    id: 'thread-babatunde',
+    partnerId: 'drv-001',
+    partnerName: 'Babatunde Adeleke',
+    partnerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+    partnerRole: 'driver',
+    partnerEmployer: 'Flutterwave',
+    vehicleMakeModel: 'Toyota Camry (2021)',
+    vehiclePlate: 'APP-842-EY',
+    routeSummary: 'Chevron Toll → Marina',
+    pickupSafeZoneName: 'Palms Mall Forecourt',
+    lastMessage: 'Monday commute locked. Section 44 certificate active.',
+    lastMessageTimestamp: 'Yesterday',
+    unreadCount: 0,
+    partnerPhone: '+234 812 443 8920',
+    isOnline: false,
+    messages: [
+      {
+        id: 'msg-b1',
+        senderId: 'drv-001',
+        senderName: 'Babatunde Adeleke',
+        text: 'Hello Femi, thanks for splitting fuel on the Monday run. Escrow is locked.',
+        timestamp: 'Yesterday 6:30 PM',
+        isUser: false,
+        status: 'read',
+      },
+      {
+        id: 'msg-b2',
+        senderId: 'user-01',
+        senderName: 'Femi Adeyemi',
+        text: 'Thanks Babatunde. See you at Palms Mall early Monday.',
+        timestamp: 'Yesterday 6:35 PM',
+        isUser: true,
+        status: 'read',
+      },
+      {
+        id: 'msg-b3',
+        senderId: 'drv-001',
+        senderName: 'Babatunde Adeleke',
+        text: 'Monday commute locked. Section 44 certificate active.',
+        timestamp: 'Yesterday 6:40 PM',
+        isUser: false,
+        status: 'read',
+      },
+    ],
+  },
+  {
+    id: 'thread-tiwa',
+    partnerId: 'rider-tiwa',
+    partnerName: 'Tiwa Sowande',
+    partnerAvatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80',
+    partnerRole: 'rider',
+    partnerEmployer: 'Flutterwave (Design Lead)',
+    vehicleMakeModel: 'Cabin Co-Rider',
+    vehiclePlate: 'Seat 2',
+    routeSummary: 'Circle Mall → Adeola Odeku',
+    pickupSafeZoneName: 'Circle Mall Parking Bay',
+    lastMessage: 'Hey! Are we riding with Damilola today as well?',
+    lastMessageTimestamp: '8:05 AM',
+    unreadCount: 1,
+    partnerPhone: '+234 809 112 3344',
+    isOnline: true,
+    messages: [
+      {
+        id: 'msg-t1',
+        senderId: 'rider-tiwa',
+        senderName: 'Tiwa Sowande',
+        text: 'Hey! Are we riding with Damilola today as well?',
+        timestamp: '8:05 AM',
+        isUser: false,
+        status: 'delivered',
+      },
+    ],
+  },
+];
 
 export const useAppStore = create<AppState>((set, get) => ({
   // Authentication & Session
@@ -972,6 +1110,139 @@ export const useAppStore = create<AppState>((set, get) => ({
         activeTab: 'deck',
       });
     }
+  },
+
+  // Theme Mode
+  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'dark') ? 'dark' : 'light',
+  toggleTheme: () => {
+    const current = get().theme;
+    const next = current === 'light' ? 'dark' : 'light';
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('carpull_theme', next);
+        if (next === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    }
+    set({ theme: next });
+  },
+  setTheme: (theme) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('carpull_theme', theme);
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {}
+    }
+    set({ theme });
+  },
+
+  // Messenger & Chat Subsystem
+  chatThreads: initialChatThreads,
+  activeThreadId: null,
+  setActiveThreadId: (id) => {
+    if (id) {
+      get().markThreadAsRead(id);
+    }
+    set({ activeThreadId: id });
+  },
+  unreadChatCount: 2,
+  markThreadAsRead: (threadId) => {
+    set((state) => {
+      const updated = state.chatThreads.map((t) => {
+        if (t.id === threadId) {
+          return {
+            ...t,
+            unreadCount: 0,
+            messages: t.messages.map((m) => ({ ...m, status: 'read' as const })),
+          };
+        }
+        return t;
+      });
+      const totalUnread = updated.reduce((acc, curr) => acc + curr.unreadCount, 0);
+      return { chatThreads: updated, unreadChatCount: totalUnread };
+    });
+  },
+  sendChatMessage: (threadId, text) => {
+    const state = get();
+    const thread = state.chatThreads.find((t) => t.id === threadId);
+    if (!thread || !text.trim()) return;
+
+    const timeStr = new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+    const userMsg: ChatMessage = {
+      id: `msg-${Date.now()}`,
+      senderId: 'user-01',
+      senderName: state.user.fullName || 'You',
+      text: text.trim(),
+      timestamp: timeStr,
+      isUser: true,
+      status: 'delivered',
+    };
+
+    const updatedThreads = state.chatThreads.map((t) => {
+      if (t.id === threadId) {
+        return {
+          ...t,
+          lastMessage: text.trim(),
+          lastMessageTimestamp: timeStr,
+          messages: [...t.messages, userMsg],
+        };
+      }
+      return t;
+    });
+
+    set({ chatThreads: updatedThreads });
+
+    // Simulate smart, contextual commuter reply after 1.2s
+    setTimeout(() => {
+      const lower = text.toLowerCase();
+      let replyText = 'Sounds good! See you in a minute.';
+      if (lower.includes('cctv') || lower.includes('safe hub') || lower.includes('here') || lower.includes('where')) {
+        replyText = 'Got it! Waiting right by the security post / CCTV pole with hazard lights on.';
+      } else if (lower.includes('5 min') || lower.includes('late') || lower.includes('traffic') || lower.includes('delay')) {
+        replyText = 'No rush at all! Traffic is moving steadily anyway. Take your time.';
+      } else if (lower.includes('ac') || lower.includes('cool') || lower.includes('cold') || lower.includes('hot')) {
+        replyText = 'AC is on maximum cooling, very chill inside!';
+      } else if (lower.includes('board') || lower.includes('enter') || lower.includes('car')) {
+        replyText = 'Welcome aboard! Have a seat and enjoy the ride.';
+      }
+
+      const replyTime = new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+      const replyMsg: ChatMessage = {
+        id: `reply-${Date.now()}`,
+        senderId: thread.partnerId,
+        senderName: thread.partnerName,
+        text: replyText,
+        timestamp: replyTime,
+        isUser: false,
+        status: 'delivered',
+      };
+
+      const currentState = get();
+      const isCurrentlyViewing = currentState.activeThreadId === threadId && currentState.activeTab === 'chats';
+
+      const finalThreads = currentState.chatThreads.map((t) => {
+        if (t.id === threadId) {
+          return {
+            ...t,
+            lastMessage: replyText,
+            lastMessageTimestamp: replyTime,
+            unreadCount: isCurrentlyViewing ? 0 : t.unreadCount + 1,
+            messages: [...t.messages, replyMsg],
+          };
+        }
+        return t;
+      });
+
+      const totalUnread = finalThreads.reduce((acc, curr) => acc + curr.unreadCount, 0);
+      set({ chatThreads: finalThreads, unreadChatCount: totalUnread });
+    }, 1200);
   },
 
   activeTab: 'deck',
