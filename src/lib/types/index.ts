@@ -263,3 +263,11 @@ export interface ChatThread {
   isOnline?: boolean;
 }
 
+export interface DriverSchedule {
+  origin: string;
+  destination: string;
+  departureTime: string;
+  availableSeats: number;
+  fuelSplitNgn: number;
+  hasAc: boolean;
+}

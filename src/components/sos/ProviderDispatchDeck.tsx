@@ -54,11 +54,11 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
       <div className="flex items-center justify-between pt-1">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-          <span className="text-xs font-black text-zinc-800 uppercase tracking-wider">
+          <span className="text-xs font-black text-zinc-800 dark:text-stone-200 uppercase tracking-wider">
             All Responding Providers
           </span>
         </div>
-        <span className="text-[10px] text-zinc-400 font-mono">
+        <span className="text-[10px] text-zinc-400 dark:text-stone-500 font-mono">
           {providers.length} responding
         </span>
       </div>
@@ -72,10 +72,10 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
               key={prov.id}
               className={`p-3.5 rounded-2xl transition-all ${
                 !prov.compatible
-                  ? 'bg-zinc-50/60 opacity-75'
+                  ? 'bg-zinc-50/60 dark:bg-stone-900/60 border border-transparent dark:border-stone-850 opacity-75'
                   : isTopPriority
-                  ? 'bg-white ring-1.5 ring-[#7C3AED] shadow-sm'
-                  : 'bg-white border border-zinc-100 shadow-2xs'
+                  ? 'bg-white dark:bg-[#1A1816] ring-1.5 ring-[#7C3AED] dark:ring-purple-500 shadow-sm'
+                  : 'bg-white dark:bg-[#1A1816] border border-zinc-100 dark:border-stone-800 shadow-2xs'
               }`}
             >
               {/* Header: Operator Photo, Name, Rating, and Priority Badge */}
@@ -88,10 +88,10 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                     className="w-10 h-10 rounded-xl object-cover"
                   />
                   <div>
-                    <h4 className="text-xs font-black text-zinc-900 leading-tight">
+                    <h4 className="text-xs font-black text-zinc-900 dark:text-stone-100 leading-tight">
                       {prov.name}
                     </h4>
-                    <span className="text-[11px] text-zinc-400 block">
+                    <span className="text-[11px] text-zinc-400 dark:text-stone-400 block">
                       Lead: {prov.operator_name}
                     </span>
                   </div>
@@ -106,50 +106,50 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
 
               {/* Equipment Spec & LASDRI Certification */}
               <div className="mt-2 flex items-center gap-2 flex-wrap text-[10px]">
-                <span className="text-zinc-600 bg-zinc-100 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                  <Truck className="w-3 h-3 text-[#7C3AED]" />
+                <span className="text-zinc-600 dark:text-stone-300 bg-zinc-100 dark:bg-stone-850 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  <Truck className="w-3 h-3 text-[#7C3AED] dark:text-purple-400" />
                   {prov.truck_type}
                 </span>
 
-                <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
                   LASDRI Certified
                 </span>
 
-                <span className="text-amber-600 font-bold flex items-center gap-0.5">
+                <span className="text-amber-600 dark:text-amber-400 font-bold flex items-center gap-0.5">
                   <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                   <span>{prov.rating}</span>
                 </span>
               </div>
 
               {/* Flowing Metrics Line - No Clunky Box Grid */}
-              <div className="mt-2 py-1.5 px-2.5 bg-zinc-50 rounded-xl flex items-center justify-between text-xs text-zinc-600">
-                <span>Dist: <strong className="text-zinc-900">{prov.distance_km} km</strong></span>
-                <span className="text-zinc-300">•</span>
-                <span className="text-amber-700 font-semibold flex items-center gap-1">
+              <div className="mt-2 py-1.5 px-2.5 bg-zinc-50 dark:bg-stone-900 rounded-xl flex items-center justify-between text-xs text-zinc-600 dark:text-stone-300">
+                <span>Dist: <strong className="text-zinc-900 dark:text-stone-100">{prov.distance_km} km</strong></span>
+                <span className="text-zinc-300 dark:text-stone-700">•</span>
+                <span className="text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
                   <Clock className="w-3 h-3" /> {prov.traffic_eta_minutes} mins ETA
                 </span>
-                <span className="text-zinc-300">•</span>
-                <span className="text-zinc-400 font-mono text-[10px]">Score: {prov.score}</span>
+                <span className="text-zinc-300 dark:text-stone-700">•</span>
+                <span className="text-zinc-400 dark:text-stone-500 font-mono text-[10px]">Score: {prov.score}</span>
               </div>
 
               {/* Incompatibility Warning (Phase 1 Filter) */}
               {!prov.compatible && (
-                <div className="mt-2 bg-red-50 rounded-xl p-2 flex items-start gap-1.5">
-                  <AlertTriangle className="w-3.5 h-3.5 text-red-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-[10px] text-red-800 leading-tight">
+                <div className="mt-2 bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-900/50 rounded-xl p-2 flex items-start gap-1.5">
+                  <AlertTriangle className="w-3.5 h-3.5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-[10px] text-red-800 dark:text-red-300 leading-tight">
                     <strong>Phase 1 Rejected:</strong> {prov.incompatibilityReason}
                   </p>
                 </div>
               )}
 
               {/* Quote Amount & Acceptance CTA */}
-              <div className="mt-2.5 pt-2 border-t border-zinc-100 flex items-center justify-between">
+              <div className="mt-2.5 pt-2 border-t border-zinc-100 dark:border-stone-800 flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] text-zinc-400 uppercase tracking-wider block font-medium">
+                  <span className="text-[9px] text-zinc-400 dark:text-stone-400 uppercase tracking-wider block font-medium">
                     Fixed Escrow Quote
                   </span>
-                  <span className="text-base font-black text-zinc-900">
+                  <span className="text-base font-black text-zinc-900 dark:text-stone-100">
                     {formatNgn(prov.flat_quote_ngn)}
                   </span>
                 </div>
@@ -159,7 +159,7 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                   disabled={!prov.compatible}
                   className={`min-h-[38px] px-3.5 rounded-xl flex items-center gap-1.5 font-bold text-xs transition-all active:scale-95 shadow-xs ${
                     !prov.compatible
-                      ? 'bg-zinc-100 text-zinc-400 cursor-not-allowed'
+                      ? 'bg-zinc-100 dark:bg-stone-850 text-zinc-400 dark:text-stone-600 cursor-not-allowed'
                       : 'bg-red-600 hover:bg-red-700 text-white'
                   }`}
                 >

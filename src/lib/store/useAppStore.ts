@@ -2,6 +2,7 @@
 // Location: /src/lib/store/useAppStore.ts
 
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import {
   User,
   UserRole,
@@ -19,6 +20,7 @@ import {
   TripCategory,
   ChatMessage,
   ChatThread,
+  DriverSchedule,
 } from '../types';
 import {
   mockCurrentUser,
@@ -183,6 +185,13 @@ interface AppState {
   toggleTheme: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
 
+  // Driver Schedule & Customization
+  driverSchedule: DriverSchedule;
+  updateDriverSchedule: (data: Partial<DriverSchedule>) => void;
+
+  // Trip Lifecycle & Escrow Settlement
+  completeCommuteTrip: (matchId: string, rating?: number) => void;
+
   // Messenger & Chat Subsystem
   chatThreads: ChatThread[];
   activeThreadId: string | null;
@@ -190,6 +199,8 @@ interface AppState {
   sendChatMessage: (threadId: string, text: string) => void;
   markThreadAsRead: (threadId: string) => void;
   unreadChatCount: number;
+  getOrCreateThreadForDriver: (driver: CorridorDriver | { id: string; name: string; avatar: string; vehicle?: any; employer?: string; phone?: string; safeZoneName?: string; plateNumber?: string }) => string;
+  getOrCreateThreadForRider: (rider: WaitingRider) => string;
 
   // UI Navigation
   activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats';
@@ -319,7 +330,9 @@ const initialChatThreads: ChatThread[] = [
   },
 ];
 
-export const useAppStore = create<AppState>((set, get) => ({
+export const useAppStore = create<AppState>()(
+  persist(
+    (set, get) => ({
   // Authentication & Session
   isAuthenticated: false,
   login: (emailOrPhone, role) => {
@@ -603,6 +616,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
       status: 'held',
     };
+
+    // Initialize or link chat thread for this driver
+    state.getOrCreateThreadForDriver(currentDriver);
 
     const nextIndex = state.activeDriverIndex + 1;
     const nextDriver = nextIndex < state.drivers.length ? state.drivers[nextIndex] : null;
@@ -1023,6 +1039,9 @@ export const useAppStore = create<AppState>((set, get) => ({
       status: 'held',
     };
 
+    // Initialize or link chat thread for this rider
+    state.getOrCreateThreadForRider(rider);
+
     set({
       availableSeats: newAvailable,
       acceptedRiders: newAccepted,
@@ -1245,6 +1264,190 @@ export const useAppStore = create<AppState>((set, get) => ({
     }, 1200);
   },
 
+  driverSchedule: {
+    origin: 'Ajah Jubilee Bridge / Langbasa',
+    destination: 'Victoria Island (Adeola Odeku)',
+    departureTime: '08:00 AM',
+    availableSeats: 3,
+    fuelSplitNgn: 1500,
+    hasAc: true,
+  },
+  updateDriverSchedule: (data) =>
+    set((state) => ({
+      driverSchedule: { ...state.driverSchedule, ...data },
+    })),
+
+  completeCommuteTrip: (matchId: string, rating: number = 5) => {
+    const state = get();
+    const match = state.activeMatches.find((m) => m.id === matchId);
+    if (!match || match.status === 'completed') return;
+
+    const fareToRelease = match.fareNgn;
+    const isDriver = state.activeRole === 'driver';
+
+    const releaseTx: EscrowTransaction = {
+      id: `tx-rel-${Date.now()}`,
+      type: 'RELEASE_CARPOOL',
+      amountNgn: fareToRelease,
+      reference: `ESC-REL-${Date.now().toString().slice(-6)}`,
+      description: isDriver
+        ? `Fuel split payout received from ${match.riderName} (Trip completed)`
+        : `Fuel split released to ${match.driverName} (Safe hub arrival confirmed)`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'released',
+    };
+
+    set({
+      activeMatches: state.activeMatches.map((m) =>
+        m.id === matchId ? { ...m, status: 'completed' as const } : m
+      ),
+      heldEscrowNgn: Math.max(0, state.heldEscrowNgn - fareToRelease),
+      escrowBalanceNgn: isDriver ? state.escrowBalanceNgn + fareToRelease : state.escrowBalanceNgn,
+      escrowTransactions: [releaseTx, ...state.escrowTransactions],
+      user: {
+        ...state.user,
+        tripsCompleted: state.user.tripsCompleted + 1,
+        ratingScore: Math.round(((state.user.ratingScore * state.user.tripsCompleted + rating) / (state.user.tripsCompleted + 1)) * 10) / 10,
+      },
+    });
+  },
+
+  getOrCreateThreadForDriver: (driverData) => {
+    const state = get();
+    const existing = state.chatThreads.find(
+      (t) =>
+        t.partnerId === driverData.id ||
+        t.partnerName.toLowerCase() === driverData.name.toLowerCase()
+    );
+    if (existing) {
+      return existing.id;
+    }
+
+    const threadId = `thread-${driverData.id || Date.now()}`;
+    const carName = (driverData as any).vehicle
+      ? `${(driverData as any).vehicle.make} ${(driverData as any).vehicle.model}`
+      : `${(driverData as any).vehicleMake || 'Toyota'} ${(driverData as any).vehicleModel || 'Camry'}`;
+    const carPlate = (driverData as any).vehicle?.plate_number || (driverData as any).plateNumber || 'LSR-210-DK';
+    const pickup = (driverData as any).safeZoneName || (driverData as any).pickupSafeZone?.name || state.selectedSafeZone.name;
+
+    const nowTime = new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+    const welcomeText = `Hello ${state.user.fullName}! Commute confirmed for ${pickup}. Looking forward to the ride!`;
+
+    const newThread: ChatThread = {
+      id: threadId,
+      partnerId: driverData.id,
+      partnerName: driverData.name,
+      partnerAvatar: driverData.avatar || (driverData as any).driverAvatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+      partnerRole: 'driver',
+      partnerEmployer: (driverData as any).employer || 'Verified Corporate Commuter',
+      vehicleMakeModel: carName,
+      vehiclePlate: carPlate,
+      routeSummary: `${pickup} → VI / Marina`,
+      pickupSafeZoneName: pickup,
+      lastMessage: welcomeText,
+      lastMessageTimestamp: nowTime,
+      unreadCount: 1,
+      partnerPhone: (driverData as any).phone || '+234 803 219 4481',
+      isOnline: true,
+      messages: [
+        {
+          id: `msg-${Date.now()}-1`,
+          senderId: driverData.id,
+          senderName: driverData.name,
+          text: welcomeText,
+          timestamp: nowTime,
+          isUser: false,
+          status: 'delivered',
+        },
+      ],
+    };
+
+    set({
+      chatThreads: [newThread, ...state.chatThreads],
+      unreadChatCount: state.unreadChatCount + 1,
+    });
+
+    return threadId;
+  },
+
+  getOrCreateThreadForRider: (rider) => {
+    const state = get();
+    const existing = state.chatThreads.find(
+      (t) =>
+        t.partnerId === rider.id ||
+        t.partnerName.toLowerCase() === rider.name.toLowerCase()
+    );
+    if (existing) {
+      return existing.id;
+    }
+
+    const threadId = `thread-${rider.id}`;
+    const nowTime = new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+    const welcomeText = `Hello ${state.user.fullName}! Thanks for accepting me into your carpool at ${rider.pickupSafeZone.name}.`;
+
+    const newThread: ChatThread = {
+      id: threadId,
+      partnerId: rider.id,
+      partnerName: rider.name,
+      partnerAvatar: rider.avatar,
+      partnerRole: 'rider',
+      partnerEmployer: rider.employer,
+      vehicleMakeModel: 'Cabin Co-Rider',
+      vehiclePlate: `Seat ${state.acceptedRiders.length + 1}`,
+      routeSummary: `${rider.pickupSafeZone.name} → ${rider.destination}`,
+      pickupSafeZoneName: rider.pickupSafeZone.name,
+      lastMessage: welcomeText,
+      lastMessageTimestamp: nowTime,
+      unreadCount: 1,
+      partnerPhone: '+234 812 345 6789',
+      isOnline: true,
+      messages: [
+        {
+          id: `msg-rider-${Date.now()}`,
+          senderId: rider.id,
+          senderName: rider.name,
+          text: welcomeText,
+          timestamp: nowTime,
+          isUser: false,
+          status: 'delivered',
+        },
+      ],
+    };
+
+    set({
+      chatThreads: [newThread, ...state.chatThreads],
+      unreadChatCount: state.unreadChatCount + 1,
+    });
+
+    return threadId;
+  },
+
   activeTab: 'deck',
   setActiveTab: (tab) => set({ activeTab: tab }),
-}));
+}),
+  {
+    name: 'car-pull-storage-v2',
+    storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+      getItem: () => null,
+      setItem: () => {},
+      removeItem: () => {},
+    })),
+    partialize: (state) => ({
+      isAuthenticated: state.isAuthenticated,
+      user: state.user,
+      activeRole: state.activeRole,
+      theme: state.theme,
+      riderRoute: state.riderRoute,
+      activeMatches: state.activeMatches,
+      weeklyLockedCommutes: state.weeklyLockedCommutes,
+      chatThreads: state.chatThreads,
+      escrowBalanceNgn: state.escrowBalanceNgn,
+      heldEscrowNgn: state.heldEscrowNgn,
+      escrowTransactions: state.escrowTransactions,
+      driverVehicle: state.driverVehicle,
+      driverSchedule: state.driverSchedule,
+      acceptedRiders: state.acceptedRiders,
+      availableSeats: state.availableSeats,
+    }),
+  }
+));

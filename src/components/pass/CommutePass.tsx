@@ -88,38 +88,38 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
       {/* Official Government Compliance Shield Card */}
-      <div className="bg-gradient-to-b from-emerald-50/80 via-white to-white rounded-3xl p-4.5 border border-emerald-200/80 shadow-xs space-y-3.5 relative overflow-hidden">
+      <div className="bg-gradient-to-b from-emerald-50/80 via-white to-white dark:from-emerald-950/30 dark:via-[#1A1816] dark:to-[#1A1816] rounded-3xl p-4.5 border border-emerald-200/80 dark:border-emerald-900/40 shadow-xs space-y-3.5 relative overflow-hidden">
         {/* Subtle Watermark */}
-        <div className="absolute -right-8 -top-8 text-emerald-100/40 pointer-events-none select-none">
+        <div className="absolute -right-8 -top-8 text-emerald-100/40 dark:text-emerald-900/20 pointer-events-none select-none">
           <ShieldCheck className="w-44 h-44" />
         </div>
 
         {/* Official Header */}
-        <div className="flex items-center justify-between border-b border-emerald-100/80 pb-2.5">
+        <div className="flex items-center justify-between border-b border-emerald-100/80 dark:border-stone-800 pb-2.5">
           <div className="flex items-center gap-2">
             <img
               src={getAssetPath('/logo.png')}
               alt="CAR PULL Seal"
-              className="w-8 h-8 rounded-lg object-contain bg-white p-0.5 shadow-2xs border border-emerald-300 flex-shrink-0"
+              className="w-8 h-8 rounded-lg object-contain bg-white dark:bg-[#1E1B18] p-0.5 shadow-2xs border border-emerald-300 dark:border-emerald-700 flex-shrink-0"
             />
             <div>
-              <span className="text-[9px] uppercase tracking-widest text-emerald-800 font-extrabold block">
+              <span className="text-[9px] uppercase tracking-widest text-emerald-800 dark:text-emerald-400 font-extrabold block">
                 Lagos State Transport Reform Act
               </span>
-              <h3 className="text-xs font-serif font-black text-[#141210] leading-tight">
+              <h3 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] leading-tight">
                 Non-Commercial Commute Certificate
               </h3>
             </div>
           </div>
 
-          <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold flex items-center gap-1 border border-emerald-300">
+          <span className="px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-[10px] font-extrabold flex items-center gap-1 border border-emerald-300 dark:border-emerald-800">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
             SEC 44 SAFE HARBOR
           </span>
         </div>
 
         {/* Dynamic Anti-Counterfeit Scannable QR Shield */}
-        <div className="flex flex-col items-center justify-center p-3.5 bg-zinc-900 rounded-2xl text-white space-y-2 relative">
+        <div className="flex flex-col items-center justify-center p-3.5 bg-zinc-900 dark:bg-[#121110] border border-transparent dark:border-stone-800 rounded-2xl text-white space-y-2 relative">
           <div className="bg-white p-2.5 rounded-xl shadow-md">
             {/* High fidelity SVG QR pattern */}
             <svg
@@ -186,62 +186,62 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
         </div>
 
         {/* Live Timestamp & Offline PIN */}
-        <div className="flex items-center justify-between px-2.5 py-1.5 bg-emerald-50 rounded-xl text-emerald-900 text-[10px] font-mono">
+        <div className="flex items-center justify-between px-2.5 py-1.5 bg-emerald-50 dark:bg-emerald-950/50 rounded-xl text-emerald-900 dark:text-emerald-300 border border-emerald-200/60 dark:border-emerald-900/40 text-[10px] font-mono">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
             <span className="font-bold">{currentTime}</span>
           </div>
-          <div className="flex items-center gap-1 bg-white px-2 py-0.5 rounded-lg border border-emerald-200">
-            <span className="font-sans font-bold text-zinc-600">PIN:</span>
-            <strong className="text-[#7C3AED] font-black tracking-widest">{offlinePin}</strong>
+          <div className="flex items-center gap-1 bg-white dark:bg-[#1A1816] px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
+            <span className="font-sans font-bold text-zinc-600 dark:text-stone-400">PIN:</span>
+            <strong className="text-[#7C3AED] dark:text-purple-400 font-black tracking-widest">{offlinePin}</strong>
           </div>
         </div>
 
         {/* Vehicle & Occupant Manifest Breakdown */}
-        <div className="bg-zinc-50 rounded-2xl p-3 space-y-2 border border-zinc-100 text-xs">
-          <div className="flex items-center justify-between border-b border-zinc-200/60 pb-1.5">
+        <div className="bg-zinc-50 dark:bg-[#1E1B18] rounded-2xl p-3 space-y-2 border border-zinc-100 dark:border-stone-800 text-xs">
+          <div className="flex items-center justify-between border-b border-zinc-200/60 dark:border-stone-800 pb-1.5">
             <div className="flex items-center gap-1.5">
-              <Car className="w-3.5 h-3.5 text-zinc-600" />
-              <span className="font-bold text-zinc-900">{activeVehicleModel}</span>
+              <Car className="w-3.5 h-3.5 text-zinc-600 dark:text-stone-400" />
+              <span className="font-bold text-zinc-900 dark:text-stone-100">{activeVehicleModel}</span>
             </div>
-            <span className="font-mono font-black text-xs px-2 py-0.5 bg-zinc-200 rounded text-zinc-800">
+            <span className="font-mono font-black text-xs px-2 py-0.5 bg-zinc-200 dark:bg-stone-800 rounded text-zinc-800 dark:text-stone-200">
               {activeVehiclePlate}
             </span>
           </div>
 
           <div className="space-y-1.5 text-[11px]">
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500 font-medium">Driver:</span>
-              <span className="font-bold text-zinc-900">
-                {activeDriverName} <span className="text-emerald-700 font-medium">(@{user.employerDomain})</span>
+              <span className="text-zinc-500 dark:text-stone-400 font-medium">Driver:</span>
+              <span className="font-bold text-zinc-900 dark:text-stone-100">
+                {activeDriverName} <span className="text-emerald-700 dark:text-emerald-400 font-medium">(@{user.employerDomain})</span>
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500 font-medium">Commute Corridor:</span>
-              <span className="font-bold text-zinc-900">
+              <span className="text-zinc-500 dark:text-stone-400 font-medium">Commute Corridor:</span>
+              <span className="font-bold text-zinc-900 dark:text-stone-100">
                 {commuteDirection === 'morning' ? 'Ajah → VI → Marina' : 'VI / Marina → Ajah'}
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500 font-medium">Statutory Classification:</span>
-              <span className="font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded text-[10px]">
+              <span className="text-zinc-500 dark:text-stone-400 font-medium">Statutory Classification:</span>
+              <span className="font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded text-[10px]">
                 Private Non-Commercial Carpool
               </span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-zinc-500 font-medium">Commercial Profit:</span>
-              <span className="font-black text-zinc-900">₦0.00 (Pure Fuel Offset)</span>
+              <span className="text-zinc-500 dark:text-stone-400 font-medium">Commercial Profit:</span>
+              <span className="font-black text-zinc-900 dark:text-stone-100">₦0.00 (Pure Fuel Offset)</span>
             </div>
           </div>
         </div>
 
         {/* Legal Advisory for Enforcement Officers */}
-        <div className="bg-amber-50/80 border border-amber-200 rounded-2xl p-3 text-[10px] text-amber-900 space-y-1">
+        <div className="bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 rounded-2xl p-3 text-[10px] text-amber-900 dark:text-amber-200 space-y-1">
           <div className="flex items-center gap-1.5 font-bold">
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-700 flex-shrink-0" />
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400 flex-shrink-0" />
             <span>STATUTORY NOTICE TO LAW ENFORCEMENT OFFICERS:</span>
           </div>
-          <p className="leading-relaxed text-zinc-700">
+          <p className="leading-relaxed text-zinc-700 dark:text-stone-300">
             This vehicle is participating in a verified private corporate carpool. Under{' '}
             <strong>Lagos State Transport Sector Reform Law (Cap T1, Section 44)</strong>, non-profit cost-sharing commuters are legally exempt from commercial bus/taxi licensing, union tickets, and local government permits.
           </p>
@@ -261,17 +261,17 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             <a
               href="tel:080000527862"
-              className="p-2 bg-zinc-100 hover:bg-zinc-200 rounded-xl text-zinc-800 font-bold flex items-center justify-center gap-1.5 transition-colors"
+              className="p-2 bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 rounded-xl text-zinc-800 dark:text-stone-200 font-bold flex items-center justify-center gap-1.5 transition-colors border border-transparent dark:border-stone-700"
             >
-              <PhoneCall className="w-3 h-3 text-red-600" />
+              <PhoneCall className="w-3 h-3 text-red-600 dark:text-red-400" />
               <span>LASTMA (0800-LASTMA)</span>
             </a>
 
             <a
               href="tel:112"
-              className="p-2 bg-red-50 hover:bg-red-100 rounded-xl text-red-800 font-bold flex items-center justify-center gap-1.5 transition-colors"
+              className="p-2 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl text-red-800 dark:text-red-300 font-bold flex items-center justify-center gap-1.5 transition-colors border border-red-200 dark:border-red-900/40"
             >
-              <PhoneCall className="w-3 h-3 text-red-600" />
+              <PhoneCall className="w-3 h-3 text-red-600 dark:text-red-400" />
               <span>LASEMA (112 / 767)</span>
             </a>
           </div>
