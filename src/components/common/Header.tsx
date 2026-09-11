@@ -30,66 +30,74 @@ export const Header: React.FC = () => {
     logout,
     theme,
     toggleTheme,
+    activeThreadId,
+    setActiveThreadId,
   } = useAppStore();
 
   const [showCockpit, setShowCockpit] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
+  const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
+
   return (
     <header className="sticky top-0 z-40 w-full bg-[#F6F2EA]/95 dark:bg-[#121110]/95 backdrop-blur-md border-b border-[#DDD4C5] dark:border-stone-800 px-3 py-2 space-y-1.5 transition-colors">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
-        {/* Brand & Optional In-App Back Button */}
-        <div className="flex items-center gap-1.5">
+        {/* Brand or In-App Back Button */}
+        <div className="flex items-center gap-1.5 flex-shrink-0">
           {activeTab !== 'deck' ? (
             <button
               onClick={() => {
                 triggerHaptic('tap');
-                setActiveTab('deck');
+                if (isInChatThread) {
+                  setActiveThreadId(null);
+                } else {
+                  setActiveTab('deck');
+                }
               }}
               className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/40 font-bold text-xs shadow-2xs active:scale-95 transition-all"
-              title="Return to Corridor Deck"
+              title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Corridor Deck'}
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
-              <span>Deck</span>
+              <span>{isInChatThread ? 'Inbox' : 'Deck'}</span>
             </button>
           ) : (
-            <button
-              onClick={() => {
-                triggerHaptic('tap');
-                setShowCockpit(true);
-              }}
-              className="p-1 rounded-xl bg-white dark:bg-[#1E1B18] border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
-              title="Tap to open Interactive Logo Cockpit"
-            >
-              <img
-                src={getAssetPath('/logo.png')}
-                alt="CAR PULL Logo"
-                className="w-7 h-7 object-contain"
-              />
-            </button>
-          )}
-
-          <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-serif font-black text-sm text-[#141210] dark:text-[#EDE8E1] tracking-tight">
-                CAR PULL
-              </span>
-              <span className="bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] text-[8px] font-black px-1.5 py-0.2 rounded-md uppercase tracking-wider">
-                LAGOS
-              </span>
+              <button
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setShowCockpit(true);
+                }}
+                className="p-1 rounded-xl bg-white dark:bg-[#1E1B18] border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
+                title="Tap to open Interactive Logo Cockpit"
+              >
+                <img
+                  src={getAssetPath('/logo.png')}
+                  alt="CAR PULL Logo"
+                  className="w-7 h-7 object-contain"
+                />
+              </button>
+
+              <div className="flex items-center gap-1">
+                <span className="font-serif font-black text-sm text-[#141210] dark:text-[#EDE8E1] tracking-tight whitespace-nowrap">
+                  CAR PULL
+                </span>
+                <span className="hidden sm:inline-block bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] text-[8px] font-black px-1 py-0.2 rounded uppercase tracking-wider">
+                  LAGOS
+                </span>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Dense Role Switcher (Rider / Driver) */}
-        <div className="flex bg-[#ECE5D8] dark:bg-stone-900 p-0.5 rounded-xl border border-[#DDD4C5] dark:border-stone-800">
+        <div className="flex bg-[#ECE5D8] dark:bg-stone-900 p-0.5 rounded-xl border border-[#DDD4C5] dark:border-stone-800 flex-shrink-0">
           <button
             onClick={() => {
               triggerHaptic('switch');
               setActiveRole('rider');
             }}
-            className={`text-xs px-2.5 py-1 rounded-lg transition-all ${
+            className={`text-[11px] px-2 py-0.5 rounded-lg transition-all ${
               activeRole === 'rider'
                 ? 'bg-white dark:bg-[#1E1B18] text-[#141210] dark:text-white shadow-2xs font-black'
                 : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] font-bold'
@@ -102,7 +110,7 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               setActiveRole('driver');
             }}
-            className={`text-xs px-2.5 py-1 rounded-lg transition-all ${
+            className={`text-[11px] px-2 py-0.5 rounded-lg transition-all ${
               activeRole === 'driver'
                 ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] shadow-2xs font-black'
                 : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] font-bold'
@@ -113,13 +121,13 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Profile Avatar, Wallet Chip, and Theme Switcher */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 flex-shrink-0">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 bg-[#F5EEFB] dark:bg-purple-950/50 hover:bg-purple-100 dark:hover:bg-purple-900/60 text-[#6D28D9] dark:text-purple-300 text-[10.5px] font-black px-2 py-1 rounded-xl border border-[#7C3AED]/30 dark:border-purple-700/50 transition-all active-press shadow-2xs"
+            className="flex items-center gap-1 bg-[#F5EEFB] dark:bg-purple-950/50 hover:bg-purple-100 dark:hover:bg-purple-900/60 text-[#6D28D9] dark:text-purple-300 text-[10px] font-black px-1.5 py-1 rounded-xl border border-[#7C3AED]/30 dark:border-purple-700/50 transition-all active-press shadow-2xs"
             title="Open Escrow Wallet"
           >
             <Lock className="w-2.5 h-2.5 text-[#7C3AED] dark:text-purple-400" />
@@ -131,7 +139,7 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               toggleTheme();
             }}
-            className="p-1.5 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs text-[#141210] dark:text-stone-200"
+            className="p-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs text-[#141210] dark:text-stone-200"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
           >
             {theme === 'dark' ? (
@@ -147,13 +155,13 @@ export const Header: React.FC = () => {
                 triggerHaptic('tap');
                 setShowProfileMenu(!showProfileMenu);
               }}
-              className="flex items-center gap-1 p-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs"
+              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs"
               title="Account & Settings"
             >
-              <div className="w-7 h-7 rounded-lg bg-[#0D6E6E]/10 dark:bg-[#14B8A6]/20 text-[#0D6E6E] dark:text-[#14B8A6] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25 dark:border-[#14B8A6]/30">
+              <div className="w-6 h-6 rounded-lg bg-[#0D6E6E]/10 dark:bg-[#14B8A6]/20 text-[#0D6E6E] dark:text-[#14B8A6] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25 dark:border-[#14B8A6]/30">
                 <span>{user.fullName ? user.fullName.charAt(0) : 'U'}</span>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-[#70665A] dark:text-stone-400" />
+              <ChevronDown className="w-3 h-3 text-[#70665A] dark:text-stone-400" />
             </button>
 
             {/* Profile Dropdown */}

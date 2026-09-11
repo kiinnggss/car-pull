@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
-  ArrowLeft,
   Phone,
   Share2,
   Send,
@@ -85,17 +84,6 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
       {/* Top Thread Navigation & Profile Header */}
       <div className="bg-white/95 dark:bg-[#1A1816]/95 backdrop-blur-md border-b border-[#DDD4C5] dark:border-stone-800 p-2.5 rounded-t-2xl flex items-center justify-between gap-2 shadow-2xs">
         <div className="flex items-center gap-2 min-w-0">
-          <button
-            onClick={() => {
-              triggerHaptic('tap');
-              setActiveThreadId(null);
-            }}
-            className="p-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-[#141210] dark:text-stone-200 transition-all active-press"
-            title="Return to Inbox"
-          >
-            <ArrowLeft className="w-4 h-4 text-[#C25E2E] dark:text-amber-400" />
-          </button>
-
           <div className="relative flex-shrink-0">
             <img
               src={thread.partnerAvatar}
