@@ -89,17 +89,6 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
           )}
         </button>
       </div>
-
-      {/* Row 3: Flowing Statutory Cost Breakdown (Inside the same card) */}
-      <div className="pt-1.5 border-t border-[#DDD4C5] flex items-center justify-between text-[10px] text-[#70665A] font-medium">
-        <span>Fuel: <strong className="text-[#141210]">{formatNgn(breakdown.fuelCostNgn)}</strong></span>
-        <span className="text-[#D5CAB8]">•</span>
-        <span>Toll: <strong className="text-[#141210]">{formatNgn(breakdown.tollFeeNgn)}</strong></span>
-        <span className="text-[#D5CAB8]">•</span>
-        <span>AC: <strong className="text-[#0D6E6E]">{formatNgn(breakdown.acSurchargeNgn)}</strong></span>
-        <span className="text-[#D5CAB8]">•</span>
-        <span>Cap: <strong className="text-red-700">{formatNgn(breakdown.maxLegalCeilingNgn)}</strong></span>
-      </div>
     </div>
   );
 };

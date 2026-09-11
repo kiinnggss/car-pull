@@ -312,58 +312,6 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           </button>
         </div>
 
-        {/* FULLY VISIBLE LCD COCKPIT TELEMETRY HUD (Multi-line, High-Contrast) */}
-        <div className="bg-[#101918] border border-[#0D6E6E]/50 rounded-2xl p-3 text-white space-y-2 font-mono shadow-md">
-          {/* Status Bar */}
-          <div className="flex items-center justify-between text-[10px] text-teal-300/80 border-b border-teal-900/60 pb-1.5">
-            <span className="flex items-center gap-1.5 font-bold tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              LIVE TELEMETRY
-            </span>
-            <span className="text-[9px] bg-teal-950/80 text-teal-300 px-1.5 py-0.5 rounded border border-teal-800">
-              {hoveredHotspot ? `HOTSPOT: [${hoveredHotspot.toUpperCase()}]` : 'ONLINE'}
-            </span>
-          </div>
-
-          {/* Action Message Feed - No Truncation, Multi-line visible */}
-          <div className="bg-black/40 rounded-xl p-2 border border-teal-900/40">
-            <span className="text-[9px] uppercase tracking-widest text-[#D97706] font-bold block mb-0.5">
-              Action Status:
-            </span>
-            <p className="text-emerald-300 text-[11px] font-sans font-bold leading-snug break-words">
-              {lastActionMessage}
-            </p>
-          </div>
-
-          {/* 4-Box Telemetry Matrix - Dense, Clean, High Contrast */}
-          <div className="grid grid-cols-2 gap-1.5 text-[10px]">
-            <div className="bg-teal-950/60 border border-teal-800/60 rounded-xl p-1.5">
-              <span className="text-teal-400 text-[8px] font-bold uppercase block">Mode</span>
-              <span className="text-white font-black uppercase text-[11px]">{activeRole}</span>
-            </div>
-            <div className="bg-amber-950/60 border border-amber-800/60 rounded-xl p-1.5">
-              <span className="text-amber-400 text-[8px] font-bold uppercase block">Corridor</span>
-              <span className="text-white font-black text-[11px]">
-                {commuteDirection === 'morning' ? 'AM: Ajah ➔ VI' : 'PM: VI ➔ Ajah'}
-              </span>
-            </div>
-            <div className="bg-teal-950/60 border border-teal-800/60 rounded-xl p-1.5 col-span-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <span className="text-teal-400 text-[8px] font-bold uppercase block">CCTV Safe Hub</span>
-                  <span className="text-white font-bold text-[11px] leading-tight block">
-                    {selectedSafeZone.name}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-emerald-400 text-[8px] font-bold uppercase block">Escrow Held</span>
-                  <span className="text-white font-black text-[11px]">{formatNgn(escrowBalanceNgn)}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Logo Hardware Control Buttons */}
         <div className="space-y-1.5">
           <span className="text-[10px] text-[#70665A] uppercase tracking-wider font-extrabold block px-0.5">
