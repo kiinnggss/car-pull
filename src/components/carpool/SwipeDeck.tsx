@@ -89,35 +89,14 @@ export const SwipeDeck: React.FC = () => {
   const hasCardsLeft = currentDriver !== null && activeDriverIndex < drivers.length;
 
   return (
-    <div className="flex-1 flex flex-col justify-between w-full max-w-[400px] mx-auto px-3 h-full min-h-0">
+    <div className="flex-1 flex flex-col justify-between w-full max-w-[400px] mx-auto px-3 h-full min-h-0 overflow-hidden py-1">
       {/* Top: Transit Console */}
-      <div className="w-full pt-0.5 flex-shrink-0 space-y-1.5">
+      <div className="w-full flex-shrink-0 pb-1">
         <RoutePlannerBar />
-
-        {/* Discovery View Switcher: Swipe Cards vs Street Map */}
-        <div className="w-full flex bg-white/70 dark:bg-stone-900/70 backdrop-blur-xl p-0.5 rounded-2xl border border-white/50 dark:border-white/10 shadow-sm">
-          <button
-            onClick={() => setActiveTab('deck')}
-            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-black transition-all bg-white/95 dark:bg-[#1E1B18]/95 text-[#0D6E6E] dark:text-[#14B8A6] shadow-xs flex items-center justify-center gap-1.5"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span>Swipe Cards</span>
-          </button>
-          <button
-            onClick={() => {
-              triggerHaptic('switch');
-              setActiveTab('map');
-            }}
-            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-bold transition-all text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200 flex items-center justify-center gap-1.5"
-          >
-            <Navigation className="w-3.5 h-3.5" />
-            <span>Street Map</span>
-          </button>
-        </div>
       </div>
 
       {/* Center: Expansive Swipeable Profile Card Deck */}
-      <div className="relative w-full flex-1 min-h-[320px] max-h-[480px] my-2 flex items-center justify-center">
+      <div className="relative w-full flex-1 min-h-0 my-1 flex items-center justify-center overflow-hidden">
         <AnimatePresence mode="popLayout">
           {hasCardsLeft ? (
             <motion.div
@@ -137,7 +116,7 @@ export const SwipeDeck: React.FC = () => {
               {/* Dynamic Overlay Stamp: ACCEPT RIDE (Teal) */}
               <motion.div
                 style={{ opacity: acceptStampOpacity }}
-                className="absolute top-5 left-5 z-30 pointer-events-none transform -rotate-12 border-2 border-[#0D6E6E] text-[#0D6E6E] font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
+                className="absolute top-5 left-5 z-30 pointer-events-none transform -rotate-12 border-2 border-[#0D6E6E] text-[#0D6E6E] font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 dark:bg-stone-900/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
               >
                 ACCEPT RIDE
               </motion.div>
@@ -145,7 +124,7 @@ export const SwipeDeck: React.FC = () => {
               {/* Dynamic Overlay Stamp: PASS (Red) */}
               <motion.div
                 style={{ opacity: passStampOpacity }}
-                className="absolute top-5 right-5 z-30 pointer-events-none transform rotate-12 border-2 border-red-600 text-red-600 font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
+                className="absolute top-5 right-5 z-30 pointer-events-none transform rotate-12 border-2 border-red-600 text-red-600 font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 dark:bg-stone-900/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
               >
                 PASS
               </motion.div>
@@ -153,9 +132,9 @@ export const SwipeDeck: React.FC = () => {
               <ProfileCard driver={currentDriver} safeZone={selectedSafeZone} />
             </motion.div>
           ) : (
-            /* Empty State Deck */
-            <div className="w-full h-full min-h-[320px] rounded-2xl bg-white/80 dark:bg-[#181614]/85 backdrop-blur-2xl border border-white/60 dark:border-stone-800 flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-xl">
-              <div className="w-12 h-12 rounded-full bg-teal-50/90 dark:bg-teal-950/60 border border-teal-200/80 dark:border-teal-800/80 flex items-center justify-center text-[#0D6E6E] dark:text-[#14B8A6]">
+            /* Empty State Deck (VisionOS Liquid Glass) */
+            <div className="w-full h-full min-h-[280px] rounded-2xl bg-white/70 dark:bg-white/[0.06] backdrop-blur-2xl border border-white/80 dark:border-white/12 flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)]">
+              <div className="w-12 h-12 rounded-full bg-teal-500/15 text-[#0D6E6E] dark:text-[#14B8A6] border border-teal-500/30 flex items-center justify-center">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div className="space-y-1">
@@ -166,7 +145,7 @@ export const SwipeDeck: React.FC = () => {
               </div>
               <button
                 onClick={resetDeck}
-                className="flex items-center gap-1.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-xs active:scale-95"
+                className="flex items-center gap-1.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow-md active:scale-95"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Reload Deck</span>
@@ -178,7 +157,7 @@ export const SwipeDeck: React.FC = () => {
 
       {/* Bottom: Flowing Split Stepper & Primary Thumb Action Console */}
       {hasCardsLeft && (
-        <div className="w-full flex-shrink-0 pb-1">
+        <div className="w-full flex-shrink-0 pt-0.5 pb-0.5">
           <QuickBidPills onAccept={triggerAccept} onPass={swipeLeft} />
         </div>
       )}

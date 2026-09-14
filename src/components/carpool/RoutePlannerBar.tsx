@@ -91,8 +91,8 @@ export const RoutePlannerBar: React.FC = () => {
 
   return (
     <>
-      {/* Sleek Native Executive Transit Capsule (44px) */}
-      <div className="w-full bg-white/85 dark:bg-[#181614]/85 backdrop-blur-xl rounded-2xl shadow-lg border border-white/60 dark:border-white/10 p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
+      {/* Sleek Native Executive Transit Capsule (VisionOS Liquid Glass) */}
+      <div className="w-full bg-white/75 dark:bg-white/[0.07] backdrop-blur-2xl rounded-2xl shadow-[0_4px_20px_0_rgba(0,0,0,0.05),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_4px_20px_0_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)] border border-white/80 dark:border-white/12 p-1.5 sm:p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
         {/* Left: Route Summary & Hub (Tap to edit route) */}
         <button
           onClick={() => {

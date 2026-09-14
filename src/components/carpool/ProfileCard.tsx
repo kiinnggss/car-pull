@@ -28,27 +28,27 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
   const confirmedPassengers = driver.cabin_passengers || [];
 
   return (
-    <div className="relative w-full h-full rounded-2xl bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl overflow-hidden shadow-2xl flex flex-col justify-between select-none border border-white/70 dark:border-white/15 transform-gpu">
+    <div className="relative w-full h-full rounded-2xl bg-white/75 dark:bg-white/[0.07] backdrop-blur-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] flex flex-col justify-between select-none border border-white/80 dark:border-white/15 transform-gpu">
       {/* Driver Visual with Smooth Seamless Fade into Card */}
       <div className="absolute inset-0 z-0">
         <img
           src={driver.avatar}
           alt={driver.name}
           loading="eager"
-          className="w-full h-[50%] object-cover object-center"
+          className="w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-25% to-white/90 dark:to-[#181614]/95 to-50%" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-15% to-white/95 dark:to-[#161412]/95 to-50%" />
       </div>
 
       {/* Floating Header Badges - Deep Logo Colors */}
-      <div className="relative z-10 p-3 flex items-center justify-between">
+      <div className="relative z-10 p-2.5 sm:p-3 flex items-center justify-between">
         <div className="flex items-center gap-1.5 flex-wrap">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setShowTrustModal(true);
             }}
-            className="inline-flex items-center gap-1 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-2xs transition-all active:scale-95"
+            className="inline-flex items-center gap-1 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md transition-all active:scale-95"
             title="Tap to view verified trust credentials"
           >
             <ShieldCheck className="w-3.5 h-3.5" />
@@ -56,25 +56,25 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           </button>
 
           {driver.vehicle.has_ac && (
-            <span className="inline-flex items-center gap-1 bg-[#0F766E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-2xs">
+            <span className="inline-flex items-center gap-1 bg-[#0F766E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
               <Snowflake className="w-3 h-3 animate-spin" style={{ animationDuration: '10s' }} />
               AC
             </span>
           )}
 
-          <span className="inline-flex items-center gap-1 bg-[#FFF9EE]/90 dark:bg-amber-950/40 text-[#C25E2E] dark:text-amber-400 border border-[#C25E2E]/30 dark:border-amber-800/40 text-[9.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-2xs backdrop-blur-xs">
+          <span className="inline-flex items-center gap-1 bg-amber-50/90 dark:bg-amber-950/50 text-[#C25E2E] dark:text-amber-400 border border-[#C25E2E]/30 dark:border-amber-800/40 text-[9.5px] font-extrabold px-2 py-0.5 rounded-full shadow-xs backdrop-blur-md">
             {categoryLabel}
           </span>
         </div>
 
-        <span className="bg-white/85 dark:bg-stone-900/85 backdrop-blur-md text-[#141210] dark:text-stone-100 text-[10.5px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs border border-white/50 dark:border-stone-700">
-          <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
+        <span className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-[#141210] dark:text-stone-100 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm border border-white/60 dark:border-stone-700">
+          <Clock className="w-3 h-3 text-[#C25E2E]" />
           {driver.corridor.departure_time}
         </span>
       </div>
 
-      {/* Flowing Content Section - Airy, Prestigious & Breathable */}
-      <div className="relative z-10 p-3 pt-1.5 space-y-2 bg-white/75 dark:bg-[#181614]/80 backdrop-blur-xl mt-auto rounded-b-2xl border-t border-white/40 dark:border-white/10">
+      {/* Flowing Content Section - VisionOS Liquid Glass */}
+      <div className="relative z-10 p-2.5 sm:p-3 pt-1 sm:pt-1.5 space-y-1.5 sm:space-y-2 bg-white/85 dark:bg-[#161412]/90 backdrop-blur-2xl mt-auto rounded-b-2xl border-t border-white/70 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)]">
         {/* Row 1: Name, Role, Rating */}
         <div>
           <div className="flex items-baseline justify-between gap-1">
@@ -139,8 +139,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           </div>
         )}
 
-        {/* Row 4: Vehicle & Cabin Co-Riders (Sleek Single Strip) */}
-        <div className="flex items-center justify-between text-xs text-[#141210] dark:text-stone-100 bg-white/60 dark:bg-stone-900/60 backdrop-blur-md border border-white/50 dark:border-stone-800 px-2.5 py-1.5 rounded-xl">
+        {/* Row 4: Vehicle & Cabin Co-Riders (VisionOS Glass Strip) */}
+        <div className="flex items-center justify-between text-xs text-[#141210] dark:text-stone-100 bg-white/60 dark:bg-white/[0.06] backdrop-blur-md border border-white/60 dark:border-white/10 px-2.5 py-1.5 rounded-xl">
           <div className="flex items-center gap-1.5 min-w-0">
             <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
             <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate">

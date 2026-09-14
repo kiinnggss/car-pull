@@ -18,7 +18,7 @@ export const BottomNav: React.FC = () => {
   const matchCount = activeMatches.length;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/80 dark:bg-[#121110]/85 backdrop-blur-2xl border-t border-white/40 dark:border-stone-800/60 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/75 dark:bg-[#121110]/75 backdrop-blur-2xl border-t border-white/80 dark:border-white/10 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-[0_-8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_-8px_32px_0_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)] safe-bottom transition-colors">
       <div className="flex items-center justify-around">
         {/* Tab 1: Swipe Cards Deck */}
         <button
