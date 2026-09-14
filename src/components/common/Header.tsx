@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
   const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-[#F6F2EA]/95 dark:bg-[#121110]/95 backdrop-blur-md border-b border-[#DDD4C5] dark:border-stone-800 px-3 py-2 space-y-1.5 transition-colors">
+    <header className="sticky top-0 z-40 w-full bg-white/80 dark:bg-[#121110]/85 backdrop-blur-xl border-b border-white/40 dark:border-stone-800/60 px-3 py-2 space-y-1.5 transition-colors shadow-2xs">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
@@ -55,7 +55,7 @@ export const Header: React.FC = () => {
                   setActiveTab('map');
                 }
               }}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/40 font-bold text-xs shadow-2xs active:scale-95 transition-all"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/40 font-bold text-xs shadow-2xs active:scale-95 transition-all"
               title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
@@ -68,7 +68,7 @@ export const Header: React.FC = () => {
                   triggerHaptic('tap');
                   setShowCockpit(true);
                 }}
-                className="p-1 rounded-xl bg-white dark:bg-[#1E1B18] border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
+                className="p-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
                 title="Tap to open Interactive Logo Cockpit"
               >
                 <img
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Dense Role Switcher (Rider / Driver) */}
-        <div className="flex bg-[#ECE5D8] dark:bg-stone-900 p-0.5 rounded-xl border border-[#DDD4C5] dark:border-stone-800 flex-shrink-0">
+        <div className="flex bg-white/70 dark:bg-stone-900/70 backdrop-blur-md p-0.5 rounded-xl border border-white/50 dark:border-stone-800 flex-shrink-0 shadow-2xs">
           <button
             onClick={() => {
               triggerHaptic('switch');
@@ -127,7 +127,7 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 bg-[#F5EEFB] dark:bg-purple-950/50 hover:bg-purple-100 dark:hover:bg-purple-900/60 text-[#6D28D9] dark:text-purple-300 text-[10px] font-black px-1.5 py-1 rounded-xl border border-[#7C3AED]/30 dark:border-purple-700/50 transition-all active-press shadow-2xs"
+            className="flex items-center gap-1 bg-purple-50/80 dark:bg-purple-950/40 backdrop-blur-md hover:bg-purple-100/90 dark:hover:bg-purple-900/60 text-[#6D28D9] dark:text-purple-300 text-[10px] font-black px-1.5 py-1 rounded-xl border border-purple-200/60 dark:border-purple-700/50 transition-all active-press shadow-2xs"
             title="Open Escrow Wallet"
           >
             <Lock className="w-2.5 h-2.5 text-[#7C3AED] dark:text-purple-400" />
@@ -139,7 +139,7 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               toggleTheme();
             }}
-            className="p-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs text-[#141210] dark:text-stone-200"
+            className="p-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 border border-white/50 dark:border-stone-800 transition-all active-press shadow-2xs text-[#141210] dark:text-stone-200"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
           >
             {theme === 'dark' ? (
@@ -155,7 +155,7 @@ export const Header: React.FC = () => {
                 triggerHaptic('tap');
                 setShowProfileMenu(!showProfileMenu);
               }}
-              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 border border-[#DDD4C5] dark:border-stone-800 transition-all active-press shadow-2xs"
+              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 border border-white/50 dark:border-stone-800 transition-all active-press shadow-2xs"
               title="Account & Settings"
             >
               <div className="w-6 h-6 rounded-lg bg-[#0D6E6E]/10 dark:bg-[#14B8A6]/20 text-[#0D6E6E] dark:text-[#14B8A6] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25 dark:border-[#14B8A6]/30">
@@ -166,7 +166,7 @@ export const Header: React.FC = () => {
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 top-10 w-52 bg-white dark:bg-[#1E1B18] rounded-2xl p-2.5 shadow-2xl border border-[#DDD4C5] dark:border-stone-700 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+              <div className="absolute right-0 top-10 w-52 bg-white/90 dark:bg-[#1E1B18]/90 backdrop-blur-2xl rounded-2xl p-2.5 shadow-2xl border border-white/60 dark:border-stone-700 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
                 <div className="border-b border-[#DDD4C5] dark:border-stone-800 pb-2 mb-2">
                   <span className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] block truncate">
                     {user.fullName}
@@ -239,7 +239,7 @@ export const Header: React.FC = () => {
                 className={`flex items-center gap-1 px-3 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active-press shadow-2xs border ${
                   isActive
                     ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] border-[#0D6E6E] dark:border-[#14B8A6]'
-                    : 'bg-white dark:bg-[#1E1B18] text-[#70665A] dark:text-stone-400 border-[#DDD4C5] dark:border-stone-800 hover:text-[#141210] dark:hover:text-stone-200'
+                    : 'bg-white/80 dark:bg-stone-900/80 backdrop-blur-md text-[#70665A] dark:text-stone-400 border-white/60 dark:border-stone-800 hover:text-[#141210] dark:hover:text-stone-200'
                 }`}
               >
                 <Icon className={`w-3 h-3 ${isActive ? 'text-amber-300' : 'text-[#C25E2E] dark:text-amber-400'}`} />

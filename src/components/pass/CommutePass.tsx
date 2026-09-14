@@ -88,7 +88,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
       {/* Official Government Compliance Shield Card */}
-      <div className="bg-gradient-to-b from-emerald-50/80 via-white to-white dark:from-emerald-950/30 dark:via-[#1A1816] dark:to-[#1A1816] rounded-3xl p-4.5 border border-emerald-200/80 dark:border-emerald-900/40 shadow-xs space-y-3.5 relative overflow-hidden">
+      <div className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-4.5 border border-emerald-300/60 dark:border-emerald-900/50 shadow-2xl space-y-3.5 relative overflow-hidden">
         {/* Subtle Watermark */}
         <div className="absolute -right-8 -top-8 text-emerald-100/40 dark:text-emerald-900/20 pointer-events-none select-none">
           <ShieldCheck className="w-44 h-44" />

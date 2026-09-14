@@ -28,7 +28,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
   const confirmedPassengers = driver.cabin_passengers || [];
 
   return (
-    <div className="relative w-full h-full rounded-2xl bg-white overflow-hidden shadow-sm flex flex-col justify-between select-none border border-[#DDD4C5] transform-gpu">
+    <div className="relative w-full h-full rounded-2xl bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl overflow-hidden shadow-2xl flex flex-col justify-between select-none border border-white/70 dark:border-white/15 transform-gpu">
       {/* Driver Visual with Smooth Seamless Fade into Card */}
       <div className="absolute inset-0 z-0">
         <img
@@ -37,7 +37,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           loading="eager"
           className="w-full h-[50%] object-cover object-center"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-25% to-white to-50%" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-25% to-white/90 dark:to-[#181614]/95 to-50%" />
       </div>
 
       {/* Floating Header Badges - Deep Logo Colors */}
@@ -62,47 +62,47 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
             </span>
           )}
 
-          <span className="inline-flex items-center gap-1 bg-[#FFF9EE] text-[#C25E2E] border border-[#C25E2E]/30 text-[9.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-2xs">
+          <span className="inline-flex items-center gap-1 bg-[#FFF9EE]/90 dark:bg-amber-950/40 text-[#C25E2E] dark:text-amber-400 border border-[#C25E2E]/30 dark:border-amber-800/40 text-[9.5px] font-extrabold px-2.5 py-0.5 rounded-full shadow-2xs backdrop-blur-xs">
             {categoryLabel}
           </span>
         </div>
 
-        <span className="bg-white/95 text-[#141210] text-[10.5px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs border border-[#DDD4C5]">
+        <span className="bg-white/85 dark:bg-stone-900/85 backdrop-blur-md text-[#141210] dark:text-stone-100 text-[10.5px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-2xs border border-white/50 dark:border-stone-700">
           <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
           {driver.corridor.departure_time}
         </span>
       </div>
 
       {/* Flowing Content Section - Airy, Prestigious & Breathable */}
-      <div className="relative z-10 p-3 pt-1.5 space-y-2 bg-white mt-auto rounded-b-2xl">
+      <div className="relative z-10 p-3 pt-1.5 space-y-2 bg-white/75 dark:bg-[#181614]/80 backdrop-blur-xl mt-auto rounded-b-2xl border-t border-white/40 dark:border-white/10">
         {/* Row 1: Name, Role, Rating */}
         <div>
           <div className="flex items-baseline justify-between gap-1">
             <div className="flex items-baseline gap-1.5 truncate">
-              <h2 className="text-base font-serif font-black text-[#141210] tracking-tight truncate">
+              <h2 className="text-base font-serif font-black text-[#141210] dark:text-stone-100 tracking-tight truncate">
                 {driver.name}
               </h2>
               {driver.social_handle && (
-                <span className="text-[10.5px] font-mono font-bold text-[#0D6E6E]">
+                <span className="text-[10.5px] font-mono font-bold text-[#0D6E6E] dark:text-[#14B8A6]">
                   {driver.social_handle}
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-[#141210] flex-shrink-0">
+            <div className="flex items-center gap-1 text-xs font-bold text-[#141210] dark:text-stone-100 flex-shrink-0">
               <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
               <span>{driver.rating}</span>
-              <span className="text-[10px] text-[#70665A] font-normal">({driver.trips_completed})</span>
+              <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-normal">({driver.trips_completed})</span>
             </div>
           </div>
 
-          <p className="text-xs text-[#70665A] truncate mt-0.5">
-            <strong className="text-[#141210] font-bold">{driver.employer}</strong> • {driver.alumni}
+          <p className="text-xs text-[#70665A] dark:text-stone-400 truncate mt-0.5">
+            <strong className="text-[#141210] dark:text-stone-200 font-bold">{driver.employer}</strong> • {driver.alumni}
           </p>
         </div>
 
         {/* Row 2: Human Quote / Trip Purpose (Subtitle without bulky box) */}
         {driver.trip_purpose && (
-          <p className="text-xs text-[#554D42] italic flex items-center gap-1.5 truncate leading-relaxed">
+          <p className="text-xs text-[#554D42] dark:text-stone-300 italic flex items-center gap-1.5 truncate leading-relaxed">
             <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
             <span className="truncate">&ldquo;{driver.trip_purpose}&rdquo;</span>
           </p>
@@ -112,26 +112,26 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
         {(driver.mutual_spark || driver.ride_mood) && (
           <div className="flex items-center gap-2 flex-wrap">
             {driver.mutual_spark && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#B45309] bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-full shadow-2xs">
+              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#B45309] bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 px-2.5 py-0.5 rounded-full shadow-2xs backdrop-blur-xs">
                 <Sparkles className="w-3 h-3 text-amber-500" />
                 <span>{driver.mutual_spark}</span>
               </span>
             )}
 
             {driver.ride_mood === 'chat' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#0D6E6E] bg-teal-50 border border-teal-200/80 px-2.5 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50/90 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/40 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
                 <MessageCircle className="w-3 h-3" />
                 <span>Chat &amp; Network</span>
               </span>
             )}
             {driver.ride_mood === 'easy' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B45309] bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B45309] dark:text-amber-400 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
                 <Coffee className="w-3 h-3" />
                 <span>Easy Flow</span>
               </span>
             )}
             {driver.ride_mood === 'quiet' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-stone-600 bg-stone-100 border border-stone-200 px-2.5 py-0.5 rounded-full">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-stone-600 dark:text-stone-300 bg-stone-100/90 dark:bg-stone-800/90 border border-stone-200/80 dark:border-stone-700 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
                 <Headphones className="w-3 h-3" />
                 <span>Quiet &amp; Unwind</span>
               </span>
@@ -140,13 +140,13 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
         )}
 
         {/* Row 4: Vehicle & Cabin Co-Riders (Sleek Single Strip) */}
-        <div className="flex items-center justify-between text-xs text-[#141210] bg-[#F9F7F1] border border-[#DDD4C5] px-2.5 py-1.5 rounded-xl">
+        <div className="flex items-center justify-between text-xs text-[#141210] dark:text-stone-100 bg-white/60 dark:bg-stone-900/60 backdrop-blur-md border border-white/50 dark:border-stone-800 px-2.5 py-1.5 rounded-xl">
           <div className="flex items-center gap-1.5 min-w-0">
-            <Car className="w-3.5 h-3.5 text-[#0D6E6E] flex-shrink-0" />
-            <span className="text-xs font-bold text-[#141210] truncate">
+            <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
+            <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate">
               {driver.vehicle.make} {driver.vehicle.model}
             </span>
-            <span className="text-[#C25E2E] font-mono font-black text-[9.5px] bg-white px-1.5 py-0.5 rounded border border-[#C25E2E]/30 flex-shrink-0">
+            <span className="text-[#C25E2E] font-mono font-black text-[9.5px] bg-white/90 dark:bg-stone-800 px-1.5 py-0.5 rounded border border-[#C25E2E]/30 flex-shrink-0">
               {driver.vehicle.plate_number}
             </span>
           </div>
@@ -154,14 +154,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           {/* Cabin Mates / Seats Left */}
           <div className="flex items-center gap-1 flex-shrink-0">
             {confirmedPassengers.length > 0 ? (
-              <div className="flex items-center gap-1 bg-white border border-[#DDD4C5] px-2 py-0.5 rounded-lg">
-                <Users className="w-3 h-3 text-[#0D6E6E]" />
-                <span className="text-[10px] font-bold text-[#141210]">
+              <div className="flex items-center gap-1 bg-white/80 dark:bg-stone-800/80 border border-white/50 dark:border-stone-700 px-2 py-0.5 rounded-lg">
+                <Users className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                <span className="text-[10px] font-bold text-[#141210] dark:text-stone-100">
                   +{confirmedPassengers[0].name.split(' ')[0]} ({confirmedPassengers[0].role.split(' ')[0]})
                 </span>
               </div>
             ) : (
-              <span className="text-[#0D6E6E] font-bold bg-teal-50 px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 border border-teal-200">
+              <span className="text-[#0D6E6E] dark:text-[#14B8A6] font-bold bg-teal-50/80 dark:bg-teal-950/60 px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 border border-teal-200/60 dark:border-teal-800/60">
                 <Users className="w-3 h-3" /> {driver.corridor.available_seats} seats left
               </span>
             )}

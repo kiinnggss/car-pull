@@ -55,15 +55,30 @@ export default function Home() {
     );
   }
 
+  const isMapTab = activeTab === 'map';
+  const isDeckTab = activeTab === 'deck';
+
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F6F2EA] dark:bg-[#121110] border-x border-[#DDD4C5] dark:border-stone-800 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-x-hidden">
-      {/* Top Application Header */}
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#ECE6DC] dark:bg-[#0E0D0C] border-x border-[#DDD4C5] dark:border-stone-800 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-hidden">
+      {/* Persistent Living Street Map Canvas Underlay */}
+      <div
+        className={`absolute inset-0 z-0 transition-opacity duration-300 ${
+          isMapTab
+            ? 'opacity-100 pointer-events-auto'
+            : isDeckTab
+            ? 'opacity-85 pointer-events-none'
+            : 'opacity-30 pointer-events-none filter blur-[1px]'
+        }`}
+      >
+        <CorridorMap isBackgroundUnderlay={!isMapTab} />
+      </div>
+
+      {/* Top Application Header (Frosted Glass Floating Over Map) */}
       <Header />
 
       {/* Primary Dynamic Content Area */}
-      <div className="flex-1 w-full pt-1 pb-[70px] flex flex-col min-h-0 overflow-y-auto no-scrollbar">
-        {activeTab === 'deck' && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
-        {activeTab === 'map' && <CorridorMap />}
+      <div className="flex-1 w-full pt-1 pb-[70px] flex flex-col min-h-0 overflow-y-auto no-scrollbar relative z-10">
+        {isDeckTab && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
         {activeTab === 'matches' && <MatchesList />}
         {activeTab === 'chats' && <ChatHub />}
         {activeTab === 'pass' && <CommutePass />}
@@ -76,7 +91,7 @@ export default function Home() {
         {activeTab === 'sos' && <EmergencyBeacon />}
       </div>
 
-      {/* Fixed Bottom Ergonomic Thumb-Zone Navigation */}
+      {/* Fixed Bottom Ergonomic Thumb-Zone Navigation (Frosted Glass Floating Over Map) */}
       <BottomNav />
     </main>
   );

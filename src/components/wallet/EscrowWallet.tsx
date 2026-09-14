@@ -75,7 +75,7 @@ export const EscrowWallet: React.FC = () => {
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in">
       {/* Balance Card - Soft Gradient Surface */}
-      <div className="bg-gradient-to-b from-purple-50/60 to-white dark:from-purple-950/30 dark:to-[#1A1816] rounded-3xl p-4.5 border border-purple-100 dark:border-stone-800 shadow-2xs space-y-3">
+      <div className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-4.5 border border-purple-200/50 dark:border-purple-900/40 shadow-xl space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-purple-100/70 dark:bg-purple-950/60 text-[#7C3AED] dark:text-purple-400">
@@ -95,7 +95,7 @@ export const EscrowWallet: React.FC = () => {
             {/* Top-up Button */}
             <button
               onClick={() => topUpWallet(10000)}
-              className="flex items-center gap-1 bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 text-zinc-800 dark:text-stone-200 text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-2xs active:scale-95 transition-all"
+              className="flex items-center gap-1 bg-white/80 dark:bg-stone-800/80 hover:bg-white dark:hover:bg-stone-700 text-zinc-800 dark:text-stone-200 text-xs font-bold px-2.5 py-1.5 rounded-xl shadow-2xs active:scale-95 transition-all border border-white/40 dark:border-stone-700 backdrop-blur-xs"
               title="Add ₦10,000 via Paystack"
             >
               <PlusCircle className="w-3.5 h-3.5 text-zinc-600 dark:text-stone-400" />
@@ -157,7 +157,7 @@ export const EscrowWallet: React.FC = () => {
           <span className="text-[10px] text-zinc-400 dark:text-stone-500 font-mono">Real-Time</span>
         </div>
 
-        <div className="divide-y divide-zinc-100 dark:divide-stone-800/80 bg-white dark:bg-[#1A1816] rounded-2xl border border-zinc-100 dark:border-stone-800 overflow-hidden shadow-2xs">
+        <div className="divide-y divide-zinc-100/70 dark:divide-stone-800/80 bg-white/80 dark:bg-[#1A1816]/80 backdrop-blur-xl rounded-2xl border border-white/60 dark:border-stone-800 overflow-hidden shadow-sm">
           {escrowTransactions.map((tx) => (
             <div
               key={tx.id}

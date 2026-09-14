@@ -93,7 +93,7 @@ export const ChatInbox: React.FC = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search co-riders, drivers, or routes..."
-          className="w-full pl-8 pr-3 py-2 bg-white dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-2xl text-xs font-medium text-[#141210] dark:text-[#EDE8E1] placeholder:text-[#70665A]/60 dark:placeholder:text-stone-500 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E] dark:focus:ring-[#14B8A6] transition-all shadow-2xs"
+          className="w-full pl-8 pr-3 py-2 bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl border border-white/60 dark:border-stone-800 rounded-2xl text-xs font-medium text-[#141210] dark:text-[#EDE8E1] placeholder:text-[#70665A]/60 dark:placeholder:text-stone-500 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E] dark:focus:ring-[#14B8A6] transition-all shadow-2xs"
         />
       </div>
 
@@ -117,7 +117,7 @@ export const ChatInbox: React.FC = () => {
               className={`px-3 py-1 rounded-xl text-xs font-bold transition-all active-press border ${
                 isActive
                   ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] border-[#0D6E6E] dark:border-[#14B8A6] shadow-2xs'
-                  : 'bg-white dark:bg-[#1E1B18] text-[#70665A] dark:text-stone-400 border-[#DDD4C5] dark:border-stone-800 hover:text-[#141210] dark:hover:text-stone-200'
+                  : 'bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md text-[#70665A] dark:text-stone-400 border-white/50 dark:border-stone-800 hover:text-[#141210] dark:hover:text-stone-200'
               }`}
             >
               {tab.label}
@@ -129,7 +129,7 @@ export const ChatInbox: React.FC = () => {
       {/* Threads List */}
       <div className="space-y-2">
         {filteredThreads.length === 0 ? (
-          <div className="bg-white dark:bg-[#1E1B18] rounded-3xl p-6 text-center border border-[#DDD4C5] dark:border-stone-800 space-y-2">
+          <div className="bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl rounded-2xl p-6 text-center border border-white/60 dark:border-stone-800 space-y-2 shadow-sm">
             <MessageCircle className="w-8 h-8 text-[#70665A]/40 dark:text-stone-600 mx-auto" />
             <p className="text-xs font-bold text-[#141210] dark:text-stone-300">No chats found</p>
             <p className="text-[11px] text-[#70665A] dark:text-stone-500">
@@ -146,10 +146,10 @@ export const ChatInbox: React.FC = () => {
                   triggerHaptic('tap');
                   setActiveThreadId(thread.id);
                 }}
-                className={`w-full text-left bg-white dark:bg-[#1E1B18] rounded-2xl p-3 border transition-all active-press shadow-2xs hover:shadow-xs flex items-center gap-3 ${
+                className={`w-full text-left bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-xl rounded-2xl p-3 border transition-all active-press shadow-sm hover:shadow-md flex items-center gap-3 ${
                   hasUnread
-                    ? 'border-[#0D6E6E]/40 dark:border-[#14B8A6]/40 ring-1 ring-[#0D6E6E]/15 dark:ring-[#14B8A6]/20'
-                    : 'border-[#DDD4C5] dark:border-stone-800'
+                    ? 'border-[#0D6E6E]/60 dark:border-[#14B8A6]/60 ring-1 ring-[#0D6E6E]/20 dark:ring-[#14B8A6]/20'
+                    : 'border-white/60 dark:border-stone-800'
                 }`}
               >
                 {/* Avatar with Online Badge */}

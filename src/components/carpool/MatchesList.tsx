@@ -105,7 +105,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
       </div>
 
       {/* Flake Penalty Test Action Bar - Minimal & Clean */}
-      <div className="bg-[#FAF6EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-2xl p-2.5 space-y-1.5">
+      <div className="bg-white/75 dark:bg-[#1E1B18]/75 backdrop-blur-xl border border-white/50 dark:border-stone-800 rounded-2xl p-2.5 space-y-1.5 shadow-sm">
         <div className="flex items-center justify-between text-[10px]">
           <span className="font-bold text-[#C25E2E] dark:text-amber-400 flex items-center gap-1">
             <AlertOctagon className="w-3 h-3 text-[#C25E2E] dark:text-amber-400" />
@@ -119,7 +119,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               triggerHaptic('error');
               simulateFlakePenalty('rider_flake');
             }}
-            className="py-1.5 px-2 bg-white dark:bg-[#141210] hover:bg-amber-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#141210] dark:text-stone-200 border border-[#DDD4C5] dark:border-stone-700 text-center active-press transition-colors shadow-2xs"
+            className="py-1.5 px-2 bg-white/80 dark:bg-[#141210]/80 hover:bg-amber-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#141210] dark:text-stone-200 border border-white/50 dark:border-stone-700 text-center active-press transition-colors shadow-2xs backdrop-blur-xs"
           >
             Rider Late Cancel (-₦1k)
           </button>
@@ -128,7 +128,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               triggerHaptic('switch');
               simulateFlakePenalty('driver_flake');
             }}
-            className="py-1.5 px-2 bg-white dark:bg-[#141210] hover:bg-teal-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] border border-[#DDD4C5] dark:border-stone-700 text-center active-press transition-colors shadow-2xs"
+            className="py-1.5 px-2 bg-white/80 dark:bg-[#141210]/80 hover:bg-teal-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] border border-white/50 dark:border-stone-700 text-center active-press transition-colors shadow-2xs backdrop-blur-xs"
           >
             Driver Flake (+₦2.5k Voucher)
           </button>
@@ -146,7 +146,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           return (
             <div
               key={match.id}
-              className="bg-white dark:bg-[#1A1816] rounded-3xl p-3.5 space-y-2.5 shadow-xs border border-[#DDD4C5] dark:border-stone-800"
+              className="bg-white/80 dark:bg-[#1A1816]/80 backdrop-blur-xl rounded-2xl p-3.5 space-y-2.5 shadow-md border border-white/60 dark:border-stone-800/80"
             >
               {/* Top info */}
               <div className="flex items-center justify-between">

@@ -95,10 +95,10 @@ export const SwipeDeck: React.FC = () => {
         <RoutePlannerBar />
 
         {/* Discovery View Switcher: Swipe Cards vs Street Map */}
-        <div className="w-full flex bg-[#ECE5D8] dark:bg-stone-900 p-0.5 rounded-2xl border border-[#DDD4C5] dark:border-stone-800">
+        <div className="w-full flex bg-white/70 dark:bg-stone-900/70 backdrop-blur-xl p-0.5 rounded-2xl border border-white/50 dark:border-white/10 shadow-sm">
           <button
             onClick={() => setActiveTab('deck')}
-            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-black transition-all bg-white dark:bg-[#1E1B18] text-[#0D6E6E] dark:text-[#14B8A6] shadow-xs flex items-center justify-center gap-1.5"
+            className="flex-1 py-1.5 px-3 rounded-xl text-xs font-black transition-all bg-white/95 dark:bg-[#1E1B18]/95 text-[#0D6E6E] dark:text-[#14B8A6] shadow-xs flex items-center justify-center gap-1.5"
           >
             <Sparkles className="w-3.5 h-3.5 text-amber-500" />
             <span>Swipe Cards</span>
@@ -137,7 +137,7 @@ export const SwipeDeck: React.FC = () => {
               {/* Dynamic Overlay Stamp: ACCEPT RIDE (Teal) */}
               <motion.div
                 style={{ opacity: acceptStampOpacity }}
-                className="absolute top-5 left-5 z-30 pointer-events-none transform -rotate-12 border-2 border-[#0D6E6E] text-[#0D6E6E] font-black text-sm px-2.5 py-0.5 rounded-lg bg-white shadow-lg tracking-wider uppercase"
+                className="absolute top-5 left-5 z-30 pointer-events-none transform -rotate-12 border-2 border-[#0D6E6E] text-[#0D6E6E] font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
               >
                 ACCEPT RIDE
               </motion.div>
@@ -145,7 +145,7 @@ export const SwipeDeck: React.FC = () => {
               {/* Dynamic Overlay Stamp: PASS (Red) */}
               <motion.div
                 style={{ opacity: passStampOpacity }}
-                className="absolute top-5 right-5 z-30 pointer-events-none transform rotate-12 border-2 border-red-600 text-red-600 font-black text-sm px-2.5 py-0.5 rounded-lg bg-white shadow-lg tracking-wider uppercase"
+                className="absolute top-5 right-5 z-30 pointer-events-none transform rotate-12 border-2 border-red-600 text-red-600 font-black text-sm px-2.5 py-0.5 rounded-lg bg-white/90 backdrop-blur-md shadow-lg tracking-wider uppercase"
               >
                 PASS
               </motion.div>
@@ -154,13 +154,13 @@ export const SwipeDeck: React.FC = () => {
             </motion.div>
           ) : (
             /* Empty State Deck */
-            <div className="w-full h-full min-h-[320px] rounded-2xl bg-white border border-[#DDD4C5] flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-xs">
-              <div className="w-12 h-12 rounded-full bg-teal-50 border border-teal-200 flex items-center justify-center text-[#0D6E6E]">
+            <div className="w-full h-full min-h-[320px] rounded-2xl bg-white/80 dark:bg-[#181614]/85 backdrop-blur-2xl border border-white/60 dark:border-stone-800 flex flex-col items-center justify-center p-5 text-center space-y-3 shadow-xl">
+              <div className="w-12 h-12 rounded-full bg-teal-50/90 dark:bg-teal-950/60 border border-teal-200/80 dark:border-teal-800/80 flex items-center justify-center text-[#0D6E6E] dark:text-[#14B8A6]">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-sm font-serif font-black text-[#141210]">All Commuters Reviewed</h3>
-                <p className="text-[11px] text-[#70665A] max-w-[240px] mx-auto">
+                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">All Commuters Reviewed</h3>
+                <p className="text-[11px] text-[#70665A] dark:text-stone-400 max-w-[240px] mx-auto">
                   No more active drivers on this corridor for the selected trip mode.
                 </p>
               </div>
@@ -185,17 +185,17 @@ export const SwipeDeck: React.FC = () => {
 
       {/* Match Confirmation Modal with Back Button */}
       {lastMatchedDriver && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[350px] bg-[#FAF8F3] rounded-2xl p-4 text-center space-y-3 shadow-2xl border border-[#DDD5C7]">
-            <div className="flex items-center justify-between border-b border-[#DDD5C7] pb-2">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-[350px] bg-white/90 dark:bg-[#1A1816]/90 backdrop-blur-2xl rounded-2xl p-4 text-center space-y-3 shadow-2xl border border-white/60 dark:border-stone-700">
+            <div className="flex items-center justify-between border-b border-white/40 dark:border-stone-700 pb-2">
               <button
                 onClick={() => {
                   triggerHaptic('tap');
                   setLastMatchedDriver(null);
                 }}
-                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white border border-[#DDD5C7] text-xs font-bold text-[#141210] shadow-2xs active:scale-95"
+                className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-white/80 dark:bg-stone-800/80 border border-white/50 dark:border-stone-700 text-xs font-bold text-[#141210] dark:text-stone-100 shadow-2xs active:scale-95 backdrop-blur-md"
               >
-                <ArrowLeft className="w-3 h-3 text-[#C25E2E]" />
+                <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
                 <span>Back</span>
               </button>
               <span className="text-[9px] font-bold text-emerald-800 uppercase tracking-wider bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">

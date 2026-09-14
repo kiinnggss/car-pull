@@ -92,7 +92,7 @@ export const RoutePlannerBar: React.FC = () => {
   return (
     <>
       {/* Sleek Native Executive Transit Capsule (44px) */}
-      <div className="w-full bg-white rounded-2xl shadow-2xs border border-[#DDD4C5] p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
+      <div className="w-full bg-white/85 dark:bg-[#181614]/85 backdrop-blur-xl rounded-2xl shadow-lg border border-white/60 dark:border-white/10 p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
         {/* Left: Route Summary & Hub (Tap to edit route) */}
         <button
           onClick={() => {
@@ -101,7 +101,7 @@ export const RoutePlannerBar: React.FC = () => {
             setDestQuery(riderRoute.destination);
             setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 text-left hover:bg-[#F8F5EE] p-1.5 rounded-xl min-w-0 flex-1 transition-colors active-press"
+          className="flex items-center gap-2 text-left hover:bg-white/60 dark:hover:bg-stone-800/60 p-1.5 rounded-xl min-w-0 flex-1 transition-colors active-press"
           title="Tap to change commute route"
         >
           <div className="flex items-center gap-1 flex-shrink-0">
@@ -112,13 +112,13 @@ export const RoutePlannerBar: React.FC = () => {
 
           <div className="min-w-0 truncate">
             <div className="flex items-center gap-1">
-              <span className="font-serif font-black text-xs text-[#141210] truncate">
+              <span className="font-serif font-black text-xs text-[#141210] dark:text-stone-100 truncate">
                 {riderRoute.origin.split('/')[0].trim()} ➔ {riderRoute.destination.split('(')[0].trim()}
               </span>
               <ChevronDown className="w-3 h-3 text-[#70665A] flex-shrink-0" />
             </div>
-            <span className="text-[10px] text-[#70665A] font-semibold truncate block">
-              Hub: <strong className="text-[#0D6E6E]">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm}km
+            <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-semibold truncate block">
+              Hub: <strong className="text-[#0D6E6E] dark:text-[#14B8A6]">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm}km
             </span>
           </div>
         </button>
@@ -130,7 +130,7 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowDeparturesSheet(true);
             }}
-            className="flex items-center gap-1 text-[#0D6E6E] hover:text-[#094E4E] bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1.5 rounded-xl border border-teal-200/80 font-bold text-[10.5px] active-press shadow-2xs"
+            className="flex items-center gap-1 text-[#0D6E6E] dark:text-[#14B8A6] hover:text-[#094E4E] bg-teal-50/80 dark:bg-teal-950/60 backdrop-blur-md hover:bg-teal-100/90 px-2.5 py-1.5 rounded-xl border border-teal-200/80 dark:border-teal-800/80 font-bold text-[10.5px] active-press shadow-2xs"
             title="Browse corridor departures schedule"
           >
             <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
@@ -142,23 +142,23 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowSafeZoneModal(true);
             }}
-            className="p-1.5 rounded-xl bg-[#F8F5EE] hover:bg-teal-50 text-[#0D6E6E] border border-[#DDD4C5] active-press shadow-2xs"
+            className="p-1.5 rounded-xl bg-white/70 dark:bg-stone-800/70 backdrop-blur-md hover:bg-teal-50 text-[#0D6E6E] dark:text-[#14B8A6] border border-white/50 dark:border-stone-700 active-press shadow-2xs"
             title="Change CCTV Safe Hub"
           >
-            <ShieldCheck className="w-4 h-4 text-[#0D6E6E]" />
+            <ShieldCheck className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
           </button>
         </div>
       </div>
 
       {/* Location Modal with Back Button */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-[430px] bg-[#FAF8F3] rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-[#DDD5C7] max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
+        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-md p-0 sm:p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-[430px] bg-white/90 dark:bg-[#1A1816]/90 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-white/60 dark:border-stone-700 max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
             {/* Header with Back Button */}
-            <div className="flex items-center justify-between border-b border-[#DDD5C7] pb-3">
+            <div className="flex items-center justify-between border-b border-white/40 dark:border-stone-700 pb-3">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white border border-[#DDD5C7] text-xs font-bold text-[#141210] shadow-2xs active:scale-95 transition-all"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/80 dark:bg-stone-800/80 border border-white/50 dark:border-stone-700 text-xs font-bold text-[#141210] dark:text-stone-100 shadow-2xs active:scale-95 transition-all backdrop-blur-md"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
                 <span>Back</span>
@@ -250,12 +250,12 @@ export const RoutePlannerBar: React.FC = () => {
 
       {/* Safe Zone Picker Modal with Back Button */}
       {showSafeZoneModal && (
-        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-[430px] bg-[#FAF8F3] rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-[#DDD5C7] max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
-            <div className="flex items-center justify-between border-b border-[#DDD5C7] pb-2.5">
+        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-md p-0 sm:p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-[430px] bg-white/90 dark:bg-[#1A1816]/90 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-white/60 dark:border-stone-700 max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
+            <div className="flex items-center justify-between border-b border-white/40 dark:border-stone-700 pb-2.5">
               <button
                 onClick={() => setShowSafeZoneModal(false)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white border border-[#DDD5C7] text-xs font-bold text-[#141210] shadow-2xs active:scale-95 transition-all"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/80 dark:bg-stone-800/80 border border-white/50 dark:border-stone-700 text-xs font-bold text-[#141210] dark:text-stone-100 shadow-2xs active:scale-95 transition-all backdrop-blur-md"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
                 <span>Back</span>
