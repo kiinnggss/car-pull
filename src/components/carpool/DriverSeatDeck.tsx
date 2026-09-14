@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { formatNgn } from '@/lib/utils';
+import { StreetCarpoolRide } from '@/lib/types';
 import {
   Users,
   ArrowLeft,
@@ -112,7 +113,7 @@ CAR PULL Zero-Cash Escrow Active`;
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in">
       {/* Top Driver Controls & Live Map Switcher */}
       <div className="w-full flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/80 dark:border-emerald-800/60 px-2.5 py-1 rounded-xl text-xs">
+        <div className="flex items-center gap-1.5 bg-emerald-500/15 dark:bg-emerald-950/50 backdrop-blur-xl border border-emerald-500/30 px-2.5 py-1 rounded-xl text-xs">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span className="font-bold text-emerald-800 dark:text-emerald-300 text-[10px]">Driver Mode Active</span>
         </div>
@@ -122,16 +123,16 @@ CAR PULL Zero-Cash Escrow Active`;
             triggerHaptic('switch');
             setActiveTab('map');
           }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] text-white text-xs font-black shadow-xs hover:shadow-sm active-press transition-all"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#0D6E6E]/90 hover:bg-[#094E4E] dark:bg-[#14B8A6] dark:text-stone-950 text-white text-xs font-black shadow-md backdrop-blur-md active-press transition-all"
           title="View route and pickups on live corridor map"
         >
-          <Navigation className="w-3.5 h-3.5 text-amber-300" />
+          <Navigation className="w-3.5 h-3.5 text-amber-300 dark:text-stone-900" />
           <span>Live Route Map</span>
         </button>
       </div>
 
       {/* Driver Vehicle & Dynamic Seat Card */}
-      <div className="bg-gradient-to-b from-purple-50/70 to-white dark:from-stone-900 dark:to-[#1A1816] rounded-3xl p-4 border border-[#DDD4C5] dark:border-stone-800 shadow-2xs space-y-3">
+      <div className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-4 border border-white/60 dark:border-stone-800 shadow-2xl space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-teal-50 dark:bg-teal-950/50 text-[#0D6E6E] dark:text-teal-300">
@@ -234,7 +235,7 @@ CAR PULL Zero-Cash Escrow Active`;
       </div>
 
       {/* Driver Everyday Schedule & Route Controls */}
-      <div className="bg-gradient-to-b from-stone-50 to-white dark:from-stone-900/70 dark:to-[#1A1816] rounded-3xl p-4 border border-[#DDD4C5] dark:border-stone-800 shadow-2xs space-y-3">
+      <div className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-4 border border-white/60 dark:border-stone-800 shadow-2xl space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-purple-50 dark:bg-purple-950/40 text-[#7C3AED] dark:text-purple-400">
@@ -351,7 +352,7 @@ CAR PULL Zero-Cash Escrow Active`;
               originStreet: userStreet.name,
               originCoords: userStreet.coordinates,
               destination: driverSchedule?.destination || 'Victoria Island',
-              departureDay: (driverSchedule?.departureDay as any) || 'Today',
+              departureDay: (driverSchedule?.departureDay || 'Today') as StreetCarpoolRide['departureDay'],
               departureTime: driverSchedule?.departureTime || '07:30 AM',
               fuelSplitNgn: driverSchedule?.fuelSplitNgn || 1500,
               availableSeats: 3,
@@ -388,7 +389,7 @@ CAR PULL Zero-Cash Escrow Active`;
             {acceptedRiders.map((rider) => (
               <div
                 key={rider.id}
-                className="bg-white dark:bg-[#1A1816] rounded-2xl p-3 border border-purple-100 dark:border-stone-800 shadow-2xs flex items-center justify-between"
+                className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-3 border border-white/60 dark:border-stone-800 shadow-lg flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
                   <div className="w-9 h-9 rounded-full bg-teal-50 dark:bg-teal-950/50 text-[#0D6E6E] dark:text-teal-300 font-black text-xs flex items-center justify-center flex-shrink-0">
@@ -458,7 +459,7 @@ CAR PULL Zero-Cash Escrow Active`;
             .map((rider) => (
               <div
                 key={rider.id}
-                className="bg-white dark:bg-[#1A1816] rounded-2xl p-3.5 border border-zinc-100 dark:border-stone-800 shadow-2xs space-y-2 hover:border-purple-200 dark:hover:border-stone-700 transition-colors"
+                className="bg-white/85 dark:bg-[#181614]/85 backdrop-blur-2xl rounded-2xl p-3.5 border border-white/60 dark:border-stone-800 shadow-xl space-y-2 hover:border-teal-400/50 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
@@ -583,8 +584,8 @@ CAR PULL Zero-Cash Escrow Active`;
 
       {/* Edit / Register Car Modal */}
       {showCarModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[360px] bg-white dark:bg-[#1E1B18] rounded-3xl p-5 shadow-2xl border border-zinc-200 dark:border-stone-800 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-[360px] bg-white/90 dark:bg-[#1E1B18]/90 backdrop-blur-2xl rounded-3xl p-5 shadow-2xl border border-white/60 dark:border-stone-800 space-y-4">
             <div className="flex items-center justify-between border-b border-zinc-100 dark:border-stone-800 pb-2.5">
               <div className="flex items-center gap-2">
                 <button
