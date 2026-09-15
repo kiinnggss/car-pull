@@ -92,7 +92,8 @@ export const RoutePlannerBar: React.FC = () => {
   return (
     <>
       {/* Sleek Native Executive Transit Capsule (VisionOS Liquid Glass) */}
-      <div className="w-full bg-white/75 dark:bg-white/[0.07] backdrop-blur-2xl rounded-2xl shadow-[0_4px_20px_0_rgba(0,0,0,0.05),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_4px_20px_0_rgba(0,0,0,0.4),inset_0_1px_0_0_rgba(255,255,255,0.1)] border border-white/80 dark:border-white/12 p-1.5 sm:p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
+      {/* Sleek Corridor Transit Capsule */}
+      <div className="w-full bg-white/90 dark:bg-[#181615]/90 backdrop-blur-md rounded-2xl shadow-xs border border-stone-200/80 dark:border-stone-800 p-1.5 flex items-center justify-between gap-1.5 text-xs transition-all">
         {/* Left: Route Summary & Hub (Tap to edit route) */}
         <button
           onClick={() => {
@@ -101,24 +102,24 @@ export const RoutePlannerBar: React.FC = () => {
             setDestQuery(riderRoute.destination);
             setIsModalOpen(true);
           }}
-          className="flex items-center gap-2 text-left hover:bg-white/60 dark:hover:bg-stone-800/60 p-1.5 rounded-xl min-w-0 flex-1 transition-colors active-press"
+          className="flex items-center gap-2 text-left hover:bg-stone-50 dark:hover:bg-stone-800/60 p-1 rounded-xl min-w-0 flex-1 transition-colors active:scale-98"
           title="Tap to change commute route"
         >
           <div className="flex items-center gap-1 flex-shrink-0">
-            <span className="w-2 h-2 rounded-full bg-[#0D6E6E] ring-2 ring-teal-100" />
-            <span className="text-[#DDD4C5] text-[10px] font-bold">➔</span>
-            <span className="w-2 h-2 rounded-full bg-[#C25E2E] ring-2 ring-amber-100" />
+            <span className="w-2 h-2 rounded-full bg-[#0D6E6E]" />
+            <span className="text-stone-300 dark:text-stone-600 text-[10px] font-bold">➔</span>
+            <span className="w-2 h-2 rounded-full bg-[#C25E2E]" />
           </div>
 
           <div className="min-w-0 truncate">
             <div className="flex items-center gap-1">
-              <span className="font-serif font-black text-xs text-[#141210] dark:text-stone-100 truncate">
+              <span className="font-bold text-xs text-stone-900 dark:text-stone-100 tracking-tight truncate">
                 {riderRoute.origin.split('/')[0].trim()} ➔ {riderRoute.destination.split('(')[0].trim()}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#70665A] flex-shrink-0" />
+              <ChevronDown className="w-3 h-3 text-stone-400 flex-shrink-0" />
             </div>
-            <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-semibold truncate block">
-              Hub: <strong className="text-[#0D6E6E] dark:text-[#14B8A6]">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm}km
+            <span className="text-[10px] text-stone-500 dark:text-stone-400 font-medium truncate block">
+              Via <strong className="text-stone-700 dark:text-stone-300 font-semibold">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm}km
             </span>
           </div>
         </button>
@@ -130,11 +131,11 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowDeparturesSheet(true);
             }}
-            className="flex items-center gap-1 text-[#0D6E6E] dark:text-[#14B8A6] hover:text-[#094E4E] bg-teal-50/80 dark:bg-teal-950/60 backdrop-blur-md hover:bg-teal-100/90 px-2.5 py-1.5 rounded-xl border border-teal-200/80 dark:border-teal-800/80 font-bold text-[10.5px] active-press shadow-2xs"
+            className="flex items-center gap-1 text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/50 hover:bg-teal-100/80 px-2 py-1 rounded-xl border border-teal-200/60 dark:border-teal-900/60 font-semibold text-[11px] active:scale-95 transition-all"
             title="Browse corridor departures schedule"
           >
-            <Clock className="w-3.5 h-3.5 text-[#C25E2E]" />
-            <span>{drivers.length} Dep</span>
+            <Clock className="w-3 h-3 text-[#C25E2E]" />
+            <span>{drivers.length} rides</span>
           </button>
 
           <button
@@ -142,10 +143,10 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowSafeZoneModal(true);
             }}
-            className="p-1.5 rounded-xl bg-white/70 dark:bg-stone-800/70 backdrop-blur-md hover:bg-teal-50 text-[#0D6E6E] dark:text-[#14B8A6] border border-white/50 dark:border-stone-700 active-press shadow-2xs"
-            title="Change CCTV Safe Hub"
+            className="p-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-600 dark:text-stone-300 border border-stone-200/60 dark:border-stone-700 active:scale-95 transition-all"
+            title="CCTV Safe Hub Security"
           >
-            <ShieldCheck className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
           </button>
         </div>
       </div>

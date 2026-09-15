@@ -10,14 +10,6 @@ import { getAssetPath } from '@/lib/assets';
 import { TripCategory } from '@/lib/types';
 import { triggerHaptic } from '@/lib/haptics';
 
-const TRIP_MODES: { id: TripCategory; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-  { id: 'all', label: 'All Rides', icon: Sparkles },
-  { id: 'leaving_now', label: 'Leaving Soon', icon: Zap },
-  { id: 'morning', label: 'Morning Travel', icon: Sun },
-  { id: 'evening', label: 'Evening Return', icon: Moon },
-  { id: 'flexible', label: 'Anytime / Day', icon: Compass },
-];
-
 export const Header: React.FC = () => {
   const {
     user,
@@ -26,8 +18,6 @@ export const Header: React.FC = () => {
     escrowBalanceNgn,
     activeTab,
     setActiveTab,
-    activeTripMode,
-    setActiveTripMode,
     logout,
     theme,
     toggleTheme,
@@ -285,32 +275,7 @@ export const Header: React.FC = () => {
         </div>
       </div>
 
-      {/* Secondary Row: Trip Mode Filters with Full Horizontal Scroll (Corridor Deck Only) */}
-      {activeTab === 'deck' && (
-        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5 pt-1 w-full">
-          {TRIP_MODES.map((mode) => {
-            const isActive = activeTripMode === mode.id;
-            const Icon = mode.icon;
-            return (
-              <button
-                key={mode.id}
-                onClick={() => {
-                  triggerHaptic('switch');
-                  setActiveTripMode(mode.id);
-                }}
-                className={`flex items-center gap-1 px-3 py-1 rounded-xl text-[11px] font-bold whitespace-nowrap transition-all active-press shadow-2xs border ${
-                  isActive
-                    ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] border-[#0D6E6E] dark:border-[#14B8A6]'
-                    : 'bg-white/80 dark:bg-stone-900/80 backdrop-blur-md text-[#70665A] dark:text-stone-400 border-white/60 dark:border-stone-800 hover:text-[#141210] dark:hover:text-stone-200'
-                }`}
-              >
-                <Icon className={`w-3 h-3 ${isActive ? 'text-amber-300' : 'text-[#C25E2E] dark:text-amber-400'}`} />
-                <span>{mode.label}</span>
-              </button>
-            );
-          })}
-        </div>
-      )}
+
 
       {/* Interactive 3D Logo Hardware Cockpit Console Modal */}
       <InteractiveLogoCockpit

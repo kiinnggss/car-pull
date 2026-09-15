@@ -28,162 +28,121 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
   const confirmedPassengers = driver.cabin_passengers || [];
 
   return (
-    <div className="relative w-full h-full rounded-2xl bg-white/75 dark:bg-white/[0.07] backdrop-blur-2xl overflow-hidden shadow-[0_8px_32px_0_rgba(0,0,0,0.06),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_8px_32px_0_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.1)] flex flex-col justify-between select-none border border-white/80 dark:border-white/15 transform-gpu">
-      {/* Driver Visual with Smooth Seamless Fade into Card */}
-      <div className="absolute inset-0 z-0">
+    <div className="relative w-full h-full rounded-3xl bg-white dark:bg-[#151413] overflow-hidden shadow-[0_12px_36px_-6px_rgba(0,0,0,0.14)] dark:shadow-[0_16px_40px_-8px_rgba(0,0,0,0.7)] flex flex-col justify-between select-none border border-stone-200/80 dark:border-stone-800 transform-gpu">
+      {/* 1. Full-Bleed Photo Section with Subtle Scrim */}
+      <div className="relative w-full flex-1 min-h-0 overflow-hidden bg-stone-900">
         <img
           src={driver.avatar}
           alt={driver.name}
           loading="eager"
           className="w-full h-full object-cover object-top"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent via-15% to-white/95 dark:to-[#161412]/95 to-50%" />
-      </div>
 
-      {/* Floating Header Badges - Deep Logo Colors */}
-      <div className="relative z-10 p-2.5 sm:p-3 flex items-center justify-between">
-        <div className="flex items-center gap-1.5 flex-wrap">
+        {/* Cinematic dark scrim at bottom of photo for razor-sharp typography */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
+
+        {/* Floating Top Header Badges */}
+        <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between z-10">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setShowTrustModal(true);
             }}
-            className="inline-flex items-center gap-1 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-md transition-all active:scale-95"
+            className="inline-flex items-center gap-1.5 bg-black/45 hover:bg-black/60 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium px-2.5 py-1 rounded-full shadow-sm transition-all active:scale-95"
             title="Tap to view verified trust credentials"
           >
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
             <span>Verified</span>
+            {driver.vehicle.has_ac && (
+              <>
+                <span className="text-white/40">•</span>
+                <span className="text-cyan-300 font-semibold flex items-center gap-0.5">
+                  <Snowflake className="w-2.5 h-2.5" /> AC
+                </span>
+              </>
+            )}
           </button>
 
-          {driver.vehicle.has_ac && (
-            <span className="inline-flex items-center gap-1 bg-[#0F766E] text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
-              <Snowflake className="w-3 h-3 animate-spin" style={{ animationDuration: '10s' }} />
-              AC
-            </span>
-          )}
-
-          <span className="inline-flex items-center gap-1 bg-amber-50/90 dark:bg-amber-950/50 text-[#C25E2E] dark:text-amber-400 border border-[#C25E2E]/30 dark:border-amber-800/40 text-[9.5px] font-extrabold px-2 py-0.5 rounded-full shadow-xs backdrop-blur-md">
-            {categoryLabel}
-          </span>
+          <div className="inline-flex items-center gap-1 bg-black/45 backdrop-blur-md border border-white/20 text-white text-[11px] font-semibold px-2.5 py-1 rounded-full shadow-sm">
+            <Clock className="w-3 h-3 text-amber-300" />
+            <span>{driver.corridor.departure_time}</span>
+          </div>
         </div>
 
-        <span className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-[#141210] dark:text-stone-100 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm border border-white/60 dark:border-stone-700">
-          <Clock className="w-3 h-3 text-[#C25E2E]" />
-          {driver.corridor.departure_time}
-        </span>
-      </div>
-
-      {/* Flowing Content Section - VisionOS Liquid Glass */}
-      <div className="relative z-10 p-2.5 sm:p-3 pt-1 sm:pt-1.5 space-y-1.5 sm:space-y-2 bg-white/85 dark:bg-[#161412]/90 backdrop-blur-2xl mt-auto rounded-b-2xl border-t border-white/70 dark:border-white/10 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)]">
-        {/* Row 1: Name, Role, Rating */}
-        <div>
-          <div className="flex items-baseline justify-between gap-1">
+        {/* Driver Name and Rating resting over the scrim */}
+        <div className="absolute bottom-2.5 inset-x-3 text-white z-10">
+          <div className="flex items-baseline justify-between gap-2">
             <div className="flex items-baseline gap-1.5 truncate">
-              <h2 className="text-base font-serif font-black text-[#141210] dark:text-stone-100 tracking-tight truncate">
+              <h2 className="text-lg font-bold tracking-tight text-white truncate">
                 {driver.name}
               </h2>
               {driver.social_handle && (
-                <span className="text-[10.5px] font-mono font-bold text-[#0D6E6E] dark:text-[#14B8A6]">
+                <span className="text-[11px] font-mono text-teal-300 font-medium truncate">
                   {driver.social_handle}
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1 text-xs font-bold text-[#141210] dark:text-stone-100 flex-shrink-0">
-              <Star className="w-3.5 h-3.5 fill-[#D97706] text-[#D97706]" />
+            <div className="flex items-center gap-1 text-xs font-semibold text-amber-400 bg-black/40 backdrop-blur-xs px-2 py-0.5 rounded-full border border-white/15 flex-shrink-0">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
               <span>{driver.rating}</span>
-              <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-normal">({driver.trips_completed})</span>
+              <span className="text-white/70 font-normal text-[10px]">({driver.trips_completed})</span>
             </div>
           </div>
-
-          <p className="text-xs text-[#70665A] dark:text-stone-400 truncate mt-0.5">
-            <strong className="text-[#141210] dark:text-stone-200 font-bold">{driver.employer}</strong> • {driver.alumni}
+          <p className="text-xs text-white/85 font-medium truncate mt-0.5">
+            {driver.employer} • {driver.alumni}
           </p>
         </div>
+      </div>
 
-        {/* Row 2: Human Quote / Trip Purpose (Subtitle without bulky box) */}
-        {driver.trip_purpose && (
-          <p className="text-xs text-[#554D42] dark:text-stone-300 italic flex items-center gap-1.5 truncate leading-relaxed">
-            <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
-            <span className="truncate">&ldquo;{driver.trip_purpose}&rdquo;</span>
-          </p>
-        )}
-
-        {/* Row 3: Unified Social Connection Signals (Spark + Mood) */}
-        {(driver.mutual_spark || driver.ride_mood) && (
-          <div className="flex items-center gap-2 flex-wrap">
-            {driver.mutual_spark && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#B45309] bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 px-2.5 py-0.5 rounded-full shadow-2xs backdrop-blur-xs">
-                <Sparkles className="w-3 h-3 text-amber-500" />
-                <span>{driver.mutual_spark}</span>
-              </span>
-            )}
-
-            {driver.ride_mood === 'chat' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50/90 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/40 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
-                <MessageCircle className="w-3 h-3" />
-                <span>Chat &amp; Network</span>
-              </span>
-            )}
-            {driver.ride_mood === 'easy' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#B45309] dark:text-amber-400 bg-amber-50/90 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/40 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
-                <Coffee className="w-3 h-3" />
-                <span>Easy Flow</span>
-              </span>
-            )}
-            {driver.ride_mood === 'quiet' && (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-stone-600 dark:text-stone-300 bg-stone-100/90 dark:bg-stone-800/90 border border-stone-200/80 dark:border-stone-700 px-2.5 py-0.5 rounded-full backdrop-blur-xs">
-                <Headphones className="w-3 h-3" />
-                <span>Quiet &amp; Unwind</span>
-              </span>
-            )}
+      {/* 2. Structured Ride Information Pane */}
+      <div className="w-full bg-white dark:bg-[#151413] p-3 space-y-2 border-t border-stone-100 dark:border-stone-800 text-[#141210] dark:text-[#EDE8E1] flex-shrink-0">
+        {/* Route & Corridor */}
+        <div className="flex items-center justify-between text-xs">
+          <div className="flex items-center gap-1.5 truncate text-stone-900 dark:text-stone-100 font-semibold">
+            <MapPin className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
+            <span className="truncate">{driver.corridor.origin.split('/')[0].trim()} ➔ {driver.corridor.destination.split('(')[0].trim()}</span>
           </div>
-        )}
+          <span className="text-[11px] text-stone-500 font-medium flex-shrink-0">
+            {driver.corridor.distance_km} km
+          </span>
+        </div>
 
-        {/* Row 4: Vehicle & Cabin Co-Riders (VisionOS Glass Strip) */}
-        <div className="flex items-center justify-between text-xs text-[#141210] dark:text-stone-100 bg-white/60 dark:bg-white/[0.06] backdrop-blur-md border border-white/60 dark:border-white/10 px-2.5 py-1.5 rounded-xl">
-          <div className="flex items-center gap-1.5 min-w-0">
-            <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
-            <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate">
-              {driver.vehicle.make} {driver.vehicle.model}
-            </span>
-            <span className="text-[#C25E2E] font-mono font-black text-[9.5px] bg-white/90 dark:bg-stone-800 px-1.5 py-0.5 rounded border border-[#C25E2E]/30 flex-shrink-0">
+        {/* Vehicle & Seats */}
+        <div className="flex items-center justify-between text-xs text-stone-600 dark:text-stone-300">
+          <div className="flex items-center gap-1.5 truncate">
+            <Car className="w-3.5 h-3.5 text-stone-400 flex-shrink-0" />
+            <span className="font-medium text-stone-800 dark:text-stone-200">{driver.vehicle.make} {driver.vehicle.model}</span>
+            <span className="text-[10px] font-mono text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded border border-stone-200 dark:border-stone-700">
               {driver.vehicle.plate_number}
             </span>
           </div>
-
-          {/* Cabin Mates / Seats Left */}
-          <div className="flex items-center gap-1 flex-shrink-0">
-            {confirmedPassengers.length > 0 ? (
-              <div className="flex items-center gap-1 bg-white/80 dark:bg-stone-800/80 border border-white/50 dark:border-stone-700 px-2 py-0.5 rounded-lg">
-                <Users className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                <span className="text-[10px] font-bold text-[#141210] dark:text-stone-100">
-                  +{confirmedPassengers[0].name.split(' ')[0]} ({confirmedPassengers[0].role.split(' ')[0]})
-                </span>
-              </div>
-            ) : (
-              <span className="text-[#0D6E6E] dark:text-[#14B8A6] font-bold bg-teal-50/80 dark:bg-teal-950/60 px-2 py-0.5 rounded-full text-[10px] flex items-center gap-1 border border-teal-200/60 dark:border-teal-800/60">
-                <Users className="w-3 h-3" /> {driver.corridor.available_seats} seats left
-              </span>
-            )}
-          </div>
+          <span className="text-emerald-700 dark:text-emerald-400 font-semibold text-[11px] flex items-center gap-1">
+            <Users className="w-3 h-3" />
+            {driver.corridor.available_seats} seats left
+          </span>
         </div>
 
-        {/* Row 5: Subtle Horizontal Topics / Music Footnote */}
-        <div className="flex items-center gap-2 text-[10px] text-[#70665A] truncate pt-0.5">
-          {(driver.talk_about || driver.interests)?.slice(0, 2).map((topic, idx) => (
-            <span key={idx} className="font-bold text-[#0D6E6E]">
-              {topic.startsWith('#') ? topic : `#${topic}`}
-            </span>
-          ))}
+        {/* Trip Purpose / Vibe Note */}
+        {driver.trip_purpose && (
+          <p className="text-xs text-stone-500 dark:text-stone-400 italic line-clamp-1">
+            &ldquo;{driver.trip_purpose}&rdquo;
+          </p>
+        )}
 
+        {/* Subtle Topics / Mutual Vibe */}
+        <div className="flex items-center gap-2 text-[10.5px] text-stone-500 dark:text-stone-400 pt-1 border-t border-stone-100 dark:border-stone-800/60">
+          {driver.mutual_spark && (
+            <span className="font-semibold text-amber-600 dark:text-amber-400 flex items-center gap-1">
+              <Sparkles className="w-3 h-3" />
+              {driver.mutual_spark}
+            </span>
+          )}
+          {driver.mutual_spark && driver.music_vibe && <span>•</span>}
           {driver.music_vibe && (
-            <>
-              <span className="text-[#DDD4C5]">•</span>
-              <span className="truncate flex items-center gap-1 text-[#70665A]">
-                <Music className="w-3 h-3 text-[#C25E2E] flex-shrink-0" />
-                <span className="truncate">{driver.music_vibe}</span>
-              </span>
-            </>
+            <span className="truncate flex items-center gap-1">
+              <Music className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
+              <span className="truncate">{driver.music_vibe}</span>
+            </span>
           )}
         </div>
       </div>

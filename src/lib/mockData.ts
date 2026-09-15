@@ -270,7 +270,7 @@ export const mockCorridorDrivers: CorridorDriver[] = [
   {
     id: 'driver-107',
     name: 'Damilola Fashola',
-    avatar: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=400&q=80',
+    avatar: 'https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?auto=format&fit=crop&w=800&q=80',
     employer: 'Creative Lead @ Studio Yellow',
     employer_domain: 'yellowstudio.ng',
     alumni: 'University of Lagos',
@@ -319,7 +319,7 @@ export const mockCorridorDrivers: CorridorDriver[] = [
   {
     id: 'driver-101',
     name: 'Babatunde Adeleke',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80',
     employer: 'Flutterwave',
     employer_domain: 'flutterwavego.com',
     alumni: 'Babcock University',
