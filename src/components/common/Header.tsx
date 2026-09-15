@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
   const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/75 dark:bg-[#121110]/75 backdrop-blur-2xl border-b border-white/80 dark:border-white/10 px-3 py-1.5 space-y-1.5 transition-colors shadow-[0_4px_20px_0_rgba(0,0,0,0.04),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_4px_20px_0_rgba(0,0,0,0.5),inset_0_1px_0_0_rgba(255,255,255,0.08)]">
+    <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10 px-3 py-1.5 transition-colors shadow-xs">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
@@ -78,10 +78,10 @@ export const Header: React.FC = () => {
                   setActiveTab('map');
                 }
               }}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/40 font-bold text-xs shadow-2xs active:scale-95 transition-all"
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700/80 font-semibold text-xs transition-all active:scale-95"
               title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
             >
-              <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
               <span>{isInChatThread ? 'Inbox' : 'Map'}</span>
             </button>
           ) : (
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
                   triggerHaptic('tap');
                   setShowCockpit(true);
                 }}
-                className="p-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md border border-[#C25E2E]/40 shadow-xs hover:border-[#0D6E6E] active:scale-95 transition-all flex-shrink-0"
+                className="p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 shadow-xs hover:border-[#0F766E] active:scale-95 transition-all flex-shrink-0"
                 title="Tap to open Interactive Logo Cockpit"
               >
                 <img
@@ -102,10 +102,10 @@ export const Header: React.FC = () => {
               </button>
 
               <div className="flex items-center gap-1">
-                <span className="font-serif font-black text-sm text-[#141210] dark:text-[#EDE8E1] tracking-tight whitespace-nowrap">
+                <span className="font-bold text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
                   CAR PULL
                 </span>
-                <span className="hidden sm:inline-block bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] text-[8px] font-black px-1 py-0.2 rounded uppercase tracking-wider">
+                <span className="hidden sm:inline-block bg-[#0F766E] text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
                   LAGOS
                 </span>
               </div>
@@ -114,16 +114,16 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Dense Role Switcher (Rider / Driver) */}
-        <div className="flex bg-white/70 dark:bg-stone-900/70 backdrop-blur-md p-0.5 rounded-xl border border-white/50 dark:border-stone-800 flex-shrink-0 shadow-2xs">
+        <div className="flex bg-slate-100 dark:bg-slate-900/80 p-0.5 rounded-xl border border-slate-200/80 dark:border-slate-800 flex-shrink-0 shadow-xs">
           <button
             onClick={() => {
               triggerHaptic('switch');
               setActiveRole('rider');
             }}
-            className={`text-[11px] px-2 py-0.5 rounded-lg transition-all ${
+            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all ${
               activeRole === 'rider'
-                ? 'bg-white dark:bg-[#1E1B18] text-[#141210] dark:text-white shadow-2xs font-black'
-                : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] font-bold'
+                ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
             }`}
           >
             Rider
@@ -133,10 +133,10 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               setActiveRole('driver');
             }}
-            className={`text-[11px] px-2 py-0.5 rounded-lg transition-all ${
+            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all ${
               activeRole === 'driver'
-                ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] shadow-2xs font-black'
-                : 'text-[#70665A] dark:text-stone-400 hover:text-[#141210] font-bold'
+                ? 'bg-[#0F766E] text-white shadow-xs font-bold'
+                : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
             }`}
           >
             Driver
@@ -150,10 +150,10 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 bg-purple-50/80 dark:bg-purple-950/40 backdrop-blur-md hover:bg-purple-100/90 dark:hover:bg-purple-900/60 text-[#6D28D9] dark:text-purple-300 text-[10px] font-black px-1.5 py-1 rounded-xl border border-purple-200/60 dark:border-purple-700/50 transition-all active-press shadow-2xs"
+            className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2 py-1 rounded-xl border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs"
             title="Open Escrow Wallet"
           >
-            <Lock className="w-2.5 h-2.5 text-[#7C3AED] dark:text-purple-400" />
+            <Lock className="w-3 h-3 text-slate-500 dark:text-slate-400" />
             <span>{formatNgn(escrowBalanceNgn)}</span>
           </button>
 
@@ -163,11 +163,11 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setShowDownloadModal(true);
             }}
-            className="flex items-center gap-1 bg-[#0D6E6E]/10 dark:bg-[#14B8A6]/15 hover:bg-[#0D6E6E]/20 dark:hover:bg-[#14B8A6]/25 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-[#14B8A6]/30 px-2 py-1 rounded-xl text-xs font-bold transition-all active-press shadow-2xs backdrop-blur-md"
+            className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-slate-700/80 px-2 py-1 rounded-xl text-xs font-medium transition-all active:scale-95 shadow-xs"
             title="Download / Install CAR PULL"
           >
-            <Download className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-            <span className="hidden xs:inline text-[10px] font-black">Download</span>
+            <Download className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
+            <span className="hidden xs:inline text-[10.5px] font-bold">Download</span>
           </button>
 
           <button
@@ -175,13 +175,13 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               toggleTheme();
             }}
-            className="p-1 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 border border-white/50 dark:border-stone-800 transition-all active-press shadow-2xs text-[#141210] dark:text-stone-200"
+            className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs text-slate-600 dark:text-slate-300"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
           >
             {theme === 'dark' ? (
               <Sun className="w-3.5 h-3.5 text-amber-400" />
             ) : (
-              <Moon className="w-3.5 h-3.5 text-indigo-600" />
+              <Moon className="w-3.5 h-3.5 text-slate-600" />
             )}
           </button>
 
@@ -191,13 +191,13 @@ export const Header: React.FC = () => {
                 triggerHaptic('tap');
                 setShowProfileMenu(!showProfileMenu);
               }}
-              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-white/80 dark:bg-[#1E1B18]/80 backdrop-blur-md hover:bg-white dark:hover:bg-stone-700 border border-white/50 dark:border-stone-800 transition-all active-press shadow-2xs"
+              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs"
               title="Account & Settings"
             >
-              <div className="w-6 h-6 rounded-lg bg-[#0D6E6E]/10 dark:bg-[#14B8A6]/20 text-[#0D6E6E] dark:text-[#14B8A6] font-black text-xs flex items-center justify-center overflow-hidden border border-[#0D6E6E]/25 dark:border-[#14B8A6]/30">
+              <div className="w-6 h-6 rounded-lg bg-[#0F766E]/15 text-[#0F766E] dark:text-[#14B8A6] font-bold text-xs flex items-center justify-center overflow-hidden border border-[#0F766E]/20">
                 <span>{user.fullName ? user.fullName.charAt(0) : 'U'}</span>
               </div>
-              <ChevronDown className="w-3 h-3 text-[#70665A] dark:text-stone-400" />
+              <ChevronDown className="w-3 h-3 text-slate-400 dark:text-slate-500" />
             </button>
 
             {/* Profile Dropdown */}

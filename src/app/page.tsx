@@ -59,7 +59,7 @@ export default function Home() {
   const isDeckTab = activeTab === 'deck';
 
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F8F6F1] dark:bg-[#0A0908] bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(13,110,110,0.08),transparent_65%),radial-gradient(ellipse_80%_60%_at_50%_100%,rgba(194,94,46,0.06),transparent_65%)] dark:bg-[radial-gradient(ellipse_80%_60%_at_50%_0%,rgba(20,184,166,0.12),transparent_65%),radial-gradient(ellipse_80%_60%_at_50%_100%,rgba(124,58,237,0.08),transparent_65%)] border-x border-white/60 dark:border-white/10 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F8FAFC] dark:bg-[#0B0F12] border-x border-slate-200/80 dark:border-white/10 relative flex flex-col justify-between shadow-2xl text-slate-900 dark:text-slate-100 overflow-hidden">
       {/* Street Discovery Map: Displayed only when the Map tab is active */}
       {isMapTab && (
         <div className="absolute inset-0 z-0">
