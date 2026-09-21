@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAR PULL - Investor Pitch Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0B0F12;
+      --card-bg: #12161A;
+      --card-border: #1E262F;
+      --teal: #0F766E;
+      --teal-light: #14B8A6;
+      --amber: #F58A25;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --accent-green: #10B981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+    }
+
+    .deck-container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      max-width: 1080px;
+      height: 88vh;
+      max-height: 720px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 48px;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      overflow-y: auto;
+    }
+
+    .slide.active {
+      display: flex;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Header & Tag */
+    .slide-header {
+      margin-bottom: 24px;
+    }
+
+    .tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      background: rgba(15, 118, 110, 0.15);
+      border: 1px solid rgba(20, 184, 166, 0.3);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
+    .tag-amber {
+      color: var(--amber);
+      background: rgba(245, 138, 37, 0.15);
+      border-color: rgba(245, 138, 37, 0.3);
+    }
+
+    h1 {
+      font-size: 40px;
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+    }
+
+    h2 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    /* Content Layouts */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 20px;
+      margin: 16px 0;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(11, 15, 18, 0.6);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: rgba(20, 184, 166, 0.4);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .stat-number {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--teal-light);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-amber {
+      color: var(--amber);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    th {
+      text-align: left;
+      padding: 10px 14px;
+      background: rgba(11, 15, 18, 0.8);
+      color: var(--text-muted);
+      font-weight: 700;
+      border-bottom: 1px solid var(--card-border);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--card-border);
+      color: var(--text);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .highlight-row {
+      background: rgba(15, 118, 110, 0.08);
+      font-weight: 700;
+      color: var(--teal-light);
+    }
+
+    /* Footer Controls */
+    .slide-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--card-border);
+      padding-top: 16px;
+      margin-top: 8px;
+    }
+
+    .footer-brand {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-dim);
+      letter-spacing: 0.05em;
+    }
+
+    .footer-counter {
+      font-size: 12px;
+      font-mono: true;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.2s;
+    }
+
+    .btn-nav:hover {
+      background: var(--teal);
+      border-color: var(--teal);
+      color: white;
+    }
+
+    /* Keyboard hint */
+    .kb-hint {
+      position: absolute;
+      bottom: 8px;
+      right: 28px;
+      font-size: 10.5px;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 24px;
+        height: 94vh;
+      }
+      h1 { font-size: 28px; }
+      h2 { font-size: 22px; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-container">
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active" id="slide-1">
+      <div class="slide-header">
+        <span class="tag">Pre-Seed Investor Presentation</span>
+        <h1 style="margin-top: 12px;">CAR PULL</h1>
+        <p class="subtitle" style="font-size: 20px; color: var(--teal-light); margin-top: 8px;">
+          Corridor-Based Peer Carpooling &amp; Roadside Resilience Network
+        </p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="stat-number">400%+</div>
+            <div class="stat-label">Lagos Commute Cost Surge</div>
+            <p class="card-desc" style="margin-top: 8px;">
+              Fuel subsidy removal exploded everyday private car and taxi bills across metropolitan Lagos.
+            </p>
+          </div>
+          <div class="card">
+            <div class="stat-number stat-amber">3 Seats</div>
+            <div class="stat-label">Wasted Per Private Car</div>
+            <p class="card-desc" style="margin-top: 8px;">
+              Over 450,000 corporate vehicles travel identical expressway routes daily with empty seats.
+            </p>
+          </div>
+          <div class="card">
+            <div class="stat-number">₦1,500</div>
+            <div class="stat-label">Predictable Seat Split</div>
+            <p class="card-desc" style="margin-top: 8px;">
+              Saves riders 80% compared to Uber while offsetting up to ₦160,000 monthly for drivers.
+            </p>
+          </div>
+        </div>
+
+        <div style="background: rgba(15, 118, 110, 0.1); border: 1px solid rgba(20, 184, 166, 0.3); border-radius: 16px; padding: 16px; font-size: 13.5px; color: #E2E8F0;">
+          <strong>Target Raise:</strong> $350,000 Pre-Seed &bull; <strong>Beachhead:</strong> Lekki-VI Arterial Corridor &bull; <strong>Architect:</strong> Gbodimowo Isaac
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">CAR PULL &bull; METRO LAGOS</div>
+        <div class="footer-counter">01 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: THE MACRO PROBLEM -->
+    <div class="slide" id="slide-2">
+      <div class="slide-header">
+        <span class="tag tag-amber">The Macro Problem</span>
+        <h2>The Post-Subsidy Transit Crisis in Lagos</h2>
+        <p class="subtitle">Why private cars and commercial ride-hailing broke down simultaneously.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">&#9888; Petrol Price Explosion</div>
+            <p class="card-desc">
+              Petrol rose from ₦195/L to over ₦1,000/L. The monthly fuel cost for a Lekki-to-VI commuter climbed from ₦35,000 to over ₦160,000. Driving alone is no longer economically viable for corporate workers.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">&#9888; Ride-Hailing Is Now a Luxury</div>
+            <p class="card-desc">
+              Uber and Bolt fares reach ₦8,000 to ₦14,000 one-way during morning rush hour. A daily round-trip commute costs ₦320,000 to ₦500,000 monthly, exceeding the net take-home salary of most mid-level professionals.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">&#9888; Danfos Fail Corporate Standards</div>
+            <p class="card-desc">
+              Commercial yellow buses (danfos) and kekes lack air conditioning, safety standards, and predictable schedules. Corporate workers face theft, harassment, and severe delays.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">&#9888; Uncoordinated Corridor Waste</div>
+            <p class="card-desc">
+              450,000+ private cars sit in the same 2-hour gridlock on Lekki-Epe Expressway and Third Mainland Bridge every morning, each carrying only one occupant.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">THE PROBLEM &bull; CAR PULL</div>
+        <div class="footer-counter">02 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: THE SOLUTION -->
+    <div class="slide" id="slide-3">
+      <div class="slide-header">
+        <span class="tag">The Solution</span>
+        <h2>Closed Corporate Corridor Carpooling</h2>
+        <p class="subtitle">A structured peer transit network connecting verified professionals along primary highways.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">&#10003; Fixed Arterial Corridor Matching</div>
+            <p class="card-desc">
+              Zero residential estate detours. Drivers pick up passengers directly along primary highways at pre-approved CCTV Safe Zones (Circle Mall, TotalEnergies, Jubilee Bridge).
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">&#10003; Fair Statutory Fuel Split</div>
+            <p class="card-desc">
+              Predictable ₦1,200 to ₦1,800 contribution per seat. Riders save 80% compared to Uber. Drivers earn up to ₦5,400 daily to offset their monthly petrol budget.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">&#10003; Zero-Cash Escrow Architecture</div>
+            <p class="card-desc">
+              No physical cash ever changes hands in the car. Fares are held digitally in escrow and automatically released upon one-tap curbside boarding verification.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">&#10003; Integrated Roadside Tow Shield</div>
+            <p class="card-desc">
+              Emergency dispatch network for mechanics, flatbed towing, battery boosts, and fuel delivery guarantees commuters are never stranded along expressway bottlenecks.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">THE SOLUTION &bull; CAR PULL</div>
+        <div class="footer-counter">03 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: MARKET SIZE -->
+    <div class="slide" id="slide-4">
+      <div class="slide-header">
+        <span class="tag">Market Sizing</span>
+        <h2>A $1.8B Commute Transit Market in Lagos</h2>
+        <p class="subtitle">High spatial density and corridor concentration make Lagos uniquely suited for carpooling.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card" style="text-align: center;">
+            <div class="stat-label">Total Addressable Market</div>
+            <div class="stat-number" style="font-size: 38px; margin: 12px 0;">$1.8B</div>
+            <p class="card-desc">2.4M daily formal workers commuting in Lagos spending an average of ₦1,500 daily on transport.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-label">Serviceable Addressable Market</div>
+            <div class="stat-number stat-amber" style="font-size: 38px; margin: 12px 0;">$420M</div>
+            <p class="card-desc">650,000 corporate commuters along Lekki-Epe, Third Mainland, and Ikorodu arterial corridors.</p>
+          </div>
+          <div class="card" style="text-align: center;">
+            <div class="stat-label">Serviceable Obtainable Market</div>
+            <div class="stat-number" style="font-size: 38px; margin: 12px 0;">$18.5M</div>
+            <p class="card-desc">Capturing 30,000 daily active seats across Year 1 and Year 2 in Lagos beachhead corridors.</p>
+          </div>
+        </div>
+
+        <div class="card" style="background: rgba(18, 22, 26, 0.9);">
+          <div class="card-title">Three Core Arterial Bottlenecks</div>
+          <p class="card-desc">
+            Over 80% of Lagos corporate jobs sit on Victoria Island, Marina, and Ikoyi. All morning traffic compresses through just three arterial bridges. Capturing a single corridor creates immediate route density.
+          </p>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">MARKET OPPORTUNITY &bull; CAR PULL</div>
+        <div class="footer-counter">04 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: PRODUCT DEMO & UX -->
+    <div class="slide" id="slide-5">
+      <div class="slide-header">
+        <span class="tag">Product Experience</span>
+        <h2>Built Specifically for Lagos Drivers and Riders</h2>
+        <p class="subtitle">Streamlined mobile-first PWA with zero clutter, fast loading, and offline caching.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">For The Driver</div>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+              <li><strong>1-Tap Direction Switch:</strong> Instant toggle between Morning Outbound and Evening Return.</li>
+              <li><strong>Compact Metric Bar:</strong> Open seats, total fuel offset, and visual occupancy boxes.</li>
+              <li><strong>Live Pickup Itinerary:</strong> Ordered stops with direct Google Maps navigation waypoints.</li>
+              <li><strong>5-Min Broadcast Alert:</strong> Pings all booked passengers simultaneously when 5 minutes out.</li>
+              <li><strong>1-Tap Boarding Verification:</strong> Confirms passenger entry and releases held escrow immediately.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">For The Commuter</div>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.8; padding-left: 18px;">
+              <li><strong>Corridor Swipe Deck:</strong> Discover vetted corporate drivers leaving at your departure time.</li>
+              <li><strong>Safe Zone Pickups:</strong> Off-street CCTV-monitored meeting points with zero random street stops.</li>
+              <li><strong>Verified Professional Badges:</strong> Mandatory NIN check and employer domain verification.</li>
+              <li><strong>Zero-Cash In-App Wallet:</strong> Fast top-up, held escrow, and automated refunds if a driver flakes.</li>
+              <li><strong>Roadside Assistance Shield:</strong> Immediate mechanical support and towing if vehicle stops.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">PRODUCT &bull; CAR PULL</div>
+        <div class="footer-counter">05 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: BUSINESS MODEL & UNIT ECONOMICS -->
+    <div class="slide" id="slide-6">
+      <div class="slide-header">
+        <span class="tag">Business Model</span>
+        <h2>Unit Economics &amp; Revenue Streams</h2>
+        <p class="subtitle">Highly capital-efficient platform model with zero vehicle debt on our balance sheet.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="card">
+            <div class="stat-number">10%</div>
+            <div class="stat-label">Platform Take Rate</div>
+            <p class="card-desc" style="margin-top: 6px;">Earned on every completed fuel-split transaction in escrow.</p>
+          </div>
+          <div class="card">
+            <div class="stat-number stat-amber">₦5,000</div>
+            <div class="stat-label">Monthly B2B Pass</div>
+            <p class="card-desc" style="margin-top: 6px;">Corporate subscriptions subsidizing employee green commutes.</p>
+          </div>
+          <div class="card">
+            <div class="stat-number">15%</div>
+            <div class="stat-label">Assistance Commission</div>
+            <p class="card-desc" style="margin-top: 6px;">On roadside towing, tire swaps, and battery jump dispatches.</p>
+          </div>
+          <div class="card">
+            <div class="stat-number stat-amber">>90%</div>
+            <div class="stat-label">Gross Margin</div>
+            <p class="card-desc" style="margin-top: 6px;">Zero driver acquisition salaries and zero vehicle depreciation.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Daily Unit Economics per Active Car (3 Seats Morning + 3 Evening)</div>
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Daily Total</th>
+                <th>Monthly (20 Working Days)</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Gross Fuel Split Volume</td>
+                <td>₦9,000</td>
+                <td>₦180,000</td>
+                <td>6 seat trips x ₦1,500 average split</td>
+              </tr>
+              <tr>
+                <td>Driver Earnings (Fuel Offset)</td>
+                <td>₦8,100</td>
+                <td>₦162,000</td>
+                <td>Directly covers driver petrol consumption</td>
+              </tr>
+              <tr class="highlight-row">
+                <td>CAR PULL Platform Revenue (10%)</td>
+                <td>₦900</td>
+                <td>₦18,000</td>
+                <td>Marginal server/infrastructure cost &lt;₦150/month</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">UNIT ECONOMICS &bull; CAR PULL</div>
+        <div class="footer-counter">06 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: REGULATORY DEFENSE -->
+    <div class="slide" id="slide-7">
+      <div class="slide-header">
+        <span class="tag">Regulatory Defense</span>
+        <h2>Built Under Lagos Transport Law Section 44</h2>
+        <p class="subtitle">Why CAR PULL is legally insulated from commercial taxi crackdowns and task forces.</p>
+      </div>
+
+      <div class="slide-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Risk Dimension</th>
+              <th>Commercial E-Hailing (Uber, Bolt)</th>
+              <th>CAR PULL Peer Network</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Legal Status</strong></td>
+              <td>Commercial taxi service subject to state franchise fees.</td>
+              <td><strong style="color: var(--teal-light);">Exempt (Section 44)</strong>: Non-commercial cost sharing among private peers.</td>
+            </tr>
+            <tr>
+              <td><strong>Roadside Cash Risk</strong></td>
+              <td>Drivers carry physical cash; target for robberies and extortion.</td>
+              <td><strong style="color: var(--teal-light);">Zero-Cash Escrow</strong>: Completely digital audit trail; no money in car.</td>
+            </tr>
+            <tr>
+              <td><strong>Traffic Obstruction</strong></td>
+              <td>Stopping along expressways causes LASTMA impounds.</td>
+              <td><strong style="color: var(--teal-light);">Off-Street Safe Zones</strong>: Pickups inside private CCTV mall parking lots.</td>
+            </tr>
+            <tr>
+              <td><strong>Identity Vetting</strong></td>
+              <td>Phone numbers only; unvetted riders and fake profiles.</td>
+              <td><strong style="color: var(--teal-light);">Corporate Domain + NIN</strong>: Verified corporate peers sharing rides.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">REGULATION &bull; CAR PULL</div>
+        <div class="footer-counter">07 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: GO-TO-MARKET -->
+    <div class="slide" id="slide-8">
+      <div class="slide-header">
+        <span class="tag">Go-To-Market Flywheel</span>
+        <h2>Corridor Concentration: The Lekki-VI Beachhead</h2>
+        <p class="subtitle">We win by dominating one corridor at a time rather than spreading liquidity thin.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">Phase 1: Lekki-VI Expressway</div>
+            <div class="stat-label" style="margin-bottom: 8px;">Months 1 to 4</div>
+            <p class="card-desc">
+              Anchor at Flutterwave, Paystack, Access Bank, and Dangote Group. 250 verified car owners in corporate lots. Target: 1,500 daily passenger rides.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">Phase 2: Third Mainland Bridge</div>
+            <div class="stat-label" style="margin-bottom: 8px;">Months 5 to 8</div>
+            <p class="card-desc">
+              Connect Gbagada, Magodo, and Ikeja to Marina banking headquarters. Roll out Corporate Commute Passes to 15 corporate firms. Target: 7,500 daily rides.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">Phase 3: Greater Lagos &amp; Beyond</div>
+            <div class="stat-label" style="margin-bottom: 8px;">Months 9 to 18</div>
+            <p class="card-desc">
+              Lagos-Ibadan Expressway and Ikorodu corridors. Expand to Abuja (Airport-CBD) and Nairobi (Thika Road). Target: 25,000 daily passenger rides.
+            </p>
+          </div>
+        </div>
+
+        <div class="card" style="background: rgba(15, 118, 110, 0.08); border-color: rgba(20, 184, 166, 0.3);">
+          <div class="card-title" style="color: var(--teal-light);">The Viral Referral Flywheel</div>
+          <p class="card-desc">
+            When a driver offsets ₦8,000 on day one, they tell their corporate coworkers in the same office floor. Supply and demand grow organically inside the same office buildings.
+          </p>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">GO-TO-MARKET &bull; CAR PULL</div>
+        <div class="footer-counter">08 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: COMPETITIVE MATRIX -->
+    <div class="slide" id="slide-9">
+      <div class="slide-header">
+        <span class="tag">Competitive Landscape</span>
+        <h2>Clear Differentiation Across Key Dimensions</h2>
+        <p class="subtitle">Positioned squarely in the massive white space between chaotic danfos and overpriced taxis.</p>
+      </div>
+
+      <div class="slide-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>CAR PULL</th>
+              <th>Uber / Bolt</th>
+              <th>Commercial Danfo</th>
+              <th>Informal WhatsApp Groups</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Daily Commute Cost</strong></td>
+              <td><strong style="color: var(--teal-light);">₦1,200 - ₦1,800</strong></td>
+              <td>₦8,000 - ₦14,000</td>
+              <td>₦600 - ₦1,000</td>
+              <td>₦2,000 - ₦3,500</td>
+            </tr>
+            <tr>
+              <td><strong>AC &amp; Cleanliness</strong></td>
+              <td><strong style="color: var(--teal-light);">100% Guaranteed</strong></td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>Unpredictable</td>
+            </tr>
+            <tr>
+              <td><strong>Vetting &amp; Safety</strong></td>
+              <td><strong style="color: var(--teal-light);">NIN + Corporate ID</strong></td>
+              <td>Driver ID Only</td>
+              <td>None</td>
+              <td>Unverified Strangers</td>
+            </tr>
+            <tr>
+              <td><strong>Payment Automation</strong></td>
+              <td><strong style="color: var(--teal-light);">Automated Escrow</strong></td>
+              <td>Card / Cash</td>
+              <td>Physical Cash</td>
+              <td>Manual Bank Transfers</td>
+            </tr>
+            <tr>
+              <td><strong>Roadside Tow Shield</strong></td>
+              <td><strong style="color: var(--teal-light);">Integrated Dispatch</strong></td>
+              <td>None</td>
+              <td>None</td>
+              <td>None</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">COMPETITION &bull; CAR PULL</div>
+        <div class="footer-counter">09 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: FINANCIAL PROJECTIONS -->
+    <div class="slide" id="slide-10">
+      <div class="slide-header">
+        <span class="tag">Financial Roadmap</span>
+        <h2>24-Month Financial Growth Projections</h2>
+        <p class="subtitle">Scaling from beachhead corridor to $1.74M Annualized Run-Rate.</p>
+      </div>
+
+      <div class="slide-body">
+        <table>
+          <thead>
+            <tr>
+              <th>Growth Milestone</th>
+              <th>Month 6</th>
+              <th>Month 12</th>
+              <th>Month 18</th>
+              <th>Month 24</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Active Vehicles (Drivers)</strong></td>
+              <td>400</td>
+              <td>1,800</td>
+              <td>5,000</td>
+              <td>11,000</td>
+            </tr>
+            <tr>
+              <td><strong>Daily Completed Seats</strong></td>
+              <td>2,000</td>
+              <td>9,000</td>
+              <td>25,000</td>
+              <td>55,000</td>
+            </tr>
+            <tr>
+              <td><strong>Monthly Gross Volume (GBV)</strong></td>
+              <td>₦60.0M ($40k)</td>
+              <td>₦270.0M ($180k)</td>
+              <td>₦750.0M ($500k)</td>
+              <td>₦1.65B ($1.1M)</td>
+            </tr>
+            <tr>
+              <td><strong>Monthly Net Platform Take</strong></td>
+              <td>₦6.0M ($4k)</td>
+              <td>₦27.0M ($18k)</td>
+              <td>₦75.0M ($50k)</td>
+              <td>₦165.0M ($110k)</td>
+            </tr>
+            <tr class="highlight-row">
+              <td><strong>Annualized Run-Rate (ARR)</strong></td>
+              <td><strong>$60,000</strong></td>
+              <td><strong>$276,000</strong></td>
+              <td><strong>$780,000</strong></td>
+              <td><strong>$1,740,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="card-desc" style="font-size: 11.5px; color: var(--text-dim); text-align: right;">
+          Calculated at ₦1,500/seat fare and 20 working days/month. Exchange rate assumed at ₦1,500 = $1.00 USD.
+        </p>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">PROJECTIONS &bull; CAR PULL</div>
+        <div class="footer-counter">10 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 11: THE ASK & CAPITAL ALLOCATION -->
+    <div class="slide" id="slide-11">
+      <div class="slide-header">
+        <span class="tag tag-amber">The Ask</span>
+        <h2>Raising $350,000 Pre-Seed</h2>
+        <p class="subtitle">Funding 18 months of runway to secure the first two corridors and reach 10,000 daily rides.</p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-title" style="color: var(--amber);">Capital Allocation</div>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.9; padding-left: 18px;">
+              <li><strong>40% ($140,000) &bull; Corridor GTM:</strong> Corporate enterprise pilots, Safe Zone parking partnerships, and ambassador activations.</li>
+              <li><strong>30% ($105,000) &bull; Engineering:</strong> Spatial polygon routing, automated NIN verification pipelines, and payment rails.</li>
+              <li><strong>20% ($70,000) &bull; Operations &amp; Legal:</strong> Lagos State compliance audits and towing rescue fleet integration.</li>
+              <li><strong>10% ($35,000) &bull; Reserve:</strong> Working capital and cash runway buffer.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-title" style="color: var(--teal-light);">12-Month Target Milestones</div>
+            <ul style="font-size: 13px; color: var(--text-muted); line-height: 1.9; padding-left: 18px;">
+              <li><strong>1,800 Active Drivers:</strong> Across Lekki-VI and Third Mainland corridors.</li>
+              <li><strong>9,000 Daily Passenger Seats:</strong> High density and sub-5-minute pickup reliability.</li>
+              <li><strong>15 Corporate Contracts:</strong> Enterprise commute benefit passes with tier-1 banks and tech firms.</li>
+              <li><strong>$23,000 Monthly Revenue ($276k ARR):</strong> Unit economics proven and profitable at contribution level.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">THE ASK &bull; CAR PULL</div>
+        <div class="footer-counter">11 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 12: VISION & CONTACT -->
+    <div class="slide" id="slide-12">
+      <div class="slide-header">
+        <span class="tag">Vision &amp; Close</span>
+        <h1 style="margin-top: 12px;">Let's Rebuild Metropolitan Commuting</h1>
+        <p class="subtitle" style="font-size: 18px; color: var(--teal-light); margin-top: 8px;">
+          Zero empty seats. Fair fuel splits. Safe, dignified corporate commutes.
+        </p>
+      </div>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-title">Live PWA Application</div>
+            <p class="card-desc" style="margin-bottom: 12px;">Experience the active corridor deck and driver cockpit.</p>
+            <a href="https://kiinnggss.github.io/car-pull/" target="_blank" style="color: var(--teal-light); font-weight: 700; text-decoration: none; font-size: 13px;">
+              kiinnggss.github.io/car-pull &rarr;
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-title">Open Architecture</div>
+            <p class="card-desc" style="margin-bottom: 12px;">Explore the full Next.js codebase, algorithms, and tests.</p>
+            <a href="https://github.com/kiinnggss/car-pull" target="_blank" style="color: var(--teal-light); font-weight: 700; text-decoration: none; font-size: 13px;">
+              github.com/kiinnggss/car-pull &rarr;
+            </a>
+          </div>
+          <div class="card">
+            <div class="card-title">Direct Founder Contact</div>
+            <p class="card-desc" style="margin-bottom: 12px;">Gbodimowo Isaac &bull; Systems Architect</p>
+            <a href="mailto:isaacgbodimowo@gmail.com" style="color: var(--amber); font-weight: 700; text-decoration: none; font-size: 13px;">
+              isaacgbodimowo@gmail.com &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="slide-footer">
+        <div class="footer-brand">CAR PULL &bull; LAGOS, NIGERIA</div>
+        <div class="footer-counter">12 / 12</div>
+        <div class="nav-buttons">
+          <button class="btn-nav" onclick="prevSlide()">&larr;</button>
+          <button class="btn-nav" onclick="nextSlide()">&rarr;</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="kb-hint">Use &larr; / &rarr; arrow keys or spacebar to navigate</div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    function showSlide(index) {
+      if (index < 1) index = 1;
+      if (index > totalSlides) index = totalSlides;
+      currentSlide = index;
+
+      document.querySelectorAll('.slide').forEach((slide, i) => {
+        slide.classList.remove('active');
+        if (i + 1 === currentSlide) {
+          slide.classList.add('active');
+        }
+      });
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        showSlide(currentSlide + 1);
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        showSlide(currentSlide - 1);
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Home') {
+        showSlide(1);
+      } else if (e.key === 'End') {
+        showSlide(totalSlides);
+      }
+    });
+
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, false);
+
+    window.addEventListener('touchend', (e) => {
+      let touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 50) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 50) {
+        prevSlide();
+      }
+    }, false);
+  </script>
+</body>
+</html>
