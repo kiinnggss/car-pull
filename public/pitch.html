@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CAR PULL - Investor Pitch Deck</title>
+  <meta name="description" content="CAR PULL - Pre-Seed Investor Presentation. Closed Corporate Corridor Carpooling & Roadside Resilience Network in Metropolitan Lagos." />
+  <meta property="og:title" content="CAR PULL - Investor Pitch Deck" />
+  <meta property="og:description" content="Closed Corporate Corridor Carpooling & Roadside Resilience Network in Metropolitan Lagos." />
+  <meta property="og:image" content="https://kiinnggss.github.io/car-pull/presentation/hero.jpg" />
+  <meta property="og:url" content="https://kiinnggss.github.io/car-pull/pitch.html" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -505,12 +511,337 @@
         height: 360px;
       }
     }
+
+    /* Top Utility Toolbar */
+    .top-toolbar {
+      position: fixed;
+      top: 14px;
+      right: 24px;
+      z-index: 120;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tool-btn {
+      background: rgba(16, 21, 27, 0.78);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      backdrop-filter: blur(14px);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .tool-btn:hover {
+      border-color: var(--teal-light);
+      background: rgba(15, 118, 110, 0.28);
+      color: #FFFFFF;
+      transform: translateY(-1px);
+    }
+
+    .tool-btn:active {
+      transform: translateY(0);
+    }
+
+    .key-badge {
+      font-size: 9.5px;
+      font-family: monospace;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 1px 5px;
+      border-radius: 4px;
+      color: var(--text-dim);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 8px var(--accent-green);
+      animation: pulseGreen 2s infinite;
+    }
+
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* Modals & Overlays */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 9, 12, 0.88);
+      backdrop-filter: blur(16px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .modal-window {
+      background: #10151B;
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 1080px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(11, 15, 18, 0.85);
+    }
+
+    .modal-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.4);
+      color: #F87171;
+    }
+
+    /* Grid Overview Items */
+    .grid-overview-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 24px;
+      overflow-y: auto;
+      max-height: calc(90vh - 72px);
+    }
+
+    .grid-slide-item {
+      background: rgba(11, 15, 18, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 120px;
+    }
+
+    .grid-slide-item:hover {
+      border-color: var(--teal-light);
+      background: rgba(15, 118, 110, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .grid-slide-item.active-thumb {
+      border-color: var(--teal-light);
+      box-shadow: 0 0 16px rgba(20, 184, 166, 0.3);
+      background: rgba(15, 118, 110, 0.18);
+    }
+
+    .grid-slide-num {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--teal-light);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .grid-slide-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFFFFF;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .grid-slide-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Speaker Notes Drawer */
+    #notes-drawer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100vw;
+      background: rgba(11, 15, 18, 0.94);
+      backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(20, 184, 166, 0.4);
+      z-index: 150;
+      padding: 16px 36px 20px;
+      display: none;
+      box-shadow: 0 -16px 36px rgba(0, 0, 0, 0.8);
+    }
+
+    #notes-drawer.open {
+      display: block;
+      animation: slideUpNotes 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes slideUpNotes {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .notes-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--teal-light);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notes-content {
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #F1F5F9;
+      max-height: 110px;
+      overflow-y: auto;
+    }
+
+    .notes-content ul {
+      padding-left: 20px;
+    }
+
+    .notes-content li {
+      margin-bottom: 4px;
+    }
+
+    /* Live Demo Iframe Frame */
+    .demo-frame-container {
+      width: 100%;
+      height: calc(88vh - 65px);
+      border: none;
+      background: #07090C;
+    }
+
+    /* Print Styles for PDF Export */
+    @media print {
+      body {
+        overflow: visible !important;
+        height: auto !important;
+        background: #07090C !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .progress-bar-container,
+      .top-toolbar,
+      .slide-footer .nav-buttons,
+      .kb-hint,
+      .modal-overlay,
+      #notes-drawer {
+        display: none !important;
+      }
+      .deck-container {
+        display: block !important;
+        padding: 0 !important;
+        height: auto !important;
+      }
+      .slide {
+        display: flex !important;
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        height: 100vh !important;
+        max-height: none !important;
+        max-width: none !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 40px 48px !important;
+      }
+    }
   </style>
 </head>
 <body>
   <!-- Top Progress Bar -->
   <div class="progress-bar-container">
     <div class="progress-bar-fill" id="progress-fill"></div>
+  </div>
+
+  <!-- Top Utility Toolbar -->
+  <div class="top-toolbar">
+    <button class="tool-btn" onclick="openLiveDemo()" title="Open Live Working App">
+      <span class="live-dot"></span>
+      <span>Live App</span>
+    </button>
+    <button class="tool-btn" onclick="toggleGrid()" title="Slide Grid Overview (G)">
+      <span>&#8862; Grid</span>
+      <span class="key-badge">G</span>
+    </button>
+    <button class="tool-btn" onclick="toggleNotes()" title="Speaker Notes (N)">
+      <span>&#128221; Notes</span>
+      <span class="key-badge">N</span>
+    </button>
+    <button class="tool-btn" onclick="window.print()" title="Export / Print to PDF">
+      <span>&#128424; PDF</span>
+    </button>
+    <button class="tool-btn" onclick="toggleFullscreen()" title="Fullscreen Presentation (F)">
+      <span id="fullscreen-label">&#x26F6; Fullscreen</span>
+      <span class="key-badge">F</span>
+    </button>
   </div>
 
   <div class="deck-container">
@@ -553,12 +884,21 @@
               </p>
             </div>
 
-            <div class="card" style="background: rgba(15, 118, 110, 0.12); border-color: rgba(20, 184, 166, 0.4);">
-              <div style="font-size: 13.5px; font-weight: 700; color: #FFFFFF;">
-                Target Raise: <span style="color: var(--teal-light);">$350,000 Pre-Seed</span>
+            <div class="card" style="background: rgba(15, 118, 110, 0.14); border-color: rgba(20, 184, 166, 0.45);">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <div style="font-size: 13.5px; font-weight: 800; color: #FFFFFF;">
+                  Target Raise: <span style="color: var(--teal-light);">$350,000 Pre-Seed</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green);"></span>
+                  <span style="font-size: 10px; font-weight: 800; color: var(--accent-green); text-transform: uppercase; letter-spacing: 0.06em;">Pilot Ready</span>
+                </div>
               </div>
-              <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+              <div style="font-size: 11.5px; color: var(--text-muted);">
                 Founder: Gbodimowo Isaac &bull; Systems Architect &bull; Lagos, Nigeria
+              </div>
+              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 11.5px; color: var(--teal-light); font-weight: 600;">
+                420+ Commuters Waitlisted &bull; 85 Pre-Registered Drivers (Lekki-VI)
               </div>
             </div>
           </div>
@@ -578,7 +918,12 @@
     <!-- SLIDE 2: THE MACRO PROBLEM (WITH DRONE GRIDLOCK PHOTO) -->
     <div class="slide" id="slide-2">
       <div class="slide-header fade-up-1">
-        <span class="tag tag-amber">The Macro Problem</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+          <span class="tag tag-amber" style="margin-bottom: 0;">The Macro Problem</span>
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--amber-light); background: rgba(245, 138, 37, 0.15); border: 1px solid rgba(245, 138, 37, 0.35); padding: 3px 12px; border-radius: 999px;">
+            &#9889; Macro Catalyst: May 2023 Subsidy Scrapping &amp; Naira Float
+          </span>
+        </div>
         <h2>The Post-Subsidy Commute Crisis</h2>
         <p class="subtitle">Private driving is unaffordable, and ride-hailing is now a luxury.</p>
       </div>
@@ -875,67 +1220,129 @@
     <!-- SLIDE 7: UNIT ECONOMICS -->
     <div class="slide" id="slide-7">
       <div class="slide-header fade-up-1">
-        <span class="tag">Unit Economics</span>
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;">
+          <span class="tag" style="margin-bottom: 0;">Unit Economics &amp; Sensitivity</span>
+          <span style="font-size: 11px; font-weight: 800; color: var(--teal-light); background: rgba(20, 184, 166, 0.15); border: 1px solid rgba(20, 184, 166, 0.35); padding: 3px 12px; border-radius: 999px;">
+            &#9881; Interactive Financial Simulator Active
+          </span>
+        </div>
         <h2>High-Margin Capital Efficient Model</h2>
         <p class="subtitle">Zero vehicle depreciation or driver acquisition salaries on our balance sheet.</p>
       </div>
 
       <div class="slide-body fade-up-2">
-        <div class="grid-4">
-          <div class="card">
-            <div class="stat-number">10%</div>
-            <div class="stat-label">Platform Take Rate</div>
-            <p class="card-desc" style="margin-top: 4px;">Earned on every completed fuel-split transaction in escrow.</p>
-          </div>
-          <div class="card">
-            <div class="stat-number stat-amber">₦5,000</div>
-            <div class="stat-label">Monthly B2B Pass</div>
-            <p class="card-desc" style="margin-top: 4px;">Corporate subscriptions subsidizing employee green commutes.</p>
-          </div>
-          <div class="card">
-            <div class="stat-number">15%</div>
-            <div class="stat-label">Tow Commission</div>
-            <p class="card-desc" style="margin-top: 4px;">On roadside towing and emergency mechanical dispatches.</p>
-          </div>
-          <div class="card">
-            <div class="stat-number stat-amber">>90%</div>
-            <div class="stat-label">Gross Margin</div>
-            <p class="card-desc" style="margin-top: 4px;">Pure software matching with negligible marginal server costs.</p>
-          </div>
-        </div>
+        <div class="grid-2" style="align-items: stretch; gap: 16px;">
+          <!-- Left Column: Key Margins & Statutory Breakdown Table -->
+          <div style="display: flex; flex-direction: column; gap: 10px; justify-content: space-between;">
+            <div class="grid-2" style="gap: 10px;">
+              <div class="card card-compact" style="padding: 12px 14px;">
+                <div class="stat-number" style="font-size: 28px;">10%</div>
+                <div class="stat-label" style="font-size: 10px;">Platform Take Rate</div>
+                <p class="card-desc" style="font-size: 11px; margin-top: 2px;">Earned on fuel splits in escrow.</p>
+              </div>
+              <div class="card card-compact" style="padding: 12px 14px;">
+                <div class="stat-number stat-amber" style="font-size: 28px;">&gt;90%</div>
+                <div class="stat-label" style="font-size: 10px;">Gross Margin</div>
+                <p class="card-desc" style="font-size: 11px; margin-top: 2px;">Pure software spatial matching.</p>
+              </div>
+            </div>
 
-        <div class="card" style="margin-top: 4px;">
-          <div class="card-title">Daily Unit Economics Per Active Car (3 Seats Morning + 3 Evening)</div>
-          <table>
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th>Daily Total</th>
-                <th>Monthly (20 Working Days)</th>
-                <th>Economic Notes</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Gross Fuel Split Volume</td>
-                <td>₦9,000</td>
-                <td>₦180,000</td>
-                <td>6 seat trips x ₦1,500 average split</td>
-              </tr>
-              <tr>
-                <td>Driver Earnings (Fuel Offset)</td>
-                <td>₦8,100</td>
-                <td>₦162,000</td>
-                <td>Directly offsets driver monthly petrol consumption</td>
-              </tr>
-              <tr class="highlight-row">
-                <td>CAR PULL Platform Revenue (10%)</td>
-                <td>₦900</td>
-                <td>₦18,000</td>
-                <td>Marginal server/infrastructure cost &lt;₦150/month</td>
-              </tr>
-            </tbody>
-          </table>
+            <div class="card card-compact" style="padding: 14px 16px;">
+              <div class="card-title" style="font-size: 13px; margin-bottom: 6px;">Daily Unit Economics Per Active Car (4 Seats)</div>
+              <table>
+                <thead>
+                  <tr>
+                    <th style="padding: 6px 10px; font-size: 10px;">Item</th>
+                    <th style="padding: 6px 10px; font-size: 10px;">Daily</th>
+                    <th style="padding: 6px 10px; font-size: 10px;">Monthly (20d)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="padding: 6px 10px; font-size: 11px;">Gross Volume (4 x ₦1,500)</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦6,000</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦120,000</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 6px 10px; font-size: 11px;">Driver Net Offset (90%)</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦5,400</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦108,000</td>
+                  </tr>
+                  <tr class="highlight-row">
+                    <td style="padding: 6px 10px; font-size: 11px;">Platform Take (10%)</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦600</td>
+                    <td style="padding: 6px 10px; font-size: 11px;">₦12,000</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="font-size: 10.5px; color: var(--text-dim); margin-top: 8px;">
+                Directly offsets driver monthly petrol budget with zero taxi licensing exposure.
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Interactive Platform Revenue Simulator -->
+          <div class="card card-compact" style="background: rgba(15, 118, 110, 0.08); border-color: rgba(20, 184, 166, 0.35); padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <div class="card-title" style="color: var(--teal-light); font-size: 13.5px; margin-bottom: 0;">
+                  Live Platform Revenue Simulator
+                </div>
+                <span style="font-size: 9.5px; font-weight: 800; color: var(--teal-light); background: rgba(20, 184, 166, 0.2); padding: 2px 8px; border-radius: 999px;">
+                  Real-Time
+                </span>
+              </div>
+              <p class="card-desc" style="font-size: 11px; margin-bottom: 12px;">
+                Adjust drivers and daily volume to test revenue sensitivity live with investors.
+              </p>
+
+              <!-- Slider 1: Active Cars -->
+              <div style="margin-bottom: 12px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; margin-bottom: 4px;">
+                  <span style="color: var(--text-muted);">Active Daily Cars (Drivers):</span>
+                  <span id="calc-cars-val" style="color: var(--teal-light); font-weight: 800;">400 cars</span>
+                </div>
+                <input type="range" id="calc-cars" min="100" max="5000" step="50" value="400" style="width: 100%; accent-color: var(--teal-light); cursor: pointer;" oninput="updateCalculator()" />
+              </div>
+
+              <!-- Slider 2: Daily Seats per Car -->
+              <div style="margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; margin-bottom: 4px;">
+                  <span style="color: var(--text-muted);">Daily Completed Seats per Car:</span>
+                  <span id="calc-seats-val" style="color: var(--teal-light); font-weight: 800;">4 seats (2 AM + 2 PM)</span>
+                </div>
+                <input type="range" id="calc-seats" min="2" max="6" step="1" value="4" style="width: 100%; accent-color: var(--teal-light); cursor: pointer;" oninput="updateCalculator()" />
+              </div>
+            </div>
+
+            <!-- Calculated Metrics -->
+            <div>
+              <div class="grid-2" style="gap: 8px; margin-bottom: 8px;">
+                <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 12px;">
+                  <div style="font-size: 9.5px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Monthly Gross Volume (GBV)</div>
+                  <div id="calc-gbv" style="font-size: 16px; font-weight: 900; color: #FFFFFF; margin-top: 2px;">₦48.0M</div>
+                  <div id="calc-gbv-usd" style="font-size: 10px; color: var(--text-muted);">$32,000 / mo</div>
+                </div>
+
+                <div style="background: rgba(15, 118, 110, 0.16); border: 1px solid rgba(20, 184, 166, 0.35); border-radius: 12px; padding: 8px 12px;">
+                  <div style="font-size: 9.5px; font-weight: 700; color: var(--teal-light); text-transform: uppercase;">Monthly Platform Take (10%)</div>
+                  <div id="calc-take" style="font-size: 16px; font-weight: 900; color: var(--teal-light); margin-top: 2px;">₦4.80M</div>
+                  <div id="calc-take-usd" style="font-size: 10px; color: #A7F3D0;">$3,200 / mo</div>
+                </div>
+              </div>
+
+              <div style="background: rgba(245, 138, 37, 0.12); border: 1px solid rgba(245, 138, 37, 0.35); border-radius: 12px; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 9.5px; font-weight: 800; color: var(--amber-light); text-transform: uppercase;">Annualized Run-Rate (ARR)</div>
+                  <div id="calc-arr" style="font-size: 18px; font-weight: 900; color: #FFFFFF; margin-top: 2px;">$38,400</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 9.5px; color: var(--text-muted);">Per Driver Monthly Offset</div>
+                  <div id="calc-driver-offset" style="font-size: 13px; font-weight: 800; color: var(--amber-light);">₦108,000/mo</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1259,17 +1666,336 @@
 
   </div>
 
-  <div class="kb-hint">Use &larr; / &rarr; keys or touch swipe to navigate</div>
+  <!-- Grid Overview Modal -->
+  <div class="modal-overlay" id="grid-modal" onclick="if(event.target===this) toggleGrid()">
+    <div class="modal-window">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span>&#8862; Deck Slide Overview</span>
+          <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(12 Slides &bull; Click any slide or press G / Esc to close)</span>
+        </div>
+        <button class="modal-close-btn" onclick="toggleGrid()">&times;</button>
+      </div>
+      <div class="grid-overview-list" id="grid-thumbnails">
+        <!-- Injected dynamically by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Working App Modal -->
+  <div class="modal-overlay" id="live-demo-modal" onclick="if(event.target===this) closeLiveDemo()">
+    <div class="modal-window" style="max-width: 1200px; height: 92vh;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="live-dot"></span>
+          <span>CAR PULL Live Interactive PWA</span>
+          <span style="font-size: 11px; font-weight: normal; color: var(--teal-light); background: rgba(20, 184, 166, 0.15); padding: 2px 8px; border-radius: 999px;">Working Prototype</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <a href="./index.html" target="_blank" class="tool-btn" style="padding: 4px 10px; font-size: 11px;">
+            Open in Tab &nearr;
+          </a>
+          <button class="modal-close-btn" onclick="closeLiveDemo()">&times;</button>
+        </div>
+      </div>
+      <iframe src="./index.html" class="demo-frame-container" title="CAR PULL Live Working Application"></iframe>
+    </div>
+  </div>
+
+  <!-- Speaker Notes Drawer -->
+  <div id="notes-drawer">
+    <div class="notes-header">
+      <div class="notes-title">
+        <span>&#128221; Presenter Speaker Notes</span>
+        <span id="notes-slide-num" style="color: var(--text-muted); font-size: 11px; margin-left: 8px;">Slide 01 / 12</span>
+      </div>
+      <button class="modal-close-btn" style="width: 26px; height: 26px; font-size: 14px;" onclick="toggleNotes()">&times;</button>
+    </div>
+    <div class="notes-content" id="notes-content">
+      <!-- Injected dynamically by JS -->
+    </div>
+  </div>
+
+  <div class="kb-hint">Nav: &larr; &rarr; / Space &bull; G: Grid &bull; N: Notes &bull; F: Fullscreen &bull; Esc: Close</div>
 
   <script>
     let currentSlide = 1;
     const totalSlides = 12;
+
+    const slideMetadata = [
+      {
+        num: "01",
+        tag: "Pre-Seed Raise",
+        title: "CAR PULL Cover",
+        desc: "Corridor-based peer carpooling & roadside resilience network.",
+        notes: [
+          "Hook: Fuel prices in Lagos jumped over 400% after subsidy removal, making private driving unaffordable.",
+          "Introduce founder: Gbodimowo Isaac, Systems Architect living and commuting across Lagos.",
+          "Traction signal: 420+ commuters waitlisted, 85 pre-registered drivers along Lekki-VI.",
+          "The Ask: Raising $350k for 18 months runway to dominate two primary corridors."
+        ]
+      },
+      {
+        num: "02",
+        tag: "The Macro Problem",
+        title: "Post-Subsidy Commute Crisis",
+        desc: "Petrol surge, ₦10k taxi rides, unsafe yellow danfos.",
+        notes: [
+          "Lekki-Epe expressway is one of Africa's densest morning traffic bottlenecks.",
+          "A daily Uber ride costs ₦10k one-way (₦400k monthly), outstripping net take-home pay.",
+          "Yellow danfos lack AC, scheduling, and expose corporate riders to harassment.",
+          "Why Now: The May 2023 subsidy removal and currency float made carpooling an economic necessity."
+        ]
+      },
+      {
+        num: "03",
+        tag: "The Solution",
+        title: "Corporate Corridor Carpooling",
+        desc: "Empty seats into air-conditioned shared commutes.",
+        notes: [
+          "Crucial distinction: Fixed arterial matching with zero residential estate detours.",
+          "Riders save 80% versus taxi apps (₦1,500 statutory fuel split).",
+          "Zero-cash escrow: digital wallet automatically releases upon passenger boarding.",
+          "CCTV safe zones: pickups occur exclusively inside off-street commercial mall parking bays."
+        ]
+      },
+      {
+        num: "04",
+        tag: "Driver Product",
+        title: "Streamlined Driver Cockpit",
+        desc: "One-handed operation sitting in traffic before rolling out.",
+        notes: [
+          "Show the cockpit UI: 1-tap toggle between Morning Outbound and Evening Return.",
+          "Live Maps Itinerary sequences all stops into Google Maps automatically.",
+          "5-Min Alert broadcast notifies booked riders to wait curbside at the commercial hub.",
+          "1-tap boarding releases held escrow into driver balance with zero delay."
+        ]
+      },
+      {
+        num: "05",
+        tag: "Safety & Resilience",
+        title: "Integrated Tow Shield",
+        desc: "Flatbed towing, mechanics, and NIN peer verification.",
+        notes: [
+          "Commuter anxiety in Lagos is breaking down along highway bridges or expressways.",
+          "Our Tow Shield dispatches vetted flatbed tow trucks and mechanics on-demand.",
+          "Escrow payouts eliminate roadside price gouging and disputes.",
+          "Identity is locked to National Identity Number (NIN) and verified corporate email domains."
+        ]
+      },
+      {
+        num: "06",
+        tag: "Market Opportunity",
+        title: "$1.8B Annual Commuter Spend",
+        desc: "Three high-density arterial beachhead corridors.",
+        notes: [
+          "Show the corridor map: Banana Island, Lekki-Ikoyi Link, Victoria Island CBD.",
+          "Total Addressable Market is $1.8B across 2.4M formal workers in Lagos.",
+          "Beachhead focus: Lekki-Epe first, followed by Third Mainland Bridge and Ikorodu.",
+          "We do not need all of Nigeria on day one; one corridor yields millions in gross volume."
+        ]
+      },
+      {
+        num: "07",
+        tag: "Unit Economics",
+        title: "High-Margin Capital Efficiency",
+        desc: "10% take rate, zero vehicles on our balance sheet.",
+        notes: [
+          "Zero asset ownership: we own no cars, hire no drivers, pay no fuel.",
+          "10% platform take on every completed ride in digital escrow.",
+          "Invite investor: Test the sensitivity simulator on the right.",
+          "At 400 cars and 4 daily seats, platform generates ₦4.8M ($3,200) net take monthly."
+        ]
+      },
+      {
+        num: "08",
+        tag: "Regulatory Defense",
+        title: "Section 44 Compliance",
+        desc: "Insulated from municipal commercial taxi crackdowns.",
+        notes: [
+          "Section 44 of the Lagos State Transport Reform Law explicitly permits non-commercial statutory cost-sharing.",
+          "Zero cash handled in vehicles prevents police extortion.",
+          "Off-street mall pickups avoid LASTMA obstruction fines.",
+          "Corporate domain verification protects passenger community trust."
+        ]
+      },
+      {
+        num: "09",
+        tag: "Go-To-Market",
+        title: "Corridor Concentration Strategy",
+        desc: "Office tower viral referrals without heavy ad spend.",
+        notes: [
+          "Phase 1: Lekki-VI Expressway with Flutterwave, Paystack, Access Bank anchor hubs.",
+          "Supply and demand grow organically on the same office floors.",
+          "Drivers offset ₦100k+ monthly and refer colleagues in the same building.",
+          "Phase 2: Third Mainland Bridge connecting Ikeja/Magodo to Marina banking towers."
+        ]
+      },
+      {
+        num: "10",
+        tag: "Competition",
+        title: "Core Transit White Space",
+        desc: "Positioned between danfos and overpriced taxi apps.",
+        notes: [
+          "Yellow buses are cheap but dangerous, unairconditioned, and erratic.",
+          "Uber and Bolt are premium but unaffordable for daily commutes (₦10k each way).",
+          "Informal WhatsApp carpool groups lack vetting, insurance, and escrow.",
+          "CAR PULL captures the middle: ₦1,500 with guaranteed AC and verified corporate peers."
+        ]
+      },
+      {
+        num: "11",
+        tag: "Financial Growth",
+        title: "24-Month Projections",
+        desc: "Scaling from beachhead corridor to $1.74M ARR.",
+        notes: [
+          "Month 6: 400 drivers, $60k ARR.",
+          "Month 12: 1,800 drivers, $276k ARR.",
+          "Month 24: 11,000 drivers across 3 corridors, $1.74M ARR.",
+          "Calculations assume conservative 20 working days/month and ₦1,500/USD."
+        ]
+      },
+      {
+        num: "12",
+        tag: "The Ask",
+        title: "Raising $350k Pre-Seed",
+        desc: "18 months runway to capture 2 primary corridors.",
+        notes: [
+          "40% Corridor GTM and corporate partnerships.",
+          "30% Engineering: spatial corridor engine and automated NIN KYC.",
+          "20% Operations and towing fleet partner integration.",
+          "Invite the investor to test the live app or open the link directly."
+        ]
+      }
+    ];
 
     function updateProgressBar() {
       const fill = document.getElementById('progress-fill');
       if (fill) {
         fill.style.width = ((currentSlide / totalSlides) * 100) + '%';
       }
+    }
+
+    function updateSpeakerNotes() {
+      const notesTitle = document.getElementById('notes-slide-num');
+      const notesBody = document.getElementById('notes-content');
+      if (!notesBody || !notesTitle) return;
+
+      const meta = slideMetadata[currentSlide - 1];
+      if (!meta) return;
+
+      notesTitle.innerHTML = `Slide ${meta.num} / 12 &bull; <strong style="color: #FFFFFF;">${meta.title}</strong>`;
+      let html = '<ul style="margin: 0; padding-left: 18px;">';
+      meta.notes.forEach(point => {
+        html += `<li style="margin-bottom: 4px;">${point}</li>`;
+      });
+      html += '</ul>';
+      notesBody.innerHTML = html;
+    }
+
+    function toggleNotes() {
+      const drawer = document.getElementById('notes-drawer');
+      if (!drawer) return;
+      drawer.classList.toggle('open');
+      if (drawer.classList.contains('open')) {
+        updateSpeakerNotes();
+      }
+    }
+
+    function renderGridThumbnails() {
+      const list = document.getElementById('grid-thumbnails');
+      if (!list) return;
+      list.innerHTML = '';
+      slideMetadata.forEach((item, idx) => {
+        const slideIndex = idx + 1;
+        const card = document.createElement('div');
+        card.className = 'grid-slide-item' + (slideIndex === currentSlide ? ' active-thumb' : '');
+        card.innerHTML = `
+          <div>
+            <div class="grid-slide-num">Slide ${item.num} &bull; ${item.tag}</div>
+            <div class="grid-slide-title">${item.title}</div>
+          </div>
+          <div class="grid-slide-desc">${item.desc}</div>
+        `;
+        card.onclick = () => {
+          showSlide(slideIndex);
+          toggleGrid();
+        };
+        list.appendChild(card);
+      });
+    }
+
+    function toggleGrid() {
+      const modal = document.getElementById('grid-modal');
+      if (!modal) return;
+      const isActive = modal.classList.contains('active');
+      if (isActive) {
+        modal.classList.remove('active');
+      } else {
+        renderGridThumbnails();
+        modal.classList.add('active');
+      }
+    }
+
+    function openLiveDemo() {
+      const modal = document.getElementById('live-demo-modal');
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeLiveDemo() {
+      const modal = document.getElementById('live-demo-modal');
+      if (modal) modal.classList.remove('active');
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+        const lbl = document.getElementById('fullscreen-label');
+        if (lbl) lbl.textContent = '⛶ Exit Full';
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+          const lbl = document.getElementById('fullscreen-label');
+          if (lbl) lbl.textContent = '⛶ Fullscreen';
+        }
+      }
+    }
+
+    function updateCalculator() {
+      const carsInput = document.getElementById('calc-cars');
+      const seatsInput = document.getElementById('calc-seats');
+      if (!carsInput || !seatsInput) return;
+
+      const cars = parseInt(carsInput.value, 10);
+      const seats = parseInt(seatsInput.value, 10);
+      const fare = 1500;
+      const days = 20;
+      const fxRate = 1500;
+
+      document.getElementById('calc-cars-val').textContent = cars.toLocaleString() + ' cars';
+      document.getElementById('calc-seats-val').textContent = seats + ' seats (' + Math.floor(seats/2) + ' AM + ' + Math.ceil(seats/2) + ' PM)';
+
+      const monthlyGrossVolume = cars * seats * fare * days;
+      const monthlyTake = monthlyGrossVolume * 0.10;
+      const monthlyGrossUsd = Math.round(monthlyGrossVolume / fxRate);
+      const monthlyTakeUsd = Math.round(monthlyTake / fxRate);
+      const arrUsd = monthlyTakeUsd * 12;
+      const driverOffset = (seats * fare * days) * 0.90;
+
+      const formatNgn = (n) => {
+        if (n >= 1000000000) return '₦' + (n / 1000000000).toFixed(2) + 'B';
+        if (n >= 1000000) return '₦' + (n / 1000000).toFixed(1) + 'M';
+        return '₦' + n.toLocaleString();
+      };
+
+      document.getElementById('calc-gbv').textContent = formatNgn(monthlyGrossVolume);
+      document.getElementById('calc-gbv-usd').textContent = '$' + monthlyGrossUsd.toLocaleString() + ' / mo';
+
+      document.getElementById('calc-take').textContent = formatNgn(monthlyTake);
+      document.getElementById('calc-take-usd').textContent = '$' + monthlyTakeUsd.toLocaleString() + ' / mo';
+
+      document.getElementById('calc-arr').textContent = '$' + arrUsd.toLocaleString();
+      document.getElementById('calc-driver-offset').textContent = '₦' + driverOffset.toLocaleString() + '/mo';
     }
 
     function showSlide(index, direction) {
@@ -1289,6 +2015,7 @@
       });
 
       updateProgressBar();
+      updateSpeakerNotes();
     }
 
     function nextSlide() {
@@ -1304,7 +2031,35 @@
     }
 
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+      // Close modal on Escape
+      if (e.key === 'Escape') {
+        const grid = document.getElementById('grid-modal');
+        if (grid && grid.classList.contains('active')) {
+          grid.classList.remove('active');
+          return;
+        }
+        const demo = document.getElementById('live-demo-modal');
+        if (demo && demo.classList.contains('active')) {
+          demo.classList.remove('active');
+          return;
+        }
+        const notes = document.getElementById('notes-drawer');
+        if (notes && notes.classList.contains('open')) {
+          notes.classList.remove('open');
+          return;
+        }
+      }
+
+      // Ignore presentation keys if in interactive slider
+      if (e.target && e.target.tagName === 'INPUT') return;
+
+      if (e.key === 'g' || e.key === 'G') {
+        toggleGrid();
+      } else if (e.key === 'n' || e.key === 'N') {
+        toggleNotes();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullscreen();
+      } else if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
         nextSlide();
       } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
         prevSlide();
@@ -1330,7 +2085,10 @@
       }
     }, false);
 
+    // Initial setup
     updateProgressBar();
+    updateCalculator();
+    updateSpeakerNotes();
   </script>
 </body>
 </html>
