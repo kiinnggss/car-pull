@@ -176,8 +176,12 @@ interface AppState {
   availableSeats: number;
   corridorRiders: WaitingRider[];
   acceptedRiders: WaitingRider[];
+  boardedRiderIds: string[];
+  lastBroadcastPing: string | null;
   acceptRiderIntoCarpool: (riderId: string) => void;
   removeRiderFromCarpool: (riderId: string) => void;
+  markRiderBoarded: (riderId: string) => void;
+  sendBroadcastPing: () => void;
 
   // Offline Verification
   offlinePin: string;
@@ -993,13 +997,30 @@ export const useAppStore = create<AppState>()(
 
   // Corridor Direction & Traffic State
   commuteDirection: 'morning',
-  setCommuteDirection: (dir) => set({ commuteDirection: dir }),
-  toggleCommuteDirection: () =>
+  setCommuteDirection: (dir) => {
     set((state) => ({
-      commuteDirection: state.commuteDirection === 'morning' ? 'evening' : 'morning',
-      activeDriverIndex: 0,
-      currentDriver: state.drivers[0] || null,
-    })),
+      commuteDirection: dir,
+      driverSchedule: state.driverSchedule ? {
+        ...state.driverSchedule,
+        destination: dir === 'morning' ? 'Victoria Island' : 'Ajah Jubilee Bridge',
+        departureTime: dir === 'morning' ? '07:30 AM' : '05:30 PM',
+      } : state.driverSchedule,
+    }));
+  },
+  toggleCommuteDirection: () =>
+    set((state) => {
+      const nextDir = state.commuteDirection === 'morning' ? 'evening' : 'morning';
+      return {
+        commuteDirection: nextDir,
+        activeDriverIndex: 0,
+        currentDriver: state.drivers[0] || null,
+        driverSchedule: state.driverSchedule ? {
+          ...state.driverSchedule,
+          destination: nextDir === 'morning' ? 'Victoria Island' : 'Ajah Jubilee Bridge',
+          departureTime: nextDir === 'morning' ? '07:30 AM' : '05:30 PM',
+        } : state.driverSchedule,
+      };
+    }),
   trafficAlerts: mockTrafficAlerts,
 
   // Driver Carpool Management
@@ -1020,6 +1041,8 @@ export const useAppStore = create<AppState>()(
   availableSeats: 3,
   corridorRiders: mockCorridorRiders,
   acceptedRiders: [],
+  boardedRiderIds: [],
+  lastBroadcastPing: null,
   acceptRiderIntoCarpool: (riderId) => {
     const state = get();
     if (state.availableSeats <= 0) return;
@@ -1085,10 +1108,41 @@ export const useAppStore = create<AppState>()(
     set({
       availableSeats: Math.min(3, state.availableSeats + 1),
       acceptedRiders: newAccepted,
+      boardedRiderIds: state.boardedRiderIds.filter((id) => id !== riderId),
       corridorRiders: state.corridorRiders.map((r) =>
         r.id === riderId ? { ...r, status: 'waiting' as const } : r
       ),
       activeMatches: state.activeMatches.filter((m) => m.riderId !== riderId),
+    });
+  },
+
+  markRiderBoarded: (riderId: string) => {
+    const state = get();
+    if (state.boardedRiderIds.includes(riderId)) return;
+    const rider = state.acceptedRiders.find((r) => r.id === riderId);
+    const fare = state.driverSchedule?.fuelSplitNgn || 1500;
+
+    const newTx: EscrowTransaction = {
+      id: `tx-release-${Date.now()}`,
+      type: 'RELEASE_CARPOOL',
+      amountNgn: fare,
+      reference: `REL-${Date.now().toString().slice(-5)}`,
+      description: `Escrow released for ${rider?.name || 'Passenger'} boarding`,
+      timestamp: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
+      status: 'released',
+    };
+
+    set({
+      boardedRiderIds: [...state.boardedRiderIds, riderId],
+      escrowBalanceNgn: state.escrowBalanceNgn + fare,
+      heldEscrowNgn: Math.max(0, state.heldEscrowNgn - fare),
+      escrowTransactions: [newTx, ...state.escrowTransactions],
+    });
+  },
+
+  sendBroadcastPing: () => {
+    set({
+      lastBroadcastPing: new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' }),
     });
   },
 
@@ -1617,6 +1671,7 @@ export const useAppStore = create<AppState>()(
       driverVehicle: state.driverVehicle,
       driverSchedule: state.driverSchedule,
       acceptedRiders: state.acceptedRiders,
+      boardedRiderIds: state.boardedRiderIds,
       availableSeats: state.availableSeats,
     }),
   }
