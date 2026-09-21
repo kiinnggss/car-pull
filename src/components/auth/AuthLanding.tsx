@@ -64,7 +64,7 @@ export const AuthLanding: React.FC = () => {
       particleCount: 35,
       spread: 55,
       origin: { y: 0.6 },
-      colors: ['#0D6E6E', '#C25E2E', '#7C3AED'],
+      colors: ['#0F766E', '#F58A25', '#14B8A6'],
     });
   };
 
@@ -90,7 +90,7 @@ export const AuthLanding: React.FC = () => {
       particleCount: 45,
       spread: 60,
       origin: { y: 0.6 },
-      colors: ['#0D6E6E', '#C25E2E', '#7C3AED'],
+      colors: ['#0F766E', '#F58A25', '#14B8A6'],
     });
   };
 

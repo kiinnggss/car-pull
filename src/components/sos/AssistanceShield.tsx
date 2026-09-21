@@ -77,26 +77,26 @@ export const AssistanceShield: React.FC = () => {
           </p>
         </div>
 
-        {/* Dynamic Countdown Timer Shield - Soft Gradient */}
-        <div className="bg-gradient-to-b from-purple-50/80 to-white dark:from-purple-950/30 dark:to-[#1A1816] rounded-3xl p-5 text-center border border-purple-100 dark:border-stone-800 shadow-sm">
-          <span className="text-[10px] text-zinc-500 dark:text-stone-400 uppercase tracking-widest font-bold block">
+        {/* Dynamic Countdown Timer Shield - Clean Slate */}
+        <div className="bg-slate-50 dark:bg-[#12161A] rounded-3xl p-5 text-center border border-slate-200 dark:border-slate-800 shadow-sm">
+          <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">
             ESTIMATED UNIT ARRIVAL
           </span>
-          <div className="text-4xl font-black text-zinc-900 dark:text-stone-100 tracking-tight my-1 font-mono flex items-center justify-center gap-2">
+          <div className="text-4xl font-black text-slate-900 dark:text-slate-100 tracking-tight my-1 font-mono flex items-center justify-center gap-2">
             <Clock className="w-6 h-6 text-red-600 dark:text-red-400 animate-pulse" />
             <span>{formattedCountdown}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 bg-white dark:bg-stone-900 px-3 py-1 rounded-full text-xs text-zinc-700 dark:text-stone-300 font-mono shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 px-3 py-1 rounded-full text-xs text-slate-700 dark:text-slate-300 font-mono shadow-2xs border border-slate-200 dark:border-slate-800">
             <span>Auth Code:</span>
-            <strong className="text-[#7C3AED] dark:text-purple-400">{activeIncident.dispatchAuthCode}</strong>
+            <strong className="text-[#0F766E] dark:text-[#14B8A6]">{activeIncident.dispatchAuthCode}</strong>
           </div>
         </div>
       </div>
 
       {/* Operator & Vehicle Digital Clearance Credentials - Streamlined Card */}
-      <div className="w-full my-3 bg-zinc-50 dark:bg-[#1A1816] border border-transparent dark:border-stone-800 rounded-3xl p-4 space-y-3">
-        <div className="flex items-center justify-between border-b border-zinc-200/60 dark:border-stone-800 pb-2.5">
+      <div className="w-full my-3 bg-slate-50 dark:bg-[#12161A] border border-slate-200 dark:border-slate-800 rounded-3xl p-4 space-y-3">
+        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
           <div className="flex items-center gap-2.5">
             <img
               src={selectedProvider.operator_photo}
@@ -105,10 +105,10 @@ export const AssistanceShield: React.FC = () => {
             />
             <div>
               <div className="flex items-center gap-1">
-                <h3 className="text-sm font-black text-zinc-900 dark:text-stone-100">{selectedProvider.operator_name}</h3>
+                <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">{selectedProvider.operator_name}</h3>
                 <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
-              <p className="text-xs text-zinc-500 dark:text-stone-400">{selectedProvider.name}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">{selectedProvider.name}</p>
               <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded inline-block mt-0.5 font-semibold">
                 {selectedProvider.lasdri_id}
               </span>
@@ -127,25 +127,25 @@ export const AssistanceShield: React.FC = () => {
         {/* Tow Truck Clearance Info Line */}
         <div className="flex items-center justify-between text-xs py-1">
           <div>
-            <span className="text-[10px] text-zinc-400 dark:text-stone-500 block uppercase font-medium">Plate</span>
-            <span className="font-black text-zinc-900 dark:text-stone-100 font-mono tracking-wider">{selectedProvider.plate_number}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Plate</span>
+            <span className="font-bold text-slate-900 dark:text-slate-100 font-mono tracking-wider">{selectedProvider.plate_number}</span>
           </div>
-          <span className="text-zinc-300 dark:text-stone-700">•</span>
+          <span className="text-slate-300 dark:text-slate-700">•</span>
           <div>
-            <span className="text-[10px] text-zinc-400 dark:text-stone-500 block uppercase font-medium">Equipment</span>
-            <span className="font-semibold text-zinc-800 dark:text-stone-200">{selectedProvider.truck_type}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Equipment</span>
+            <span className="font-semibold text-slate-800 dark:text-slate-200">{selectedProvider.truck_type}</span>
           </div>
-          <span className="text-zinc-300 dark:text-stone-700">•</span>
+          <span className="text-slate-300 dark:text-slate-700">•</span>
           <div>
-            <span className="text-[10px] text-zinc-400 dark:text-stone-500 block uppercase font-medium">Escrow</span>
-            <span className="font-black text-emerald-700 dark:text-emerald-400">{formatNgn(activeIncident.escrowAmountNgn)}</span>
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Escrow</span>
+            <span className="font-bold text-emerald-700 dark:text-emerald-400">{formatNgn(activeIncident.escrowAmountNgn)}</span>
           </div>
         </div>
 
         {/* Replacement Parts Review Bar */}
-        <div className="bg-white dark:bg-stone-900 rounded-2xl p-2.5 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2 text-zinc-700 dark:text-stone-300">
-            <FileCheck className="w-4 h-4 text-[#7C3AED] dark:text-purple-400" />
+        <div className="bg-white dark:bg-slate-900 rounded-2xl p-2.5 flex items-center justify-between text-xs border border-slate-200 dark:border-slate-800">
+          <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
+            <FileCheck className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
             <span className="font-medium text-[11px]">Parts Receipt Approval</span>
           </div>
           <button
@@ -153,7 +153,7 @@ export const AssistanceShield: React.FC = () => {
             className={`text-[11px] font-bold px-2.5 py-1 rounded-lg transition-all ${
               receiptApproved
                 ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300'
-                : 'bg-[#7C3AED] text-white'
+                : 'bg-[#0F766E] text-white'
             }`}
           >
             {receiptApproved ? 'Approved' : 'Review'}

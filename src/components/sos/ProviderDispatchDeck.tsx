@@ -74,8 +74,8 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                 !prov.compatible
                   ? 'bg-zinc-50/60 dark:bg-stone-900/60 border border-transparent dark:border-stone-850 opacity-75'
                   : isTopPriority
-                  ? 'bg-white dark:bg-[#1A1816] ring-1.5 ring-[#7C3AED] dark:ring-purple-500 shadow-sm'
-                  : 'bg-white dark:bg-[#1A1816] border border-zinc-100 dark:border-stone-800 shadow-2xs'
+                  ? 'bg-white dark:bg-[#12161A] ring-1.5 ring-[#0F766E] dark:ring-teal-500 shadow-sm'
+                  : 'bg-white dark:bg-[#12161A] border border-slate-200 dark:border-slate-800 shadow-2xs'
               }`}
             >
               {/* Header: Operator Photo, Name, Rating, and Priority Badge */}
@@ -88,17 +88,17 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                     className="w-10 h-10 rounded-xl object-cover"
                   />
                   <div>
-                    <h4 className="text-xs font-black text-zinc-900 dark:text-stone-100 leading-tight">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 leading-tight">
                       {prov.name}
                     </h4>
-                    <span className="text-[11px] text-zinc-400 dark:text-stone-400 block">
+                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
                       Lead: {prov.operator_name}
                     </span>
                   </div>
                 </div>
 
                 {isTopPriority && (
-                  <span className="text-[9px] font-extrabold uppercase tracking-wider bg-[#7C3AED] text-white px-2 py-0.5 rounded-md">
+                  <span className="text-[9px] font-extrabold uppercase tracking-wider bg-[#0F766E] text-white px-2 py-0.5 rounded-md">
                     Top Match
                   </span>
                 )}
@@ -106,8 +106,8 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
 
               {/* Equipment Spec & LASDRI Certification */}
               <div className="mt-2 flex items-center gap-2 flex-wrap text-[10px]">
-                <span className="text-zinc-600 dark:text-stone-300 bg-zinc-100 dark:bg-stone-850 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                  <Truck className="w-3 h-3 text-[#7C3AED] dark:text-purple-400" />
+                <span className="text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  <Truck className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6]" />
                   {prov.truck_type}
                 </span>
 

@@ -18,7 +18,7 @@ export const BottomNav: React.FC = () => {
   const matchCount = activeMatches.length;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-t border-slate-200/80 dark:border-white/10 px-2 pt-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 px-2 pt-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
       <div className="flex items-center justify-around">
         {/* Tab 1: Swipe Cards Deck */}
         <button
@@ -29,7 +29,7 @@ export const BottomNav: React.FC = () => {
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active:scale-95 ${
             activeTab === 'deck'
               ? 'text-[#0F766E] dark:text-[#14B8A6] font-bold'
-              : 'text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
           title="Swipe carpool cards deck"
         >
@@ -46,7 +46,7 @@ export const BottomNav: React.FC = () => {
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active:scale-95 ${
             activeTab === 'map'
               ? 'text-[#0F766E] dark:text-[#14B8A6] font-bold'
-              : 'text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
           title="Street-level carpool discovery map"
         >
@@ -63,7 +63,7 @@ export const BottomNav: React.FC = () => {
           className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active:scale-95 ${
             activeTab === 'matches'
               ? 'text-[#0F766E] dark:text-[#14B8A6] font-bold'
-              : 'text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <div className="relative">
@@ -102,7 +102,7 @@ export const BottomNav: React.FC = () => {
           className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active:scale-95 ${
             activeTab === 'chats'
               ? 'text-[#0F766E] dark:text-[#14B8A6] font-bold'
-              : 'text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <div className="relative">
@@ -125,7 +125,7 @@ export const BottomNav: React.FC = () => {
           className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active:scale-95 ${
             activeTab === 'pass'
               ? 'text-[#0F766E] dark:text-[#14B8A6] font-bold'
-              : 'text-slate-400 dark:text-slate-500 hover:text-slate-800 dark:hover:text-slate-200'
+              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
           }`}
         >
           <QrCode className="w-5 h-5" />

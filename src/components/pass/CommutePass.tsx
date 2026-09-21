@@ -171,7 +171,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
               <rect x="60" y="95" width="25" height="5" />
               <rect x="95" y="95" width="10" height="5" />
 
-              <circle cx="60" cy="60" r="10" fill="#7C3AED" />
+              <circle cx="60" cy="60" r="10" fill="#0F766E" />
             </svg>
           </div>
 
@@ -191,9 +191,9 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
             <span className="font-bold">{currentTime}</span>
           </div>
-          <div className="flex items-center gap-1 bg-white dark:bg-[#1A1816] px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
-            <span className="font-sans font-bold text-zinc-600 dark:text-stone-400">PIN:</span>
-            <strong className="text-[#7C3AED] dark:text-purple-400 font-black tracking-widest">{offlinePin}</strong>
+          <div className="flex items-center gap-1 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800">
+            <span className="font-sans font-bold text-slate-600 dark:text-slate-400">PIN:</span>
+            <strong className="text-[#0F766E] dark:text-[#14B8A6] font-black tracking-widest">{offlinePin}</strong>
           </div>
         </div>
 

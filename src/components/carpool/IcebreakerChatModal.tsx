@@ -120,7 +120,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       particleCount: 25,
       spread: 40,
       origin: { y: 0.6 },
-      colors: ['#0D6E6E', '#C25E2E', '#7C3AED'],
+      colors: ['#0F766E', '#F58A25', '#14B8A6'],
     });
 
     setSentSuccess(true);

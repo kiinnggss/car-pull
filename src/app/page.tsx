@@ -49,7 +49,7 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen bg-[#F6F2EA] dark:bg-[#121110] border-x border-[#DDD4C5] dark:border-stone-800 relative flex flex-col justify-between shadow-2xl text-[#141210] dark:text-[#EDE8E1] overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen bg-[#F8FAFC] dark:bg-[#0B0F12] relative flex flex-col justify-between shadow-2xl text-slate-900 dark:text-slate-100 overflow-x-hidden">
         <AuthLanding />
       </main>
     );
@@ -59,7 +59,7 @@ export default function Home() {
   const isDeckTab = activeTab === 'deck';
 
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F8FAFC] dark:bg-[#0B0F12] border-x border-slate-200/80 dark:border-white/10 relative flex flex-col justify-between shadow-2xl text-slate-900 dark:text-slate-100 overflow-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F8FAFC] dark:bg-[#0B0F12] relative flex flex-col justify-between shadow-2xl text-slate-900 dark:text-slate-100 overflow-hidden">
       {/* Street Discovery Map: Displayed only when the Map tab is active */}
       {isMapTab && (
         <div className="absolute inset-0 z-0">

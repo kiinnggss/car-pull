@@ -166,7 +166,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           particleCount: 35,
           spread: 50,
           origin: { y: 0.6 },
-          colors: ['#D97706', '#0D6E6E', '#7C3AED'],
+          colors: ['#F58A25', '#0F766E', '#14B8A6'],
         });
         break;
     }

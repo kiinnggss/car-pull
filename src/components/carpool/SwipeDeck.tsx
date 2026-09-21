@@ -79,7 +79,7 @@ export const SwipeDeck: React.FC = () => {
         particleCount: 40,
         spread: 55,
         origin: { y: 0.65 },
-        colors: ['#0D6E6E', '#C25E2E', '#7C3AED', '#D97706'],
+        colors: ['#0F766E', '#F58A25', '#14B8A6', '#D97706'],
       });
     });
 

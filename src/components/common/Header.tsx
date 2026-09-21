@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
   const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-white/10 px-3 py-1.5 transition-colors shadow-xs">
+    <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-3 py-1.5 transition-colors shadow-xs">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
@@ -202,12 +202,12 @@ export const Header: React.FC = () => {
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 top-10 w-52 bg-white/90 dark:bg-[#1E1B18]/90 backdrop-blur-2xl rounded-2xl p-2.5 shadow-2xl border border-white/60 dark:border-stone-700 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="border-b border-[#DDD4C5] dark:border-stone-800 pb-2 mb-2">
-                  <span className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] block truncate">
+              <div className="absolute right-0 top-10 w-52 bg-white dark:bg-[#12161A] backdrop-blur-2xl rounded-2xl p-2.5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="border-b border-slate-100 dark:border-slate-800 pb-2 mb-2">
+                  <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block truncate">
                     {user.fullName}
                   </span>
-                  <span className="text-[10px] text-[#70665A] dark:text-stone-400 block truncate">
+                  <span className="text-[10px] text-slate-500 dark:text-slate-400 block truncate">
                     {user.employer} (@{user.employerDomain})
                   </span>
                 </div>
@@ -219,10 +219,10 @@ export const Header: React.FC = () => {
                       setActiveTab('wallet');
                       setShowProfileMenu(false);
                     }}
-                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-[#141210] dark:text-stone-200 font-bold flex items-center justify-between"
+                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold flex items-center justify-between transition-colors"
                   >
                     <span>Escrow Balance</span>
-                    <span className="text-[#0D6E6E] dark:text-[#14B8A6] font-black font-mono text-[11px]">
+                    <span className="text-[#0F766E] dark:text-[#14B8A6] font-bold font-mono text-[11px]">
                       {formatNgn(escrowBalanceNgn)}
                     </span>
                   </button>
@@ -232,10 +232,10 @@ export const Header: React.FC = () => {
                       setActiveTab('pass');
                       setShowProfileMenu(false);
                     }}
-                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-[#141210] dark:text-stone-200 font-bold flex items-center justify-between"
+                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold flex items-center justify-between transition-colors"
                   >
                     <span>Sec 44 Digital Pass</span>
-                    <span className="text-[9px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.2 rounded font-mono font-bold">
+                    <span className="text-[9px] bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded font-mono font-bold">
                       VERIFIED
                     </span>
                   </button>
@@ -245,24 +245,24 @@ export const Header: React.FC = () => {
                       setShowProfileMenu(false);
                       setShowDownloadModal(true);
                     }}
-                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 text-[#141210] dark:text-stone-200 font-bold flex items-center justify-between"
+                    className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold flex items-center justify-between transition-colors"
                   >
                     <span className="flex items-center gap-1.5">
-                      <Download className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                      <Download className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
                       Download / Install App
                     </span>
-                    <span className="text-[9px] bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 font-bold px-1.5 py-0.2 rounded">
+                    <span className="text-[9px] bg-teal-50 dark:bg-teal-950 text-[#0F766E] dark:text-[#14B8A6] font-bold px-1.5 py-0.5 rounded">
                       PWA
                     </span>
                   </button>
-                  <div className="border-t border-[#DDD4C5] dark:border-stone-800 pt-1 mt-1">
+                  <div className="border-t border-slate-100 dark:border-slate-800 pt-1 mt-1">
                     <button
                       onClick={() => {
                         triggerHaptic('tap');
                         logout();
                         setShowProfileMenu(false);
                       }}
-                      className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5"
+                      className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-red-50 dark:hover:bg-red-950/40 text-red-600 dark:text-red-400 font-bold flex items-center gap-1.5 transition-colors"
                     >
                       <LogOut className="w-3.5 h-3.5" />
                       <span>Sign Out</span>

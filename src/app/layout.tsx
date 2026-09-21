@@ -49,7 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${serif.variable}`}>
-      <body className="min-h-screen bg-[#EFE9DF] text-[#141210] font-sans antialiased flex flex-col items-center">
+      <body className="min-h-screen bg-slate-100 dark:bg-[#06080A] text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col items-center">
         {children}
       </body>
     </html>

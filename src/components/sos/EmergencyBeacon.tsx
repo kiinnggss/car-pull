@@ -79,7 +79,7 @@ export const EmergencyBeacon: React.FC = () => {
           <div className="flex items-center justify-between px-1">
             <button
               onClick={() => selectIncidentIssue(null as any)}
-              className="text-xs text-[#7C3AED] dark:text-purple-400 font-bold flex items-center gap-1 hover:underline"
+              className="text-xs text-[#0F766E] dark:text-[#14B8A6] font-bold flex items-center gap-1 hover:underline"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Change Issue
             </button>
