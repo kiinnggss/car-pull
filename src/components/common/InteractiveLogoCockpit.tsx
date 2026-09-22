@@ -175,12 +175,12 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
   return createPortal(
     <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain">
       <div className="min-h-full flex items-center justify-center py-2">
-        <div className="w-full max-w-[390px] bg-[#FAF8F3] rounded-3xl p-3.5 space-y-2.5 shadow-2xl border border-[#DDD4C5] my-auto animate-in zoom-in-95 duration-150">
+        <div className="w-full max-w-[390px] bg-[#FAF8F3] dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating-lg my-auto animate-in zoom-in-95 duration-150">
           {/* Header with Back Button (Takes you back a step instead of closing app) */}
-          <div className="flex items-center justify-between border-b border-[#DDD4C5] pb-2">
+          <div className="flex items-center justify-between pb-2">
             <button
               onClick={handleBack}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-stone-100 text-[#141210] border border-[#DDD4C5] font-bold text-xs transition-all active:scale-95 shadow-2xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-[#1E293B] hover:bg-stone-100 text-[#141210] dark:text-slate-100 font-bold text-xs transition-all active:scale-95 shadow-floating-sm"
               title="Go back a step"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
@@ -188,10 +188,10 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             </button>
 
             <div className="text-center">
-              <h3 className="text-sm font-serif font-black text-[#141210] tracking-tight">
+              <h3 className="text-sm font-serif font-black text-[#141210] dark:text-slate-100 tracking-tight">
                 Logo Cockpit Console
               </h3>
-              <span className="text-[10px] text-[#70665A] font-semibold block">
+              <span className="text-[10px] text-[#70665A] dark:text-slate-400 font-semibold block">
                 Interactive Telemetry &amp; Hardware
               </span>
             </div>
@@ -199,18 +199,18 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setSoundEnabled(!soundEnabled)}
-                className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 transition-colors"
+                className="p-1.5 rounded-lg text-stone-500 hover:text-stone-900 dark:hover:text-stone-200 transition-colors"
                 title={soundEnabled ? 'Mute audio feedback' : 'Enable audio feedback'}
               >
                 {soundEnabled ? (
-                  <Volume2 className="w-4 h-4 text-[#0D6E6E]" />
+                  <Volume2 className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
                 ) : (
                   <VolumeX className="w-4 h-4 text-stone-400" />
                 )}
               </button>
               <button
                 onClick={handleBack}
-                className="w-7 h-7 rounded-full bg-white hover:bg-stone-200 text-stone-700 font-bold text-xs flex items-center justify-center border border-[#DDD4C5] transition-colors"
+                className="w-7 h-7 rounded-full bg-white dark:bg-[#1E293B] hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center justify-center transition-colors shadow-floating-sm"
                 title="Close console"
               >
                 <X className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           </div>
 
           {/* 3D Interactive Logo Display with Calibrated Touch Hotspots */}
-          <div className="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-[#D97706]/15 via-[#0D6E6E]/15 to-[#C25E2E]/20 p-1 shadow-inner border border-[#C25E2E]/30 flex items-center justify-center">
+          <div className="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden bg-gradient-to-br from-[#D97706]/15 via-[#0D6E6E]/15 to-[#C25E2E]/20 p-1 shadow-inner flex items-center justify-center">
             <img
               src={getAssetPath('/logo.png')}
               alt="CAR PULL Interactive Logo"
@@ -321,7 +321,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           <div className="grid grid-cols-2 gap-1.5 text-xs">
             <button
               onClick={() => handleAction('pin')}
-              className="p-2 bg-white hover:bg-amber-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
+              className="p-2.5 bg-white dark:bg-[#1E293B] hover:bg-amber-50 dark:hover:bg-amber-950/40 text-[#141210] dark:text-slate-100 rounded-xl font-bold flex items-center gap-1.5 transition-all active:scale-95 text-left shadow-floating-sm"
             >
               <MapPin className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
               <span className="text-[11px]">1. Route Map</span>
@@ -329,32 +329,32 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
 
             <button
               onClick={() => handleAction('arrow')}
-              className="p-2 bg-white hover:bg-teal-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
+              className="p-2.5 bg-white dark:bg-[#1E293B] hover:bg-teal-50 dark:hover:bg-teal-950/40 text-[#141210] dark:text-slate-100 rounded-xl font-bold flex items-center gap-1.5 transition-all active:scale-95 text-left shadow-floating-sm"
             >
-              <Compass className="w-3.5 h-3.5 text-[#0D6E6E] flex-shrink-0" />
+              <Compass className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
               <span className="text-[11px]">2. AM/PM Route</span>
             </button>
 
             <button
               onClick={() => handleAction('circle')}
-              className="p-2 bg-white hover:bg-cyan-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
+              className="p-2.5 bg-white dark:bg-[#1E293B] hover:bg-cyan-50 dark:hover:bg-cyan-950/40 text-[#141210] dark:text-slate-100 rounded-xl font-bold flex items-center gap-1.5 transition-all active:scale-95 text-left shadow-floating-sm"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-cyan-700 flex-shrink-0" />
+              <RefreshCw className="w-3.5 h-3.5 text-cyan-700 dark:text-cyan-400 flex-shrink-0" />
               <span className="text-[11px]">3. Refresh Deck</span>
             </button>
 
             <button
               onClick={() => handleAction('shield')}
-              className="p-2 bg-white hover:bg-emerald-50 text-[#141210] rounded-xl font-bold flex items-center gap-1.5 border border-[#DDD5C7] transition-all active:scale-95 text-left shadow-2xs"
+              className="p-2.5 bg-white dark:bg-[#1E293B] hover:bg-emerald-50 dark:hover:bg-emerald-950/40 text-[#141210] dark:text-slate-100 rounded-xl font-bold flex items-center gap-1.5 transition-all active:scale-95 text-left shadow-floating-sm"
             >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 flex-shrink-0" />
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-700 dark:text-emerald-400 flex-shrink-0" />
               <span className="text-[11px]">4. Sec 44 Pass</span>
             </button>
           </div>
 
           <button
             onClick={() => handleAction('car')}
-            className="w-full p-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.99] shadow-xs"
+            className="w-full p-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all active:scale-[0.99] shadow-floating-sm"
           >
             <Car className="w-3.5 h-3.5 text-[#FBBF24]" />
             <span>Switch to {activeRole === 'rider' ? 'Driver Mode' : 'Rider Mode'}</span>

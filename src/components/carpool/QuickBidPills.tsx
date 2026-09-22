@@ -23,7 +23,7 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
       {/* 1. Pass Button (Tactile dismissal) */}
       <button
         onClick={onPass}
-        className="w-12 h-12 rounded-2xl bg-white dark:bg-[#12161A] hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200/90 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 shadow-xs flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+        className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-[#12161A]/95 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.5)] flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
         title="Pass ride"
         aria-label="Pass ride"
       >
@@ -31,11 +31,11 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
       </button>
 
       {/* 2. Fuel Split Stepper (Center frosted capsule) */}
-      <div className="flex-1 h-12 rounded-2xl bg-white dark:bg-[#12161A] border border-slate-200/90 dark:border-slate-800 shadow-xs flex items-center justify-between px-2.5">
+      <div className="flex-1 h-12 rounded-2xl bg-white/95 dark:bg-[#12161A]/95 shadow-[0_6px_20px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_-4px_rgba(0,0,0,0.5)] flex items-center justify-between px-2.5">
         <button
           onClick={() => adjustBid(-500)}
           disabled={customBidNgn <= 500}
-          className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 flex items-center justify-center text-slate-700 dark:text-slate-300 transition-all active:scale-90"
+          className="w-8 h-8 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 disabled:opacity-30 flex items-center justify-center text-slate-700 dark:text-slate-300 transition-all active:scale-90 shadow-2xs"
           title="Decrease fuel split by ₦500"
         >
           <Minus className="w-3.5 h-3.5" />
@@ -52,7 +52,7 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
 
         <button
           onClick={() => adjustBid(500)}
-          className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-[#0F766E] dark:text-[#14B8A6] transition-all active:scale-90"
+          className="w-8 h-8 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center text-[#0F766E] dark:text-[#14B8A6] transition-all active:scale-90 shadow-2xs"
           title="Increase fuel split by ₦500"
         >
           <Plus className="w-3.5 h-3.5" />
@@ -65,8 +65,8 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onAccept, onPass }
         disabled={isLocked}
         className={`h-12 px-6 rounded-2xl flex items-center justify-center gap-1.5 font-bold text-xs transition-all active:scale-95 shadow-md flex-shrink-0 ${
           isLocked
-            ? 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed border border-slate-300 dark:border-slate-700'
-            : 'bg-[#0F766E] hover:bg-[#0D655E] text-white shadow-teal-950/15'
+            ? 'bg-slate-200/80 dark:bg-slate-800/80 text-slate-400 cursor-not-allowed shadow-xs'
+            : 'bg-[#0F766E] hover:bg-[#0D655E] text-white shadow-teal-950/20'
         }`}
         title={isLocked ? 'Legal fare ceiling exceeded' : 'Accept ride and reserve seat'}
       >

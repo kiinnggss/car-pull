@@ -63,13 +63,13 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
 
   return createPortal(
     <div className="fixed inset-0 z-[600] bg-black/60 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
-      <div className="w-full max-w-[420px] bg-white dark:bg-[#12161A] rounded-t-3xl sm:rounded-3xl p-4 space-y-3 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[88vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
+      <div className="w-full max-w-[420px] bg-white dark:bg-[#141C24] rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-floating-lg max-h-[88vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
         
         {/* Header with Step-Back Navigation */}
-        <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <div className="flex items-center justify-between pb-2.5">
           <button
             onClick={handleBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 font-bold text-xs transition-all active:scale-95 shadow-2xs"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-bold text-xs transition-all active:scale-95 shadow-floating-sm"
             title="Return to corridor deck"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-[#F58A25]" />
@@ -87,7 +87,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
 
           <button
             onClick={handleBack}
-            className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center border border-slate-200 dark:border-slate-700 transition-colors"
+            className="w-7 h-7 rounded-full bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center shadow-floating-sm transition-all"
             title="Close"
           >
             <X className="w-3.5 h-3.5" />
@@ -98,10 +98,10 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
           <button
             onClick={() => setSelectedTimeFilter('all')}
-            className={`px-3 py-1 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
+            className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs shadow-floating-sm ${
               selectedTimeFilter === 'all'
-                ? 'bg-[#0F766E] text-white shadow-2xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700'
+                ? 'bg-[#0F766E] text-white'
+                : 'bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             All Departures ({drivers.length})
@@ -110,10 +110,10 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
             <button
               key={time}
               onClick={() => setSelectedTimeFilter(time)}
-              className={`px-2.5 py-1 rounded-xl font-bold whitespace-nowrap transition-all text-xs ${
+              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs shadow-floating-sm ${
                 selectedTimeFilter === time
-                  ? 'bg-[#0F766E] text-white shadow-2xs'
-                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-700'
+                  ? 'bg-[#0F766E] text-white'
+                  : 'bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {time}
@@ -129,16 +129,16 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
             return (
               <div
                 key={driver.id}
-                className={`bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 border transition-all ${
+                className={`bg-slate-50/90 dark:bg-slate-900/60 rounded-2xl p-3.5 shadow-floating-sm transition-all ${
                   isSelected
-                    ? 'border-[#0F766E] ring-2 ring-[#0F766E]/20 shadow-xs'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                    ? 'ring-2 ring-[#0F766E]/40'
+                    : ''
                 }`}
               >
                 {/* Time & Cost Header */}
-                <div className="flex items-center justify-between border-b border-slate-200/60 dark:border-slate-800 pb-1.5">
+                <div className="flex items-center justify-between pb-1.5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-lg border border-teal-200 dark:border-teal-800">
+                    <span className="text-xs font-mono font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-lg shadow-2xs">
                       {driver.corridor.departure_time}
                     </span>
                     <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
@@ -160,7 +160,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                 {/* Driver Info & Vehicle Plate */}
                 <div className="flex items-center justify-between pt-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="relative w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 overflow-hidden border border-slate-200 dark:border-slate-700">
+                    <div className="relative w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 overflow-hidden shadow-floating-sm">
                       <span>{driver.name.split(' ').map((n) => n[0]).join('')}</span>
                       <img
                         src={driver.avatar}
@@ -188,7 +188,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                       <Car className="w-3 h-3 text-slate-400" />
                       <span>{driver.vehicle.make} {driver.vehicle.model}</span>
                     </div>
-                    <span className="text-[9px] font-mono font-bold text-[#F58A25] bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded border border-amber-200/60 dark:border-amber-900/60 inline-block mt-0.5">
+                    <span className="text-[9px] font-mono font-bold text-[#F58A25] bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md shadow-2xs inline-block mt-0.5">
                       {driver.vehicle.plate_number}
                     </span>
                   </div>
@@ -201,9 +201,9 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                       selectDriverById(driver.id);
                       onClose();
                     }}
-                    className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-2xs active:scale-[0.99] ${
+                    className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-floating-sm active:scale-[0.99] ${
                       isSelected
-                        ? 'bg-teal-50 dark:bg-teal-950/60 text-[#0F766E] dark:text-[#14B8A6] border border-[#0F766E]/40 font-bold'
+                        ? 'bg-teal-50 dark:bg-teal-950/60 text-[#0F766E] dark:text-[#14B8A6] font-bold shadow-inner'
                         : 'bg-[#0F766E] hover:bg-[#0D655E] text-white'
                     }`}
                   >
@@ -217,7 +217,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
         </div>
 
         {/* Muted Legal Notice */}
-        <div className="border-t border-slate-100 dark:border-slate-800 pt-2 text-center text-[10px] text-slate-500 dark:text-slate-400">
+        <div className="pt-2 text-center text-[10px] text-slate-500 dark:text-slate-400">
           <span>Lagos State Transport Reform Act (Sec 44): Non-Commercial Commute</span>
         </div>
       </div>

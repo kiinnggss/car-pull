@@ -198,7 +198,7 @@ CAR PULL Zero-Cash Escrow Active`;
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in">
       {/* 1. Header Toolbar: Status, Trip Settings, and Map */}
       <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 bg-emerald-500/15 dark:bg-emerald-950/50 border border-emerald-500/30 px-2.5 py-1 rounded-xl">
+        <div className="flex items-center gap-1.5 bg-emerald-500/15 dark:bg-emerald-950/50 px-3 py-1 rounded-xl shadow-2xs">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           <span className="font-bold text-emerald-800 dark:text-emerald-300 text-[10px]">
             Driver Active
@@ -211,7 +211,7 @@ CAR PULL Zero-Cash Escrow Active`;
               triggerHaptic('tap');
               setShowSettingsModal(true);
             }}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold shadow-xs active:scale-95 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold shadow-floating-sm active:scale-95 transition-all"
             title="Edit route, schedule, and car details"
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
@@ -223,7 +223,7 @@ CAR PULL Zero-Cash Escrow Active`;
               triggerHaptic('switch');
               setActiveTab('map');
             }}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[#0F766E] hover:bg-[#0D655E] text-white text-xs font-bold shadow-xs active:scale-95 transition-all"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-[#0F766E] hover:bg-[#0D655E] text-white text-xs font-bold shadow-floating-sm active:scale-95 transition-all"
             title="View corridor pickup map"
           >
             <Navigation className="w-3.5 h-3.5 text-[#F58A25]" />
@@ -233,7 +233,7 @@ CAR PULL Zero-Cash Escrow Active`;
       </div>
 
       {/* 2. One-Tap Direction Switcher */}
-      <div className="grid grid-cols-2 p-1 bg-slate-100 dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-xs">
+      <div className="grid grid-cols-2 p-1 bg-slate-100/90 dark:bg-slate-900 rounded-2xl shadow-inner text-xs">
         <button
           type="button"
           onClick={() => {
@@ -242,7 +242,7 @@ CAR PULL Zero-Cash Escrow Active`;
           }}
           className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 ${
             commuteDirection === 'morning'
-              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-floating-sm'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
@@ -263,7 +263,7 @@ CAR PULL Zero-Cash Escrow Active`;
           }}
           className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 ${
             commuteDirection === 'evening'
-              ? 'bg-[#0F766E] text-white shadow-xs'
+              ? 'bg-[#0F766E] text-white shadow-floating-sm'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
@@ -278,10 +278,10 @@ CAR PULL Zero-Cash Escrow Active`;
       </div>
 
       {/* 3. Streamlined Route & Capacity Capsule */}
-      <div className="bg-white dark:bg-[#12161A] rounded-2xl p-3.5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-2.5">
+      <div className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3">
         {/* Metric Bar: Capacity, Fuel Split, Next Departure */}
-        <div className="grid grid-cols-3 gap-2 pb-2.5 border-b border-slate-100 dark:border-slate-800 text-center">
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+        <div className="grid grid-cols-3 gap-2 pb-2 text-center">
+          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Available
             </span>
@@ -290,7 +290,7 @@ CAR PULL Zero-Cash Escrow Active`;
             </span>
           </div>
 
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Fuel Offset
             </span>
@@ -299,7 +299,7 @@ CAR PULL Zero-Cash Escrow Active`;
             </span>
           </div>
 
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl border border-slate-100 dark:border-slate-800">
+          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Departure
             </span>
@@ -319,12 +319,12 @@ CAR PULL Zero-Cash Escrow Active`;
             return (
               <div
                 key={idx}
-                className={`p-2 rounded-xl border text-center transition-all ${
+                className={`p-2.5 rounded-xl text-center shadow-floating-sm transition-all ${
                   isBoarded
-                    ? 'bg-emerald-500/10 dark:bg-emerald-950/40 border-emerald-500/40 text-emerald-700 dark:text-emerald-300'
+                    ? 'bg-emerald-500/15 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
                     : isFilled
-                    ? 'bg-teal-50/70 dark:bg-teal-950/40 border-teal-200 dark:border-teal-800/60 text-[#0F766E] dark:text-teal-300'
-                    : 'bg-slate-50 dark:bg-slate-900/60 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 border-dashed'
+                    ? 'bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-300'
+                    : 'bg-slate-50 dark:bg-slate-900/60 text-slate-400 dark:text-slate-500'
                 }`}
               >
                 <div className="flex items-center justify-center gap-1 text-[11px] font-bold">
@@ -353,7 +353,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
       {/* 4. Live Pickup Itinerary & Navigation (When Passengers Exist) */}
       {acceptedRiders.length > 0 && (
-        <div className="bg-white dark:bg-[#12161A] rounded-2xl p-3.5 border border-slate-200/80 dark:border-slate-800 shadow-xs space-y-3">
+        <div className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
               <Compass className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
@@ -361,19 +361,19 @@ CAR PULL Zero-Cash Escrow Active`;
                 Pickup Itinerary
               </h4>
             </div>
-            <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full font-bold">
+            <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
               {boardedRiderIds?.length || 0}/{acceptedRiders.length} Boarded
             </span>
           </div>
 
           {/* Sequential Stops */}
-          <div className="space-y-2 relative pl-2 border-l-2 border-slate-200 dark:border-slate-800 ml-2">
+          <div className="space-y-2.5 relative pl-3.5 ml-1 before:absolute before:left-1 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-200/60 dark:before:bg-slate-800/60">
             {acceptedRiders.map((rider, idx) => {
               const isBoarded = boardedRiderIds?.includes(rider.id);
               return (
                 <div key={rider.id} className="relative pl-3">
-                  <span className={`absolute -left-[17px] top-1 w-3 h-3 rounded-full border-2 ${
-                    isBoarded ? 'bg-emerald-500 border-white dark:border-slate-900' : 'bg-[#0F766E] border-white dark:border-slate-900'
+                  <span className={`absolute -left-[15px] top-1 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#141C24] shadow-xs ${
+                    isBoarded ? 'bg-emerald-500' : 'bg-[#0F766E]'
                   }`} />
                   <div className="flex items-center justify-between text-xs gap-2">
                     <div>
@@ -391,7 +391,7 @@ CAR PULL Zero-Cash Escrow Active`;
                     ) : (
                       <button
                         onClick={() => handleConfirmBoarded(rider.id)}
-                        className="px-2.5 py-1 bg-[#0F766E] hover:bg-[#0D655E] text-white text-[10.5px] font-bold rounded-lg shadow-xs active:scale-95 transition-all flex-shrink-0"
+                        className="px-2.5 py-1 bg-[#0F766E] hover:bg-[#0D655E] text-white text-[10.5px] font-bold rounded-lg shadow-floating-sm active:scale-95 transition-all flex-shrink-0"
                       >
                         Confirm Boarded
                       </button>
@@ -403,7 +403,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
             {/* Final Dropoff Stop */}
             <div className="relative pl-3 pt-1">
-              <span className="absolute -left-[17px] top-2 w-3 h-3 rounded-full bg-[#F58A25] border-2 border-white dark:border-slate-900" />
+              <span className="absolute -left-[15px] top-2 w-3.5 h-3.5 rounded-full bg-[#F58A25] ring-2 ring-white dark:ring-[#141C24] shadow-xs" />
               <div className="text-xs">
                 <span className="font-bold text-slate-900 dark:text-slate-100 block">
                   Final Dropoff: {driverSchedule?.destination || 'Victoria Island'}
@@ -416,10 +416,10 @@ CAR PULL Zero-Cash Escrow Active`;
           </div>
 
           {/* Drive & Broadcast Action Grid */}
-          <div className="grid grid-cols-2 gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+          <div className="grid grid-cols-2 gap-2 pt-1">
             <button
               onClick={handleStartDrive}
-              className="py-2.5 px-3 bg-[#0F766E] hover:bg-[#0D655E] text-white rounded-xl text-xs font-bold shadow-xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 bg-[#0F766E] hover:bg-[#0D655E] text-white rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
             >
               <Navigation className="w-3.5 h-3.5 text-[#F58A25]" />
               <span>Start Drive (Maps)</span>
@@ -427,7 +427,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
             <button
               onClick={handleBroadcastPing}
-              className="py-2.5 px-3 bg-amber-500/15 dark:bg-amber-950/40 hover:bg-amber-500/25 border border-amber-500/40 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold active:scale-95 transition-all flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 bg-amber-500/15 dark:bg-amber-950/40 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
             >
               <Radio className="w-3.5 h-3.5 text-[#F58A25]" />
               <span>{pingSentToast ? 'Ping Broadcasted!' : '5-Min Alert Ping'}</span>
@@ -437,7 +437,7 @@ CAR PULL Zero-Cash Escrow Active`;
           {/* WhatsApp Manifest Trigger */}
           <button
             onClick={shareToWhatsApp}
-            className="w-full py-2 bg-[#25D366]/10 hover:bg-[#25D366]/20 border border-[#25D366]/30 text-[#128C7E] dark:text-[#25D366] rounded-xl text-xs font-bold active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] dark:text-[#25D366] rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>{copiedManifest ? 'Manifest Copied to Clipboard' : 'Share WhatsApp Manifest'}</span>
@@ -463,7 +463,7 @@ CAR PULL Zero-Cash Escrow Active`;
               return (
                 <div
                   key={rider.id}
-                  className="bg-white dark:bg-[#12161A] rounded-2xl p-3 border border-slate-200/80 dark:border-slate-800 shadow-xs flex items-center justify-between"
+                  className="bg-white dark:bg-[#141C24] rounded-2xl p-3 shadow-floating-sm flex items-center justify-between"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="w-9 h-9 rounded-full bg-teal-50 dark:bg-teal-950/50 text-[#0F766E] dark:text-teal-300 font-bold text-xs flex items-center justify-center flex-shrink-0">
@@ -581,19 +581,19 @@ CAR PULL Zero-Cash Escrow Active`;
           {waitingRiders.map((rider) => (
             <div
               key={rider.id}
-              className="bg-white dark:bg-[#12161A] rounded-2xl p-3.5 border border-slate-200/80 dark:border-slate-800 shadow-sm space-y-2.5 hover:border-teal-500/50 transition-all"
+              className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3 hover:shadow-floating-lg transition-all"
             >
               {/* Header: Commuter Avatar, Name, Company, Rating, Offer */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center flex-shrink-0">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-floating-sm">
                     {rider.name.split(' ').map((n) => n[0]).join('')}
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1">
                       {rider.name}
                       {rider.isFemaleOnly && (
-                        <span className="text-[9px] bg-pink-50 dark:bg-pink-950/50 text-pink-700 dark:text-pink-300 px-1.5 py-0.2 rounded font-bold">
+                        <span className="text-[9px] bg-pink-50 dark:bg-pink-950/50 text-pink-700 dark:text-pink-300 px-1.5 py-0.2 rounded font-bold shadow-2xs">
                           Women
                         </span>
                       )}
@@ -619,7 +619,7 @@ CAR PULL Zero-Cash Escrow Active`;
               </div>
 
               {/* Route: Pickup Safe Zone to Drop Destination */}
-              <div className="bg-slate-50 dark:bg-slate-900/60 p-2.5 rounded-xl text-[10.5px] space-y-1 text-slate-700 dark:text-slate-300 border border-slate-100 dark:border-slate-800">
+              <div className="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl text-[10.5px] space-y-1 text-slate-700 dark:text-slate-300 shadow-inner">
                 <div className="flex items-center gap-1.5">
                   <MapPin className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
                   <span className="font-semibold text-slate-900 dark:text-slate-100">Pickup:</span>
@@ -635,7 +635,7 @@ CAR PULL Zero-Cash Escrow Active`;
               {/* Mutual Spark Pill if present */}
               {rider.mutual_spark && (
                 <div className="flex items-center gap-1">
-                  <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-[#F58A25] bg-amber-50 dark:bg-amber-950/30 px-2 py-0.5 rounded-full border border-amber-200/60 dark:border-amber-900/40">
+                  <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-[#F58A25] bg-amber-50 dark:bg-amber-950/30 px-2 py-0.5 rounded-full shadow-2xs">
                     <Sparkles className="w-2.5 h-2.5 text-[#F58A25]" />
                     {rider.mutual_spark}
                   </span>
@@ -650,7 +650,7 @@ CAR PULL Zero-Cash Escrow Active`;
                     triggerHaptic('tap');
                     setSelectedChatRider(rider);
                   }}
-                  className="py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-semibold rounded-xl active:scale-95 transition-all flex items-center justify-center gap-1"
+                  className="py-2 bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1"
                   title="Say hello to commuter"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-[#F58A25]" />
@@ -659,7 +659,7 @@ CAR PULL Zero-Cash Escrow Active`;
                 <button
                   onClick={() => handleAccept(rider.id)}
                   disabled={availableSeats <= 0}
-                  className="col-span-2 py-2 bg-[#0F766E] hover:bg-[#0D655E] disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white text-xs font-bold rounded-xl shadow-xs active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                  className="col-span-2 py-2 bg-[#0F766E] hover:bg-[#0D655E] disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white text-xs font-bold rounded-xl shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>
@@ -671,7 +671,7 @@ CAR PULL Zero-Cash Escrow Active`;
           ))}
 
           {waitingRiders.length === 0 && (
-            <div className="p-8 text-center bg-white dark:bg-[#12161A] rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-1.5">
+            <div className="p-8 text-center bg-white dark:bg-[#141C24] rounded-3xl shadow-floating space-y-1.5">
               <Users className="w-8 h-8 text-slate-400 mx-auto" />
               <p className="text-xs font-bold text-slate-800 dark:text-slate-200">
                 No matching commuters for this filter
@@ -687,8 +687,8 @@ CAR PULL Zero-Cash Escrow Active`;
       {/* 7. Dedicated Trip & Vehicle Settings Modal */}
       {showSettingsModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-3 animate-in fade-in">
-          <div className="bg-white dark:bg-[#12161A] rounded-3xl max-w-[370px] w-full p-4 border border-slate-200 dark:border-slate-800 shadow-2xl space-y-3.5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
+          <div className="bg-white dark:bg-[#141C24] rounded-3xl max-w-[370px] w-full p-5 shadow-floating-lg space-y-3.5 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between pb-2">
               <div className="flex items-center gap-2">
                 <SlidersHorizontal className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
                 <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">
@@ -717,8 +717,8 @@ CAR PULL Zero-Cash Escrow Active`;
                       onClick={() => setTempDepartureDay(day)}
                       className={`py-1.5 rounded-xl text-xs font-bold transition-all ${
                         tempDepartureDay === day
-                          ? 'bg-[#0F766E] text-white shadow-xs'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                          ? 'bg-[#0F766E] text-white shadow-floating-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-inner'
                       }`}
                     >
                       {day}
@@ -737,7 +737,7 @@ CAR PULL Zero-Cash Escrow Active`;
                     type="text"
                     value={tempDepartureTime}
                     onChange={(e) => setTempDepartureTime(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                    className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                   />
                 </div>
 
@@ -748,7 +748,7 @@ CAR PULL Zero-Cash Escrow Active`;
                   <select
                     value={tempDestination}
                     onChange={(e) => setTempDestination(e.target.value)}
-                    className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                    className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                   >
                     <option value="Victoria Island">Victoria Island</option>
                     <option value="Marina / CMS">Marina / CMS</option>
@@ -774,8 +774,8 @@ CAR PULL Zero-Cash Escrow Active`;
                       onClick={() => setTempFuelSplit(amount)}
                       className={`py-1.5 rounded-xl text-xs font-bold transition-all ${
                         tempFuelSplit === amount
-                          ? 'bg-[#0F766E] text-white shadow-xs'
-                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                          ? 'bg-[#0F766E] text-white shadow-floating-sm'
+                          : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-inner'
                       }`}
                     >
                       {formatNgn(amount)}
@@ -785,7 +785,7 @@ CAR PULL Zero-Cash Escrow Active`;
               </div>
 
               {/* Vehicle Specifications */}
-              <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
+              <div className="pt-2 space-y-2.5">
                 <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Vehicle Specifications
                 </span>
@@ -799,7 +799,7 @@ CAR PULL Zero-Cash Escrow Active`;
                       type="text"
                       value={carMake}
                       onChange={(e) => setCarMake(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                      className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                       required
                     />
                   </div>
@@ -811,7 +811,7 @@ CAR PULL Zero-Cash Escrow Active`;
                       type="text"
                       value={carModel}
                       onChange={(e) => setCarModel(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                      className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                       required
                     />
                   </div>
@@ -826,7 +826,7 @@ CAR PULL Zero-Cash Escrow Active`;
                       type="text"
                       value={carPlate}
                       onChange={(e) => setCarPlate(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-mono font-bold text-slate-900 dark:text-slate-100 uppercase text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                      className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2.5 py-1.5 font-mono font-bold text-slate-900 dark:text-slate-100 uppercase text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                       required
                     />
                   </div>
@@ -838,7 +838,7 @@ CAR PULL Zero-Cash Escrow Active`;
                       type="text"
                       value={carColor}
                       onChange={(e) => setCarColor(e.target.value)}
-                      className="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs focus:outline-none focus:ring-1 focus:ring-[#0F766E]"
+                      className="w-full bg-slate-100/80 dark:bg-slate-900 rounded-xl px-2.5 py-1.5 font-bold text-slate-900 dark:text-slate-100 text-xs shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0F766E]/20"
                     />
                   </div>
                 </div>
@@ -855,8 +855,8 @@ CAR PULL Zero-Cash Escrow Active`;
                         onClick={() => setCarSeats(num)}
                         className={`flex-1 py-1.5 rounded-xl text-xs font-bold transition-all ${
                           carSeats === num
-                            ? 'bg-[#0F766E] text-white shadow-xs'
-                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                            ? 'bg-[#0F766E] text-white shadow-floating-sm'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shadow-inner'
                         }`}
                       >
                         {num}
@@ -868,7 +868,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
               <button
                 type="submit"
-                className="w-full mt-3 py-2.5 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-xs active:scale-[0.99] transition-all"
+                className="w-full mt-3 py-3 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-floating active:scale-[0.99] transition-all"
               >
                 Save Trip &amp; Vehicle
               </button>

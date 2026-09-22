@@ -23,7 +23,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
       title: 'Flat Tyre',
       subtitle: 'Mobile Vulcanizer • Spare Wheel',
       icon: <Disc className="w-5 h-5 text-amber-600 dark:text-amber-400" />,
-      color: 'bg-amber-50/70 dark:bg-amber-950/30 border border-transparent dark:border-stone-800',
+      color: 'bg-amber-50/80 dark:bg-amber-950/40 shadow-floating-sm',
       badge: 'Rapid Moto',
     },
     {
@@ -31,7 +31,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
       title: 'Dead Battery',
       subtitle: '12V/24V Jumpstart • Terminals',
       icon: <Zap className="w-5 h-5 text-yellow-600 dark:text-yellow-400" />,
-      color: 'bg-yellow-50/70 dark:bg-yellow-950/30 border border-transparent dark:border-stone-800',
+      color: 'bg-yellow-50/80 dark:bg-yellow-950/40 shadow-floating-sm',
       badge: 'Fast Jump',
     },
     {
@@ -39,7 +39,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
       title: 'Overheating',
       subtitle: 'OBD2 Thermal Scan • Coolant',
       icon: <Flame className="w-5 h-5 text-orange-600 dark:text-orange-400" />,
-      color: 'bg-orange-50/70 dark:bg-orange-950/30 border border-transparent dark:border-stone-800',
+      color: 'bg-orange-50/80 dark:bg-orange-950/40 shadow-floating-sm',
       badge: 'Diagnostic',
     },
     {
@@ -47,7 +47,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
       title: 'Flatbed Tow',
       subtitle: 'Hydraulic Tilt • Differential Safe',
       icon: <Truck className="w-5 h-5 text-red-600 dark:text-red-400" />,
-      color: 'bg-red-50/70 dark:bg-red-950/30 border border-transparent dark:border-stone-800',
+      color: 'bg-red-50/80 dark:bg-red-950/40 shadow-floating-sm',
       badge: 'Heavy Recovery',
     },
   ];
@@ -58,7 +58,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
         <span className="text-xs font-black text-zinc-800 dark:text-stone-200 uppercase tracking-wider">
           Step 1: Select Roadside Issue
         </span>
-        <span className="text-[10px] text-red-700 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/50 px-2 py-0.5 rounded-full border border-red-200 dark:border-red-900/50">
+        <span className="text-[10px] text-red-700 dark:text-red-400 font-bold bg-red-50 dark:bg-red-950/50 px-2.5 py-0.5 rounded-full shadow-floating-sm">
           Expressway SOS
         </span>
       </div>
@@ -72,15 +72,15 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
               onClick={() => onSelectIssue(issue.id)}
               className={`p-3.5 rounded-2xl text-left flex flex-col justify-between min-h-[110px] transition-all active:scale-95 ${
                 isSelected
-                  ? 'ring-2 ring-red-500 bg-red-50 dark:bg-red-950/50 shadow-xs'
+                  ? 'bg-red-50 dark:bg-red-950/70 shadow-floating ring-2 ring-red-500/80'
                   : `${issue.color} hover:bg-zinc-100 dark:hover:bg-stone-800/60`
               }`}
             >
               <div className="flex items-start justify-between w-full">
-                <div className="p-2 rounded-xl bg-white dark:bg-stone-900 shadow-2xs">
+                <div className="p-2 rounded-xl bg-white dark:bg-stone-900 shadow-floating-sm">
                   {issue.icon}
                 </div>
-                <span className="text-[9px] font-bold text-zinc-500 dark:text-stone-400 bg-white/80 dark:bg-stone-900/80 px-1.5 py-0.5 rounded shadow-2xs">
+                <span className="text-[9px] font-bold text-zinc-600 dark:text-stone-300 bg-white/90 dark:bg-stone-900/90 px-1.5 py-0.5 rounded-md shadow-floating-sm">
                   {issue.badge}
                 </span>
               </div>

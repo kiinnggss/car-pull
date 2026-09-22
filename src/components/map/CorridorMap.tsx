@@ -214,13 +214,13 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     const userPinHtml = `
       <div class="relative flex flex-col items-center">
         <span class="absolute -inset-2 rounded-full bg-emerald-400/40 animate-ping"></span>
-        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg border-2 border-white ring-2 ring-emerald-400 z-20">
+        <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-lg ring-2 ring-emerald-400 z-20">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
             <circle cx="12" cy="10" r="3"/>
           </svg>
         </div>
-        <span class="mt-1 bg-stone-900 text-white px-2 py-0.5 rounded-full text-[9px] font-black border border-stone-700 shadow-md whitespace-nowrap z-20">
+        <span class="mt-1 bg-stone-900/90 text-white px-2 py-0.5 rounded-full text-[9px] font-black shadow-md whitespace-nowrap z-20">
           Your Street
         </span>
       </div>
@@ -266,7 +266,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       const vehicleHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
           ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-teal-400/50 animate-ping"></span>' : ''}
-          <div class="relative w-8 h-8 rounded-full border-2 ${isSelected ? 'border-amber-400 ring-2 ring-teal-500' : 'border-white'} bg-stone-900 shadow-md overflow-hidden">
+          <div class="relative w-8 h-8 rounded-full ${isSelected ? 'ring-2 ring-amber-400' : ''} bg-stone-900 shadow-md overflow-hidden">
             <img src="${ride.driverAvatar}" class="w-full h-full object-cover" alt="${ride.driverName}" />
             <div class="absolute bottom-0 right-0 bg-[#0D6E6E] text-white p-0.5 rounded-tl-sm">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -277,7 +277,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </svg>
             </div>
           </div>
-          <span class="mt-0.5 bg-white dark:bg-stone-900 text-stone-900 dark:text-stone-100 px-1.5 py-0.2 rounded text-[8px] font-black border border-stone-300 dark:border-stone-700 shadow-xs whitespace-nowrap">
+          <span class="mt-0.5 bg-white/95 dark:bg-stone-900/95 text-stone-900 dark:text-stone-100 px-1.5 py-0.2 rounded text-[8px] font-black shadow-xs whitespace-nowrap">
             ${ride.driverName.split(' ')[0]} • ${ride.availableSeats} seat${ride.availableSeats === 1 ? '' : 's'}
           </span>
         </div>
@@ -303,10 +303,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     neighborhoodRiders.forEach((rider) => {
       const riderHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-          <div class="w-6 h-6 rounded-full border-2 border-amber-400 bg-stone-900 overflow-hidden shadow-sm">
+          <div class="w-6 h-6 rounded-full bg-stone-900 overflow-hidden shadow-sm">
             <img src="${rider.avatar}" class="w-full h-full object-cover" alt="${rider.name}" />
           </div>
-          <span class="bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1 rounded text-[7px] font-bold border border-amber-300 whitespace-nowrap">
+          <span class="bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1 rounded text-[7px] font-bold shadow-xs whitespace-nowrap">
             Co-Rider: ${rider.name.split(' ')[0]}
           </span>
         </div>
@@ -386,7 +386,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {!isBackgroundUnderlay && (
         <div className="absolute top-2 left-2 right-2 z-[500] space-y-1.5 max-w-[420px] mx-auto animate-in fade-in duration-200">
           {/* Discovery View Switcher: Swipe Cards vs Street Map */}
-          <div className="w-full flex bg-white/80 dark:bg-[#1C1A17]/85 backdrop-blur-xl p-1 rounded-2xl border border-white/60 dark:border-stone-800 shadow-xl">
+          <div className="w-full flex bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl p-1 rounded-2xl shadow-floating">
             <button
               onClick={() => {
                 triggerHaptic('switch');
@@ -407,7 +407,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           </div>
 
           {/* Origin Street & Destination Selectors */}
-          <div className="bg-white/80 dark:bg-[#1C1A17]/85 backdrop-blur-xl rounded-2xl p-2 border border-white/60 dark:border-stone-800 shadow-xl space-y-1.5">
+          <div className="bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl rounded-2xl p-2.5 shadow-floating space-y-2">
             {/* Row 1: Your Street Selector */}
             <div className="flex items-center justify-between gap-1.5">
               <button
@@ -415,7 +415,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   triggerHaptic('tap');
                   setShowStreetPicker(true);
                 }}
-                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/80 dark:bg-stone-900/80 hover:bg-stone-100/90 dark:hover:bg-stone-800 border border-white/40 dark:border-stone-700 rounded-xl text-left transition-colors backdrop-blur-md"
+                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/90 dark:bg-stone-900/90 hover:bg-stone-100/90 dark:hover:bg-stone-800 rounded-xl text-left transition-colors backdrop-blur-md shadow-floating-sm"
               >
                 <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
                 <div className="min-w-0 flex-1">
@@ -433,7 +433,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               <button
                 onClick={handleLocateMe}
                 disabled={isLocating}
-                className="p-2.5 bg-teal-50/80 dark:bg-teal-950/60 hover:bg-teal-100/90 text-[#0D6E6E] dark:text-[#14B8A6] border border-teal-200/60 dark:border-teal-800/60 rounded-xl active-press transition-all flex-shrink-0 backdrop-blur-md"
+                className="p-2.5 bg-teal-50/90 dark:bg-teal-950/70 hover:bg-teal-100 text-[#0D6E6E] dark:text-[#14B8A6] rounded-xl active-press transition-all flex-shrink-0 backdrop-blur-md shadow-floating-sm"
                 title="Pin my current GPS street"
               >
                 <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
@@ -447,7 +447,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   triggerHaptic('tap');
                   setShowDestPicker(true);
                 }}
-                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/80 dark:bg-stone-900/80 hover:bg-stone-100/90 dark:hover:bg-stone-800 border border-white/40 dark:border-stone-700 rounded-xl text-left transition-colors backdrop-blur-md"
+                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/90 dark:bg-stone-900/90 hover:bg-stone-100/90 dark:hover:bg-stone-800 rounded-xl text-left transition-colors backdrop-blur-md shadow-floating-sm"
               >
                 <Compass className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
                 <div className="min-w-0 flex-1">
@@ -464,7 +464,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               {selectedDestination !== 'all' && (
                 <button
                   onClick={() => setSelectedDestination('all')}
-                  className="px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 text-[10px] font-bold text-stone-600 dark:text-stone-300 rounded-lg hover:bg-stone-200 backdrop-blur-xs"
+                  className="px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 text-[10px] font-bold text-stone-600 dark:text-stone-300 rounded-lg hover:bg-stone-200 backdrop-blur-xs shadow-floating-sm"
                 >
                   Clear
                 </button>
@@ -472,7 +472,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             </div>
 
             {/* Row 3: Day & Timing Filter Chips */}
-            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pt-0.5">
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
               {(
                 [
                   { id: 'all', label: 'All Days' },
@@ -490,8 +490,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   }}
                   className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-all active-press ${
                     selectedDayFilter === chip.id
-                      ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-900 shadow-xs'
-                      : 'bg-white/70 dark:bg-stone-800/70 backdrop-blur-md text-[#70665A] dark:text-stone-300 hover:bg-white/90 border border-white/40 dark:border-stone-700/50'
+                      ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-900 shadow-floating-sm'
+                      : 'bg-white/80 dark:bg-stone-800/80 backdrop-blur-md text-[#70665A] dark:text-stone-300 hover:bg-white/90 shadow-floating-sm'
                   }`}
                 >
                   {chip.label}
@@ -501,7 +501,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           </div>
 
           {/* Street Tap Hint Banner */}
-          <div className="bg-stone-900/75 dark:bg-black/75 backdrop-blur-md text-white text-[10px] font-medium py-1 px-3 rounded-xl flex items-center justify-between shadow-xs border border-white/10">
+          <div className="bg-stone-900/80 dark:bg-black/80 backdrop-blur-md text-white text-[10px] font-medium py-1.5 px-3 rounded-xl flex items-center justify-between shadow-floating-sm">
             <span className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
               Tap anywhere on the map to set your street pin
@@ -519,19 +519,19 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Bottom Floating Street Ride Card */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
         <div className="absolute bottom-[4.75rem] left-2 right-2 z-30 max-w-[420px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="bg-white/85 dark:bg-[#1C1A17]/85 backdrop-blur-2xl rounded-2xl border border-white/60 dark:border-stone-800 shadow-2xl p-3 space-y-2 text-[#141210] dark:text-stone-100">
+          <div className="bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-2xl shadow-floating-lg p-3.5 space-y-2.5 text-[#141210] dark:text-stone-100">
             {/* Top row: Driver, Car, Fuel Split */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2.5">
                 <img
                   src={selectedRide.driverAvatar}
                   alt={selectedRide.driverName}
-                  className="w-10 h-10 rounded-xl object-cover border border-[#DDD4C5] dark:border-stone-700"
+                  className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
                 />
                 <div>
                   <div className="flex items-center gap-1.5">
                     <h4 className="text-xs font-serif font-black">{selectedRide.driverName}</h4>
-                    <span className="text-[9px] bg-teal-50 dark:bg-teal-950 text-[#0D6E6E] dark:text-[#14B8A6] font-bold px-1.5 py-0.2 rounded border border-teal-200 dark:border-teal-800">
+                    <span className="text-[9px] bg-teal-50 dark:bg-teal-950 text-[#0D6E6E] dark:text-[#14B8A6] font-bold px-1.5 py-0.5 rounded shadow-floating-sm">
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
@@ -552,7 +552,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             </div>
 
             {/* Route & Pickup Corner Callout */}
-            <div className="bg-[#FAF6EE] dark:bg-stone-900 border border-[#DDD4C5] dark:border-stone-800 rounded-xl p-2 text-xs space-y-1">
+            <div className="bg-[#FAF6EE] dark:bg-stone-900 rounded-xl p-2.5 text-xs space-y-1.5 shadow-inner">
               <div className="flex items-center justify-between text-[11px] font-bold">
                 <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
                   <MapPin className="w-3.5 h-3.5 text-emerald-600" />
@@ -563,7 +563,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 </span>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 pt-0.5 border-t border-[#DDD4C5]/60 dark:border-stone-800">
+              <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 pt-1">
                 <span className="flex items-center gap-1 font-semibold text-stone-800 dark:text-stone-200">
                   <ArrowRight className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
                   Heading to: <strong>{selectedRide.destination}</strong>
@@ -590,7 +590,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             <div className="grid grid-cols-3 gap-1.5 pt-0.5">
               <button
                 onClick={() => handleBookRide(selectedRide)}
-                className="col-span-2 py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white dark:text-stone-950 dark:bg-[#14B8A6] text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-md active-press transition-all"
+                className="col-span-2 py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white dark:text-stone-950 dark:bg-[#14B8A6] text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
               >
                 <Sparkles className="w-4 h-4 text-amber-300 dark:text-stone-900" />
                 <span>Join Carpool • {formatNgn(selectedRide.fuelSplitNgn)}</span>
@@ -610,7 +610,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   setActiveThreadId(threadId);
                   setActiveTab('chats');
                 }}
-                className="py-2.5 bg-[#FAF6EE] dark:bg-stone-800 hover:bg-stone-100 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#DDD4C5] dark:border-stone-700 text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all"
+                className="py-2.5 bg-[#FAF6EE] dark:bg-stone-800 hover:bg-stone-100 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all shadow-floating-sm"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>
@@ -622,7 +622,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
       {/* Booking Success Banner */}
       {!isBackgroundUnderlay && bookedSuccessRide && (
-        <div className="absolute bottom-[4.75rem] left-3 right-3 z-30 max-w-[400px] mx-auto bg-emerald-600/90 backdrop-blur-xl text-white rounded-2xl p-3.5 shadow-2xl flex items-center justify-between animate-in zoom-in-95 border border-emerald-400/40">
+        <div className="absolute bottom-[4.75rem] left-3 right-3 z-30 max-w-[400px] mx-auto bg-emerald-600/95 backdrop-blur-xl text-white rounded-2xl p-3.5 shadow-floating-lg flex items-center justify-between animate-in zoom-in-95">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-6 h-6 text-white" />
             <div>
@@ -632,7 +632,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </p>
             </div>
           </div>
-          <span className="font-mono text-xs font-black bg-emerald-700/80 px-2 py-1 rounded-lg">
+          <span className="font-mono text-xs font-black bg-emerald-700/80 px-2 py-1 rounded-lg shadow-floating-sm">
             {formatNgn(bookedSuccessRide.fuelSplitNgn)} Held
           </span>
         </div>
@@ -641,7 +641,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Street Picker Modal */}
       {!isBackgroundUnderlay && showStreetPicker && (
         <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-md flex items-end justify-center p-3 animate-in fade-in">
-          <div className="w-full max-w-[400px] bg-white/90 dark:bg-[#1C1A17]/90 backdrop-blur-2xl rounded-3xl p-4 border border-white/60 dark:border-stone-800 shadow-2xl space-y-3 max-h-[85vh] flex flex-col">
+          <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
@@ -653,7 +653,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </div>
               <button
                 onClick={() => setShowStreetPicker(false)}
-                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
+                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -667,7 +667,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 placeholder="Search street, estate, or neighborhood..."
                 value={searchStreetText}
                 onChange={(e) => setSearchStreetText(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-[#FAF6EE] dark:bg-stone-900 border border-[#DDD4C5] dark:border-stone-700 rounded-xl text-xs text-[#141210] dark:text-stone-100 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E]"
+                className="w-full pl-9 pr-3 py-2 bg-[#FAF6EE] dark:bg-stone-900 rounded-xl text-xs text-[#141210] dark:text-stone-100 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E] shadow-inner"
               />
             </div>
 
@@ -677,7 +677,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 setShowStreetPicker(false);
                 handleLocateMe();
               }}
-              className="w-full py-2 px-3 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100/80 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl border border-teal-200 dark:border-teal-800 flex items-center justify-center gap-2"
+              className="w-full py-2 px-3 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100/80 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-floating-sm transition-all"
             >
               <Crosshair className="w-4 h-4" />
               <span>Use Current GPS Location</span>
@@ -696,10 +696,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                       mapInstanceRef.current.flyTo([st.coordinates.lat, st.coordinates.lng], 14);
                     }
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl border transition-colors flex items-start justify-between ${
+                  className={`w-full text-left p-2.5 rounded-xl transition-colors flex items-start justify-between shadow-floating-sm ${
                     userStreet.id === st.id
-                      ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-300 dark:border-teal-700'
-                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 border-[#DDD4C5] dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      ? 'bg-teal-50 dark:bg-teal-950/60 ring-1 ring-teal-500'
+                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 hover:bg-stone-100 dark:hover:bg-stone-800'
                   }`}
                 >
                   <div>
@@ -723,7 +723,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Destination Picker Modal */}
       {!isBackgroundUnderlay && showDestPicker && (
         <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-md flex items-end justify-center p-3 animate-in fade-in">
-          <div className="w-full max-w-[400px] bg-white/90 dark:bg-[#1C1A17]/90 backdrop-blur-2xl rounded-3xl p-4 border border-white/60 dark:border-stone-800 shadow-2xl space-y-3 max-h-[85vh] flex flex-col">
+          <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
@@ -735,7 +735,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </div>
               <button
                 onClick={() => setShowDestPicker(false)}
-                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500"
+                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -759,10 +759,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                     setSelectedDestination(dest.id);
                     setShowDestPicker(false);
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl border transition-colors flex items-start justify-between ${
+                  className={`w-full text-left p-2.5 rounded-xl transition-colors flex items-start justify-between shadow-floating-sm ${
                     selectedDestination === dest.id
-                      ? 'bg-teal-50 dark:bg-teal-950/60 border-teal-300 dark:border-teal-700'
-                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 border-[#DDD4C5] dark:border-stone-800 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      ? 'bg-teal-50 dark:bg-teal-950/60 ring-1 ring-teal-500'
+                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 hover:bg-stone-100 dark:hover:bg-stone-800'
                   }`}
                 >
                   <div>

@@ -18,7 +18,7 @@ export const BottomNav: React.FC = () => {
   const matchCount = activeMatches.length;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 max-w-[430px] mx-auto bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-t border-slate-200/80 dark:border-slate-800 px-2 pt-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg safe-bottom transition-colors">
+    <nav className="fixed bottom-2.5 inset-x-2.5 z-40 max-w-[414px] mx-auto rounded-3xl bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-xl px-2.5 py-1.5 shadow-[0_12px_35px_-5px_rgba(0,0,0,0.12),0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_16px_45px_-5px_rgba(0,0,0,0.75),0_4px_16px_rgba(0,0,0,0.5)] transition-all">
       <div className="flex items-center justify-around">
         {/* Tab 1: Swipe Cards Deck */}
         <button
@@ -86,7 +86,7 @@ export const BottomNav: React.FC = () => {
           className={`flex flex-col items-center justify-center px-3 py-1 rounded-xl min-h-[44px] transition-all active:scale-95 ${
             isSosActive || activeTab === 'sos'
               ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30'
-              : 'bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 text-rose-600 dark:text-rose-400 hover:bg-rose-50'
+              : 'bg-rose-50/80 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 shadow-xs hover:bg-rose-100'
           }`}
         >
           <AlertOctagon className="w-5 h-5" />

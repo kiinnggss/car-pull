@@ -82,16 +82,16 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
   return (
     <div className="w-full max-w-[390px] mx-auto px-2 h-[calc(100vh-145px)] min-h-[500px] flex flex-col justify-between animate-in fade-in">
       {/* Top Thread Navigation & Profile Header */}
-      <div className="bg-white/95 dark:bg-[#1A1816]/95 backdrop-blur-md border-b border-[#DDD4C5] dark:border-stone-800 p-2.5 rounded-t-2xl flex items-center justify-between gap-2 shadow-2xs">
+      <div className="bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-md p-3 rounded-2xl flex items-center justify-between gap-2 shadow-floating-sm">
         <div className="flex items-center gap-2 min-w-0">
           <div className="relative flex-shrink-0">
             <img
               src={thread.partnerAvatar}
               alt={thread.partnerName}
-              className="w-9 h-9 rounded-xl object-cover border border-[#DDD4C5] dark:border-stone-700"
+              className="w-9 h-9 rounded-xl object-cover shadow-floating-sm"
             />
             {thread.isOnline && (
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1A1816]" />
+              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#141C24]" />
             )}
           </div>
 
@@ -100,7 +100,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               <h3 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] truncate">
                 {thread.partnerName}
               </h3>
-              <span className="text-[9px] font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-1 py-0.2 rounded border border-teal-200 dark:border-teal-800 flex-shrink-0">
+              <span className="text-[9px] font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded-md shadow-2xs flex-shrink-0">
                 {thread.partnerRole === 'driver' ? 'Driver' : 'Co-Rider'}
               </span>
             </div>
@@ -116,7 +116,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
             <a
               href={`tel:${thread.partnerPhone}`}
               onClick={() => triggerHaptic('tap')}
-              className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-stone-800 text-[#0D6E6E] dark:text-[#14B8A6] hover:bg-stone-100 dark:hover:bg-stone-700 active-press border border-[#DDD4C5] dark:border-stone-700 shadow-2xs"
+              className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-[#1E2630] text-[#0D6E6E] dark:text-[#14B8A6] hover:bg-white dark:hover:bg-stone-700 active-press shadow-floating-sm transition-all"
               title="Voice Call"
             >
               <Phone className="w-3.5 h-3.5" />
@@ -128,7 +128,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               const text = `*CAR PULL - Connecting with ${thread.partnerName}*\nRoute: ${thread.routeSummary}\nSafe Hub: ${thread.pickupSafeZoneName}`;
               window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
             }}
-            className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-stone-800 text-emerald-600 dark:text-emerald-400 hover:bg-stone-100 dark:hover:bg-stone-700 active-press border border-[#DDD4C5] dark:border-stone-700 shadow-2xs"
+            className="p-2 rounded-xl bg-[#FAF6EE] dark:bg-[#1E2630] text-emerald-600 dark:text-emerald-400 hover:bg-white dark:hover:bg-stone-700 active-press shadow-floating-sm transition-all"
             title="Open WhatsApp"
           >
             <Share2 className="w-3.5 h-3.5" />
@@ -137,7 +137,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
       </div>
 
       {/* Safe Hub Strip */}
-      <div className="bg-[#FAF6EE] dark:bg-[#141210] border-x border-b border-[#DDD4C5] dark:border-stone-800 px-3 py-1.5 flex items-center justify-between text-[10px]">
+      <div className="bg-[#FAF6EE]/90 dark:bg-[#10161D]/90 rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] shadow-inner mt-1">
         <div className="flex items-center gap-1.5 text-[#70665A] dark:text-stone-400 truncate">
           <MapPin className="w-3 h-3 text-[#C25E2E] dark:text-amber-400 flex-shrink-0" />
           <span className="truncate">{thread.pickupSafeZoneName}</span>
@@ -164,10 +164,10 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
             >
               <div
-                className={`max-w-[80%] rounded-2xl px-3.5 py-2 shadow-2xs text-xs leading-relaxed ${
+                className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
                   isMe
-                    ? 'bg-[#0D6E6E] dark:bg-[#0D6E6E] text-white rounded-tr-xs'
-                    : 'bg-white dark:bg-[#1E1B18] text-[#141210] dark:text-stone-200 border border-[#DDD4C5] dark:border-stone-800 rounded-tl-xs'
+                    ? 'bg-[#0D6E6E] dark:bg-[#0D6E6E] text-white rounded-tr-xs shadow-floating-sm'
+                    : 'bg-white dark:bg-[#141C24] text-[#141210] dark:text-stone-200 shadow-floating-sm rounded-tl-xs'
                 }`}
               >
                 <p>{msg.text}</p>
@@ -187,12 +187,12 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
       </div>
 
       {/* Quick Pings Row */}
-      <div className="p-1 px-2 overflow-x-auto no-scrollbar flex items-center gap-1.5 bg-[#F6F2EA]/80 dark:bg-[#121110]/80 backdrop-blur-xs border-t border-[#DDD4C5] dark:border-stone-800">
+      <div className="p-1.5 px-2 overflow-x-auto no-scrollbar flex items-center gap-1.5 bg-transparent">
         {quickPings.map((ping, idx) => (
           <button
             key={idx}
             onClick={() => handleQuickPing(ping.text)}
-            className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-700 text-[#141210] dark:text-stone-300 text-[10.5px] font-bold border border-[#DDD4C5] dark:border-stone-700 shadow-2xs whitespace-nowrap active-press transition-all"
+            className="px-3 py-1.5 rounded-xl bg-white dark:bg-[#141C24] hover:bg-stone-50 dark:hover:bg-stone-700 text-[#141210] dark:text-stone-300 text-[10.5px] font-bold shadow-floating-sm whitespace-nowrap active-press transition-all"
           >
             {ping.label}
           </button>
@@ -202,19 +202,19 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
       {/* Message Input Bar */}
       <form
         onSubmit={handleSend}
-        className="bg-white dark:bg-[#1A1816] p-2 border-t border-[#DDD4C5] dark:border-stone-800 rounded-b-2xl flex items-center gap-2 shadow-sm"
+        className="bg-white dark:bg-[#141C24] p-2 rounded-2xl flex items-center gap-2 shadow-floating"
       >
         <input
           type="text"
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           placeholder={`Message ${thread.partnerName.split(' ')[0]}...`}
-          className="flex-1 px-3 py-2 bg-[#F6F2EA] dark:bg-[#121110] border border-[#DDD4C5] dark:border-stone-700 rounded-xl text-xs text-[#141210] dark:text-[#EDE8E1] placeholder:text-[#70665A]/60 dark:placeholder:text-stone-500 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E] dark:focus:ring-[#14B8A6] transition-all"
+          className="flex-1 px-3.5 py-2 bg-[#F4EFE6] dark:bg-[#0E141B] rounded-xl text-xs text-[#141210] dark:text-[#EDE8E1] placeholder:text-[#70665A]/60 dark:placeholder:text-stone-500 shadow-inner focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E]/30 dark:focus:ring-[#14B8A6]/30 transition-all"
         />
         <button
           type="submit"
           disabled={!inputMessage.trim()}
-          className={`p-2.5 rounded-xl transition-all shadow-2xs flex-shrink-0 ${
+          className={`p-2.5 rounded-xl transition-all shadow-floating-sm flex-shrink-0 ${
             inputMessage.trim()
               ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] active-press hover:bg-[#094E4E]'
               : 'bg-stone-200 dark:bg-stone-800 text-stone-400 cursor-not-allowed'

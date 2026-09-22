@@ -63,3 +63,31 @@ html.dark, body.dark {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #14B8A6;
 }
+
+/* 2026 Floating Borderless Surface System */
+.floating-surface {
+  border: none !important;
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+}
+
+.dark .floating-surface {
+  box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.7), 0 6px 16px -3px rgba(0, 0, 0, 0.5);
+}
+
+.floating-pill {
+  border: none !important;
+  box-shadow: 0 6px 18px -2px rgba(15, 23, 42, 0.08);
+}
+
+.dark .floating-pill {
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
+}
+
+.floating-dock {
+  border: none !important;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.08), 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.dark .floating-dock {
+  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.65), 0 16px 40px rgba(0, 0, 0, 0.8);
+}

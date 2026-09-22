@@ -93,7 +93,7 @@ export const RoutePlannerBar: React.FC = () => {
     <>
       {/* Sleek Native Executive Transit Capsule (VisionOS Liquid Glass) */}
       {/* Sleek Corridor Transit Capsule */}
-      <div className="w-full bg-white dark:bg-[#12161A] rounded-2xl shadow-xs border border-slate-200/80 dark:border-slate-800 p-1.5 flex items-center justify-between gap-1.5 text-xs transition-all">
+      <div className="w-full bg-white/95 dark:bg-[#12161A]/95 rounded-2xl shadow-[0_8px_25px_-4px_rgba(0,0,0,0.08)] dark:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.6)] p-2 flex items-center justify-between gap-1.5 text-xs transition-all">
         {/* Left: Route Summary & Hub (Tap to edit route) */}
         <button
           onClick={() => {
@@ -131,7 +131,7 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowDeparturesSheet(true);
             }}
-            className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-800 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700/80 px-2.5 py-1 rounded-xl font-medium text-[11px] active:scale-95 transition-all shadow-xs"
+            className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-200 px-2.5 py-1.5 rounded-xl font-medium text-[11px] active:scale-95 transition-all shadow-xs"
             title="Browse corridor departures schedule"
           >
             <Clock className="w-3 h-3 text-[#F58A25]" />
@@ -143,7 +143,7 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setShowSafeZoneModal(true);
             }}
-            className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-600 dark:text-slate-300 border border-slate-200/90 dark:border-slate-700/80 active:scale-95 transition-all shadow-xs"
+            className="p-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-600 dark:text-slate-300 active:scale-95 transition-all shadow-xs"
             title="CCTV Safe Hub Security"
           >
             <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
@@ -154,12 +154,12 @@ export const RoutePlannerBar: React.FC = () => {
       {/* Location Modal with Back Button */}
       {isModalOpen && (
         <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-[430px] bg-white dark:bg-[#12161A] backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
+          <div className="w-full max-w-[430px] bg-white/95 dark:bg-[#12161A]/95 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-[0_24px_60px_rgba(0,0,0,0.3)] dark:shadow-[0_28px_70px_rgba(0,0,0,0.85)] max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
             {/* Header with Back Button */}
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between pb-3">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-2xs active:scale-95 transition-all"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-2xs active:scale-95 transition-all"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-[#F58A25]" />
                 <span>Back</span>
@@ -170,7 +170,7 @@ export const RoutePlannerBar: React.FC = () => {
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"
+                className="w-7 h-7 rounded-full bg-slate-100/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-xs"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -182,7 +182,7 @@ export const RoutePlannerBar: React.FC = () => {
                 <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Pickup Origin
                 </label>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5">
+                <div className="flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-2 shadow-inner">
                   <MapPin className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
                   <input
                     type="text"
@@ -201,7 +201,7 @@ export const RoutePlannerBar: React.FC = () => {
                 <label className="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                   Destination
                 </label>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-700 rounded-xl px-2.5 py-1.5">
+                <div className="flex items-center gap-2 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-2 shadow-inner">
                   <Car className="w-3.5 h-3.5 text-[#F58A25]" />
                   <input
                     type="text"
@@ -226,13 +226,13 @@ export const RoutePlannerBar: React.FC = () => {
                 <button
                   key={loc.id}
                   onClick={() => handleSelectLocation(loc, activeInput)}
-                  className="w-full p-2 rounded-xl bg-slate-50 dark:bg-slate-900/50 hover:bg-teal-50/50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-left flex items-center justify-between text-xs transition-colors"
+                  className="w-full p-2.5 rounded-xl bg-slate-100/70 dark:bg-slate-900/60 hover:bg-teal-50/70 dark:hover:bg-slate-800 text-left flex items-center justify-between text-xs transition-colors shadow-2xs"
                 >
                   <div>
                     <span className="font-bold text-slate-900 dark:text-slate-100 block">{loc.name}</span>
                     <span className="text-[10px] text-slate-500 dark:text-slate-400">{loc.area}</span>
                   </div>
-                  <span className="text-[9px] font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-full border border-teal-200 dark:border-teal-800">
+                  <span className="text-[9px] font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-50/80 dark:bg-teal-950/60 px-2.5 py-0.5 rounded-full shadow-2xs">
                     Select
                   </span>
                 </button>
@@ -241,7 +241,7 @@ export const RoutePlannerBar: React.FC = () => {
 
             <button
               onClick={handleApplyRoute}
-              className="w-full mt-3 py-2.5 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-xs active:scale-[0.99] transition-all"
+              className="w-full mt-3 py-2.5 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-md active:scale-[0.99] transition-all"
             >
               Update Commute Route
             </button>
@@ -252,11 +252,11 @@ export const RoutePlannerBar: React.FC = () => {
       {/* Safe Zone Picker Modal with Back Button */}
       {showSafeZoneModal && (
         <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md p-0 sm:p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-[430px] bg-white dark:bg-[#12161A] backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-2xl border border-slate-200 dark:border-slate-800 max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+          <div className="w-full max-w-[430px] bg-white/95 dark:bg-[#12161A]/95 backdrop-blur-2xl rounded-t-3xl sm:rounded-3xl p-4 shadow-[0_24px_60px_rgba(0,0,0,0.3)] dark:shadow-[0_28px_70px_rgba(0,0,0,0.85)] max-h-[90vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-200">
+            <div className="flex items-center justify-between pb-2.5">
               <button
                 onClick={() => setShowSafeZoneModal(false)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-2xs active:scale-95 transition-all"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 text-xs font-bold text-slate-800 dark:text-slate-100 shadow-2xs active:scale-95 transition-all"
               >
                 <ArrowLeft className="w-3.5 h-3.5 text-[#F58A25]" />
                 <span>Back</span>
@@ -267,7 +267,7 @@ export const RoutePlannerBar: React.FC = () => {
               </h3>
               <button
                 onClick={() => setShowSafeZoneModal(false)}
-                className="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center"
+                className="w-7 h-7 rounded-full bg-slate-100/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 flex items-center justify-center shadow-xs"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -277,7 +277,7 @@ export const RoutePlannerBar: React.FC = () => {
             </div>
             <button
               onClick={() => setShowSafeZoneModal(false)}
-              className="w-full mt-2 py-2.5 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-xs active:scale-[0.99] transition-all"
+              className="w-full mt-2 py-2.5 bg-[#0F766E] hover:bg-[#0D655E] text-white font-bold text-xs rounded-xl shadow-md active:scale-[0.99] transition-all"
             >
               Confirm Safe Zone Hub
             </button>

@@ -98,7 +98,7 @@ export const AuthLanding: React.FC = () => {
     <div className="w-full max-w-[430px] mx-auto min-h-screen bg-[#F6F2EA] text-[#141210] flex flex-col justify-between p-4 py-5 space-y-3">
       {/* Brand Header with Responsive Logo & Fancy Typography */}
       <div className="flex flex-col items-center text-center space-y-2 pt-1">
-        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-1 bg-white border border-[#C25E2E]/40 shadow-xs flex items-center justify-center">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl p-2 bg-white shadow-floating flex items-center justify-center">
           <img
             src={getAssetPath('/logo.png')}
             alt="CAR PULL Logo"
@@ -114,21 +114,21 @@ export const AuthLanding: React.FC = () => {
             Community &amp; Social Carpooling
           </h1>
           <p className="text-[11px] text-[#70665A] max-w-[320px] mx-auto leading-tight mt-0.5">
-            Ride together, meet great people, and share fuel splits across Lagos—any day, any time.
+            Ride together, meet great people, and share fuel splits across Lagos, any day, any time.
           </p>
         </div>
       </div>
 
-      {/* Main Form Container - Dense & Flowing */}
-      <div className="bg-white border border-[#DDD4C5] rounded-2xl p-3.5 shadow-sm space-y-3">
+      {/* Main Form Container - Floating Surface */}
+      <div className="bg-white rounded-3xl p-4 shadow-floating space-y-3">
         {/* 2-Tab Segmented Selector (Sign In vs Create Account) */}
-        <div className="grid grid-cols-2 gap-1 bg-[#ECE5D8] p-1 rounded-xl text-xs font-bold border border-[#DDD4C5]">
+        <div className="grid grid-cols-2 gap-1 bg-[#ECE5D8] p-1 rounded-2xl text-xs font-bold shadow-inner">
           <button
             type="button"
             onClick={() => setAuthTab('signin')}
-            className={`py-1.5 rounded-lg transition-all ${
+            className={`py-1.5 rounded-xl transition-all ${
               authTab === 'signin'
-                ? 'bg-white text-[#141210] shadow-2xs font-black'
+                ? 'bg-white text-[#141210] shadow-floating-sm font-black'
                 : 'text-[#70665A] hover:text-[#141210]'
             }`}
           >
@@ -137,7 +137,7 @@ export const AuthLanding: React.FC = () => {
           <button
             type="button"
             onClick={() => setAuthTab('signup')}
-            className={`py-1.5 rounded-lg transition-all ${
+            className={`py-1.5 rounded-xl transition-all ${
               authTab === 'signup'
                 ? 'bg-white text-[#141210] shadow-2xs font-black'
                 : 'text-[#70665A] hover:text-[#141210]'
@@ -154,7 +154,7 @@ export const AuthLanding: React.FC = () => {
               <label className="text-[10px] font-bold text-[#70665A] uppercase tracking-wider block">
                 Work Email or Phone
               </label>
-              <div className="flex items-center gap-2 bg-[#F8F5EE] border border-[#DDD4C5] focus-within:border-[#0D6E6E] rounded-xl px-3 py-2 transition-colors">
+              <div className="flex items-center gap-2 bg-[#F4EFE6] rounded-xl px-3 py-2 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                 <Mail className="w-4 h-4 text-[#70665A] flex-shrink-0" />
                 <input
                   type="text"
@@ -171,7 +171,7 @@ export const AuthLanding: React.FC = () => {
               <label className="text-[10px] font-bold text-[#70665A] uppercase tracking-wider block">
                 Password or OTP
               </label>
-              <div className="flex items-center gap-2 bg-[#F8F5EE] border border-[#DDD4C5] focus-within:border-[#0D6E6E] rounded-xl px-3 py-2 transition-colors">
+              <div className="flex items-center gap-2 bg-[#F4EFE6] rounded-xl px-3 py-2 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                 <Lock className="w-4 h-4 text-[#70665A] flex-shrink-0" />
                 <input
                   type="password"
@@ -186,14 +186,14 @@ export const AuthLanding: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] hover:opacity-95 active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] hover:opacity-95 active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5"
             >
               <span>Sign In to CAR PULL</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
 
             {/* Instant Demo Shortcuts in Logo Colors */}
-            <div className="pt-2 border-t border-[#DDD4C5] flex items-center justify-between text-[10px]">
+            <div className="pt-2 flex items-center justify-between text-[10px]">
               <span className="font-bold text-[#70665A] uppercase tracking-wider text-[9px]">
                 Instant Demo:
               </span>
@@ -201,7 +201,7 @@ export const AuthLanding: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => login('femi.adeyemi@dangote.com', 'rider')}
-                  className="px-2 py-1 bg-[#F8F5EE] hover:bg-teal-50 hover:text-[#0D6E6E] text-[#141210] rounded-lg font-bold transition-colors flex items-center gap-1 border border-[#DDD4C5]"
+                  className="px-2.5 py-1 bg-[#F4EFE6] hover:bg-white text-[#141210] rounded-xl font-bold shadow-floating-sm transition-all flex items-center gap-1"
                 >
                   <User className="w-3 h-3 text-[#0D6E6E]" />
                   <span>Rider (Femi)</span>
@@ -209,7 +209,7 @@ export const AuthLanding: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => login('babatunde.adeleke@flutterwave.com', 'driver')}
-                  className="px-2 py-1 bg-[#F8F5EE] hover:bg-amber-50 hover:text-[#C25E2E] text-[#141210] rounded-lg font-bold transition-colors flex items-center gap-1 border border-[#DDD4C5]"
+                  className="px-2.5 py-1 bg-[#F4EFE6] hover:bg-white text-[#141210] rounded-xl font-bold shadow-floating-sm transition-all flex items-center gap-1"
                 >
                   <Car className="w-3 h-3 text-[#C25E2E]" />
                   <span>Driver (Babatunde)</span>
@@ -222,7 +222,7 @@ export const AuthLanding: React.FC = () => {
         {/* 2. SIGN UP TAB (With Back to Sign In Option) */}
         {authTab === 'signup' && (
           <div className="space-y-2.5 pt-0.5">
-            <div className="flex items-center justify-between pb-1 border-b border-[#DDD4C5]">
+            <div className="flex items-center justify-between pb-1">
               <button
                 type="button"
                 onClick={() => setAuthTab('signin')}
@@ -232,12 +232,12 @@ export const AuthLanding: React.FC = () => {
                 <span>Back to Sign In</span>
               </button>
 
-              <div className="flex bg-[#ECE5D8] p-0.5 rounded-lg border border-[#DDD4C5] text-[10px] font-bold">
+              <div className="flex bg-[#ECE5D8] p-0.5 rounded-xl shadow-inner text-[10px] font-bold">
                 <button
                   type="button"
                   onClick={() => setSignUpRole('rider')}
-                  className={`px-2 py-0.5 rounded-md transition-all ${
-                    signUpRole === 'rider' ? 'bg-[#0D6E6E] text-white font-black' : 'text-[#70665A]'
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    signUpRole === 'rider' ? 'bg-[#0D6E6E] text-white font-black shadow-floating-sm' : 'text-[#70665A]'
                   }`}
                 >
                   Rider
@@ -245,8 +245,8 @@ export const AuthLanding: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setSignUpRole('driver')}
-                  className={`px-2 py-0.5 rounded-md transition-all ${
-                    signUpRole === 'driver' ? 'bg-[#0D6E6E] text-white font-black' : 'text-[#70665A]'
+                  className={`px-2.5 py-1 rounded-lg transition-all ${
+                    signUpRole === 'driver' ? 'bg-[#0D6E6E] text-white font-black shadow-floating-sm' : 'text-[#70665A]'
                   }`}
                 >
                   Driver
@@ -261,7 +261,7 @@ export const AuthLanding: React.FC = () => {
                   <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                     Full Name
                   </label>
-                  <div className="flex items-center gap-1.5 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5">
+                  <div className="flex items-center gap-1.5 bg-[#F4EFE6] rounded-xl px-2.5 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                     <User className="w-3.5 h-3.5 text-[#70665A]" />
                     <input
                       type="text"
@@ -278,7 +278,7 @@ export const AuthLanding: React.FC = () => {
                   <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                     Email Address
                   </label>
-                  <div className="flex items-center gap-1.5 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5">
+                  <div className="flex items-center gap-1.5 bg-[#F4EFE6] rounded-xl px-2.5 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                     <Mail className="w-3.5 h-3.5 text-[#70665A]" />
                     <input
                       type="email"
@@ -296,7 +296,7 @@ export const AuthLanding: React.FC = () => {
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                       Phone Number
                     </label>
-                    <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
+                    <div className="flex items-center gap-1 bg-[#F4EFE6] rounded-xl px-2 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                       <Phone className="w-3 h-3 text-[#70665A]" />
                       <input
                         type="tel"
@@ -312,7 +312,7 @@ export const AuthLanding: React.FC = () => {
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                       Work / Community
                     </label>
-                    <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
+                    <div className="flex items-center gap-1 bg-[#F4EFE6] rounded-xl px-2 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                       <Building2 className="w-3 h-3 text-[#70665A]" />
                       <input
                         type="text"
@@ -327,7 +327,7 @@ export const AuthLanding: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 mt-1"
+                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5 mt-1"
                 >
                   <span>Create Rider Account</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -343,7 +343,7 @@ export const AuthLanding: React.FC = () => {
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                       Full Name
                     </label>
-                    <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
+                    <div className="flex items-center gap-1 bg-[#F4EFE6] rounded-xl px-2 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                       <User className="w-3 h-3 text-[#70665A]" />
                       <input
                         type="text"
@@ -360,7 +360,7 @@ export const AuthLanding: React.FC = () => {
                     <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                       Work / Field
                     </label>
-                    <div className="flex items-center gap-1 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2 py-1.5">
+                    <div className="flex items-center gap-1 bg-[#F4EFE6] rounded-xl px-2 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                       <Building2 className="w-3 h-3 text-[#70665A]" />
                       <input
                         type="text"
@@ -377,7 +377,7 @@ export const AuthLanding: React.FC = () => {
                   <label className="text-[9px] font-bold text-[#70665A] uppercase tracking-wider block">
                     Email Address
                   </label>
-                  <div className="flex items-center gap-1.5 bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl px-2.5 py-1.5">
+                  <div className="flex items-center gap-1.5 bg-[#F4EFE6] rounded-xl px-2.5 py-1.5 shadow-inner focus-within:ring-2 focus-within:ring-[#0D6E6E]/20 transition-all">
                     <Mail className="w-3.5 h-3.5 text-[#70665A]" />
                     <input
                       type="email"
@@ -389,14 +389,14 @@ export const AuthLanding: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Flowing Vehicle Details Box */}
-                <div className="bg-[#F8F5EE] border border-[#DDD4C5] rounded-xl p-2.5 space-y-2">
+                {/* Floating Vehicle Details Container */}
+                <div className="bg-[#F4EFE6] rounded-2xl p-3 shadow-floating-sm space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-[9px] font-black text-[#0D6E6E] uppercase tracking-wider flex items-center gap-1">
                       <Car className="w-3 h-3" />
                       Vehicle Details
                     </span>
-                    <span className="text-[8px] font-black text-emerald-800 bg-emerald-100/80 border border-emerald-300 px-1.5 py-0.2 rounded-full">
+                    <span className="text-[8px] font-black text-emerald-800 bg-emerald-100/90 px-2 py-0.5 rounded-full shadow-2xs">
                       Sec 44 Compliant
                     </span>
                   </div>
@@ -409,7 +409,7 @@ export const AuthLanding: React.FC = () => {
                         value={carMake}
                         onChange={(e) => setCarMake(e.target.value)}
                         placeholder="e.g. Toyota"
-                        className="w-full bg-white border border-[#DDD4C5] rounded-lg px-2 py-1 text-xs font-bold text-[#141210] focus:outline-none"
+                        className="w-full bg-white rounded-xl px-2.5 py-1.5 text-xs font-bold text-[#141210] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0D6E6E]/20 transition-all"
                         required
                       />
                     </div>
@@ -420,7 +420,7 @@ export const AuthLanding: React.FC = () => {
                         value={carModel}
                         onChange={(e) => setCarModel(e.target.value)}
                         placeholder="e.g. Camry"
-                        className="w-full bg-white border border-[#DDD4C5] rounded-lg px-2 py-1 text-xs font-bold text-[#141210] focus:outline-none"
+                        className="w-full bg-white rounded-xl px-2.5 py-1.5 text-xs font-bold text-[#141210] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0D6E6E]/20 transition-all"
                         required
                       />
                     </div>
@@ -434,7 +434,7 @@ export const AuthLanding: React.FC = () => {
                         value={carPlate}
                         onChange={(e) => setCarPlate(e.target.value)}
                         placeholder="APP-842-EY"
-                        className="w-full bg-white border border-[#C25E2E] rounded-lg px-2 py-1 text-xs font-black font-mono text-[#C25E2E] uppercase focus:outline-none"
+                        className="w-full bg-[#FFF5ED] rounded-xl px-2.5 py-1.5 text-xs font-black font-mono text-[#C25E2E] uppercase shadow-inner focus:outline-none focus:ring-2 focus:ring-[#C25E2E]/20 transition-all"
                         required
                       />
                     </div>
@@ -446,21 +446,21 @@ export const AuthLanding: React.FC = () => {
                           value={carYear}
                           onChange={(e) => setCarYear(e.target.value)}
                           placeholder="2022"
-                          className="w-12 bg-white border border-[#DDD4C5] rounded-lg px-1.5 py-1 text-xs font-bold text-[#141210] focus:outline-none"
+                          className="w-12 bg-white rounded-xl px-2 py-1.5 text-xs font-bold text-[#141210] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0D6E6E]/20 transition-all"
                         />
                         <input
                           type="text"
                           value={carColor}
                           onChange={(e) => setCarColor(e.target.value)}
                           placeholder="Silver"
-                          className="flex-1 min-w-0 bg-white border border-[#DDD4C5] rounded-lg px-1.5 py-1 text-xs font-bold text-[#141210] focus:outline-none"
+                          className="flex-1 min-w-0 bg-white rounded-xl px-2 py-1.5 text-xs font-bold text-[#141210] shadow-inner focus:outline-none focus:ring-2 focus:ring-[#0D6E6E]/20 transition-all"
                         />
                       </div>
                     </div>
                   </div>
 
                   {/* Seats & AC Options */}
-                  <div className="flex items-center justify-between pt-1 border-t border-[#DDD4C5] text-[11px]">
+                  <div className="flex items-center justify-between pt-1 text-[11px]">
                     <div className="flex items-center gap-1.5">
                       <span className="text-[9px] font-bold text-[#70665A]">Seats:</span>
                       {[1, 2, 3, 4].map((num) => (
@@ -468,10 +468,10 @@ export const AuthLanding: React.FC = () => {
                           key={num}
                           type="button"
                           onClick={() => setCarSeats(num)}
-                          className={`w-5 h-5 rounded-md text-[10px] font-black transition-all ${
+                          className={`w-5 h-5 rounded-lg text-[10px] font-black transition-all ${
                             carSeats === num
-                              ? 'bg-[#0D6E6E] text-white shadow-2xs'
-                              : 'bg-white text-[#70665A] border border-[#DDD4C5]'
+                              ? 'bg-[#0D6E6E] text-white shadow-floating-sm'
+                              : 'bg-white text-[#70665A] shadow-inner'
                           }`}
                         >
                           {num}
@@ -493,7 +493,7 @@ export const AuthLanding: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-xs transition-all flex items-center justify-center gap-1.5 mt-1"
+                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5 mt-1"
                 >
                   <Car className="w-3.5 h-3.5 text-[#FBBF24]" />
                   <span>Register Vehicle & Start Driving</span>
@@ -504,19 +504,19 @@ export const AuthLanding: React.FC = () => {
         )}
       </div>
 
-      {/* Flowing Value Pillars in Logo Colors */}
+      {/* Floating Value Pillars in Logo Colors */}
       <div className="grid grid-cols-3 gap-1.5 text-center pt-0.5">
-        <div className="p-2 rounded-xl bg-white border border-[#DDD4C5] flex flex-col items-center">
+        <div className="p-2.5 rounded-2xl bg-white shadow-floating-sm flex flex-col items-center">
           <ShieldCheck className="w-4 h-4 text-[#0D6E6E] mb-0.5" />
           <span className="text-[9px] font-bold text-[#141210] leading-tight">Verified Peers</span>
           <span className="text-[8px] text-[#70665A]">NIN / Work Domain</span>
         </div>
-        <div className="p-2 rounded-xl bg-white border border-[#DDD4C5] flex flex-col items-center">
+        <div className="p-2.5 rounded-2xl bg-white shadow-floating-sm flex flex-col items-center">
           <Fuel className="w-4 h-4 text-[#C25E2E] mb-0.5" />
           <span className="text-[9px] font-bold text-[#141210] leading-tight">Fair Fuel Split</span>
           <span className="text-[8px] text-[#70665A]">Zero Commercial Fare</span>
         </div>
-        <div className="p-2 rounded-xl bg-white border border-[#DDD4C5] flex flex-col items-center">
+        <div className="p-2.5 rounded-2xl bg-white shadow-floating-sm flex flex-col items-center">
           <MapPin className="w-4 h-4 text-[#D97706] mb-0.5" />
           <span className="text-[9px] font-bold text-[#141210] leading-tight">Safe Hubs</span>
           <span className="text-[8px] text-[#70665A]">Off-Street CCTV</span>

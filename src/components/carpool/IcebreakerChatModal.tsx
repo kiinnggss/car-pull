@@ -86,7 +86,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       ? `Heading over to "${tripPurpose}" as well? Great connecting on CAR PULL!`
       : `Hi ${firstName}! What time are you pulling up at the safe hub?`,
     musicVibe
-      ? `Saw your vibe tag (${musicVibe})—mind if we queue up a commute playlist?`
+      ? `Saw your vibe tag (${musicVibe}), mind if we queue up a commute playlist?`
       : `Hey ${firstName}! Looking forward to sharing the ride and beating the traffic.`,
     `Great connecting on CAR PULL! I'll be waiting at the designated CCTV safe hub.`,
   ];
@@ -140,12 +140,12 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
 
   return createPortal(
     <div className="fixed inset-0 z-[600] bg-black/70 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
-      <div className="w-full max-w-[390px] bg-[#FAF8F3] dark:bg-[#1E1B18] rounded-t-3xl sm:rounded-3xl p-4 space-y-3 shadow-2xl border border-[#DDD4C5] dark:border-stone-800 max-h-[90vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
+      <div className="w-full max-w-[390px] bg-[#FAF8F3] dark:bg-[#141C24] rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-floating-lg max-h-[90vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
         {/* Header with Step-Back Navigation */}
-        <div className="flex items-center justify-between border-b border-[#DDD4C5] dark:border-stone-800 pb-2">
+        <div className="flex items-center justify-between pb-2">
           <button
             onClick={handleBack}
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-white dark:bg-stone-850 hover:bg-stone-100 dark:hover:bg-stone-800 text-[#141210] dark:text-stone-200 border border-[#DDD4C5] dark:border-stone-700 font-bold text-xs transition-all active:scale-95 shadow-2xs active-press"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-stone-800 text-[#141210] dark:text-stone-200 font-bold text-xs shadow-floating-sm active:scale-95 transition-all"
             title="Go back"
           >
             <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
@@ -163,7 +163,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
 
           <button
             onClick={handleBack}
-            className="w-7 h-7 rounded-full bg-white dark:bg-stone-850 hover:bg-stone-200 dark:hover:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center justify-center border border-[#DDD4C5] dark:border-stone-700 transition-colors active-press"
+            className="w-7 h-7 rounded-full bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 font-bold text-xs flex items-center justify-center shadow-floating-sm transition-all"
             title="Close"
           >
             <X className="w-3.5 h-3.5" />
@@ -171,12 +171,12 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
         </div>
 
         {/* Matched Person Profile Capsule */}
-        <div className="bg-white dark:bg-[#1A1816] rounded-2xl p-3 border border-[#DDD4C5] dark:border-stone-800 shadow-2xs space-y-2">
+        <div className="bg-white dark:bg-[#1E2630] rounded-2xl p-3.5 shadow-floating-sm space-y-2">
           <div className="flex items-center gap-3">
             <img
               src={personAvatar}
               alt={personName}
-              className="w-12 h-12 rounded-xl object-cover border border-[#DDD4C5] dark:border-stone-700 flex-shrink-0"
+              className="w-12 h-12 rounded-xl object-cover shadow-floating-sm flex-shrink-0"
             />
             <div className="min-w-0 flex-1 space-y-0.5">
               <div className="flex items-center justify-between">
@@ -184,7 +184,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
                   {personName}
                 </h4>
                 {vehiclePlate && (
-                  <span className="font-mono text-[9px] font-black text-[#C25E2E] dark:text-amber-400 bg-[#FFF9EE] dark:bg-stone-850 px-1.5 py-0.2 rounded border border-[#C25E2E]/30 dark:border-amber-400/30">
+                  <span className="font-mono text-[9px] font-black text-[#C25E2E] dark:text-amber-400 bg-[#FFF9EE] dark:bg-stone-800 px-2 py-0.5 rounded-md shadow-2xs">
                     {vehiclePlate}
                   </span>
                 )}
@@ -216,7 +216,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
           <button
             type="button"
             onClick={handleOpenLinkedIn}
-            className="w-full py-1.5 px-2.5 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/30 text-[#0A66C2] dark:text-blue-400 text-[11px] font-bold flex items-center justify-center gap-1.5 transition-all active-press"
+            className="w-full py-2 px-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 text-[#0A66C2] dark:text-blue-400 text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
           >
             <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
               in
@@ -241,7 +241,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
                   triggerHaptic('tap');
                   setMessage(prompt);
                 }}
-                className="w-full text-left p-2 rounded-xl bg-white dark:bg-stone-900 hover:bg-amber-50/70 dark:hover:bg-stone-850 border border-[#DDD4C5] dark:border-stone-800 text-[11px] text-[#141210] dark:text-stone-200 font-medium transition-all active-press leading-snug"
+                className="w-full text-left p-2.5 rounded-xl bg-white dark:bg-stone-900 hover:bg-amber-50/70 dark:hover:bg-stone-800 text-[11px] text-[#141210] dark:text-stone-200 font-medium shadow-floating-sm transition-all active-press leading-snug"
               >
                 &ldquo;{prompt}&rdquo;
               </button>
@@ -257,7 +257,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder={`Write a friendly note to ${firstName}...`}
-              className="w-full p-2.5 rounded-xl bg-white dark:bg-stone-900 border border-[#DDD4C5] dark:border-stone-800 text-xs text-[#141210] dark:text-stone-100 placeholder:text-[#70665A] dark:placeholder:text-stone-500 focus:outline-hidden focus:ring-1 focus:ring-[#0D6E6E] resize-none"
+              className="w-full p-3 rounded-xl bg-[#F4EFE6] dark:bg-stone-900 text-xs text-[#141210] dark:text-stone-100 placeholder:text-[#70665A] dark:placeholder:text-stone-500 shadow-inner focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E]/30 resize-none"
             />
           </div>
 

@@ -81,9 +81,9 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
   };
 
   const moodLabels = {
-    chat: { label: '💬 Chat & Network', bg: 'bg-emerald-50 text-emerald-800 border-emerald-200' },
-    easy: { label: '☕ Easy Flow', bg: 'bg-amber-50 text-amber-800 border-amber-200' },
-    quiet: { label: '🎧 Quiet & Unwind', bg: 'bg-stone-100 text-stone-700 border-stone-200' },
+    chat: { label: '💬 Chat & Network', bg: 'bg-emerald-50 text-emerald-800 shadow-2xs' },
+    easy: { label: '☕ Easy Flow', bg: 'bg-amber-50 text-amber-800 shadow-2xs' },
+    quiet: { label: '🎧 Quiet & Unwind', bg: 'bg-stone-100 text-stone-700 shadow-2xs' },
   };
 
   return (
@@ -99,13 +99,13 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
             Live street pickups &amp; escrow secured
           </p>
         </div>
-        <span className="text-xs font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-full border border-teal-200 dark:border-teal-800 shadow-2xs flex-shrink-0">
+        <span className="text-xs font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full shadow-2xs flex-shrink-0">
           {activeMatches.length} Active {activeMatches.length === 1 ? 'Ride' : 'Rides'}
         </span>
       </div>
 
-      {/* Flake Penalty Test Action Bar - Minimal & Clean */}
-      <div className="bg-white/75 dark:bg-[#1E1B18]/75 backdrop-blur-xl border border-white/50 dark:border-stone-800 rounded-2xl p-2.5 space-y-1.5 shadow-sm">
+      {/* Flake Penalty Test Action Bar - Floating Surface */}
+      <div className="bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl rounded-2xl p-3 space-y-2 shadow-floating-sm">
         <div className="flex items-center justify-between text-[10px]">
           <span className="font-bold text-[#C25E2E] dark:text-amber-400 flex items-center gap-1">
             <AlertOctagon className="w-3 h-3 text-[#C25E2E] dark:text-amber-400" />
@@ -119,7 +119,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               triggerHaptic('error');
               simulateFlakePenalty('rider_flake');
             }}
-            className="py-1.5 px-2 bg-white/80 dark:bg-[#141210]/80 hover:bg-amber-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#141210] dark:text-stone-200 border border-white/50 dark:border-stone-700 text-center active-press transition-colors shadow-2xs backdrop-blur-xs"
+            className="py-1.5 px-2 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-amber-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#141210] dark:text-stone-200 text-center active-press transition-all shadow-floating-sm"
           >
             Rider Late Cancel (-₦1k)
           </button>
@@ -128,7 +128,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               triggerHaptic('switch');
               simulateFlakePenalty('driver_flake');
             }}
-            className="py-1.5 px-2 bg-white/80 dark:bg-[#141210]/80 hover:bg-teal-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] border border-white/50 dark:border-stone-700 text-center active-press transition-colors shadow-2xs backdrop-blur-xs"
+            className="py-1.5 px-2 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-teal-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] text-center active-press transition-all shadow-floating-sm"
           >
             Driver Flake (+₦2.5k Voucher)
           </button>
@@ -146,7 +146,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           return (
             <div
               key={match.id}
-              className="bg-white/80 dark:bg-[#1A1816]/80 backdrop-blur-xl rounded-2xl p-3.5 space-y-2.5 shadow-md border border-white/60 dark:border-stone-800/80"
+              className="bg-white dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating"
             >
               {/* Top info */}
               <div className="flex items-center justify-between">
@@ -154,7 +154,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                   <img
                     src={match.driverAvatar}
                     alt={match.driverName}
-                    className="w-10 h-10 rounded-xl object-cover border border-[#DDD4C5] dark:border-stone-700"
+                    className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
                   />
                   <div>
                     <h4 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1]">{match.driverName}</h4>
@@ -179,13 +179,13 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               {(match.mutual_spark || moodInfo) && (
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {match.mutual_spark && (
-                    <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-[#C25E2E] dark:text-amber-400 bg-orange-50/90 dark:bg-orange-950/40 px-2 py-0.5 rounded-full border border-orange-200/70 dark:border-orange-800/50">
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-[#C25E2E] dark:text-amber-400 bg-orange-50/90 dark:bg-orange-950/40 px-2 py-0.5 rounded-full shadow-2xs">
                       <Sparkles className="w-2.5 h-2.5 text-[#C25E2E] dark:text-amber-400" />
                       {match.mutual_spark}
                     </span>
                   )}
                   {moodInfo && (
-                    <span className={`inline-flex items-center text-[9.5px] font-bold px-2 py-0.5 rounded-full border ${moodInfo.bg}`}>
+                    <span className={`inline-flex items-center text-[9.5px] font-bold px-2.5 py-0.5 rounded-full shadow-2xs ${moodInfo.bg}`}>
                       {moodInfo.label}
                     </span>
                   )}
@@ -194,7 +194,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Trip Purpose / Human Context */}
               {match.trip_purpose && (
-                <div className="bg-[#FAF7F0] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 px-2.5 py-1 rounded-xl flex items-center gap-1.5 text-xs text-[#141210] dark:text-stone-200">
+                <div className="bg-[#F4EFE6] dark:bg-[#10161D] px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-[#141210] dark:text-stone-200 shadow-inner">
                   <Compass className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400 flex-shrink-0" />
                   <span className="text-[10.5px] font-semibold truncate leading-tight">
                     {match.trip_purpose}
@@ -204,7 +204,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Cabin Co-Riders Preview */}
               {match.cabin_passengers && match.cabin_passengers.length > 0 && (
-                <div className="bg-[#F8F5EE] dark:bg-[#1E1B18] border border-[#DDD4C5]/80 dark:border-stone-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[10px]">
+                <div className="bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] shadow-inner">
                   <div className="flex items-center gap-1.5">
                     <Users className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
                     <span className="font-bold text-[#70665A] dark:text-stone-400">Cabin Co-Rider:</span>
@@ -219,14 +219,14 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               )}
 
               {/* Vehicle Brand and Plate Number */}
-              <div className="flex items-center justify-between bg-[#F8F5EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-xl px-2.5 py-1.5 text-xs">
+              <div className="flex items-center justify-between bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl px-3 py-1.5 text-xs shadow-inner">
                 <div className="flex items-center gap-1.5">
                   <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
                   <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
                     {match.vehicleMake || 'Toyota'} {match.vehicleModel || 'Camry'}
                   </span>
                 </div>
-                <span className="font-mono text-[10px] font-black text-[#C25E2E] dark:text-amber-400 bg-[#FFF9EE] dark:bg-amber-950/40 px-2 py-0.2 rounded border border-[#C25E2E]/30 dark:border-amber-700/50">
+                <span className="font-mono text-[10px] font-black text-[#C25E2E] dark:text-amber-400 bg-[#FFF9EE] dark:bg-amber-950/40 px-2.5 py-0.5 rounded-lg shadow-2xs">
                   {match.plateNumber || 'APP-842-EY'}
                 </span>
               </div>
@@ -242,7 +242,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                   );
                   setActiveTab('map');
                 }}
-                className="w-full flex items-center justify-between text-xs py-1.5 px-2 bg-[#F8F5EE] dark:bg-[#1E1B18] hover:bg-stone-100 dark:hover:bg-stone-800 border border-[#DDD4C5] dark:border-stone-800 rounded-xl text-left transition-colors active-press group"
+                className="w-full flex items-center justify-between text-xs py-2 px-3 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-white dark:hover:bg-stone-800 rounded-xl text-left transition-all active-press group shadow-floating-sm"
               >
                 <span className="flex items-center gap-1.5 truncate">
                   <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
@@ -275,7 +275,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                     setActiveThreadId(targetThreadId);
                     setActiveTab('chats');
                   }}
-                  className="col-span-2 py-2 bg-[#EEF7F7] dark:bg-teal-950/50 hover:bg-teal-100/70 dark:hover:bg-teal-900/60 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/30 dark:border-teal-700/50 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active-press transition-all shadow-2xs"
+                  className="col-span-2 py-2.5 bg-[#EEF7F7] dark:bg-teal-950/50 hover:bg-teal-100/70 dark:hover:bg-teal-900/60 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active-press transition-all shadow-floating-sm"
                 >
                   <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
                   <span>Chat &amp; Pings</span>
@@ -290,7 +290,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                       : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(match.driverName)}`;
                     window.open(url, '_blank');
                   }}
-                  className="py-2 bg-[#0A66C2]/10 dark:bg-sky-950/40 hover:bg-[#0A66C2]/20 dark:hover:bg-sky-900/50 text-[#0A66C2] dark:text-sky-300 border border-[#0A66C2]/30 dark:border-sky-800/50 text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all shadow-2xs"
+                  className="py-2.5 bg-[#0A66C2]/10 dark:bg-sky-950/40 hover:bg-[#0A66C2]/20 dark:hover:bg-sky-900/50 text-[#0A66C2] dark:text-sky-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all shadow-floating-sm"
                   title="Connect on LinkedIn"
                 >
                   <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
@@ -301,21 +301,21 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               </div>
 
               {/* Everyday Carpool Schedule Info */}
-              <div className="bg-[#FAF6EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-xl p-2 flex items-center justify-between text-xs">
+              <div className="bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl p-2.5 flex items-center justify-between text-xs shadow-inner">
                 <div className="flex items-center gap-1.5">
                   <Calendar className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
                   <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
                     Ride Schedule
                   </span>
                 </div>
-                <span className="text-[10px] font-bold font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-md border border-teal-200 dark:border-teal-800">
+                <span className="text-[10px] font-bold font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-md shadow-2xs">
                   {match.scheduledFor}
                 </span>
               </div>
 
               {/* In-Transit Status & Trip Completion with Escrow Release */}
               {isCompleted ? (
-                <div className="bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-xl p-2.5 flex items-center justify-between text-xs">
+                <div className="bg-emerald-50/90 dark:bg-emerald-950/40 rounded-xl p-3 flex items-center justify-between text-xs shadow-floating-sm">
                   <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                     Trip Completed • Escrow Released
@@ -328,9 +328,9 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 <div className="space-y-1.5">
                   <button
                     onClick={() => toggleBoarded(match.id)}
-                    className={`w-full py-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active-press shadow-2xs ${
+                    className={`w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active-press shadow-floating-sm ${
                       isBoarded
-                        ? 'bg-[#EEF7F7] dark:bg-teal-950/60 text-[#0D6E6E] dark:text-[#14B8A6] border border-[#0D6E6E]/40 dark:border-teal-700/60 font-black'
+                        ? 'bg-[#EEF7F7] dark:bg-teal-950/60 text-[#0D6E6E] dark:text-[#14B8A6] font-black shadow-inner'
                         : 'bg-[#0D6E6E] dark:bg-[#14B8A6] hover:bg-[#094E4E] text-white dark:text-[#121110]'
                     }`}
                   >
@@ -354,7 +354,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                         });
                         completeCommuteTrip(match.id, 5);
                       }}
-                      className="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 transition-all active-press shadow-2xs"
+                      className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 transition-all active-press shadow-floating"
                     >
                       <Sparkles className="w-3.5 h-3.5 text-amber-300" />
                       <span>Arrived at Destination • Release Escrow ({formatNgn(match.fareNgn)})</span>
@@ -364,7 +364,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               )}
 
               {/* Offline PIN & Pass Links */}
-              <div className="flex items-center justify-between px-2.5 py-1.5 bg-[#F8F5EE] dark:bg-[#1E1B18] border border-[#DDD4C5] dark:border-stone-800 rounded-xl text-[10px]">
+              <div className="flex items-center justify-between px-3 py-2 bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl text-[10px] shadow-inner">
                 <div className="flex items-center gap-1.5 text-[#70665A] dark:text-stone-400 font-medium">
                   <KeyRound className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
                   <span>Offline PIN:</span>

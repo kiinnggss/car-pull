@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
   const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/90 dark:bg-[#0E1216]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 px-3 py-1.5 transition-colors shadow-xs">
+    <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0E1216]/85 backdrop-blur-xl px-3 py-2 transition-colors shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_-2px_rgba(0,0,0,0.5)]">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
@@ -78,7 +78,7 @@ export const Header: React.FC = () => {
                   setActiveTab('map');
                 }
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/90 dark:border-slate-700/80 font-semibold text-xs transition-all active:scale-95"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all active:scale-95 shadow-xs"
               title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
             >
               <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
                   triggerHaptic('tap');
                   setShowCockpit(true);
                 }}
-                className="p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 shadow-xs hover:border-[#0F766E] active:scale-95 transition-all flex-shrink-0"
+                className="p-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all flex-shrink-0"
                 title="Tap to open Interactive Logo Cockpit"
               >
                 <img
@@ -114,7 +114,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Dense Role Switcher (Rider / Driver) */}
-        <div className="flex bg-slate-100 dark:bg-slate-900/80 p-0.5 rounded-xl border border-slate-200/80 dark:border-slate-800 flex-shrink-0 shadow-xs">
+        <div className="flex bg-slate-100/90 dark:bg-slate-900/90 p-0.5 rounded-xl flex-shrink-0 shadow-inner">
           <button
             onClick={() => {
               triggerHaptic('switch');
@@ -150,7 +150,7 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2 py-1 rounded-xl border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs"
+            className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all active:scale-95 shadow-xs"
             title="Open Escrow Wallet"
           >
             <Lock className="w-3 h-3 text-slate-500 dark:text-slate-400" />
@@ -163,7 +163,7 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setShowDownloadModal(true);
             }}
-            className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 text-slate-700 dark:text-slate-300 border border-slate-200/90 dark:border-slate-700/80 px-2 py-1 rounded-xl text-xs font-medium transition-all active:scale-95 shadow-xs"
+            className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-700 dark:text-slate-300 px-2.5 py-1.5 rounded-xl text-xs font-medium transition-all active:scale-95 shadow-xs"
             title="Download / Install CAR PULL"
           >
             <Download className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
@@ -175,7 +175,7 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               toggleTheme();
             }}
-            className="p-1.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs text-slate-600 dark:text-slate-300"
+            className="p-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 transition-all active:scale-95 shadow-xs text-slate-600 dark:text-slate-300"
             title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
           >
             {theme === 'dark' ? (
@@ -191,10 +191,10 @@ export const Header: React.FC = () => {
                 triggerHaptic('tap');
                 setShowProfileMenu(!showProfileMenu);
               }}
-              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-slate-100 dark:bg-slate-800/80 hover:bg-slate-200/80 dark:hover:bg-slate-700/80 border border-slate-200/90 dark:border-slate-700/80 transition-all active:scale-95 shadow-xs"
+              className="flex items-center gap-0.5 p-0.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 transition-all active:scale-95 shadow-xs"
               title="Account & Settings"
             >
-              <div className="w-6 h-6 rounded-lg bg-[#0F766E]/15 text-[#0F766E] dark:text-[#14B8A6] font-bold text-xs flex items-center justify-center overflow-hidden border border-[#0F766E]/20">
+              <div className="w-6 h-6 rounded-lg bg-[#0F766E]/15 text-[#0F766E] dark:text-[#14B8A6] font-bold text-xs flex items-center justify-center overflow-hidden">
                 <span>{user.fullName ? user.fullName.charAt(0) : 'U'}</span>
               </div>
               <ChevronDown className="w-3 h-3 text-slate-400 dark:text-slate-500" />
@@ -202,8 +202,8 @@ export const Header: React.FC = () => {
 
             {/* Profile Dropdown */}
             {showProfileMenu && (
-              <div className="absolute right-0 top-10 w-52 bg-white dark:bg-[#12161A] backdrop-blur-2xl rounded-2xl p-2.5 shadow-2xl border border-slate-200 dark:border-slate-800 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                <div className="border-b border-slate-100 dark:border-slate-800 pb-2 mb-2">
+              <div className="absolute right-0 top-10 w-52 bg-white/95 dark:bg-[#12161A]/95 backdrop-blur-2xl rounded-2xl p-2.5 shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:shadow-[0_24px_55px_rgba(0,0,0,0.7)] z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                <div className="bg-slate-50 dark:bg-slate-800/50 p-2 rounded-xl mb-2">
                   <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block truncate">
                     {user.fullName}
                   </span>
@@ -255,7 +255,7 @@ export const Header: React.FC = () => {
                       PWA
                     </span>
                   </button>
-                  <div className="border-t border-slate-100 dark:border-slate-800 pt-1 mt-1">
+                  <div className="pt-1 mt-1">
                     <button
                       onClick={() => {
                         triggerHaptic('tap');
@@ -291,13 +291,13 @@ export const Header: React.FC = () => {
             if (e.target === e.currentTarget) setShowDownloadModal(false);
           }}
         >
-          <div className="w-full max-w-[360px] bg-white/95 dark:bg-[#181614]/95 backdrop-blur-2xl rounded-3xl p-5 shadow-[0_16px_48px_0_rgba(0,0,0,0.2),inset_0_1px_0_0_rgba(255,255,255,0.4)] dark:shadow-[0_16px_48px_0_rgba(0,0,0,0.6),inset_0_1px_0_0_rgba(255,255,255,0.1)] border border-white/80 dark:border-white/12 space-y-3.5 text-[#141210] dark:text-[#EDE8E1]">
-            <div className="flex items-center justify-between border-b border-white/60 dark:border-stone-800 pb-2.5">
+          <div className="w-full max-w-[360px] bg-white/95 dark:bg-[#181614]/95 backdrop-blur-2xl rounded-3xl p-5 shadow-[0_24px_60px_-10px_rgba(0,0,0,0.3)] dark:shadow-[0_28px_70px_-10px_rgba(0,0,0,0.85)] space-y-3.5 text-[#141210] dark:text-[#EDE8E1]">
+            <div className="flex items-center justify-between pb-2">
               <div className="flex items-center gap-2.5">
                 <img
                   src={getAssetPath('/logo.png')}
                   alt="CAR PULL Logo"
-                  className="w-9 h-9 object-contain rounded-xl p-1 bg-white dark:bg-stone-900 border border-white/80 dark:border-stone-800 shadow-xs"
+                  className="w-9 h-9 object-contain rounded-xl p-1 bg-white dark:bg-stone-900 shadow-xs"
                 />
                 <div>
                   <h3 className="text-sm font-serif font-black">Download CAR PULL</h3>
@@ -336,7 +336,7 @@ export const Header: React.FC = () => {
 
             {/* Step-by-step guides for iOS & Android */}
             <div className="space-y-2 text-xs">
-              <div className="bg-white/60 dark:bg-white/[0.05] p-2.5 rounded-2xl border border-white/60 dark:border-white/10 space-y-1">
+              <div className="bg-slate-100/70 dark:bg-white/[0.05] p-2.5 rounded-2xl space-y-1 shadow-2xs">
                 <div className="flex items-center gap-2 font-bold text-xs text-[#141210] dark:text-stone-100">
                   <Smartphone className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
                   <span>iPhone / iPad (Safari)</span>
@@ -347,7 +347,7 @@ export const Header: React.FC = () => {
                 </p>
               </div>
 
-              <div className="bg-white/60 dark:bg-white/[0.05] p-2.5 rounded-2xl border border-white/60 dark:border-white/10 space-y-1">
+              <div className="bg-slate-100/70 dark:bg-white/[0.05] p-2.5 rounded-2xl space-y-1 shadow-2xs">
                 <div className="flex items-center gap-2 font-bold text-xs text-[#141210] dark:text-stone-100">
                   <Smartphone className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
                   <span>Android (Chrome)</span>
@@ -380,7 +380,7 @@ Timestamp: ${new Date().toISOString()}`;
                 a.click();
                 URL.revokeObjectURL(url);
               }}
-              className="w-full py-2 bg-stone-100/80 dark:bg-stone-800/80 hover:bg-stone-200 dark:hover:bg-stone-700 text-[#141210] dark:text-stone-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 border border-white/40 dark:border-stone-700 active-press transition-all"
+              className="w-full py-2 bg-stone-100/90 dark:bg-stone-800/90 hover:bg-stone-200 dark:hover:bg-stone-700 text-[#141210] dark:text-stone-200 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active-press transition-all shadow-xs"
             >
               <Download className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
               <span>Download Offline Commute Pass (.txt)</span>

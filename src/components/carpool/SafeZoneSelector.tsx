@@ -41,7 +41,7 @@ export const SafeZoneSelector: React.FC = () => {
   return (
     <div className="space-y-3">
       {/* Geofencing Anti-Agbero Banner */}
-      <div className="bg-amber-50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/60 rounded-2xl p-3 flex items-start gap-2.5 shadow-2xs">
+      <div className="bg-amber-500/10 dark:bg-amber-950/40 rounded-2xl p-3 flex items-start gap-2.5 shadow-floating-sm">
         <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
         <div className="text-[11px] text-amber-950 dark:text-amber-200 leading-snug">
           <span className="font-bold text-amber-900 dark:text-amber-300">Anti-Agbero Geofenced Snapping:</span> Expressways, bus stops, and roundabouts are blocked. Pickups are strictly restricted to CCTV-monitored off-street safe hubs with max 45s dwell time.
@@ -59,15 +59,15 @@ export const SafeZoneSelector: React.FC = () => {
             <button
               key={zone.id}
               onClick={() => setSelectedSafeZone(zone)}
-              className={`w-full text-left p-3 rounded-2xl border transition-all flex items-center justify-between shadow-xs ${
+              className={`w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between ${
                 isSelected
-                  ? 'bg-teal-50/80 dark:bg-teal-950/40 border-[#0F766E] ring-1 ring-[#0F766E]'
-                  : 'bg-white dark:bg-[#12161A] border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700'
+                  ? 'bg-teal-50 dark:bg-teal-950/60 ring-2 ring-[#0F766E] dark:ring-[#14B8A6] shadow-floating'
+                  : 'bg-white dark:bg-[#141C24] shadow-floating-sm hover:shadow-floating'
               }`}
             >
               <div className="flex items-start gap-3">
                 <div
-                  className={`p-2 rounded-xl mt-0.5 ${
+                  className={`p-2 rounded-xl mt-0.5 shadow-floating-sm ${
                     isSelected ? 'bg-[#0F766E] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                   }`}
                 >
@@ -76,7 +76,7 @@ export const SafeZoneSelector: React.FC = () => {
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{zone.name}</span>
-                    <span className="text-[9px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-slate-200 dark:border-slate-700">
+                    <span className="text-[9px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full shadow-floating-sm">
                       {getZoneTag(zone.zone_type)}
                     </span>
                   </div>
@@ -91,7 +91,7 @@ export const SafeZoneSelector: React.FC = () => {
               </div>
 
               {isSelected && (
-                <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center text-white flex-shrink-0">
+                <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center text-white flex-shrink-0 shadow-floating-sm">
                   <Check className="w-3.5 h-3.5" />
                 </div>
               )}

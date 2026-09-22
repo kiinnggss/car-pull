@@ -15,9 +15,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg: #07090C;
-      --card-bg: #10151B;
-      --card-border: #1E2833;
+      --bg: #06080B;
+      --card-bg: rgba(16, 22, 30, 0.7);
+      --card-border: transparent;
+      --card-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+      --card-shadow-hover: 0 24px 50px -10px rgba(0, 0, 0, 0.75), 0 0 30px rgba(20, 184, 166, 0.18);
+      --deck-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 90px -25px rgba(15, 118, 110, 0.16);
+      --floating-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.012) 100%), #111822;
+      --floating-bg-hover: linear-gradient(145deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.02) 100%), #141F2D;
       --teal: #0F766E;
       --teal-light: #14B8A6;
       --teal-glow: rgba(20, 184, 166, 0.25);
@@ -80,15 +85,16 @@
       max-width: 1140px;
       height: 90vh;
       max-height: 760px;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 28px;
+      background: radial-gradient(120% 120% at 50% 0%, #141C26 0%, #0A0E13 100%);
+      border: none;
+      border-radius: 32px;
       padding: 40px 48px;
       flex-direction: column;
       justify-content: space-between;
       position: relative;
-      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.04);
+      box-shadow: var(--deck-shadow);
       overflow: hidden;
+      backdrop-filter: blur(24px);
     }
 
     /* Directional Slide Transitions */
@@ -158,17 +164,19 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--teal-light);
-      background: rgba(15, 118, 110, 0.18);
-      border: 1px solid rgba(20, 184, 166, 0.35);
-      padding: 4px 14px;
+      background: rgba(15, 118, 110, 0.22);
+      border: none;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.16);
+      padding: 5px 14px;
       border-radius: 999px;
       margin-bottom: 8px;
     }
 
     .tag-amber {
       color: var(--amber-light);
-      background: rgba(245, 138, 37, 0.18);
-      border-color: rgba(245, 138, 37, 0.35);
+      background: rgba(245, 138, 37, 0.22);
+      box-shadow: 0 4px 14px rgba(245, 138, 37, 0.16);
+      border: none;
     }
 
     h1 {
@@ -231,17 +239,19 @@
     }
 
     .card {
-      background: rgba(11, 15, 18, 0.65);
-      border: 1px solid var(--card-border);
-      border-radius: 18px;
-      padding: 20px;
-      transition: all 0.25s ease;
+      background: var(--floating-bg);
+      border: none;
+      border-radius: 20px;
+      padding: 22px;
+      box-shadow: var(--card-shadow);
+      backdrop-filter: blur(16px);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .card:hover {
-      border-color: rgba(20, 184, 166, 0.45);
-      background: rgba(11, 15, 18, 0.85);
-      transform: translateY(-2px);
+      background: var(--floating-bg-hover);
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-3px) scale(1.008);
     }
 
     .card-title {
@@ -298,10 +308,10 @@
     /* Picture Frames & Visual Media */
     .media-card {
       position: relative;
-      border-radius: 20px;
+      border-radius: 24px;
       overflow: hidden;
-      border: 1px solid var(--card-border);
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.6);
+      border: none;
+      box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.75), 0 6px 18px -4px rgba(0, 0, 0, 0.5);
       height: 100%;
       min-height: 280px;
     }
@@ -341,25 +351,25 @@
     .phone-mockup {
       width: 228px;
       height: 440px;
-      border-radius: 32px;
-      border: 4px solid #1E2833;
-      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08);
+      border-radius: 36px;
+      border: none;
+      box-shadow: 0 28px 60px -15px rgba(0, 0, 0, 0.9), 0 10px 25px -5px rgba(0, 0, 0, 0.6);
       overflow: hidden;
       position: relative;
       background: #0B0F12;
       flex-shrink: 0;
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
     }
 
     .phone-mockup.sm {
       width: 195px;
       height: 395px;
-      border-radius: 28px;
+      border-radius: 30px;
     }
 
     .phone-mockup:hover {
-      transform: translateY(-4px) scale(1.02);
-      border-color: var(--teal-light);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(20, 184, 166, 0.22);
     }
 
     .phone-mockup img {
@@ -375,13 +385,14 @@
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(12px);
+      border: none;
       border-radius: 999px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
       font-size: 9px;
       font-weight: 800;
-      padding: 3px 10px;
+      padding: 4px 12px;
       color: var(--teal-light);
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -392,17 +403,18 @@
     /* Tables */
     table {
       width: 100%;
-      border-collapse: collapse;
+      border-collapse: separate;
+      border-spacing: 0 6px;
       font-size: 13px;
     }
 
     th {
       text-align: left;
       padding: 10px 14px;
-      background: rgba(11, 15, 18, 0.85);
-      color: var(--text-muted);
+      background: transparent;
+      color: var(--text-dim);
       font-weight: 700;
-      border-bottom: 1px solid var(--card-border);
+      border: none;
       text-transform: uppercase;
       font-size: 11px;
       letter-spacing: 0.05em;
@@ -410,16 +422,20 @@
 
     td {
       padding: 11px 14px;
-      border-bottom: 1px solid var(--card-border);
+      border: none;
+      background: rgba(255, 255, 255, 0.025);
       color: var(--text);
     }
 
-    tr:last-child td {
-      border-bottom: none;
+    tr td:first-child {
+      border-radius: 12px 0 0 12px;
+    }
+    tr td:last-child {
+      border-radius: 0 12px 12px 0;
     }
 
-    .highlight-row {
-      background: rgba(15, 118, 110, 0.1);
+    .highlight-row td {
+      background: rgba(15, 118, 110, 0.16);
       font-weight: 700;
       color: var(--teal-light);
     }
@@ -429,7 +445,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-top: 1px solid var(--card-border);
+      border-top: none;
       padding-top: 16px;
       margin-top: 6px;
     }
@@ -465,25 +481,26 @@
 
     .btn-nav {
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--card-border);
+      border: none;
       color: var(--text);
       width: 38px;
       height: 38px;
-      border-radius: 12px;
+      border-radius: 14px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 16px;
       font-weight: bold;
-      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .btn-nav:hover {
       background: var(--teal);
-      border-color: var(--teal);
       color: white;
-      transform: scale(1.05);
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.4);
     }
 
     .btn-nav:active {
@@ -515,7 +532,7 @@
     /* Top Utility Toolbar */
     .top-toolbar {
       position: fixed;
-      top: 14px;
+      top: 16px;
       right: 24px;
       z-index: 120;
       display: flex;
@@ -524,10 +541,10 @@
     }
 
     .tool-btn {
-      background: rgba(16, 21, 27, 0.78);
-      border: 1px solid var(--card-border);
+      background: rgba(16, 21, 27, 0.72);
+      border: none;
       color: var(--text);
-      padding: 6px 13px;
+      padding: 7px 14px;
       border-radius: 999px;
       font-size: 11.5px;
       font-weight: 700;
@@ -535,16 +552,17 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      backdrop-filter: blur(14px);
-      transition: all 0.2s ease;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       text-decoration: none;
     }
 
     .tool-btn:hover {
-      border-color: var(--teal-light);
-      background: rgba(15, 118, 110, 0.28);
+      background: rgba(15, 118, 110, 0.35);
       color: #FFFFFF;
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(20, 184, 166, 0.25);
     }
 
     .tool-btn:active {
@@ -578,8 +596,8 @@
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(7, 9, 12, 0.88);
-      backdrop-filter: blur(16px);
+      background: rgba(6, 8, 11, 0.85);
+      backdrop-filter: blur(20px);
       z-index: 200;
       display: none;
       align-items: center;
@@ -598,25 +616,25 @@
     }
 
     .modal-window {
-      background: #10151B;
-      border: 1px solid var(--card-border);
-      border-radius: 24px;
+      background: #0E1319;
+      border: none;
+      border-radius: 28px;
       width: 100%;
       max-width: 1080px;
       max-height: 90vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.9), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 16px 36px rgba(0, 0, 0, 0.7);
     }
 
     .modal-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 24px;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(11, 15, 18, 0.85);
+      padding: 20px 28px;
+      border-bottom: none;
+      background: rgba(255, 255, 255, 0.02);
     }
 
     .modal-title {
@@ -630,22 +648,22 @@
 
     .modal-close-btn {
       background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--card-border);
+      border: none;
       color: var(--text-muted);
       width: 32px;
       height: 32px;
-      border-radius: 8px;
+      border-radius: 10px;
       cursor: pointer;
       font-size: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
       transition: all 0.2s ease;
     }
 
     .modal-close-btn:hover {
-      background: rgba(239, 68, 68, 0.2);
-      border-color: rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.25);
       color: #F87171;
     }
 
@@ -660,12 +678,13 @@
     }
 
     .grid-slide-item {
-      background: rgba(11, 15, 18, 0.8);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 16px;
+      background: var(--floating-bg);
+      border: none;
+      border-radius: 18px;
+      padding: 18px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.5);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -673,15 +692,14 @@
     }
 
     .grid-slide-item:hover {
-      border-color: var(--teal-light);
-      background: rgba(15, 118, 110, 0.15);
-      transform: translateY(-2px);
+      background: var(--floating-bg-hover);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px -6px rgba(0, 0, 0, 0.75), 0 0 20px rgba(20, 184, 166, 0.2);
     }
 
     .grid-slide-item.active-thumb {
-      border-color: var(--teal-light);
-      box-shadow: 0 0 16px rgba(20, 184, 166, 0.3);
-      background: rgba(15, 118, 110, 0.18);
+      box-shadow: 0 0 0 2px var(--teal-light), 0 16px 36px rgba(20, 184, 166, 0.3);
+      background: rgba(15, 118, 110, 0.22);
     }
 
     .grid-slide-num {
@@ -713,13 +731,13 @@
       bottom: 0;
       left: 0;
       width: 100vw;
-      background: rgba(11, 15, 18, 0.94);
-      backdrop-filter: blur(24px);
-      border-top: 1px solid rgba(20, 184, 166, 0.4);
+      background: rgba(11, 15, 18, 0.92);
+      backdrop-filter: blur(30px);
+      border-top: none;
       z-index: 150;
-      padding: 16px 36px 20px;
+      padding: 20px 40px 24px;
       display: none;
-      box-shadow: 0 -16px 36px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 -24px 60px rgba(0, 0, 0, 0.95), 0 -4px 20px rgba(20, 184, 166, 0.15);
     }
 
     #notes-drawer.open {
@@ -884,20 +902,20 @@
               </p>
             </div>
 
-            <div class="card" style="background: rgba(15, 118, 110, 0.14); border-color: rgba(20, 184, 166, 0.45);">
+            <div class="card" style="background: linear-gradient(145deg, rgba(15, 118, 110, 0.22) 0%, rgba(15, 118, 110, 0.08) 100%), #111822; box-shadow: 0 16px 36px -6px rgba(15, 118, 110, 0.25);">
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                 <div style="font-size: 13.5px; font-weight: 800; color: #FFFFFF;">
                   Target Raise: <span style="color: var(--teal-light);">$350,000 Pre-Seed</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 6px;">
-                  <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green);"></span>
+                  <span style="width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); box-shadow: 0 0 8px var(--accent-green);"></span>
                   <span style="font-size: 10px; font-weight: 800; color: var(--accent-green); text-transform: uppercase; letter-spacing: 0.06em;">Pilot Ready</span>
                 </div>
               </div>
               <div style="font-size: 11.5px; color: var(--text-muted);">
                 Founder: Gbodimowo Isaac &bull; Systems Architect &bull; Lagos, Nigeria
               </div>
-              <div style="margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 11.5px; color: var(--teal-light); font-weight: 600;">
+              <div style="margin-top: 8px; padding-top: 8px; font-size: 11.5px; color: var(--teal-light); font-weight: 600;">
                 420+ Commuters Waitlisted &bull; 85 Pre-Registered Drivers (Lekki-VI)
               </div>
             </div>
@@ -920,7 +938,7 @@
       <div class="slide-header fade-up-1">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
           <span class="tag tag-amber" style="margin-bottom: 0;">The Macro Problem</span>
-          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--amber-light); background: rgba(245, 138, 37, 0.15); border: 1px solid rgba(245, 138, 37, 0.35); padding: 3px 12px; border-radius: 999px;">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 800; color: var(--amber-light); background: rgba(245, 138, 37, 0.18); box-shadow: 0 4px 12px rgba(245, 138, 37, 0.15); padding: 4px 14px; border-radius: 999px;">
             &#9889; Macro Catalyst: May 2023 Subsidy Scrapping &amp; Naira Float
           </span>
         </div>
@@ -1222,7 +1240,7 @@
       <div class="slide-header fade-up-1">
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 4px;">
           <span class="tag" style="margin-bottom: 0;">Unit Economics &amp; Sensitivity</span>
-          <span style="font-size: 11px; font-weight: 800; color: var(--teal-light); background: rgba(20, 184, 166, 0.15); border: 1px solid rgba(20, 184, 166, 0.35); padding: 3px 12px; border-radius: 999px;">
+          <span style="font-size: 11px; font-weight: 800; color: var(--teal-light); background: rgba(20, 184, 166, 0.18); box-shadow: 0 4px 12px rgba(20, 184, 166, 0.15); padding: 4px 14px; border-radius: 999px;">
             &#9881; Interactive Financial Simulator Active
           </span>
         </div>
@@ -1282,7 +1300,7 @@
           </div>
 
           <!-- Right Column: Interactive Platform Revenue Simulator -->
-          <div class="card card-compact" style="background: rgba(15, 118, 110, 0.08); border-color: rgba(20, 184, 166, 0.35); padding: 16px 20px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div class="card card-compact" style="background: linear-gradient(145deg, rgba(15, 118, 110, 0.14) 0%, rgba(15, 118, 110, 0.04) 100%), #111822; box-shadow: 0 16px 36px -6px rgba(15, 118, 110, 0.2); padding: 18px 22px; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
               <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
                 <div class="card-title" style="color: var(--teal-light); font-size: 13.5px; margin-bottom: 0;">
@@ -1318,20 +1336,20 @@
             <!-- Calculated Metrics -->
             <div>
               <div class="grid-2" style="gap: 8px; margin-bottom: 8px;">
-                <div style="background: rgba(0, 0, 0, 0.45); border: 1px solid var(--card-border); border-radius: 12px; padding: 8px 12px;">
+                <div style="background: rgba(0, 0, 0, 0.35); border-radius: 14px; padding: 10px 14px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);">
                   <div style="font-size: 9.5px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Monthly Gross Volume (GBV)</div>
                   <div id="calc-gbv" style="font-size: 16px; font-weight: 900; color: #FFFFFF; margin-top: 2px;">₦48.0M</div>
                   <div id="calc-gbv-usd" style="font-size: 10px; color: var(--text-muted);">$32,000 / mo</div>
                 </div>
 
-                <div style="background: rgba(15, 118, 110, 0.16); border: 1px solid rgba(20, 184, 166, 0.35); border-radius: 12px; padding: 8px 12px;">
+                <div style="background: rgba(15, 118, 110, 0.2); border-radius: 14px; padding: 10px 14px; box-shadow: 0 6px 18px rgba(15, 118, 110, 0.22);">
                   <div style="font-size: 9.5px; font-weight: 700; color: var(--teal-light); text-transform: uppercase;">Monthly Platform Take (10%)</div>
                   <div id="calc-take" style="font-size: 16px; font-weight: 900; color: var(--teal-light); margin-top: 2px;">₦4.80M</div>
                   <div id="calc-take-usd" style="font-size: 10px; color: #A7F3D0;">$3,200 / mo</div>
                 </div>
               </div>
 
-              <div style="background: rgba(245, 138, 37, 0.12); border: 1px solid rgba(245, 138, 37, 0.35); border-radius: 12px; padding: 8px 14px; display: flex; justify-content: space-between; align-items: center;">
+              <div style="background: rgba(245, 138, 37, 0.16); border-radius: 14px; padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 18px rgba(245, 138, 37, 0.18);">
                 <div>
                   <div style="font-size: 9.5px; font-weight: 800; color: var(--amber-light); text-transform: uppercase;">Annualized Run-Rate (ARR)</div>
                   <div id="calc-arr" style="font-size: 18px; font-weight: 900; color: #FFFFFF; margin-top: 2px;">$38,400</div>
@@ -1443,8 +1461,8 @@
           </div>
         </div>
 
-        <div class="card" style="background: rgba(15, 118, 110, 0.08); border-color: rgba(20, 184, 166, 0.35);">
-          <div class="card-title" style="color: var(--teal-light);">The Corporate Viral Referral Flywheel</div>
+        <div class="card" style="background: linear-gradient(145deg, rgba(15, 118, 110, 0.18) 0%, rgba(15, 118, 110, 0.06) 100%), #111822; box-shadow: 0 16px 36px -6px rgba(15, 118, 110, 0.25);">
+          <div class="card-title" style="color: var(--teal-light);">Corporate Word-of-Mouth Network Growth</div>
           <p class="card-desc">
             When a driver offsets ₦8,000 on day one, they tell their corporate coworkers on the same office floor. Supply and demand grow organically inside the same office towers without paid customer acquisition ad burn.
           </p>

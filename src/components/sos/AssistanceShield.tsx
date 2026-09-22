@@ -63,9 +63,9 @@ export const AssistanceShield: React.FC = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-white dark:bg-[#141210] text-zinc-900 dark:text-stone-100 overflow-y-auto px-4 py-5 flex flex-col items-center justify-between max-w-[430px] mx-auto animate-in fade-in duration-150">
-      {/* Top Legal Authority Header - Clean Banner */}
+      {/* Top Legal Authority Header */}
       <div className="w-full space-y-2.5">
-        <div className="bg-amber-50 dark:bg-amber-950/40 rounded-2xl p-3 text-center border-l-4 border-amber-500">
+        <div className="bg-amber-500/10 dark:bg-amber-950/40 rounded-2xl p-3.5 text-center shadow-floating-sm">
           <div className="flex items-center justify-center gap-1.5 text-amber-900 dark:text-amber-200">
             <ShieldAlert className="w-4 h-4 text-amber-600 dark:text-amber-400 animate-bounce" />
             <span className="text-xs font-black uppercase tracking-wider">
@@ -77,8 +77,8 @@ export const AssistanceShield: React.FC = () => {
           </p>
         </div>
 
-        {/* Dynamic Countdown Timer Shield - Clean Slate */}
-        <div className="bg-slate-50 dark:bg-[#12161A] rounded-3xl p-5 text-center border border-slate-200 dark:border-slate-800 shadow-sm">
+        {/* Dynamic Countdown Timer Shield */}
+        <div className="bg-white dark:bg-[#141C24] rounded-3xl p-5 text-center shadow-floating">
           <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">
             ESTIMATED UNIT ARRIVAL
           </span>
@@ -87,21 +87,21 @@ export const AssistanceShield: React.FC = () => {
             <span>{formattedCountdown}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 bg-white dark:bg-slate-900 px-3 py-1 rounded-full text-xs text-slate-700 dark:text-slate-300 font-mono shadow-2xs border border-slate-200 dark:border-slate-800">
+          <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 px-3 py-1 rounded-full text-xs text-slate-700 dark:text-slate-300 font-mono shadow-floating-sm">
             <span>Auth Code:</span>
             <strong className="text-[#0F766E] dark:text-[#14B8A6]">{activeIncident.dispatchAuthCode}</strong>
           </div>
         </div>
       </div>
 
-      {/* Operator & Vehicle Digital Clearance Credentials - Streamlined Card */}
-      <div className="w-full my-3 bg-slate-50 dark:bg-[#12161A] border border-slate-200 dark:border-slate-800 rounded-3xl p-4 space-y-3">
-        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2.5">
+      {/* Operator & Vehicle Digital Clearance Credentials */}
+      <div className="w-full my-3 bg-white dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating">
+        <div className="flex items-center justify-between pb-2.5">
           <div className="flex items-center gap-2.5">
             <img
               src={selectedProvider.operator_photo}
               alt={selectedProvider.operator_name}
-              className="w-12 h-12 rounded-2xl object-cover"
+              className="w-12 h-12 rounded-2xl object-cover shadow-floating-sm"
             />
             <div>
               <div className="flex items-center gap-1">
@@ -109,7 +109,7 @@ export const AssistanceShield: React.FC = () => {
                 <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">{selectedProvider.name}</p>
-              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded inline-block mt-0.5 font-semibold">
+              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded inline-block mt-0.5 font-semibold shadow-floating-sm">
                 {selectedProvider.lasdri_id}
               </span>
             </div>
@@ -117,7 +117,7 @@ export const AssistanceShield: React.FC = () => {
 
           <a
             href={`tel:${selectedProvider.phone}`}
-            className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-xs active:scale-90 transition-transform"
+            className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-floating-sm active:scale-90 transition-transform"
             title="Call Operator"
           >
             <Phone className="w-4 h-4" />
@@ -125,7 +125,7 @@ export const AssistanceShield: React.FC = () => {
         </div>
 
         {/* Tow Truck Clearance Info Line */}
-        <div className="flex items-center justify-between text-xs py-1">
+        <div className="flex items-center justify-between text-xs py-1 px-1">
           <div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Plate</span>
             <span className="font-bold text-slate-900 dark:text-slate-100 font-mono tracking-wider">{selectedProvider.plate_number}</span>
@@ -143,14 +143,14 @@ export const AssistanceShield: React.FC = () => {
         </div>
 
         {/* Replacement Parts Review Bar */}
-        <div className="bg-white dark:bg-slate-900 rounded-2xl p-2.5 flex items-center justify-between text-xs border border-slate-200 dark:border-slate-800">
+        <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 flex items-center justify-between text-xs shadow-floating-sm">
           <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
             <FileCheck className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
             <span className="font-medium text-[11px]">Parts Receipt Approval</span>
           </div>
           <button
             onClick={() => setShowReceiptModal(true)}
-            className={`text-[11px] font-bold px-2.5 py-1 rounded-lg transition-all ${
+            className={`text-[11px] font-bold px-2.5 py-1 rounded-lg transition-all shadow-floating-sm ${
               receiptApproved
                 ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300'
                 : 'bg-[#0F766E] text-white'
@@ -165,7 +165,7 @@ export const AssistanceShield: React.FC = () => {
       <div className="w-full space-y-2 pb-2">
         <button
           onClick={handleWhatsAppShare}
-          className="w-full min-h-[46px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-xs active:scale-95 transition-all"
+          className="w-full min-h-[46px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-floating-sm active:scale-95 transition-all"
         >
           <Share2 className="w-4 h-4" />
           <span>1-Tap WhatsApp Emergency Share</span>
@@ -174,14 +174,14 @@ export const AssistanceShield: React.FC = () => {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => setShieldVisibility(false)}
-            className="min-h-[42px] bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 text-zinc-800 dark:text-stone-200 font-bold text-xs rounded-2xl transition-colors"
+            className="min-h-[42px] bg-zinc-100 dark:bg-stone-850 hover:bg-zinc-200 dark:hover:bg-stone-750 text-zinc-800 dark:text-stone-200 font-bold text-xs rounded-2xl transition-colors shadow-floating-sm"
           >
             Minimize Shield
           </button>
 
           <button
             onClick={cancelEmergency}
-            className="min-h-[42px] bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-700 dark:text-red-400 font-bold text-xs rounded-2xl transition-colors flex items-center justify-center gap-1.5"
+            className="min-h-[42px] bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-700 dark:text-red-400 font-bold text-xs rounded-2xl transition-colors flex items-center justify-center gap-1.5 shadow-floating-sm"
           >
             <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
             <span>Cancel SOS</span>
@@ -192,21 +192,21 @@ export const AssistanceShield: React.FC = () => {
       {/* Parts Receipt Inspection Modal */}
       {showReceiptModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[340px] bg-white dark:bg-[#1E1B18] border border-zinc-100 dark:border-stone-800 rounded-3xl p-4 space-y-3 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-stone-800 pb-2">
+          <div className="w-full max-w-[340px] bg-white dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating-lg">
+            <div className="flex items-center justify-between pb-2">
               <h3 className="text-xs font-black text-zinc-900 dark:text-stone-100 flex items-center gap-1.5">
                 <FileCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
                 Parts Purchase Receipt
               </h3>
               <button
                 onClick={() => setShowReceiptModal(false)}
-                className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-stone-200 rounded-lg hover:bg-zinc-100 dark:hover:bg-stone-800"
+                className="p-1 text-zinc-400 hover:text-zinc-900 dark:hover:text-stone-200 rounded-lg hover:bg-zinc-100 dark:hover:bg-stone-800 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="bg-zinc-50 dark:bg-stone-900 p-3 rounded-2xl space-y-1.5 text-xs">
+            <div className="bg-zinc-50 dark:bg-stone-900 p-3 rounded-2xl space-y-1.5 text-xs shadow-inner">
               <div className="flex justify-between text-zinc-600 dark:text-stone-400">
                 <span>Vendor:</span>
                 <span className="text-zinc-900 dark:text-stone-100 font-medium">Ladipo Lekki Express Parts</span>
@@ -227,7 +227,7 @@ export const AssistanceShield: React.FC = () => {
 
             <button
               onClick={handleApprovePartsReceipt}
-              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-xs active:scale-95"
+              className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl shadow-floating-sm active:scale-95 transition-all"
             >
               Approve Receipt & Release Escrow
             </button>

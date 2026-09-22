@@ -24,6 +24,30 @@ These requirements are mandatory for every task and every reply.
 These rules apply across projects. A repository's nearest `AGENTS.md`,
 `CLAUDE.md`, or `GEMINI.md` may add or override project-specific rules.
 
+## System boundaries and host isolation
+
+All agent actions must remain confined to the specific project directory. Agents must never touch, modify, or disrupt the Linux system layer or application layer of this machine.
+
+### Hard host prohibitions
+
+Under no circumstances may an agent make changes that target the Linux system itself or its built-in services:
+
+- **Sound and audio.** Do not modify ALSA, PulseAudio, PipeWire, audio drivers, sound servers, mixer controls, or volume levels.
+- **Input.** Do not reconfigure evdev, libinput, keyboard mappings, mouse or trackpad behavior, or input device settings.
+- **Video and display.** Do not change X11, Wayland, DRM, KMS, graphics drivers, display managers, or display outputs.
+- **Network.** Do not reconfigure NetworkManager, systemd-networkd, systemd-resolved, interfaces, routing tables, firewalls (iptables, nftables), DNS resolvers, or `/etc/hosts`.
+- **Power, sleep, and kernel.** Do not touch hibernation hooks, suspend scripts, sleep configurations, systemd sleep services, sysctl settings, udev rules, or kernel modules.
+- **Bluetooth and hardware buses.** Do not touch BlueZ, bluetoothctl, USB subsystem rules, or PCI device states.
+- **Init and systemd.** Do not alter unit files in `/etc/systemd/system/`, reload system daemons, or execute `systemctl` commands that manage host-level services.
+- **System paths.** Do not create, edit, or delete files in `/etc`, `/usr`, `/var`, `/boot`, `/opt`, `/lib`, or root system paths.
+
+### Application layer and package discipline
+
+- **Ask before installing packages.** Installing packages borders the host environment and pushes boundaries. Always ask the user before installing any system package through `apt`, `dpkg`, `snap`, `flatpak`, `pacman`, or external package managers.
+- **Confine runtimes locally.** Always isolate dependencies inside project-scoped environments such as `.venv` for Python and local `node_modules` for Node.js. Never install packages globally (`pip install --user`, `sudo pip`, or `npm -g`).
+- **No root or sudo actions.** Never execute `sudo` or request root privileges. If an action appears to require elevated rights, stop immediately and ask the user.
+- **Ask before modifying external tools.** If a task requires changes to user-level configuration files outside the project (such as `~/.bashrc`, `~/.config`, shell profiles, or system-wide dev tools), ask the user for permission first.
+
 ## Start with local evidence
 
 - Read the nearest agent instructions and relevant manifests before changing
