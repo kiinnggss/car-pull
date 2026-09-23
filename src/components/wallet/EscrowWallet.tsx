@@ -74,8 +74,8 @@ export const EscrowWallet: React.FC = () => {
 
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in">
-      {/* Balance Card - Clean Slate Floating Surface */}
-      <div className="floating-surface rounded-3xl p-5 shadow-specular space-y-3.5">
+      {/* Balance Card - Frosted Glass Surface */}
+      <div className="bg-white/80 dark:bg-[#121820]/80 backdrop-blur-2xl rounded-3xl p-5 shadow-xl border border-white/80 dark:border-white/10 space-y-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-xl bg-teal-500/15 text-teal-900 dark:text-teal-300 shadow-xs">
@@ -94,7 +94,7 @@ export const EscrowWallet: React.FC = () => {
           {/* Quick Payout Rules Pill */}
           <button
             onClick={() => setShowInfoModal(true)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold active-spring transition-all shadow-xs"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-white/70 dark:bg-white/10 backdrop-blur-md hover:bg-white/90 dark:hover:bg-white/15 text-slate-900 dark:text-slate-100 text-xs font-bold active-spring transition-all border border-white/60 dark:border-white/10 shadow-xs"
             title="How Escrow Payouts Work"
           >
             <HelpCircle className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
@@ -106,12 +106,12 @@ export const EscrowWallet: React.FC = () => {
         <div className="flex items-center justify-between pt-1 text-xs">
           <div>
             <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium block">Available To Withdraw</span>
-            <span className="text-2xl font-black font-mono tabular-nums text-slate-950 dark:text-slate-50 tracking-tight">
+            <span className="text-2xl font-black font-mono tabular-nums text-slate-950 dark:text-white tracking-tight">
               {formatNgn(escrowBalanceNgn)}
             </span>
           </div>
 
-          <div className="h-8 w-px bg-slate-200/80 dark:bg-slate-800/80" />
+          <div className="h-8 w-px bg-slate-200/80 dark:bg-white/10" />
 
           <div className="text-right">
             <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium block flex items-center justify-end gap-1">
@@ -124,17 +124,17 @@ export const EscrowWallet: React.FC = () => {
         </div>
 
         {/* Dual Cash Cockpit: Grouped Top-up & Withdraw Bar */}
-        <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-2xl gap-1 shadow-inner">
+        <div className="flex items-center p-1 bg-white/70 dark:bg-white/5 backdrop-blur-md rounded-2xl gap-1 border border-white/60 dark:border-white/10 shadow-inner">
           <button
             onClick={() => topUpWallet(10000)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100 hover:bg-white/80 dark:hover:bg-white/10 active-spring transition-all"
             title="Add ₦10,000 via Paystack"
           >
             <PlusCircle className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
             <span>Top-up (+₦10k)</span>
           </button>
 
-          <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+          <div className="w-px h-5 bg-slate-300/60 dark:bg-white/10" />
 
           <button
             onClick={() => {
@@ -153,7 +153,7 @@ export const EscrowWallet: React.FC = () => {
         </div>
       </div>
 
-      {/* Transaction History Ledger - Flowing Clean Floating Surface */}
+      {/* Transaction History Ledger - Frosted Glass Surface */}
       <div className="space-y-1.5">
         <div className="flex items-center justify-between px-1">
           <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider">
@@ -162,7 +162,7 @@ export const EscrowWallet: React.FC = () => {
           <span className="text-[10px] text-slate-400 dark:text-slate-500 font-mono">Real-Time</span>
         </div>
 
-        <div className="floating-surface rounded-3xl p-1 shadow-specular overflow-hidden">
+        <div className="bg-white/80 dark:bg-[#121820]/80 backdrop-blur-2xl rounded-3xl p-1 shadow-xl border border-white/80 dark:border-white/10 overflow-hidden divide-y divide-slate-200/50 dark:divide-white/5">
           {escrowTransactions.map((tx) => (
             <div
               key={tx.id}
@@ -234,8 +234,8 @@ export const EscrowWallet: React.FC = () => {
 
       {/* WITHDRAWAL MODAL */}
       {showWithdrawModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-150">
-          <div className="w-full max-w-[370px] floating-surface rounded-3xl p-5 space-y-4 shadow-specular">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-150">
+          <div className="w-full max-w-[370px] bg-white/90 dark:bg-[#121820]/90 backdrop-blur-2xl rounded-3xl p-5 space-y-4 shadow-2xl border border-white/80 dark:border-white/10">
             <div className="flex items-center justify-between pb-2.5">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-xl bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-xs">
@@ -389,8 +389,8 @@ export const EscrowWallet: React.FC = () => {
 
       {/* HOW IT WORKS / PAYOUT RULES MODAL */}
       {showInfoModal && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[340px] bg-white dark:bg-[#141C24] rounded-3xl p-6 space-y-3.5 shadow-floating-lg text-xs">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
+          <div className="w-full max-w-[340px] bg-white/90 dark:bg-[#121820]/90 backdrop-blur-2xl rounded-3xl p-6 space-y-3.5 shadow-2xl border border-white/80 dark:border-white/10 text-xs">
             <div className="flex items-center justify-between pb-2">
               <h3 className="font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <HelpCircle className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />

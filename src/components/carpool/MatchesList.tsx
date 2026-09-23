@@ -104,8 +104,8 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
         </span>
       </div>
 
-      {/* Flake Penalty Test Action Bar - Floating Surface */}
-      <div className="floating-surface rounded-2xl p-3 space-y-2 shadow-specular">
+      {/* Flake Penalty Test Action Bar - Frosted Glass Surface */}
+      <div className="bg-white/80 dark:bg-[#121820]/80 backdrop-blur-2xl rounded-2xl p-3 space-y-2 shadow-md border border-white/80 dark:border-white/10">
         <div className="flex items-center justify-between text-[10px]">
           <span className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1">
             <AlertOctagon className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
@@ -113,23 +113,23 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           </span>
           <span className="text-slate-500 dark:text-slate-400 font-mono text-[9px]">Sec 44 Policy</span>
         </div>
-        <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-xl gap-1 shadow-inner">
+        <div className="flex items-center p-1 bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-xl gap-1 border border-white/50 dark:border-white/10 shadow-inner">
           <button
             onClick={() => {
               triggerHaptic('error');
               simulateFlakePenalty('rider_flake');
             }}
-            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 text-center active-spring transition-all"
+            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-slate-900 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-white/10 text-center active-spring transition-all"
           >
             Rider Late Cancel (-₦1k)
           </button>
-          <div className="w-px h-4 bg-slate-300/60 dark:bg-slate-700/60" />
+          <div className="w-px h-4 bg-slate-300/60 dark:bg-white/10" />
           <button
             onClick={() => {
               triggerHaptic('switch');
               simulateFlakePenalty('driver_flake');
             }}
-            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-teal-950 dark:text-teal-300 hover:bg-white/80 dark:hover:bg-slate-800 text-center active-spring transition-all"
+            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-teal-950 dark:text-teal-300 hover:bg-white/80 dark:hover:bg-white/10 text-center active-spring transition-all"
           >
             Driver Flake (+₦2.5k)
           </button>
@@ -146,7 +146,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           return (
             <div
               key={match.id}
-              className="floating-surface rounded-3xl p-4 space-y-3 shadow-specular"
+              className="bg-white/80 dark:bg-[#121820]/80 backdrop-blur-2xl rounded-3xl p-4 space-y-3 shadow-xl border border-white/80 dark:border-white/10"
             >
               {/* Top info */}
               <div className="flex items-center justify-between">
@@ -194,7 +194,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Trip Purpose */}
               {match.trip_purpose && (
-                <div className="bg-slate-100/80 dark:bg-slate-900/80 px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-slate-900 dark:text-slate-200 shadow-2xs">
+                <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-slate-900 dark:text-slate-200 border border-white/50 dark:border-white/5 shadow-2xs">
                   <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
                   <span className="text-[11px] font-semibold truncate leading-tight">
                     {match.trip_purpose}
@@ -204,7 +204,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Cabin Co-Riders Preview */}
               {match.cabin_passengers && match.cabin_passengers.length > 0 && (
-                <div className="bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] shadow-2xs">
+                <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] border border-white/50 dark:border-white/5 shadow-2xs">
                   <div className="flex items-center gap-1.5">
                     <Users className="w-3 h-3 text-slate-600 dark:text-slate-400" />
                     <span className="font-bold text-slate-600 dark:text-slate-400">Co-Rider:</span>
@@ -219,7 +219,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               )}
 
               {/* Vehicle & Plate */}
-              <div className="flex items-center justify-between bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-1.5 text-xs shadow-2xs">
+              <div className="flex items-center justify-between bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-xl px-3 py-1.5 text-xs border border-white/50 dark:border-white/5 shadow-2xs">
                 <div className="flex items-center gap-1.5">
                   <Car className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
                   <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">
@@ -232,7 +232,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               </div>
 
               {/* Pickup Safe Zone */}
-              <div className="bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-2 text-xs flex items-center justify-between shadow-2xs">
+              <div className="bg-white/60 dark:bg-white/5 backdrop-blur-md rounded-xl px-3 py-2 text-xs flex items-center justify-between border border-white/50 dark:border-white/5 shadow-2xs">
                 <span className="flex items-center gap-1.5 truncate">
                   <MapPin className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400 flex-shrink-0" />
                   <span className="text-[11px] truncate text-slate-700 dark:text-slate-300">
@@ -242,7 +242,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               </div>
 
               {/* Grouped Action Rail 1: Chat, Map, LinkedIn, WhatsApp */}
-              <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-2xl gap-1 shadow-inner">
+              <div className="flex items-center p-1 bg-white/70 dark:bg-white/5 backdrop-blur-md rounded-2xl gap-1 border border-white/60 dark:border-white/10 shadow-inner">
                 <button
                   onClick={() => {
                     triggerHaptic('tap');
@@ -261,14 +261,14 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                     setActiveThreadId(targetThreadId);
                     setActiveTab('chats');
                   }}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100 hover:bg-white/80 dark:hover:bg-white/10 active-spring transition-all"
                   title="Chat with driver"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
+                  <MessageCircle className="w-3.5 h-3.5 text-slate-800 dark:text-slate-200" />
                   <span>Chat</span>
                 </button>
 
-                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-white/10" />
 
                 <button
                   onClick={() => {
@@ -280,14 +280,14 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                     );
                     setActiveTab('map');
                   }}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-900 dark:text-slate-100 hover:bg-white/80 dark:hover:bg-white/10 active-spring transition-all"
                   title="View pickup location on map"
                 >
                   <MapPin className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400" />
                   <span>Map</span>
                 </button>
 
-                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-white/10" />
 
                 <button
                   type="button"
@@ -298,7 +298,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                       : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(match.driverName)}`;
                     window.open(url, '_blank');
                   }}
-                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-slate-800 text-[#0A66C2] active-spring transition-all flex-shrink-0"
+                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-white/10 text-[#0A66C2] active-spring transition-all flex-shrink-0"
                   title="LinkedIn Profile"
                 >
                   <span className="w-4 h-4 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[10px] font-black leading-none">
@@ -306,11 +306,11 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                   </span>
                 </button>
 
-                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-white/10" />
 
                 <button
                   onClick={() => handleShareWhatsApp(match)}
-                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-slate-800 text-emerald-600 dark:text-emerald-400 active-spring transition-all flex-shrink-0"
+                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-white/10 text-emerald-600 dark:text-emerald-400 active-spring transition-all flex-shrink-0"
                   title="Share on WhatsApp"
                 >
                   <Share2 className="w-3.5 h-3.5" />
@@ -319,7 +319,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Grouped Action Rail 2: Boarding & Verification Cockpit */}
               {isCompleted ? (
-                <div className="bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl p-3 flex items-center justify-between text-xs shadow-2xs">
+                <div className="bg-emerald-50/90 dark:bg-emerald-950/40 backdrop-blur-md rounded-2xl p-3 flex items-center justify-between text-xs border border-emerald-200/50 dark:border-emerald-900/40 shadow-2xs">
                   <span className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                     Trip Completed • Escrow Released
@@ -336,19 +336,19 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                         triggerHaptic('tap');
                         setActiveTab('pass');
                       }}
-                      className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100/90 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-2xl text-[11px] font-mono shadow-xs active-spring transition-all flex-shrink-0"
+                      className="flex items-center gap-1.5 px-3 py-2.5 bg-white/70 dark:bg-white/10 backdrop-blur-md hover:bg-white/90 dark:hover:bg-white/15 rounded-2xl text-[11px] font-mono border border-white/60 dark:border-white/10 shadow-xs active-spring transition-all flex-shrink-0"
                       title="Open Sec 44 Commute Pass"
                     >
                       <QrCode className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400" />
                       <span className="text-slate-600 dark:text-slate-400 text-[10px] font-sans font-medium">PIN:</span>
-                      <strong className="text-slate-950 dark:text-slate-50 font-bold tracking-wider">{offlinePin}</strong>
+                      <strong className="text-slate-950 dark:text-white font-bold tracking-wider">{offlinePin}</strong>
                     </button>
 
                     <button
                       onClick={() => toggleBoarded(match.id)}
                       className={`flex-1 py-2.5 px-3 rounded-2xl text-xs font-black flex items-center justify-center gap-1.5 transition-all active-spring shadow-specular ${
                         isBoarded
-                          ? 'bg-teal-100 dark:bg-teal-950/70 text-teal-950 dark:text-teal-300'
+                          ? 'bg-teal-100 dark:bg-teal-950/70 text-teal-950 dark:text-teal-300 border border-teal-200/50 dark:border-teal-800/40'
                           : 'btn-electric-mint'
                       }`}
                     >

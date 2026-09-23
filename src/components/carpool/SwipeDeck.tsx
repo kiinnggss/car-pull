@@ -165,7 +165,7 @@ export const SwipeDeck: React.FC = () => {
       {/* Match Confirmation Modal with Back Button */}
       {lastMatchedDriver && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[350px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-xl floating-surface rounded-3xl p-5 text-center space-y-3.5 shadow-specular">
+          <div className="w-full max-w-[350px] bg-white/85 dark:bg-[#121820]/85 backdrop-blur-2xl rounded-3xl p-5 text-center space-y-3.5 shadow-2xl border border-white/80 dark:border-white/10">
             <div className="flex items-center justify-between pb-2">
               <button
                 onClick={() => {
