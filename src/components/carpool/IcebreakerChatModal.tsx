@@ -154,10 +154,10 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
 
           <div className="text-center">
             <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
-              Break the Ice
+              Direct Chat
             </h3>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">
-              Say hello before the ride
+              Co-rider coordination
             </span>
           </div>
 
@@ -216,12 +216,12 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
           <button
             type="button"
             onClick={handleOpenLinkedIn}
-            className="w-full py-2 px-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 text-[#0A66C2] dark:text-blue-400 text-[11px] font-bold flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
+            className="w-full py-2 px-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 text-[#0A66C2] dark:text-blue-400 text-xs font-bold flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
           >
-            <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
+            <span className="w-4 h-4 bg-[#0A66C2] text-white rounded flex items-center justify-center text-[9px] font-black leading-none">
               in
             </span>
-            <span>Connect on LinkedIn</span>
+            <span>LinkedIn</span>
             <ExternalLink className="w-3 h-3 text-[#0A66C2] dark:text-blue-400" />
           </button>
         </div>
@@ -267,10 +267,10 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
               type="button"
               onClick={handleSendWhatsApp}
               className="py-2 px-3 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition-all active-press"
-              title="Open WhatsApp chat with pre-filled icebreaker"
+              title="Open WhatsApp chat"
             >
               <Share2 className="w-3.5 h-3.5" />
-              <span>WhatsApp Chat</span>
+              <span>WhatsApp</span>
             </button>
 
             <button
@@ -278,19 +278,19 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
               disabled={!message.trim()}
               className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-2xs transition-all active-press ${
                 message.trim()
-                  ? 'bg-[#0D6E6E] hover:bg-[#094E4E] text-white'
+                  ? 'btn-electric-mint text-slate-950'
                   : 'bg-stone-200 dark:bg-stone-850 text-stone-400 dark:text-stone-600 cursor-not-allowed'
               }`}
             >
               {sentSuccess ? (
                 <>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                  <span>Sent!</span>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Sent</span>
                 </>
               ) : (
                 <>
-                  <Send className="w-3.5 h-3.5" />
-                  <span>Send In-App</span>
+                  <Send className="w-3.5 h-3.5 text-slate-950" />
+                  <span>Send</span>
                 </>
               )}
             </button>

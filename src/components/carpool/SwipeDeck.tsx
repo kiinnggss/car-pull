@@ -249,20 +249,8 @@ export const SwipeDeck: React.FC = () => {
               </p>
             </div>
 
-            {/* Social Connection CTA: Say Hello & Break the Ice */}
-            <div className="space-y-1.5 pt-1">
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  setShowChatModal(true);
-                }}
-                className="w-full py-2.5 px-3 btn-electric-mint text-xs font-black rounded-xl flex items-center justify-center gap-2 shadow-specular active-spring transition-all"
-              >
-                <MessageCircle className="w-4 h-4 text-slate-950" />
-                <span>Say Hello / Break the Ice</span>
-              </button>
-
-              {/* Digital Handshake / LinkedIn Exchange */}
+            {/* Grouped Match Actions: LinkedIn icon, Chat CTA, and Done dismiss */}
+            <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => {
                   triggerHaptic('success');
@@ -271,13 +259,23 @@ export const SwipeDeck: React.FC = () => {
                     : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(lastMatchedDriver.name)}`;
                   window.open(url, '_blank');
                 }}
-                className="w-full py-2 px-3 floating-pill bg-white dark:bg-[#1A2430] hover:bg-[#0A66C2]/10 text-[#0A66C2] dark:text-[#38BDF8] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-xs active-spring transition-all"
+                className="w-11 h-10 rounded-2xl bg-white dark:bg-slate-800 hover:bg-[#0A66C2]/15 text-[#0A66C2] shadow-xs active-spring flex items-center justify-center flex-shrink-0"
+                title="LinkedIn Profile"
               >
-                <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
+                <span className="w-5 h-5 bg-[#0A66C2] text-white rounded flex items-center justify-center text-[10px] font-black leading-none">
                   in
                 </span>
-                <span>Stay in Touch on LinkedIn</span>
-                <ExternalLink className="w-3 h-3 text-[#0A66C2]" />
+              </button>
+
+              <button
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setShowChatModal(true);
+                }}
+                className="flex-1 h-10 px-4 btn-electric-mint text-xs font-black rounded-2xl flex items-center justify-center gap-1.5 shadow-specular active-spring transition-all"
+              >
+                <MessageCircle className="w-4 h-4 text-slate-950" />
+                <span>Chat</span>
               </button>
 
               <button
@@ -285,9 +283,9 @@ export const SwipeDeck: React.FC = () => {
                   triggerHaptic('tap');
                   setLastMatchedDriver(null);
                 }}
-                className="w-full py-1.5 floating-pill bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl active-spring transition-colors"
+                className="h-10 px-4 rounded-2xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs active-spring transition-colors flex-shrink-0"
               >
-                Keep Browsing
+                Done
               </button>
             </div>
           </div>

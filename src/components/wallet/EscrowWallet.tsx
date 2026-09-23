@@ -78,73 +78,78 @@ export const EscrowWallet: React.FC = () => {
       <div className="floating-surface rounded-3xl p-5 shadow-specular space-y-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 rounded-xl bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-xs">
+            <div className="p-2 rounded-xl bg-teal-500/15 text-teal-900 dark:text-teal-300 shadow-xs">
               <Wallet className="w-5 h-5" />
             </div>
             <div>
-              <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold block">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 uppercase tracking-wider font-bold block">
                 CAR PULL Escrow
               </span>
-              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> Zero-Cash Protection
+              <span className="text-xs font-bold text-teal-950 dark:text-emerald-300 flex items-center gap-1">
+                <ShieldCheck className="w-3.5 h-3.5 text-teal-800 dark:text-emerald-400" /> Zero-Cash Protection
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            {/* Top-up Button */}
-            <button
-              onClick={() => topUpWallet(10000)}
-              className="flex items-center gap-1 floating-pill bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold px-3 py-1.5 rounded-xl shadow-xs active-spring transition-all"
-              title="Add ₦10,000 via Paystack"
-            >
-              <PlusCircle className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-              <span>+₦10k</span>
-            </button>
-
-            {/* Withdraw Button */}
-            <button
-              onClick={() => {
-                setErrorMessage('');
-                setShowWithdrawModal(true);
-              }}
-              className="flex items-center gap-1 btn-electric-mint text-xs font-black px-3.5 py-1.5 rounded-xl shadow-specular active-spring transition-all"
-            >
-              <ArrowUpRight className="w-3.5 h-3.5" />
-              <span>Withdraw</span>
-            </button>
-          </div>
+          {/* Quick Payout Rules Pill */}
+          <button
+            onClick={() => setShowInfoModal(true)}
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold active-spring transition-all shadow-xs"
+            title="How Escrow Payouts Work"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+            <span>Rules</span>
+          </button>
         </div>
 
         {/* Balance Metrics - Inline Dual Metrics without Double Boxes */}
         <div className="flex items-center justify-between pt-1 text-xs">
           <div>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">Available To Withdraw</span>
-            <span className="text-xl font-black font-mono tabular-nums text-slate-900 dark:text-slate-100 tracking-tight">
+            <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium block">Available To Withdraw</span>
+            <span className="text-2xl font-black font-mono tabular-nums text-slate-950 dark:text-slate-50 tracking-tight">
               {formatNgn(escrowBalanceNgn)}
             </span>
           </div>
 
-          <div className="h-8 w-px bg-slate-200/60 dark:bg-slate-800/60" />
+          <div className="h-8 w-px bg-slate-200/80 dark:bg-slate-800/80" />
 
           <div className="text-right">
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block flex items-center justify-end gap-1">
-              <Lock className="w-2.5 h-2.5 text-amber-500" /> Held In Active Trips
+            <span className="text-[10px] text-slate-600 dark:text-slate-400 font-medium block flex items-center justify-end gap-1">
+              <Lock className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400" /> Held In Active Trips
             </span>
-            <span className="text-xl font-black font-mono tabular-nums text-amber-600 dark:text-amber-400 tracking-tight">
+            <span className="text-2xl font-black font-mono tabular-nums text-amber-700 dark:text-amber-400 tracking-tight">
               {formatNgn(heldEscrowNgn)}
             </span>
           </div>
         </div>
 
-        <div className="flex items-center justify-between pt-1 text-[10px] text-slate-500 dark:text-slate-400">
-          <span>Funds payout via NIBSS Instant Payment (NIP)</span>
+        {/* Dual Cash Cockpit: Grouped Top-up & Withdraw Bar */}
+        <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-2xl gap-1 shadow-inner">
           <button
-            onClick={() => setShowInfoModal(true)}
-            className="text-teal-600 dark:text-teal-400 font-bold flex items-center gap-0.5 hover:underline"
+            onClick={() => topUpWallet(10000)}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+            title="Add ₦10,000 via Paystack"
           >
-            <HelpCircle className="w-3 h-3" /> Payout rules
+            <PlusCircle className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+            <span>Top-up (+₦10k)</span>
           </button>
+
+          <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+
+          <button
+            onClick={() => {
+              setErrorMessage('');
+              setShowWithdrawModal(true);
+            }}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl btn-electric-mint text-xs font-black shadow-specular active-spring transition-all"
+          >
+            <ArrowUpRight className="w-3.5 h-3.5" />
+            <span>Withdraw</span>
+          </button>
+        </div>
+
+        <div className="text-center pt-0.5 text-[10px] text-slate-500 dark:text-slate-400 font-medium">
+          <span>Funds payout via NIBSS Instant Payment (NIP) • Instant Settlement</span>
         </div>
       </div>
 
@@ -213,10 +218,10 @@ export const EscrowWallet: React.FC = () => {
                 <span
                   className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded-lg shadow-2xs ${
                     tx.type === 'WITHDRAWAL'
-                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                      ? 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-300'
                       : tx.status === 'held'
-                      ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
-                      : 'bg-teal-500/15 text-teal-700 dark:text-teal-300'
+                      ? 'bg-amber-500/15 text-amber-900 dark:text-amber-400 font-bold'
+                      : 'bg-teal-500/15 text-teal-950 dark:text-teal-300 font-bold'
                   }`}
                 >
                   {tx.type === 'WITHDRAWAL' ? 'Sent' : tx.status}
@@ -309,13 +314,13 @@ export const EscrowWallet: React.FC = () => {
                 {/* Amount to Withdraw */}
                 <div>
                   <div className="flex items-center justify-between mb-1">
-                    <label className="text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                    <label className="text-[11px] font-bold text-slate-800 dark:text-slate-300">
                       Amount to Withdraw (₦)
                     </label>
                     <button
                       type="button"
                       onClick={() => setWithdrawAmount(escrowBalanceNgn.toString())}
-                      className="text-[10px] font-bold text-teal-600 dark:text-teal-400 hover:underline font-mono tabular-nums"
+                      className="text-[10px] font-bold text-teal-950 dark:text-teal-300 hover:underline font-mono tabular-nums"
                     >
                       Max: {formatNgn(escrowBalanceNgn)}
                     </button>
@@ -325,33 +330,40 @@ export const EscrowWallet: React.FC = () => {
                     value={withdrawAmount}
                     onChange={(e) => setWithdrawAmount(e.target.value)}
                     placeholder="e.g. 10000"
-                    className="w-full p-2.5 bg-slate-100/80 dark:bg-slate-900 rounded-xl text-xs font-mono tabular-nums font-bold text-slate-900 dark:text-slate-100 focus:outline-hidden"
+                    className="w-full p-2.5 bg-slate-100/90 dark:bg-slate-900 rounded-xl text-xs font-mono tabular-nums font-bold text-slate-900 dark:text-slate-100 focus:outline-hidden"
                   />
 
-                  {/* Quick Pill presets */}
-                  <div className="flex items-center gap-1.5 mt-1.5">
+                  {/* Quick Preset Rail: Unified Segmented Pill */}
+                  <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-2xl gap-1 mt-1.5 shadow-inner">
                     {[5000, 10000, 20000].map((preset) => (
                       <button
                         key={preset}
                         type="button"
                         onClick={() => setWithdrawAmount(preset.toString())}
-                        className="flex-1 py-1.5 floating-pill bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-xl text-[10px] font-bold font-mono tabular-nums active-spring transition-all"
+                        className="flex-1 py-1.5 rounded-xl text-[10px] font-bold font-mono tabular-nums text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
                       >
                         +{formatNgn(preset)}
                       </button>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => setWithdrawAmount(escrowBalanceNgn.toString())}
+                      className="flex-1 py-1.5 rounded-xl text-[10px] font-bold font-mono tabular-nums text-teal-950 dark:text-teal-300 bg-teal-100/80 dark:bg-teal-950/70 hover:bg-teal-200/80 dark:hover:bg-teal-900 active-spring transition-all"
+                    >
+                      Max
+                    </button>
                   </div>
                 </div>
 
                 {/* Fees & Summary */}
-                <div className="bg-slate-100/80 dark:bg-slate-900/60 p-3 rounded-2xl space-y-1 text-[11px] text-slate-600 dark:text-slate-400">
+                <div className="bg-slate-100/90 dark:bg-slate-900/60 p-3 rounded-2xl space-y-1 text-[11px] text-slate-700 dark:text-slate-300">
                   <div className="flex justify-between">
                     <span>NIP Transfer Settlement:</span>
-                    <span className="font-semibold text-emerald-700 dark:text-emerald-400">Instant (Zero Fee)</span>
+                    <span className="font-bold text-emerald-800 dark:text-emerald-400">Instant (Zero Fee)</span>
                   </div>
-                  <div className="flex justify-between font-bold text-slate-900 dark:text-slate-100 pt-0.5">
+                  <div className="flex justify-between font-bold text-slate-950 dark:text-slate-50 pt-0.5">
                     <span>Net Amount Credited:</span>
-                    <span className="text-teal-600 dark:text-teal-400 text-xs font-mono tabular-nums font-bold">{formatNgn(numAmount)}</span>
+                    <span className="text-teal-950 dark:text-teal-300 text-xs font-mono tabular-nums font-black">{formatNgn(numAmount)}</span>
                   </div>
                 </div>
 

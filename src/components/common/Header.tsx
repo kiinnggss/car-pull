@@ -68,49 +68,45 @@ export const Header: React.FC = () => {
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
-          {activeTab !== 'map' ? (
+          {isInChatThread && (
             <button
               onClick={() => {
                 triggerHaptic('tap');
-                if (isInChatThread) {
-                  setActiveThreadId(null);
-                } else {
-                  setActiveTab('map');
-                }
+                setActiveThreadId(null);
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all active-spring shadow-xs"
-              title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
+              className="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all active-spring shadow-xs"
+              title="Return to Chat Inbox"
             >
               <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
-              <span>{isInChatThread ? 'Inbox' : 'Map'}</span>
+              <span>Inbox</span>
             </button>
-          ) : (
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  setShowCockpit(true);
-                }}
-                className="p-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 active-spring flex-shrink-0"
-                title="Tap to open Interactive Logo Cockpit"
-              >
-                <img
-                  src={getAssetPath('/logo.png')}
-                  alt="CAR PULL Logo"
-                  className="w-7 h-7 object-contain"
-                />
-              </button>
-
-              <div className="flex items-center gap-1">
-                <span className="font-extrabold text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
-                  CAR PULL
-                </span>
-                <span className="hidden sm:inline-block bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
-                  LAGOS
-                </span>
-              </div>
-            </div>
           )}
+
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowCockpit(true);
+              }}
+              className="p-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 active-spring flex-shrink-0"
+              title="Tap to open Interactive Logo Cockpit"
+            >
+              <img
+                src={getAssetPath('/logo.png')}
+                alt="CAR PULL Logo"
+                className="w-7 h-7 object-contain"
+              />
+            </button>
+
+            <div className="flex items-center gap-1">
+              <span className="font-extrabold text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
+                CAR PULL
+              </span>
+              <span className="hidden sm:inline-block bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
+                LAGOS
+              </span>
+            </div>
+          </div>
         </div>
 
         {/* Dense Role Switcher (Rider / Driver) */}

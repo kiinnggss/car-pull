@@ -99,46 +99,46 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
             Live street pickups &amp; escrow secured
           </p>
         </div>
-        <span className="text-xs font-bold text-teal-700 dark:text-teal-300 bg-teal-500/15 px-3 py-1 rounded-full shadow-2xs flex-shrink-0 font-mono tabular-nums">
+        <span className="text-xs font-bold text-teal-950 dark:text-teal-300 bg-teal-100/90 dark:bg-teal-500/15 px-3 py-1 rounded-full shadow-2xs flex-shrink-0 font-mono tabular-nums">
           {activeMatches.length} Active {activeMatches.length === 1 ? 'Ride' : 'Rides'}
         </span>
       </div>
 
       {/* Flake Penalty Test Action Bar - Floating Surface */}
-      <div className="bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl rounded-2xl p-3 space-y-2 shadow-floating-sm">
+      <div className="floating-surface rounded-2xl p-3 space-y-2 shadow-specular">
         <div className="flex items-center justify-between text-[10px]">
-          <span className="font-bold text-[#C25E2E] dark:text-amber-400 flex items-center gap-1">
-            <AlertOctagon className="w-3 h-3 text-[#C25E2E] dark:text-amber-400" />
+          <span className="font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1">
+            <AlertOctagon className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400" />
             Lagos Anti-Flake Penalty Engine
           </span>
-          <span className="text-[#70665A] dark:text-stone-400 font-mono text-[9px]">Sec 44 Policy</span>
+          <span className="text-slate-500 dark:text-slate-400 font-mono text-[9px]">Sec 44 Policy</span>
         </div>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-xl gap-1 shadow-inner">
           <button
             onClick={() => {
               triggerHaptic('error');
               simulateFlakePenalty('rider_flake');
             }}
-            className="py-1.5 px-2 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-amber-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#141210] dark:text-stone-200 text-center active-press transition-all shadow-floating-sm"
+            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 text-center active-spring transition-all"
           >
             Rider Late Cancel (-₦1k)
           </button>
+          <div className="w-px h-4 bg-slate-300/60 dark:bg-slate-700/60" />
           <button
             onClick={() => {
               triggerHaptic('switch');
               simulateFlakePenalty('driver_flake');
             }}
-            className="py-1.5 px-2 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-teal-50 dark:hover:bg-stone-800 rounded-xl text-[10px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] text-center active-press transition-all shadow-floating-sm"
+            className="flex-1 py-1.5 px-2 rounded-lg text-[10px] font-bold text-teal-950 dark:text-teal-300 hover:bg-white/80 dark:hover:bg-slate-800 text-center active-spring transition-all"
           >
-            Driver Flake (+₦2.5k Voucher)
+            Driver Flake (+₦2.5k)
           </button>
         </div>
       </div>
 
       {/* List of active matches */}
-      <div className="space-y-2.5">
+      <div className="space-y-3">
         {activeMatches.map((match) => {
-          const isWeeklyLocked = weeklyLockedCommutes.includes(match.driverId);
           const isBoarded = boardedMatchIds.includes(match.id);
           const isCompleted = match.status === 'completed';
           const moodInfo = match.ride_mood ? moodLabels[match.ride_mood] : null;
@@ -146,7 +146,7 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
           return (
             <div
               key={match.id}
-              className="bg-white dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating"
+              className="floating-surface rounded-3xl p-4 space-y-3 shadow-specular"
             >
               {/* Top info */}
               <div className="flex items-center justify-between">
@@ -154,22 +154,22 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                   <img
                     src={match.driverAvatar}
                     alt={match.driverName}
-                    className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
+                    className="w-10 h-10 rounded-xl object-cover shadow-xs"
                   />
                   <div>
-                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100">{match.driverName}</h4>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
+                    <h4 className="text-xs font-black text-slate-950 dark:text-slate-50">{match.driverName}</h4>
+                    <span className="text-[10px] text-slate-700 dark:text-slate-300 font-bold flex items-center gap-1">
+                      <Clock className="w-3 h-3 text-slate-500 dark:text-slate-400" />
                       {match.scheduledFor}
                     </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <span className="text-xs font-black text-[#0D6E6E] dark:text-[#14B8A6] block">
+                  <span className="text-sm font-black font-mono tabular-nums text-teal-950 dark:text-teal-300 block">
                     {formatNgn(match.fareNgn)}
                   </span>
-                  <span className={`text-[9px] uppercase font-mono ${isCompleted ? 'text-emerald-600 dark:text-emerald-400 font-bold' : 'text-[#70665A] dark:text-stone-400'}`}>
+                  <span className={`text-[9px] uppercase font-mono font-bold ${isCompleted ? 'text-emerald-800 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}`}>
                     {isCompleted ? 'Escrow Released' : 'Escrow Held'}
                   </span>
                 </div>
@@ -179,8 +179,8 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
               {(match.mutual_spark || moodInfo) && (
                 <div className="flex items-center gap-1.5 flex-wrap">
                   {match.mutual_spark && (
-                    <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-[#C25E2E] dark:text-amber-400 bg-orange-50/90 dark:bg-orange-950/40 px-2 py-0.5 rounded-full shadow-2xs">
-                      <Sparkles className="w-2.5 h-2.5 text-[#C25E2E] dark:text-amber-400" />
+                    <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-amber-900 dark:text-amber-300 bg-amber-100/90 dark:bg-amber-950/40 px-2 py-0.5 rounded-full shadow-2xs">
+                      <Sparkles className="w-2.5 h-2.5 text-amber-600 dark:text-amber-400" />
                       {match.mutual_spark}
                     </span>
                   )}
@@ -192,11 +192,11 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                 </div>
               )}
 
-              {/* Trip Purpose / Human Context */}
+              {/* Trip Purpose */}
               {match.trip_purpose && (
-                <div className="bg-[#F4EFE6] dark:bg-[#10161D] px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-[#141210] dark:text-stone-200 shadow-inner">
-                  <Compass className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400 flex-shrink-0" />
-                  <span className="text-[10.5px] font-semibold truncate leading-tight">
+                <div className="bg-slate-100/80 dark:bg-slate-900/80 px-3 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-slate-900 dark:text-slate-200 shadow-2xs">
+                  <Compass className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 flex-shrink-0" />
+                  <span className="text-[11px] font-semibold truncate leading-tight">
                     {match.trip_purpose}
                   </span>
                 </div>
@@ -204,59 +204,45 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
 
               {/* Cabin Co-Riders Preview */}
               {match.cabin_passengers && match.cabin_passengers.length > 0 && (
-                <div className="bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] shadow-inner">
+                <div className="bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] shadow-2xs">
                   <div className="flex items-center gap-1.5">
-                    <Users className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                    <span className="font-bold text-[#70665A] dark:text-stone-400">Cabin Co-Rider:</span>
-                    <span className="text-[#141210] dark:text-stone-200 font-semibold">
+                    <Users className="w-3 h-3 text-slate-600 dark:text-slate-400" />
+                    <span className="font-bold text-slate-600 dark:text-slate-400">Co-Rider:</span>
+                    <span className="text-slate-900 dark:text-slate-100 font-semibold">
                       {match.cabin_passengers.map((p) => `${p.name} (${p.role})`).join(', ')}
                     </span>
                   </div>
-                  <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded">
+                  <span className="text-[9px] font-bold text-emerald-900 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/60 px-1.5 py-0.2 rounded">
                     Seat Filled
                   </span>
                 </div>
               )}
 
-              {/* Vehicle Brand and Plate Number */}
-              <div className="flex items-center justify-between bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl px-3 py-1.5 text-xs shadow-inner">
+              {/* Vehicle & Plate */}
+              <div className="flex items-center justify-between bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-1.5 text-xs shadow-2xs">
                 <div className="flex items-center gap-1.5">
-                  <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                  <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
+                  <Car className="w-3.5 h-3.5 text-slate-600 dark:text-slate-400" />
+                  <span className="font-bold text-slate-900 dark:text-slate-100 text-[11px]">
                     {match.vehicleMake || 'Toyota'} {match.vehicleModel || 'Camry'}
                   </span>
                 </div>
-                <span className="font-mono text-[10px] font-black text-[#C25E2E] dark:text-amber-400 bg-[#FFF9EE] dark:bg-amber-950/40 px-2.5 py-0.5 rounded-lg shadow-2xs">
+                <span className="font-mono text-[10px] font-black text-amber-900 dark:text-amber-300 bg-amber-100/90 dark:bg-amber-950/50 px-2.5 py-0.5 rounded-lg shadow-2xs">
                   {match.plateNumber || 'APP-842-EY'}
                 </span>
               </div>
 
-              {/* Pickup Safe Zone with 1-Tap Map Navigation */}
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  setUserStreetByNameOrCoords(
-                    match.pickupSafeZone.name,
-                    match.pickupSafeZone.coordinates || { lat: 6.4480, lng: 3.4720 },
-                    match.pickupSafeZone.address || 'Pickup Point'
-                  );
-                  setActiveTab('map');
-                }}
-                className="w-full flex items-center justify-between text-xs py-2 px-3 bg-[#F4EFE6] dark:bg-[#10161D] hover:bg-white dark:hover:bg-stone-800 rounded-xl text-left transition-all active-press group shadow-floating-sm"
-              >
+              {/* Pickup Safe Zone */}
+              <div className="bg-slate-100/80 dark:bg-slate-900/80 rounded-xl px-3 py-2 text-xs flex items-center justify-between shadow-2xs">
                 <span className="flex items-center gap-1.5 truncate">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                  <span className="text-[11px] truncate">
-                    Pickup: <strong className="text-[#141210] dark:text-[#EDE8E1]">{match.pickupSafeZone.name}</strong>
+                  <MapPin className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400 flex-shrink-0" />
+                  <span className="text-[11px] truncate text-slate-700 dark:text-slate-300">
+                    Pickup: <strong className="text-slate-950 dark:text-white font-bold">{match.pickupSafeZone.name}</strong>
                   </span>
                 </span>
-                <span className="text-[9px] font-bold text-[#0D6E6E] dark:text-[#14B8A6] flex items-center gap-0.5 group-hover:underline flex-shrink-0 ml-1">
-                  View on Map &rarr;
-                </span>
-              </button>
+              </div>
 
-              {/* Dynamic Chat & LinkedIn Actions */}
-              <div className="grid grid-cols-3 gap-1.5">
+              {/* Grouped Action Rail 1: Chat, Map, LinkedIn, WhatsApp */}
+              <div className="flex items-center p-1 bg-slate-100/90 dark:bg-slate-900/80 rounded-2xl gap-1 shadow-inner">
                 <button
                   onClick={() => {
                     triggerHaptic('tap');
@@ -275,11 +261,33 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                     setActiveThreadId(targetThreadId);
                     setActiveTab('chats');
                   }}
-                  className="col-span-2 py-2.5 bg-[#EEF7F7] dark:bg-teal-950/50 hover:bg-teal-100/70 dark:hover:bg-teal-900/60 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 active-press transition-all shadow-floating-sm"
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+                  title="Chat with driver"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
-                  <span>Chat &amp; Pings</span>
+                  <MessageCircle className="w-3.5 h-3.5 text-slate-700 dark:text-slate-300" />
+                  <span>Chat</span>
                 </button>
+
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+
+                <button
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    setUserStreetByNameOrCoords(
+                      match.pickupSafeZone.name,
+                      match.pickupSafeZone.coordinates || { lat: 6.4480, lng: 3.4720 },
+                      match.pickupSafeZone.address || 'Pickup Point'
+                    );
+                    setActiveTab('map');
+                  }}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-xl text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-white/80 dark:hover:bg-slate-800 active-spring transition-all"
+                  title="View pickup location on map"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400" />
+                  <span>Map</span>
+                </button>
+
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
 
                 <button
                   type="button"
@@ -290,57 +298,64 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                       : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(match.driverName)}`;
                     window.open(url, '_blank');
                   }}
-                  className="py-2.5 bg-[#0A66C2]/10 dark:bg-sky-950/40 hover:bg-[#0A66C2]/20 dark:hover:bg-sky-900/50 text-[#0A66C2] dark:text-sky-300 text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all shadow-floating-sm"
-                  title="Connect on LinkedIn"
+                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-slate-800 text-[#0A66C2] active-spring transition-all flex-shrink-0"
+                  title="LinkedIn Profile"
                 >
-                  <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
+                  <span className="w-4 h-4 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[10px] font-black leading-none">
                     in
                   </span>
-                  <span>Connect</span>
+                </button>
+
+                <div className="w-px h-5 bg-slate-300/60 dark:bg-slate-700/60" />
+
+                <button
+                  onClick={() => handleShareWhatsApp(match)}
+                  className="w-10 h-8 rounded-xl flex items-center justify-center hover:bg-white/80 dark:hover:bg-slate-800 text-emerald-600 dark:text-emerald-400 active-spring transition-all flex-shrink-0"
+                  title="Share on WhatsApp"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
                 </button>
               </div>
 
-              {/* Everyday Carpool Schedule Info */}
-              <div className="bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl p-2.5 flex items-center justify-between text-xs shadow-inner">
-                <div className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                  <span className="font-bold text-[#141210] dark:text-stone-200 text-[11px]">
-                    Ride Schedule
-                  </span>
-                </div>
-                <span className="text-[10px] font-bold font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-md shadow-2xs">
-                  {match.scheduledFor}
-                </span>
-              </div>
-
-              {/* In-Transit Status & Trip Completion with Escrow Release */}
+              {/* Grouped Action Rail 2: Boarding & Verification Cockpit */}
               {isCompleted ? (
-                <div className="bg-emerald-50/90 dark:bg-emerald-950/40 rounded-xl p-3 flex items-center justify-between text-xs shadow-floating-sm">
-                  <span className="font-bold text-emerald-700 dark:text-emerald-400 flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <div className="bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl p-3 flex items-center justify-between text-xs shadow-2xs">
+                  <span className="font-bold text-emerald-900 dark:text-emerald-300 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                     Trip Completed • Escrow Released
                   </span>
-                  <span className="font-mono font-bold text-emerald-800 dark:text-emerald-300 text-[11px]">
+                  <span className="font-mono font-bold text-emerald-950 dark:text-emerald-200 text-xs">
                     {formatNgn(match.fareNgn)} Paid
                   </span>
                 </div>
               ) : (
-                <div className="space-y-1.5">
-                  <button
-                    onClick={() => toggleBoarded(match.id)}
-                    className={`w-full py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all active-press shadow-floating-sm ${
-                      isBoarded
-                        ? 'bg-[#EEF7F7] dark:bg-teal-950/60 text-[#0D6E6E] dark:text-[#14B8A6] font-black shadow-inner'
-                        : 'bg-[#0D6E6E] dark:bg-[#14B8A6] hover:bg-[#094E4E] text-white dark:text-[#121110]'
-                    }`}
-                  >
-                    <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>
-                      {isBoarded
-                        ? 'Boarded • Commute in Progress'
-                        : 'Confirm Boarding at Safe Hub'}
-                    </span>
-                  </button>
+                <div className="space-y-1.5 pt-0.5">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        triggerHaptic('tap');
+                        setActiveTab('pass');
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-2.5 bg-slate-100/90 dark:bg-slate-900/80 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-2xl text-[11px] font-mono shadow-xs active-spring transition-all flex-shrink-0"
+                      title="Open Sec 44 Commute Pass"
+                    >
+                      <QrCode className="w-3.5 h-3.5 text-teal-800 dark:text-teal-400" />
+                      <span className="text-slate-600 dark:text-slate-400 text-[10px] font-sans font-medium">PIN:</span>
+                      <strong className="text-slate-950 dark:text-slate-50 font-bold tracking-wider">{offlinePin}</strong>
+                    </button>
+
+                    <button
+                      onClick={() => toggleBoarded(match.id)}
+                      className={`flex-1 py-2.5 px-3 rounded-2xl text-xs font-black flex items-center justify-center gap-1.5 transition-all active-spring shadow-specular ${
+                        isBoarded
+                          ? 'bg-teal-100 dark:bg-teal-950/70 text-teal-950 dark:text-teal-300'
+                          : 'btn-electric-mint'
+                      }`}
+                    >
+                      <CheckCircle2 className="w-4 h-4" />
+                      <span>{isBoarded ? 'Boarded' : 'Confirm Boarding'}</span>
+                    </button>
+                  </div>
 
                   {isBoarded && (
                     <button
@@ -350,46 +365,18 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                           particleCount: 45,
                           spread: 55,
                           origin: { y: 0.6 },
-                          colors: ['#10B981', '#0D6E6E', '#F59E0B'],
+                          colors: ['#10B981', '#0F766E', '#F59E0B'],
                         });
                         completeCommuteTrip(match.id, 5);
                       }}
-                      className="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-xl flex items-center justify-center gap-1.5 transition-all active-press shadow-floating"
+                      className="w-full py-2.5 btn-electric-mint text-xs font-black rounded-2xl flex items-center justify-center gap-1.5 transition-all active-spring shadow-specular"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                      <span>Arrived at Destination • Release Escrow ({formatNgn(match.fareNgn)})</span>
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>Arrived • Release Escrow ({formatNgn(match.fareNgn)})</span>
                     </button>
                   )}
                 </div>
               )}
-
-              {/* Offline PIN & Pass Links */}
-              <div className="flex items-center justify-between px-3 py-2 bg-[#F4EFE6] dark:bg-[#10161D] rounded-xl text-[10px] shadow-inner">
-                <div className="flex items-center gap-1.5 text-[#70665A] dark:text-stone-400 font-medium">
-                  <KeyRound className="w-3.5 h-3.5 text-[#C25E2E] dark:text-amber-400" />
-                  <span>Offline PIN:</span>
-                  <strong className="text-[#141210] dark:text-[#EDE8E1] font-mono tracking-widest">{offlinePin}</strong>
-                </div>
-                <button
-                  onClick={() => {
-                    triggerHaptic('tap');
-                    setActiveTab('pass');
-                  }}
-                  className="text-[#0D6E6E] dark:text-[#14B8A6] font-bold flex items-center gap-1 hover:underline"
-                >
-                  <QrCode className="w-3 h-3" />
-                  <span>Sec 44 Pass</span>
-                </button>
-              </div>
-
-              {/* Share ride details via WhatsApp */}
-              <button
-                onClick={() => handleShareWhatsApp(match)}
-                className="w-full py-2 bg-[#25D366]/10 dark:bg-emerald-950/40 hover:bg-[#25D366]/20 text-[#128C7E] dark:text-emerald-400 text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 transition-colors active-press"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                <span>Share Manifest on WhatsApp</span>
-              </button>
             </div>
           );
         })}
