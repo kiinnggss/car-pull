@@ -107,13 +107,13 @@ export const AuthLanding: React.FC = () => {
         </div>
 
         <div>
-          <div className="inline-flex items-center gap-1.5 bg-[#0D6E6E] text-white text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-widest shadow-2xs">
+          <div className="inline-flex items-center gap-1.5 bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-widest shadow-floating-sm">
             <span>CAR PULL LAGOS</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-serif font-black text-[#141210] tracking-tight mt-1">
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-slate-100 tracking-tight mt-1">
             Community &amp; Social Carpooling
           </h1>
-          <p className="text-[11px] text-[#70665A] max-w-[320px] mx-auto leading-tight mt-0.5">
+          <p className="text-[11px] text-slate-600 dark:text-slate-400 max-w-[320px] mx-auto leading-tight mt-0.5">
             Ride together, meet great people, and share fuel splits across Lagos, any day, any time.
           </p>
         </div>
@@ -186,7 +186,7 @@ export const AuthLanding: React.FC = () => {
 
             <button
               type="submit"
-              className="w-full py-2.5 bg-gradient-to-r from-[#0D6E6E] to-[#094E4E] hover:opacity-95 active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5"
+              className="w-full py-2.5 btn-electric-mint text-xs rounded-xl shadow-floating flex items-center justify-center gap-1.5 active-spring"
             >
               <span>Sign In to CAR PULL</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -327,7 +327,7 @@ export const AuthLanding: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5 mt-1"
+                  className="w-full py-2.5 btn-electric-mint rounded-xl shadow-floating flex items-center justify-center gap-1.5 text-xs font-black active-spring mt-1"
                 >
                   <span>Create Rider Account</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -493,9 +493,9 @@ export const AuthLanding: React.FC = () => {
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] active:scale-[0.99] text-white font-bold text-xs rounded-xl shadow-floating transition-all flex items-center justify-center gap-1.5 mt-1"
+                  className="w-full py-2.5 btn-electric-mint rounded-xl shadow-floating flex items-center justify-center gap-1.5 text-xs font-black active-spring mt-1"
                 >
-                  <Car className="w-3.5 h-3.5 text-[#FBBF24]" />
+                  <Car className="w-3.5 h-3.5" />
                   <span>Register Vehicle & Start Driving</span>
                 </button>
               </form>

@@ -9,7 +9,6 @@ import {
   Clock,
   Share2,
   FileCheck,
-  CheckCircle2,
   XCircle,
   X,
 } from 'lucide-react';
@@ -20,7 +19,6 @@ export const AssistanceShield: React.FC = () => {
     activeIncident,
     selectedProvider,
     sosCountdownSeconds,
-    decrementSosCountdown,
     setShieldVisibility,
     cancelEmergency,
     releaseEscrow,
@@ -78,38 +76,38 @@ export const AssistanceShield: React.FC = () => {
         </div>
 
         {/* Dynamic Countdown Timer Shield */}
-        <div className="bg-white dark:bg-[#141C24] rounded-3xl p-5 text-center shadow-floating">
+        <div className="floating-surface rounded-3xl p-5 text-center shadow-specular">
           <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-widest font-bold block">
             ESTIMATED UNIT ARRIVAL
           </span>
-          <div className="text-4xl font-black text-slate-900 dark:text-slate-100 tracking-tight my-1 font-mono flex items-center justify-center gap-2">
+          <div className="text-4xl font-black text-slate-900 dark:text-slate-100 tracking-tight my-1 font-mono tabular-nums flex items-center justify-center gap-2">
             <Clock className="w-6 h-6 text-red-600 dark:text-red-400 animate-pulse" />
             <span>{formattedCountdown}</span>
           </div>
 
-          <div className="inline-flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800/80 px-3 py-1 rounded-full text-xs text-slate-700 dark:text-slate-300 font-mono shadow-floating-sm">
+          <div className="inline-flex items-center gap-1.5 floating-pill bg-slate-100 dark:bg-slate-800/80 px-3 py-1 rounded-full text-xs text-slate-700 dark:text-slate-300 font-mono tabular-nums shadow-xs">
             <span>Auth Code:</span>
-            <strong className="text-[#0F766E] dark:text-[#14B8A6]">{activeIncident.dispatchAuthCode}</strong>
+            <strong className="text-teal-600 dark:text-teal-400">{activeIncident.dispatchAuthCode}</strong>
           </div>
         </div>
       </div>
 
       {/* Operator & Vehicle Digital Clearance Credentials */}
-      <div className="w-full my-3 bg-white dark:bg-[#141C24] rounded-3xl p-4 space-y-3 shadow-floating">
+      <div className="w-full my-3 floating-surface rounded-3xl p-4 space-y-3 shadow-specular">
         <div className="flex items-center justify-between pb-2.5">
           <div className="flex items-center gap-2.5">
             <img
               src={selectedProvider.operator_photo}
               alt={selectedProvider.operator_name}
-              className="w-12 h-12 rounded-2xl object-cover shadow-floating-sm"
+              className="w-12 h-12 rounded-2xl object-cover shadow-xs"
             />
             <div>
               <div className="flex items-center gap-1">
                 <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">{selectedProvider.operator_name}</h3>
-                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400">{selectedProvider.name}</p>
-              <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded inline-block mt-0.5 font-semibold shadow-floating-sm">
+              <span className="text-[10px] font-mono tabular-nums text-emerald-700 dark:text-emerald-300 bg-emerald-500/15 px-2 py-0.5 rounded inline-block mt-0.5 font-semibold shadow-2xs">
                 {selectedProvider.lasdri_id}
               </span>
             </div>
@@ -117,10 +115,10 @@ export const AssistanceShield: React.FC = () => {
 
           <a
             href={`tel:${selectedProvider.phone}`}
-            className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-floating-sm active:scale-90 transition-transform"
+            className="w-10 h-10 rounded-2xl btn-electric-mint flex items-center justify-center shadow-specular active-spring transition-transform"
             title="Call Operator"
           >
-            <Phone className="w-4 h-4" />
+            <Phone className="w-4 h-4 text-slate-950" />
           </a>
         </div>
 
@@ -128,7 +126,7 @@ export const AssistanceShield: React.FC = () => {
         <div className="flex items-center justify-between text-xs py-1 px-1">
           <div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Plate</span>
-            <span className="font-bold text-slate-900 dark:text-slate-100 font-mono tracking-wider">{selectedProvider.plate_number}</span>
+            <span className="font-bold text-slate-900 dark:text-slate-100 font-mono tabular-nums tracking-wider">{selectedProvider.plate_number}</span>
           </div>
           <span className="text-slate-300 dark:text-slate-700">•</span>
           <div>
@@ -138,22 +136,22 @@ export const AssistanceShield: React.FC = () => {
           <span className="text-slate-300 dark:text-slate-700">•</span>
           <div>
             <span className="text-[10px] text-slate-500 dark:text-slate-400 block uppercase font-medium">Escrow</span>
-            <span className="font-bold text-emerald-700 dark:text-emerald-400">{formatNgn(activeIncident.escrowAmountNgn)}</span>
+            <span className="font-bold font-mono tabular-nums text-emerald-600 dark:text-emerald-400">{formatNgn(activeIncident.escrowAmountNgn)}</span>
           </div>
         </div>
 
         {/* Replacement Parts Review Bar */}
-        <div className="bg-slate-50 dark:bg-slate-900/60 rounded-2xl p-3 flex items-center justify-between text-xs shadow-floating-sm">
+        <div className="bg-slate-100/70 dark:bg-slate-900/60 rounded-2xl p-3 flex items-center justify-between text-xs shadow-xs">
           <div className="flex items-center gap-2 text-slate-700 dark:text-slate-300">
-            <FileCheck className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
+            <FileCheck className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             <span className="font-medium text-[11px]">Parts Receipt Approval</span>
           </div>
           <button
             onClick={() => setShowReceiptModal(true)}
-            className={`text-[11px] font-bold px-2.5 py-1 rounded-lg transition-all shadow-floating-sm ${
+            className={`text-[11px] font-bold px-2.5 py-1 rounded-lg transition-all active-spring ${
               receiptApproved
-                ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300'
-                : 'bg-[#0F766E] text-white'
+                ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-300'
+                : 'btn-electric-mint text-slate-950 shadow-specular'
             }`}
           >
             {receiptApproved ? 'Approved' : 'Review'}
@@ -165,7 +163,7 @@ export const AssistanceShield: React.FC = () => {
       <div className="w-full space-y-2 pb-2">
         <button
           onClick={handleWhatsAppShare}
-          className="w-full min-h-[46px] bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl flex items-center justify-center gap-2 shadow-floating-sm active:scale-95 transition-all"
+          className="w-full min-h-[46px] btn-electric-mint text-slate-950 font-black text-xs rounded-2xl flex items-center justify-center gap-2 shadow-specular active-spring transition-all"
         >
           <Share2 className="w-4 h-4" />
           <span>1-Tap WhatsApp Emergency Share</span>
@@ -174,14 +172,14 @@ export const AssistanceShield: React.FC = () => {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => setShieldVisibility(false)}
-            className="min-h-[42px] bg-zinc-100 dark:bg-stone-850 hover:bg-zinc-200 dark:hover:bg-stone-750 text-zinc-800 dark:text-stone-200 font-bold text-xs rounded-2xl transition-colors shadow-floating-sm"
+            className="min-h-[42px] floating-pill bg-zinc-100 dark:bg-stone-850 hover:bg-zinc-200 dark:hover:bg-stone-750 text-zinc-800 dark:text-stone-200 font-bold text-xs rounded-2xl transition-colors shadow-specular active-spring"
           >
             Minimize Shield
           </button>
 
           <button
             onClick={cancelEmergency}
-            className="min-h-[42px] bg-red-50 dark:bg-red-950/30 hover:bg-red-100 dark:hover:bg-red-900/40 text-red-700 dark:text-red-400 font-bold text-xs rounded-2xl transition-colors flex items-center justify-center gap-1.5 shadow-floating-sm"
+            className="min-h-[42px] floating-pill bg-red-500/15 hover:bg-red-500/25 text-red-700 dark:text-red-400 font-bold text-xs rounded-2xl transition-colors flex items-center justify-center gap-1.5 shadow-specular active-spring"
           >
             <XCircle className="w-4 h-4 text-red-600 dark:text-red-400" />
             <span>Cancel SOS</span>

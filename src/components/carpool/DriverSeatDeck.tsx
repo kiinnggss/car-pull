@@ -233,21 +233,21 @@ CAR PULL Zero-Cash Escrow Active`;
       </div>
 
       {/* 2. One-Tap Direction Switcher */}
-      <div className="grid grid-cols-2 p-1 bg-slate-100/90 dark:bg-slate-900 rounded-2xl shadow-inner text-xs">
+      <div className="grid grid-cols-2 p-1 floating-surface rounded-2xl shadow-specular text-xs">
         <button
           type="button"
           onClick={() => {
             triggerHaptic('switch');
             setCommuteDirection('morning');
           }}
-          className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 ${
+          className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 active-spring ${
             commuteDirection === 'morning'
-              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-floating-sm'
+              ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
             <span className="truncate">Morning Outbound</span>
           </div>
           <span className="text-[10px] font-normal text-slate-500 dark:text-slate-400 truncate">
@@ -261,14 +261,14 @@ CAR PULL Zero-Cash Escrow Active`;
             triggerHaptic('switch');
             setCommuteDirection('evening');
           }}
-          className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 ${
+          className={`py-2 px-2.5 rounded-xl font-bold transition-all text-center flex flex-col items-center gap-0.5 active-spring ${
             commuteDirection === 'evening'
-              ? 'bg-[#0F766E] text-white shadow-floating-sm'
+              ? 'btn-electric-mint text-slate-950 shadow-xs'
               : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
           }`}
         >
           <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#F58A25]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
             <span className="truncate">Evening Return</span>
           </div>
           <span className="text-[10px] font-normal text-slate-500 dark:text-slate-400 truncate">
@@ -277,33 +277,102 @@ CAR PULL Zero-Cash Escrow Active`;
         </button>
       </div>
 
+      {/* Unibody Segmented Driver Control Rail */}
+      <div className="floating-surface rounded-2xl p-2 flex items-center justify-between gap-1 shadow-specular text-xs font-semibold">
+        {/* Seats Stepper */}
+        <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl">
+          <span className="text-[10px] text-slate-400 uppercase font-bold">Seats</span>
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              const newSeats = Math.max(1, Number(carSeats) - 1);
+              setCarSeats(newSeats);
+              updateDriverCar({ ...driverVehicle, total_seats: newSeats });
+            }}
+            className="w-5 h-5 rounded-lg flex items-center justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 active-spring shadow-2xs"
+            title="Decrease seats"
+          >
+            -
+          </button>
+          <span className="font-mono tabular-nums font-black text-slate-900 dark:text-slate-100 min-w-[12px] text-center">
+            {carSeats}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              const newSeats = Math.min(8, Number(carSeats) + 1);
+              setCarSeats(newSeats);
+              updateDriverCar({ ...driverVehicle, total_seats: newSeats });
+            }}
+            className="w-5 h-5 rounded-lg flex items-center justify-center bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 active-spring shadow-2xs"
+            title="Increase seats"
+          >
+            +
+          </button>
+        </div>
+
+        <span className="text-slate-300 dark:text-slate-700">|</span>
+
+        {/* AC Active Pill */}
+        <button
+          type="button"
+          onClick={() => {
+            triggerHaptic('tap');
+            setShowSettingsModal(true);
+          }}
+          className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-teal-500/15 text-teal-700 dark:text-teal-300 active-spring"
+          title="AC setting"
+        >
+          <span>❄️</span>
+          <span className="text-[10.5px] font-bold">AC Active</span>
+        </button>
+
+        <span className="text-slate-300 dark:text-slate-700">|</span>
+
+        {/* Departure Time */}
+        <button
+          type="button"
+          onClick={() => {
+            triggerHaptic('tap');
+            setShowSettingsModal(true);
+          }}
+          className="flex items-center gap-1 px-2 py-1 rounded-xl text-amber-600 dark:text-amber-400 font-mono tabular-nums text-[10.5px] font-bold active-spring hover:bg-slate-100 dark:hover:bg-slate-800"
+          title="Departure time"
+        >
+          <Clock className="w-3 h-3" />
+          <span>{driverSchedule?.departureTime || '07:30 AM'}</span>
+        </button>
+      </div>
+
       {/* 3. Streamlined Route & Capacity Capsule */}
-      <div className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3">
+      <div className="floating-surface rounded-3xl p-4 shadow-specular space-y-3">
         {/* Metric Bar: Capacity, Fuel Split, Next Departure */}
         <div className="grid grid-cols-3 gap-2 pb-2 text-center">
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
+          <div className="bg-slate-100/70 dark:bg-slate-900/60 p-2 rounded-xl">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Available
             </span>
-            <span className="text-xs font-bold text-[#0F766E] dark:text-[#14B8A6]">
+            <span className="text-xs font-black font-mono tabular-nums text-teal-600 dark:text-teal-400">
               {availableSeats} of {totalSeats} open
             </span>
           </div>
 
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
+          <div className="bg-slate-100/70 dark:bg-slate-900/60 p-2 rounded-xl">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Fuel Offset
             </span>
-            <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">
+            <span className="text-xs font-black font-mono tabular-nums text-emerald-600 dark:text-emerald-400">
               {formatNgn(totalFuelOffset)}
             </span>
           </div>
 
-          <div className="bg-slate-50 dark:bg-slate-900/60 p-2 rounded-xl shadow-inner">
+          <div className="bg-slate-100/70 dark:bg-slate-900/60 p-2 rounded-xl">
             <span className="text-[9.5px] uppercase font-bold text-slate-400 dark:text-slate-500 block">
               Departure
             </span>
-            <span className="text-xs font-bold text-[#F58A25]">
+            <span className="text-xs font-black font-mono tabular-nums text-amber-600 dark:text-amber-400">
               {driverSchedule?.departureTime || '07:30 AM'}
             </span>
           </div>
@@ -319,12 +388,12 @@ CAR PULL Zero-Cash Escrow Active`;
             return (
               <div
                 key={idx}
-                className={`p-2.5 rounded-xl text-center shadow-floating-sm transition-all ${
+                className={`p-2.5 rounded-xl text-center shadow-xs transition-all ${
                   isBoarded
                     ? 'bg-emerald-500/15 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
                     : isFilled
-                    ? 'bg-teal-50 dark:bg-teal-950/40 text-[#0F766E] dark:text-teal-300'
-                    : 'bg-slate-50 dark:bg-slate-900/60 text-slate-400 dark:text-slate-500'
+                    ? 'bg-teal-500/15 dark:bg-teal-950/40 text-teal-700 dark:text-teal-300'
+                    : 'bg-slate-100/70 dark:bg-slate-900/60 text-slate-400 dark:text-slate-500'
                 }`}
               >
                 <div className="flex items-center justify-center gap-1 text-[11px] font-bold">
@@ -344,7 +413,7 @@ CAR PULL Zero-Cash Escrow Active`;
           <span>{driverVehicle.make} {driverVehicle.model} ({driverVehicle.plate_number})</span>
           <button
             onClick={() => setShowSettingsModal(true)}
-            className="text-[#0F766E] dark:text-[#14B8A6] font-semibold hover:underline"
+            className="text-teal-600 dark:text-teal-400 font-semibold hover:underline"
           >
             Edit Vehicle Specs
           </button>
@@ -353,15 +422,15 @@ CAR PULL Zero-Cash Escrow Active`;
 
       {/* 4. Live Pickup Itinerary & Navigation (When Passengers Exist) */}
       {acceptedRiders.length > 0 && (
-        <div className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3">
+        <div className="floating-surface rounded-3xl p-4 shadow-specular space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Compass className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
-              <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 uppercase tracking-wider">
+              <Compass className="w-4 h-4 text-teal-500" />
+              <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 uppercase tracking-wider">
                 Pickup Itinerary
               </h4>
             </div>
-            <span className="text-[10px] font-mono text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full font-bold shadow-2xs">
+            <span className="text-[10px] font-mono tabular-nums text-emerald-700 dark:text-emerald-400 bg-emerald-500/15 px-2.5 py-0.5 rounded-full font-bold shadow-xs">
               {boardedRiderIds?.length || 0}/{acceptedRiders.length} Boarded
             </span>
           </div>
@@ -373,7 +442,7 @@ CAR PULL Zero-Cash Escrow Active`;
               return (
                 <div key={rider.id} className="relative pl-3">
                   <span className={`absolute -left-[15px] top-1 w-3.5 h-3.5 rounded-full ring-2 ring-white dark:ring-[#141C24] shadow-xs ${
-                    isBoarded ? 'bg-emerald-500' : 'bg-[#0F766E]'
+                    isBoarded ? 'bg-emerald-500' : 'bg-teal-600'
                   }`} />
                   <div className="flex items-center justify-between text-xs gap-2">
                     <div>
@@ -385,13 +454,13 @@ CAR PULL Zero-Cash Escrow Active`;
                       </span>
                     </div>
                     {isBoarded ? (
-                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-full flex-shrink-0">
+                      <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-500/15 px-2 py-0.5 rounded-full flex-shrink-0">
                         Boarded
                       </span>
                     ) : (
                       <button
                         onClick={() => handleConfirmBoarded(rider.id)}
-                        className="px-2.5 py-1 bg-[#0F766E] hover:bg-[#0D655E] text-white text-[10.5px] font-bold rounded-lg shadow-floating-sm active:scale-95 transition-all flex-shrink-0"
+                        className="px-3 py-1 btn-electric-mint text-[10.5px] font-black rounded-lg shadow-specular active-spring transition-all flex-shrink-0"
                       >
                         Confirm Boarded
                       </button>
@@ -403,7 +472,7 @@ CAR PULL Zero-Cash Escrow Active`;
 
             {/* Final Dropoff Stop */}
             <div className="relative pl-3 pt-1">
-              <span className="absolute -left-[15px] top-2 w-3.5 h-3.5 rounded-full bg-[#F58A25] ring-2 ring-white dark:ring-[#141C24] shadow-xs" />
+              <span className="absolute -left-[15px] top-2 w-3.5 h-3.5 rounded-full bg-amber-500 ring-2 ring-white dark:ring-[#141C24] shadow-xs" />
               <div className="text-xs">
                 <span className="font-bold text-slate-900 dark:text-slate-100 block">
                   Final Dropoff: {driverSchedule?.destination || 'Victoria Island'}
@@ -419,17 +488,17 @@ CAR PULL Zero-Cash Escrow Active`;
           <div className="grid grid-cols-2 gap-2 pt-1">
             <button
               onClick={handleStartDrive}
-              className="py-2.5 px-3 bg-[#0F766E] hover:bg-[#0D655E] text-white rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 btn-electric-mint rounded-xl text-xs font-black shadow-specular active-spring transition-all flex items-center justify-center gap-1.5"
             >
-              <Navigation className="w-3.5 h-3.5 text-[#F58A25]" />
+              <Navigation className="w-3.5 h-3.5 text-slate-950" />
               <span>Start Drive (Maps)</span>
             </button>
 
             <button
               onClick={handleBroadcastPing}
-              className="py-2.5 px-3 bg-amber-500/15 dark:bg-amber-950/40 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
+              className="py-2.5 px-3 floating-pill bg-amber-500/15 hover:bg-amber-500/25 text-amber-800 dark:text-amber-300 rounded-xl text-xs font-bold shadow-specular active-spring transition-all flex items-center justify-center gap-1.5"
             >
-              <Radio className="w-3.5 h-3.5 text-[#F58A25]" />
+              <Radio className="w-3.5 h-3.5 text-amber-500" />
               <span>{pingSentToast ? 'Ping Broadcasted!' : '5-Min Alert Ping'}</span>
             </button>
           </div>
@@ -437,7 +506,7 @@ CAR PULL Zero-Cash Escrow Active`;
           {/* WhatsApp Manifest Trigger */}
           <button
             onClick={shareToWhatsApp}
-            className="w-full py-2.5 bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] dark:text-[#25D366] rounded-xl text-xs font-bold shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 floating-pill bg-[#25D366]/15 hover:bg-[#25D366]/25 text-[#128C7E] dark:text-[#25D366] rounded-xl text-xs font-bold shadow-specular active-spring transition-all flex items-center justify-center gap-1.5"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>{copiedManifest ? 'Manifest Copied to Clipboard' : 'Share WhatsApp Manifest'}</span>
@@ -532,44 +601,56 @@ CAR PULL Zero-Cash Escrow Active`;
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
           <button
             type="button"
-            onClick={() => setFilterPill('all')}
-            className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            onClick={() => {
+              triggerHaptic('tap');
+              setFilterPill('all');
+            }}
+            className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all active-spring ${
               filterPill === 'all'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700/80'
+                ? 'btn-electric-mint shadow-specular'
+                : 'floating-pill bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300'
             }`}
           >
             All Commuters
           </button>
           <button
             type="button"
-            onClick={() => setFilterPill('expressway')}
-            className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            onClick={() => {
+              triggerHaptic('tap');
+              setFilterPill('expressway');
+            }}
+            className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all active-spring ${
               filterPill === 'expressway'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700/80'
+                ? 'btn-electric-mint shadow-specular'
+                : 'floating-pill bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300'
             }`}
           >
             Direct Expressway
           </button>
           <button
             type="button"
-            onClick={() => setFilterPill('corporate')}
-            className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            onClick={() => {
+              triggerHaptic('tap');
+              setFilterPill('corporate');
+            }}
+            className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all active-spring ${
               filterPill === 'corporate'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700/80'
+                ? 'btn-electric-mint shadow-specular'
+                : 'floating-pill bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300'
             }`}
           >
             Corporate Verified
           </button>
           <button
             type="button"
-            onClick={() => setFilterPill('high_match')}
-            className={`px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+            onClick={() => {
+              triggerHaptic('tap');
+              setFilterPill('high_match');
+            }}
+            className={`px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap transition-all active-spring ${
               filterPill === 'high_match'
-                ? 'bg-[#0F766E] text-white shadow-xs'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-700/80'
+                ? 'btn-electric-mint shadow-specular'
+                : 'floating-pill bg-white/80 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300'
             }`}
           >
             High Match
@@ -581,19 +662,19 @@ CAR PULL Zero-Cash Escrow Active`;
           {waitingRiders.map((rider) => (
             <div
               key={rider.id}
-              className="bg-white dark:bg-[#141C24] rounded-3xl p-4 shadow-floating space-y-3 hover:shadow-floating-lg transition-all"
+              className="floating-surface rounded-3xl p-4 shadow-specular space-y-3 transition-all"
             >
               {/* Header: Commuter Avatar, Name, Company, Rating, Offer */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-floating-sm">
+                  <div className="w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
                     {rider.name.split(' ').map((n) => n[0]).join('')}
                   </div>
                   <div>
-                    <h5 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1">
+                    <h5 className="text-xs font-black text-slate-900 dark:text-slate-100 flex items-center gap-1">
                       {rider.name}
                       {rider.isFemaleOnly && (
-                        <span className="text-[9px] bg-pink-50 dark:bg-pink-950/50 text-pink-700 dark:text-pink-300 px-1.5 py-0.2 rounded font-bold shadow-2xs">
+                        <span className="text-[9px] bg-pink-500/15 text-pink-700 dark:text-pink-300 px-1.5 py-0.2 rounded font-bold shadow-2xs">
                           Women
                         </span>
                       )}
@@ -609,24 +690,24 @@ CAR PULL Zero-Cash Escrow Active`;
                 </div>
 
                 <div className="text-right">
-                  <span className="text-xs font-bold text-[#0F766E] dark:text-[#14B8A6] block">
+                  <span className="text-xs font-black font-mono tabular-nums text-teal-600 dark:text-teal-400 block">
                     +{formatNgn(rider.bidNgn)}
                   </span>
-                  <span className="text-[9px] text-slate-400 dark:text-slate-500 font-medium">
+                  <span className="text-[9px] uppercase tracking-wider text-slate-400 dark:text-slate-500 font-semibold">
                     Fair Split
                   </span>
                 </div>
               </div>
 
               {/* Route: Pickup Safe Zone to Drop Destination */}
-              <div className="bg-slate-50 dark:bg-slate-900/60 p-3 rounded-2xl text-[10.5px] space-y-1 text-slate-700 dark:text-slate-300 shadow-inner">
+              <div className="bg-slate-100/70 dark:bg-slate-900/60 p-3 rounded-2xl text-[10.5px] space-y-1 text-slate-700 dark:text-slate-300">
                 <div className="flex items-center gap-1.5">
-                  <MapPin className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                  <MapPin className="w-3 h-3 text-teal-500 flex-shrink-0" />
                   <span className="font-semibold text-slate-900 dark:text-slate-100">Pickup:</span>
                   <span className="truncate">{rider.pickupSafeZone.name}</span>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <Clock className="w-3 h-3 text-[#F58A25] flex-shrink-0" />
+                  <Clock className="w-3 h-3 text-amber-500 flex-shrink-0" />
                   <span className="font-semibold text-slate-900 dark:text-slate-100">Drop:</span>
                   <span className="truncate">{rider.destination} ({rider.departure_time})</span>
                 </div>
@@ -635,8 +716,8 @@ CAR PULL Zero-Cash Escrow Active`;
               {/* Mutual Spark Pill if present */}
               {rider.mutual_spark && (
                 <div className="flex items-center gap-1">
-                  <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-[#F58A25] bg-amber-50 dark:bg-amber-950/30 px-2 py-0.5 rounded-full shadow-2xs">
-                    <Sparkles className="w-2.5 h-2.5 text-[#F58A25]" />
+                  <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-amber-700 dark:text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-full shadow-2xs">
+                    <Sparkles className="w-2.5 h-2.5 text-amber-500" />
                     {rider.mutual_spark}
                   </span>
                 </div>
@@ -650,16 +731,16 @@ CAR PULL Zero-Cash Escrow Active`;
                     triggerHaptic('tap');
                     setSelectedChatRider(rider);
                   }}
-                  className="py-2 bg-slate-100/90 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1"
+                  className="py-2 floating-pill bg-slate-100/90 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-xl shadow-xs active-spring transition-all flex items-center justify-center gap-1"
                   title="Say hello to commuter"
                 >
-                  <MessageCircle className="w-3.5 h-3.5 text-[#F58A25]" />
+                  <MessageCircle className="w-3.5 h-3.5 text-amber-500" />
                   <span>Chat</span>
                 </button>
                 <button
                   onClick={() => handleAccept(rider.id)}
                   disabled={availableSeats <= 0}
-                  className="col-span-2 py-2 bg-[#0F766E] hover:bg-[#0D655E] disabled:bg-slate-100 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 text-white text-xs font-bold rounded-xl shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
+                  className="col-span-2 py-2 btn-electric-mint disabled:opacity-40 text-xs font-black rounded-xl shadow-specular active-spring transition-all flex items-center justify-center gap-1.5"
                 >
                   <Plus className="w-3.5 h-3.5" />
                   <span>

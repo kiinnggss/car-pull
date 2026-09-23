@@ -2,20 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { formatNgn } from '@/lib/utils';
 import {
   ShieldCheck,
-  QrCode,
-  Lock,
   PhoneCall,
   Share2,
   AlertTriangle,
-  CheckCircle2,
-  FileText,
   Car,
-  Users,
-  Building2,
-  ExternalLink,
 } from 'lucide-react';
 import { getAssetPath } from '@/lib/assets';
 
@@ -28,7 +20,6 @@ export const CommutePass: React.FC = () => {
     activeMatches,
     offlinePin,
     commuteDirection,
-    setActiveTab,
   } = useAppStore();
 
   const [currentTime, setCurrentTime] = useState('');
@@ -88,7 +79,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
   return (
     <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
       {/* Official Government Compliance Shield Card */}
-      <div className="bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-5 shadow-floating-lg space-y-4 relative overflow-hidden">
+      <div className="floating-surface rounded-3xl p-5 shadow-specular space-y-4 relative overflow-hidden">
         {/* Subtle Watermark */}
         <div className="absolute -right-8 -top-8 text-emerald-100/40 dark:text-emerald-900/20 pointer-events-none select-none">
           <ShieldCheck className="w-44 h-44" />
@@ -100,20 +91,20 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             <img
               src={getAssetPath('/logo.png')}
               alt="CAR PULL Seal"
-              className="w-8 h-8 rounded-xl object-contain bg-white dark:bg-[#1E2630] p-1 shadow-floating-sm flex-shrink-0"
+              className="w-8 h-8 rounded-xl object-contain bg-white dark:bg-[#1E2630] p-1 shadow-xs flex-shrink-0"
             />
             <div>
               <span className="text-[9px] uppercase tracking-widest text-emerald-800 dark:text-emerald-400 font-extrabold block">
                 Lagos State Transport Reform Act
               </span>
-              <h3 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] leading-tight">
+              <h3 className="text-xs font-black text-slate-900 dark:text-slate-100 leading-tight">
                 Non-Commercial Commute Certificate
               </h3>
             </div>
           </div>
 
-          <span className="px-2.5 py-1 rounded-full bg-emerald-100/90 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 text-[10px] font-extrabold flex items-center gap-1.5 shadow-2xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse" />
+          <span className="px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 text-[10px] font-extrabold flex items-center gap-1.5 shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             SEC 44 SAFE HARBOR
           </span>
         </div>
@@ -186,25 +177,25 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
         </div>
 
         {/* Live Timestamp & Offline PIN */}
-        <div className="flex items-center justify-between px-3 py-2 bg-emerald-50/90 dark:bg-emerald-950/40 rounded-xl text-emerald-900 dark:text-emerald-300 shadow-inner text-[10px] font-mono">
+        <div className="flex items-center justify-between px-3 py-2 bg-emerald-50/90 dark:bg-emerald-950/40 rounded-xl text-emerald-900 dark:text-emerald-300 shadow-inner text-[10px] font-mono tabular-nums">
           <div className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-600 animate-ping" />
             <span className="font-bold">{currentTime}</span>
           </div>
-          <div className="flex items-center gap-1 bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg shadow-floating-sm">
+          <div className="flex items-center gap-1 floating-pill bg-white dark:bg-slate-900 px-2.5 py-1 rounded-lg shadow-xs">
             <span className="font-sans font-bold text-slate-600 dark:text-slate-400">PIN:</span>
-            <strong className="text-[#0F766E] dark:text-[#14B8A6] font-black tracking-widest">{offlinePin}</strong>
+            <strong className="text-teal-600 dark:text-teal-400 font-black tracking-widest">{offlinePin}</strong>
           </div>
         </div>
 
         {/* Vehicle & Occupant Manifest Breakdown */}
-        <div className="bg-zinc-50/90 dark:bg-[#19222C] rounded-2xl p-3.5 space-y-2 shadow-floating-sm text-xs">
+        <div className="floating-surface rounded-2xl p-3.5 space-y-2 shadow-specular text-xs">
           <div className="flex items-center justify-between pb-1.5">
             <div className="flex items-center gap-1.5">
               <Car className="w-3.5 h-3.5 text-zinc-600 dark:text-stone-400" />
               <span className="font-bold text-zinc-900 dark:text-stone-100">{activeVehicleModel}</span>
             </div>
-            <span className="font-mono font-black text-xs px-2.5 py-1 bg-zinc-200 dark:bg-stone-800 rounded-lg text-zinc-800 dark:text-stone-200 shadow-2xs">
+            <span className="font-mono tabular-nums font-black text-xs px-2.5 py-1 bg-zinc-200 dark:bg-stone-800 rounded-lg text-zinc-800 dark:text-stone-200 shadow-2xs">
               {activeVehiclePlate}
             </span>
           </div>
@@ -230,13 +221,13 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             </div>
             <div className="flex items-center justify-between">
               <span className="text-zinc-500 dark:text-stone-400 font-medium">Commercial Profit:</span>
-              <span className="font-black text-zinc-900 dark:text-stone-100">₦0.00 (Pure Fuel Offset)</span>
+              <span className="font-black font-mono tabular-nums text-zinc-900 dark:text-stone-100">₦0.00 (Pure Fuel Offset)</span>
             </div>
           </div>
         </div>
 
         {/* Legal Advisory for Enforcement Officers */}
-        <div className="bg-amber-50/90 dark:bg-amber-950/30 rounded-2xl p-3 text-[10px] text-amber-900 dark:text-amber-200 shadow-floating-sm space-y-1">
+        <div className="bg-amber-50/90 dark:bg-amber-950/30 rounded-2xl p-3 text-[10px] text-amber-900 dark:text-amber-200 shadow-specular space-y-1">
           <div className="flex items-center gap-1.5 font-bold">
             <AlertTriangle className="w-3.5 h-3.5 text-amber-700 dark:text-amber-400 flex-shrink-0" />
             <span>STATUTORY NOTICE TO LAW ENFORCEMENT OFFICERS:</span>
@@ -251,7 +242,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
         <div className="space-y-2 pt-1">
           <button
             onClick={sharePassWhatsApp}
-            className="w-full py-3 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs rounded-xl shadow-floating active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-3 btn-electric-mint font-black text-xs rounded-2xl shadow-specular active-spring transition-all flex items-center justify-center gap-1.5"
           >
             <Share2 className="w-4 h-4" />
             <span>{copied ? 'Pass Copied to Clipboard!' : 'Share Pass on WhatsApp'}</span>
@@ -261,7 +252,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             <a
               href="tel:080000527862"
-              className="p-2.5 bg-zinc-100 dark:bg-[#1E2630] hover:bg-zinc-200 dark:hover:bg-[#26313E] rounded-xl text-zinc-800 dark:text-stone-200 font-bold flex items-center justify-center gap-1.5 shadow-floating-sm transition-all"
+              className="p-2.5 floating-pill bg-zinc-100 dark:bg-[#1E2630] hover:bg-zinc-200 dark:hover:bg-[#26313E] rounded-xl text-zinc-800 dark:text-stone-200 font-bold flex items-center justify-center gap-1.5 shadow-specular active-spring transition-all"
             >
               <PhoneCall className="w-3 h-3 text-red-600 dark:text-red-400" />
               <span>LASTMA (0800-LASTMA)</span>
@@ -269,7 +260,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
             <a
               href="tel:112"
-              className="p-2.5 bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl text-red-800 dark:text-red-300 font-bold flex items-center justify-center gap-1.5 shadow-floating-sm transition-all"
+              className="p-2.5 floating-pill bg-red-50 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-xl text-red-800 dark:text-red-300 font-bold flex items-center justify-center gap-1.5 shadow-specular active-spring transition-all"
             >
               <PhoneCall className="w-3 h-3 text-red-600 dark:text-red-400" />
               <span>LASEMA (112 / 767)</span>

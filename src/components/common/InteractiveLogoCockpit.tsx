@@ -188,10 +188,10 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             </button>
 
             <div className="text-center">
-              <h3 className="text-sm font-serif font-black text-[#141210] dark:text-slate-100 tracking-tight">
+              <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
                 Logo Cockpit Console
               </h3>
-              <span className="text-[10px] text-[#70665A] dark:text-slate-400 font-semibold block">
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">
                 Interactive Telemetry &amp; Hardware
               </span>
             </div>

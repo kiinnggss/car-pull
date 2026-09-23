@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CorridorDriver, SafeZone } from '@/lib/types';
-import { ShieldCheck, Snowflake, Clock, Users, Car, MapPin, Star, Compass, Music, MessageCircle, Sparkles, Coffee, Headphones } from 'lucide-react';
+import { ShieldCheck, Snowflake, Clock, Users, Car, MapPin, Star, Music, Sparkles } from 'lucide-react';
 import { DriverTrustModal } from './DriverTrustModal';
 import { triggerHaptic } from '@/lib/haptics';
 
@@ -14,21 +14,8 @@ interface ProfileCardProps {
 export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) => {
   const [showTrustModal, setShowTrustModal] = useState(false);
 
-  const categoryLabel =
-    driver.trip_type === 'leaving_now'
-      ? 'Leaving Soon'
-      : driver.trip_type === 'morning'
-      ? 'Morning Travel'
-      : driver.trip_type === 'evening'
-      ? 'Evening Return'
-      : driver.trip_type === 'flexible'
-      ? 'Anytime Ride'
-      : 'Travel Corridor';
-
-  const confirmedPassengers = driver.cabin_passengers || [];
-
   return (
-    <div className="relative w-full h-full rounded-3xl bg-white dark:bg-[#12161A] overflow-hidden shadow-[0_16px_40px_-8px_rgba(0,0,0,0.14)] dark:shadow-[0_20px_50px_-8px_rgba(0,0,0,0.75)] flex flex-col justify-between select-none transform-gpu">
+    <div className="relative w-full h-full rounded-3xl floating-surface overflow-hidden shadow-specular flex flex-col justify-between select-none transform-gpu">
       {/* 1. Full-Bleed Photo Section with Subtle Scrim */}
       <div className="relative w-full flex-1 min-h-0 overflow-hidden bg-slate-900">
         <img
@@ -38,8 +25,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           className="w-full h-full object-cover object-top"
         />
 
-        {/* Cinematic dark scrim at bottom of photo for razor-sharp typography */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent pointer-events-none" />
+        {/* Scrim at bottom of photo for contrast */}
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/30 to-transparent pointer-events-none" />
 
         {/* Floating Top Header Badges */}
         <div className="absolute top-2.5 inset-x-2.5 flex items-center justify-between z-10">
@@ -48,10 +35,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
               triggerHaptic('tap');
               setShowTrustModal(true);
             }}
-            className="inline-flex items-center gap-1.5 bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full shadow-sm transition-all active:scale-95"
+            className="inline-flex items-center gap-1.5 floating-pill bg-slate-950/60 hover:bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full shadow-specular-light transition-all active-spring"
             title="Tap to view verified trust credentials"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#14B8A6]" />
+            <ShieldCheck className="w-3.5 h-3.5 text-teal-400" />
             <span>Verified</span>
             {driver.vehicle.has_ac && (
               <>
@@ -63,8 +50,8 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
             )}
           </button>
 
-          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md text-white text-[11px] font-medium px-3 py-1 rounded-full shadow-sm">
-            <Clock className="w-3 h-3 text-[#F58A25]" />
+          <div className="inline-flex items-center gap-1.5 floating-pill bg-slate-950/60 backdrop-blur-md text-white text-[11px] font-mono tabular-nums px-3 py-1 rounded-full shadow-specular-light">
+            <Clock className="w-3 h-3 text-amber-400" />
             <span>{driver.corridor.departure_time}</span>
           </div>
         </div>
@@ -73,7 +60,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
         <div className="absolute bottom-2.5 inset-x-3 text-white z-10">
           <div className="flex items-baseline justify-between gap-2">
             <div className="flex items-baseline gap-1.5 truncate">
-              <h2 className="text-lg font-bold tracking-tight text-white truncate">
+              <h2 className="text-lg font-black tracking-tight text-white truncate">
                 {driver.name}
               </h2>
               {driver.social_handle && (
@@ -82,10 +69,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-1 text-xs font-semibold text-amber-400 bg-black/60 backdrop-blur-xs px-2.5 py-0.5 rounded-full shadow-xs flex-shrink-0">
+            <div className="flex items-center gap-1 text-xs font-semibold text-amber-400 floating-pill bg-slate-950/60 backdrop-blur-xs px-2.5 py-0.5 rounded-full shadow-xs flex-shrink-0">
               <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-              <span>{driver.rating}</span>
-              <span className="text-white/70 font-normal text-[10px]">({driver.trips_completed})</span>
+              <span className="font-mono tabular-nums">{driver.rating}</span>
+              <span className="text-white/70 font-normal font-mono tabular-nums text-[10px]">({driver.trips_completed})</span>
             </div>
           </div>
           <p className="text-xs text-white/85 font-medium truncate mt-0.5">
@@ -95,14 +82,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
       </div>
 
       {/* 2. Structured Ride Information Pane */}
-      <div className="w-full bg-slate-50/80 dark:bg-[#15191F] p-3 space-y-2 text-slate-900 dark:text-slate-100 flex-shrink-0">
+      <div className="w-full bg-white/95 dark:bg-[#12161A]/95 backdrop-blur-xl p-3 space-y-2 text-slate-900 dark:text-slate-100 flex-shrink-0">
         {/* Route & Corridor */}
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-1.5 truncate text-slate-900 dark:text-slate-100 font-semibold">
-            <MapPin className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-teal-500 flex-shrink-0" />
             <span className="truncate">{driver.corridor.origin.split('/')[0].trim()} ➔ {driver.corridor.destination.split('(')[0].trim()}</span>
           </div>
-          <span className="text-[11px] text-slate-500 font-medium flex-shrink-0">
+          <span className="text-[11px] font-mono tabular-nums text-slate-500 font-medium flex-shrink-0">
             {driver.corridor.distance_km} km
           </span>
         </div>
@@ -112,11 +99,11 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           <div className="flex items-center gap-1.5 truncate">
             <Car className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
             <span className="font-medium text-slate-800 dark:text-slate-200">{driver.vehicle.make} {driver.vehicle.model}</span>
-            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 bg-slate-200/60 dark:bg-slate-800 px-1.5 py-0.5 rounded shadow-2xs">
+            <span className="text-[10px] font-mono tabular-nums text-slate-500 dark:text-slate-400 bg-slate-200/60 dark:bg-slate-800 px-1.5 py-0.5 rounded shadow-xs">
               {driver.vehicle.plate_number}
             </span>
           </div>
-          <span className="text-[#0F766E] dark:text-[#14B8A6] font-semibold text-[11px] flex items-center gap-1">
+          <span className="text-teal-600 dark:text-teal-400 font-semibold text-[11px] font-mono tabular-nums flex items-center gap-1">
             <Users className="w-3 h-3" />
             {driver.corridor.available_seats} seats left
           </span>
@@ -129,10 +116,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           </p>
         )}
 
-        {/* Subtle Topics / Mutual Vibe */}
-        <div className="flex items-center gap-2 text-[10.5px] text-slate-500 dark:text-slate-400 pt-1">
+        {/* Topics / Mutual Vibe */}
+        <div className="flex items-center gap-2 text-[10.5px] text-slate-500 dark:text-slate-400 pt-0.5">
           {driver.mutual_spark && (
-            <span className="font-semibold text-[#F58A25] flex items-center gap-1">
+            <span className="font-semibold text-amber-500 flex items-center gap-1">
               <Sparkles className="w-3 h-3" />
               {driver.mutual_spark}
             </span>
@@ -140,7 +127,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver, safeZone }) =>
           {driver.mutual_spark && driver.music_vibe && <span>•</span>}
           {driver.music_vibe && (
             <span className="truncate flex items-center gap-1">
-              <Music className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+              <Music className="w-3 h-3 text-teal-500 flex-shrink-0" />
               <span className="truncate">{driver.music_vibe}</span>
             </span>
           )}

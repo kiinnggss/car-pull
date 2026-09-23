@@ -63,7 +63,7 @@ export const Header: React.FC = () => {
   const isInChatThread = activeTab === 'chats' && Boolean(activeThreadId);
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0E1216]/85 backdrop-blur-xl px-3 py-2 transition-colors shadow-[0_4px_20px_-2px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_-2px_rgba(0,0,0,0.5)]">
+    <header className="sticky top-0 z-40 w-full bg-white/85 dark:bg-[#0E1216]/85 backdrop-blur-xl px-3 py-2 transition-colors shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_4px_20px_-2px_rgba(0,0,0,0.06)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_4px_24px_-2px_rgba(0,0,0,0.5)]">
       {/* Primary Row: Logo & Brand, Role Switcher, and User Profile */}
       <div className="flex items-center justify-between gap-2">
         {/* Brand or In-App Back Button */}
@@ -78,7 +78,7 @@ export const Header: React.FC = () => {
                   setActiveTab('map');
                 }
               }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all active:scale-95 shadow-xs"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-semibold text-xs transition-all active-spring shadow-xs"
               title={isInChatThread ? 'Return to Chat Inbox' : 'Return to Street Map'}
             >
               <ArrowLeft className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />
@@ -91,7 +91,7 @@ export const Header: React.FC = () => {
                   triggerHaptic('tap');
                   setShowCockpit(true);
                 }}
-                className="p-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 active:scale-95 transition-all flex-shrink-0"
+                className="p-1 rounded-xl bg-slate-100/90 dark:bg-slate-800/90 shadow-xs hover:bg-slate-200 dark:hover:bg-slate-700 active-spring flex-shrink-0"
                 title="Tap to open Interactive Logo Cockpit"
               >
                 <img
@@ -102,10 +102,10 @@ export const Header: React.FC = () => {
               </button>
 
               <div className="flex items-center gap-1">
-                <span className="font-bold text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
+                <span className="font-extrabold text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
                   CAR PULL
                 </span>
-                <span className="hidden sm:inline-block bg-[#0F766E] text-white text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
+                <span className="hidden sm:inline-block bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[8px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider">
                   LAGOS
                 </span>
               </div>
@@ -120,7 +120,7 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               setActiveRole('rider');
             }}
-            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all ${
+            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all active-spring ${
               activeRole === 'rider'
                 ? 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white shadow-xs font-bold'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
@@ -133,9 +133,9 @@ export const Header: React.FC = () => {
               triggerHaptic('switch');
               setActiveRole('driver');
             }}
-            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all ${
+            className={`text-[11px] px-2.5 py-0.5 rounded-lg transition-all active-spring ${
               activeRole === 'driver'
-                ? 'bg-[#0F766E] text-white shadow-xs font-bold'
+                ? 'btn-electric-mint shadow-xs font-bold'
                 : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 font-medium'
             }`}
           >
@@ -150,11 +150,11 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setActiveTab('wallet');
             }}
-            className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all active:scale-95 shadow-xs"
+            className="flex items-center gap-1 bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200/90 dark:hover:bg-slate-700/90 text-slate-800 dark:text-slate-200 text-[11px] font-bold px-2.5 py-1.5 rounded-xl transition-all active-spring shadow-xs"
             title="Open Escrow Wallet"
           >
             <Lock className="w-3 h-3 text-slate-500 dark:text-slate-400" />
-            <span>{formatNgn(escrowBalanceNgn)}</span>
+            <span className="font-mono tabular-nums">{formatNgn(escrowBalanceNgn)}</span>
           </button>
 
           {/* Download App Trigger */}
@@ -300,7 +300,7 @@ export const Header: React.FC = () => {
                   className="w-9 h-9 object-contain rounded-xl p-1 bg-white dark:bg-stone-900 shadow-xs"
                 />
                 <div>
-                  <h3 className="text-sm font-serif font-black">Download CAR PULL</h3>
+                  <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">Download CAR PULL</h3>
                   <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold block">
                     Fast • Offline-Ready PWA
                   </span>

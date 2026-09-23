@@ -47,17 +47,17 @@ export const ChatInbox: React.FC = () => {
       <div className="flex items-center justify-between pt-1">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-base font-serif font-black text-[#141210] dark:text-[#EDE8E1] flex items-center gap-1.5">
-              <MessageCircle className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
+            <h2 className="text-base font-black text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+              <MessageCircle className="w-4 h-4 text-teal-600 dark:text-teal-400" />
               Commute Chats
             </h2>
             {totalUnread > 0 && (
-              <span className="bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-[#121110] text-[10px] font-black px-2 py-0.5 rounded-full shadow-2xs">
+              <span className="bg-teal-500/15 text-teal-700 dark:text-teal-300 text-[10px] font-mono tabular-nums font-black px-2 py-0.5 rounded-full shadow-2xs">
                 {totalUnread} New
               </span>
             )}
           </div>
-          <p className="text-[11px] text-[#70665A] dark:text-stone-400 font-medium">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
             Real-time coordination with verified carpool peers
           </p>
         </div>
@@ -171,14 +171,14 @@ export const ChatInbox: React.FC = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 truncate">
-                      <h4 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] truncate">
+                      <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
                         {thread.partnerName}
                       </h4>
-                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-stone-100 dark:bg-stone-800 text-[#70665A] dark:text-stone-300 flex-shrink-0">
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0">
                         {thread.partnerRole === 'driver' ? 'Driver' : 'Co-Rider'}
                       </span>
                     </div>
-                    <span className="text-[10px] font-mono text-[#70665A] dark:text-stone-500 flex-shrink-0">
+                    <span className="text-[10px] font-mono tabular-nums text-slate-400 dark:text-slate-500 flex-shrink-0">
                       {thread.lastMessageTimestamp}
                     </span>
                   </div>

@@ -153,10 +153,10 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
           </button>
 
           <div className="text-center">
-            <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
+            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
               Break the Ice
             </h3>
-            <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-semibold block">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold block">
               Say hello before the ride
             </span>
           </div>
@@ -180,7 +180,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
             />
             <div className="min-w-0 flex-1 space-y-0.5">
               <div className="flex items-center justify-between">
-                <h4 className="text-xs font-serif font-black text-[#141210] dark:text-stone-100 truncate">
+                <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
                   {personName}
                 </h4>
                 {vehiclePlate && (

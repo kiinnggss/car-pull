@@ -91,15 +91,15 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
       {/* Header */}
       <div className="flex items-center justify-between pt-1">
         <div>
-          <h2 className="text-base font-serif font-black text-[#141210] dark:text-[#EDE8E1] flex items-center gap-1.5">
-            <Car className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6]" />
+          <h2 className="text-base font-black text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+            <Car className="w-4 h-4 text-teal-600 dark:text-teal-400" />
             Your Booked Rides
           </h2>
-          <p className="text-[11px] text-[#70665A] dark:text-stone-400 font-medium">
+          <p className="text-[11px] text-slate-500 dark:text-slate-400 font-medium">
             Live street pickups &amp; escrow secured
           </p>
         </div>
-        <span className="text-xs font-bold text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-3 py-1 rounded-full shadow-2xs flex-shrink-0">
+        <span className="text-xs font-bold text-teal-700 dark:text-teal-300 bg-teal-500/15 px-3 py-1 rounded-full shadow-2xs flex-shrink-0 font-mono tabular-nums">
           {activeMatches.length} Active {activeMatches.length === 1 ? 'Ride' : 'Rides'}
         </span>
       </div>
@@ -157,8 +157,8 @@ Zero Cash • Monitored Corridor • CCTV Safe Zone`;
                     className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
                   />
                   <div>
-                    <h4 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1]">{match.driverName}</h4>
-                    <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-semibold flex items-center gap-1">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100">{match.driverName}</h4>
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold flex items-center gap-1">
                       <Clock className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
                       {match.scheduledFor}
                     </span>

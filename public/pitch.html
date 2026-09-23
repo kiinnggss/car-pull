@@ -12,19 +12,21 @@
   <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
+      --font-mono: 'JetBrains Mono', monospace;
       --bg: #06080B;
       --card-bg: rgba(16, 22, 30, 0.7);
       --card-border: transparent;
-      --card-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 4px 16px -2px rgba(0, 0, 0, 0.4);
-      --card-shadow-hover: 0 24px 50px -10px rgba(0, 0, 0, 0.75), 0 0 30px rgba(20, 184, 166, 0.18);
-      --deck-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 90px -25px rgba(15, 118, 110, 0.16);
+      --card-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 16px 36px -8px rgba(0, 0, 0, 0.65), 0 4px 16px -2px rgba(0, 0, 0, 0.4);
+      --card-shadow-hover: inset 0 1px 0 0 rgba(255, 255, 255, 0.14), 0 24px 50px -10px rgba(0, 0, 0, 0.75), 0 0 30px rgba(20, 184, 166, 0.18);
+      --deck-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 40px 100px -20px rgba(0, 0, 0, 0.95), 0 20px 50px -10px rgba(0, 0, 0, 0.7), 0 0 90px -25px rgba(15, 118, 110, 0.16);
       --floating-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.012) 100%), #111822;
       --floating-bg-hover: linear-gradient(145deg, rgba(255, 255, 255, 0.075) 0%, rgba(255, 255, 255, 0.02) 100%), #141F2D;
       --teal: #0F766E;
       --teal-light: #14B8A6;
+      --teal-dark: #051614;
       --teal-glow: rgba(20, 184, 166, 0.25);
       --amber: #F58A25;
       --amber-light: #FB923C;
@@ -285,6 +287,8 @@
     }
 
     .stat-number {
+      font-family: var(--font-mono), monospace;
+      font-variant-numeric: tabular-nums;
       font-size: 36px;
       font-weight: 900;
       color: var(--teal-light);
@@ -311,7 +315,7 @@
       border-radius: 24px;
       overflow: hidden;
       border: none;
-      box-shadow: 0 20px 45px -8px rgba(0, 0, 0, 0.75), 0 6px 18px -4px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08), 0 20px 45px -8px rgba(0, 0, 0, 0.75), 0 6px 18px -4px rgba(0, 0, 0, 0.5);
       height: 100%;
       min-height: 280px;
     }
@@ -346,6 +350,7 @@
       align-items: center;
       justify-content: center;
       gap: 16px;
+      perspective: 1200px;
     }
 
     .phone-mockup {
@@ -353,12 +358,14 @@
       height: 440px;
       border-radius: 36px;
       border: none;
-      box-shadow: 0 28px 60px -15px rgba(0, 0, 0, 0.9), 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 28px 60px -15px rgba(0, 0, 0, 0.9), 0 10px 25px -5px rgba(0, 0, 0, 0.6);
       overflow: hidden;
       position: relative;
       background: #0B0F12;
       flex-shrink: 0;
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+      transform-style: preserve-3d;
+      transition: transform 0.16s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.25s ease;
+      will-change: transform;
     }
 
     .phone-mockup.sm {
@@ -368,8 +375,7 @@
     }
 
     .phone-mockup:hover {
-      transform: translateY(-5px) scale(1.02);
-      box-shadow: 0 35px 70px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(20, 184, 166, 0.22);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 35px 70px -15px rgba(0, 0, 0, 0.95), 0 0 35px rgba(20, 184, 166, 0.25);
     }
 
     .phone-mockup img {
@@ -378,6 +384,7 @@
       object-fit: cover;
       object-position: top;
       display: block;
+      pointer-events: none;
     }
 
     .phone-pill-badge {
@@ -389,7 +396,7 @@
       backdrop-filter: blur(12px);
       border: none;
       border-radius: 999px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 4px 14px rgba(0, 0, 0, 0.5);
       font-size: 9px;
       font-weight: 800;
       padding: 4px 12px;
@@ -470,7 +477,8 @@
     .footer-counter {
       font-size: 12px;
       font-weight: 700;
-      font-family: monospace;
+      font-family: var(--font-mono), monospace;
+      font-variant-numeric: tabular-nums;
       color: var(--text-muted);
     }
 
@@ -492,15 +500,15 @@
       justify-content: center;
       font-size: 16px;
       font-weight: bold;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.09), 0 4px 14px rgba(0, 0, 0, 0.4);
+      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .btn-nav:hover {
-      background: var(--teal);
-      color: white;
+      background: var(--teal-light);
+      color: var(--teal-dark);
       transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 20px rgba(15, 118, 110, 0.4);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4), 0 8px 20px rgba(20, 184, 166, 0.45);
     }
 
     .btn-nav:active {
@@ -527,6 +535,9 @@
         width: 190px;
         height: 360px;
       }
+      .pacing-hud {
+        display: none;
+      }
     }
 
     /* Top Utility Toolbar */
@@ -538,6 +549,59 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    /* Presenter Pacing HUD */
+    .pacing-hud {
+      background: rgba(16, 21, 27, 0.85);
+      backdrop-filter: blur(20px);
+      padding: 6px 14px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 24px -4px rgba(0, 0, 0, 0.6);
+      font-family: var(--font-mono), monospace;
+      font-variant-numeric: tabular-nums;
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    .hud-clock {
+      color: #F1F5F9;
+      font-weight: 700;
+    }
+
+    .hud-sep {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .hud-timer-btn {
+      background: transparent;
+      border: none;
+      color: var(--teal-light);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .hud-timer-btn:hover {
+      opacity: 0.8;
+    }
+
+    .hud-timer-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal-light);
+      box-shadow: 0 0 8px var(--teal-light);
+      animation: pulseGreen 2s infinite;
     }
 
     .tool-btn {
@@ -553,8 +617,8 @@
       align-items: center;
       gap: 6px;
       backdrop-filter: blur(20px);
-      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.09), 0 8px 24px -4px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.3);
+      transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
       text-decoration: none;
     }
 
@@ -562,11 +626,29 @@
       background: rgba(15, 118, 110, 0.35);
       color: #FFFFFF;
       transform: translateY(-2px);
-      box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(20, 184, 166, 0.25);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 12px 28px -4px rgba(0, 0, 0, 0.75), 0 0 20px rgba(20, 184, 166, 0.25);
     }
 
     .tool-btn:active {
-      transform: translateY(0);
+      transform: scale(0.96);
+    }
+
+    .tool-btn-mint {
+      background: var(--teal-light);
+      color: var(--teal-dark);
+      font-weight: 800;
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.45), 0 8px 24px -4px rgba(20, 184, 166, 0.5);
+    }
+
+    .tool-btn-mint:hover {
+      background: #2dd4bf;
+      color: var(--teal-dark);
+      transform: translateY(-2px);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.6), 0 12px 28px -4px rgba(20, 184, 166, 0.65);
+    }
+
+    .tool-btn-mint:active {
+      transform: scale(0.96);
     }
 
     .key-badge {
@@ -841,8 +923,16 @@
 
   <!-- Top Utility Toolbar -->
   <div class="top-toolbar">
-    <button class="tool-btn" onclick="openLiveDemo()" title="Open Live Working App">
-      <span class="live-dot"></span>
+    <div class="pacing-hud" id="pacing-hud" title="Presenter Pacing: Live Clock and Stopwatch. Click timer to restart.">
+      <span class="hud-clock" id="hud-clock">00:00:00</span>
+      <span class="hud-sep">|</span>
+      <button class="hud-timer-btn" id="hud-timer-btn" onclick="resetPacingTimer()" title="Click to restart stopwatch">
+        <span class="hud-timer-dot"></span>
+        <span class="hud-timer" id="hud-timer">00:00</span>
+      </button>
+    </div>
+    <button class="tool-btn tool-btn-mint" onclick="openLiveDemo()" title="Open Live Working App">
+      <span class="live-dot" style="background: #051614; box-shadow: 0 0 6px rgba(5, 22, 20, 0.6);"></span>
       <span>Live App</span>
     </button>
     <button class="tool-btn" onclick="toggleGrid()" title="Slide Grid Overview (G)">
@@ -2029,6 +2119,7 @@
           } else {
             slide.classList.add('active');
           }
+          animateSlideStats(slide);
         }
       });
 
@@ -2046,6 +2137,96 @@
       if (currentSlide > 1) {
         showSlide(currentSlide - 1, 'prev');
       }
+    }
+
+    /* 3D Perspective Tilt on Phone Mockups */
+    function init3DMockupTilt() {
+      const mockups = document.querySelectorAll('.phone-mockup');
+      mockups.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -11;
+          const rotateY = ((x - centerX) / centerX) * 11;
+          card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) translateY(-4px) scale3d(1.02, 1.02, 1.02)`;
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px) scale3d(1, 1, 1)';
+        });
+      });
+    }
+
+    /* Animated Count-up Numbers for Stat Elements */
+    function initStatCounters() {
+      document.querySelectorAll('.stat-number').forEach(el => {
+        if (!el.dataset.target) {
+          const text = el.textContent.trim();
+          const match = text.match(/^([^0-9.]*)([0-9]+(?:\.[0-9]+)?)(.*)$/);
+          if (match) {
+            el.dataset.prefix = match[1];
+            el.dataset.target = match[2];
+            el.dataset.suffix = match[3];
+            el.dataset.decimals = match[2].includes('.') ? (match[2].split('.')[1].length) : 0;
+          }
+        }
+      });
+    }
+
+    function animateSlideStats(slide) {
+      if (!slide) return;
+      const stats = slide.querySelectorAll('.stat-number');
+      stats.forEach(el => {
+        const target = parseFloat(el.dataset.target || 0);
+        if (isNaN(target)) return;
+        const prefix = el.dataset.prefix || '';
+        const suffix = el.dataset.suffix || '';
+        const decimals = parseInt(el.dataset.decimals || '0', 10);
+        const duration = 750;
+        const startTime = performance.now();
+
+        function update(currentTime) {
+          const elapsed = currentTime - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const current = ease * target;
+          const formatted = decimals > 0 ? current.toFixed(decimals) : Math.round(current).toString();
+          el.textContent = `${prefix}${formatted}${suffix}`;
+
+          if (progress < 1) {
+            requestAnimationFrame(update);
+          } else {
+            const finalVal = decimals > 0 ? target.toFixed(decimals) : Math.round(target).toString();
+            el.textContent = `${prefix}${finalVal}${suffix}`;
+          }
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    /* Presenter Pacing HUD Clock and Stopwatch */
+    let pacingSeconds = 0;
+    function updateClockAndPacing() {
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      const ss = String(now.getSeconds()).padStart(2, '0');
+      const clockEl = document.getElementById('hud-clock');
+      if (clockEl) clockEl.textContent = `${hh}:${mm}:${ss}`;
+
+      pacingSeconds++;
+      const pMin = String(Math.floor(pacingSeconds / 60)).padStart(2, '0');
+      const pSec = String(pacingSeconds % 60).padStart(2, '0');
+      const timerEl = document.getElementById('hud-timer');
+      if (timerEl) timerEl.textContent = `${pMin}:${pSec}`;
+    }
+
+    function resetPacingTimer() {
+      pacingSeconds = 0;
+      const timerEl = document.getElementById('hud-timer');
+      if (timerEl) timerEl.textContent = '00:00';
     }
 
     window.addEventListener('keydown', (e) => {
@@ -2104,9 +2285,15 @@
     }, false);
 
     // Initial setup
+    initStatCounters();
+    init3DMockupTilt();
+    setInterval(updateClockAndPacing, 1000);
+    updateClockAndPacing();
     updateProgressBar();
     updateCalculator();
     updateSpeakerNotes();
+    const initialActiveSlide = document.querySelector('.slide.active');
+    if (initialActiveSlide) animateSlideStats(initialActiveSlide);
   </script>
 </body>
 </html>

@@ -97,14 +97,14 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
 
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 truncate">
-              <h3 className="text-xs font-serif font-black text-[#141210] dark:text-[#EDE8E1] truncate">
+              <h3 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
                 {thread.partnerName}
               </h3>
-              <span className="text-[9px] font-mono text-[#0D6E6E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-1.5 py-0.5 rounded-md shadow-2xs flex-shrink-0">
+              <span className="text-[9px] font-mono text-teal-700 dark:text-teal-300 bg-teal-500/15 px-1.5 py-0.5 rounded-md shadow-2xs flex-shrink-0">
                 {thread.partnerRole === 'driver' ? 'Driver' : 'Co-Rider'}
               </span>
             </div>
-            <p className="text-[10px] text-[#70665A] dark:text-stone-400 truncate">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
               {thread.partnerEmployer} {thread.vehiclePlate ? `• ${thread.vehiclePlate}` : ''}
             </p>
           </div>

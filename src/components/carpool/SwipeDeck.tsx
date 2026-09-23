@@ -132,20 +132,20 @@ export const SwipeDeck: React.FC = () => {
               <ProfileCard driver={currentDriver} safeZone={selectedSafeZone} />
             </motion.div>
           ) : (
-            /* Empty State Deck (VisionOS Liquid Glass) */
-            <div className="w-full h-full min-h-[280px] rounded-3xl bg-white/80 dark:bg-white/[0.06] backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center space-y-3 shadow-[0_16px_40px_0_rgba(0,0,0,0.08)] dark:shadow-[0_20px_50px_0_rgba(0,0,0,0.6)]">
-              <div className="w-12 h-12 rounded-full bg-teal-500/15 text-[#0D6E6E] dark:text-[#14B8A6] flex items-center justify-center shadow-xs">
+            /* Empty State Deck */
+            <div className="w-full h-full min-h-[280px] rounded-3xl floating-surface flex flex-col items-center justify-center p-6 text-center space-y-3 shadow-specular">
+              <div className="w-12 h-12 rounded-full bg-teal-500/15 text-teal-600 dark:text-teal-400 flex items-center justify-center shadow-xs">
                 <Sparkles className="w-6 h-6" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">All Commuters Reviewed</h3>
-                <p className="text-[11px] text-[#70665A] dark:text-stone-400 max-w-[240px] mx-auto">
+                <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">All Commuters Reviewed</h3>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 max-w-[240px] mx-auto">
                   No more active drivers on this corridor for the selected trip mode.
                 </p>
               </div>
               <button
                 onClick={resetDeck}
-                className="flex items-center gap-1.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white font-bold text-xs px-4 py-2 rounded-xl transition-all shadow-md active:scale-95"
+                className="flex items-center gap-1.5 btn-electric-mint font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow-specular active-spring"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Reload Deck</span>
@@ -165,19 +165,19 @@ export const SwipeDeck: React.FC = () => {
       {/* Match Confirmation Modal with Back Button */}
       {lastMatchedDriver && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[350px] bg-white/95 dark:bg-[#1A1816]/95 backdrop-blur-2xl rounded-3xl p-5 text-center space-y-3.5 shadow-[0_25px_60px_rgba(0,0,0,0.35)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.85)]">
+          <div className="w-full max-w-[350px] floating-surface rounded-3xl p-5 text-center space-y-3.5 shadow-specular">
             <div className="flex items-center justify-between pb-2">
               <button
                 onClick={() => {
                   triggerHaptic('tap');
                   setLastMatchedDriver(null);
                 }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-slate-100/90 dark:bg-stone-800/90 text-xs font-bold text-[#141210] dark:text-stone-100 shadow-2xs active:scale-95"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-xl floating-pill bg-slate-100/90 dark:bg-slate-800/90 text-xs font-bold text-slate-900 dark:text-slate-100 shadow-xs active-spring"
               >
-                <ArrowLeft className="w-3.5 h-3.5 text-[#C25E2E]" />
+                <ArrowLeft className="w-3.5 h-3.5 text-amber-500" />
                 <span>Back</span>
               </button>
-              <span className="text-[9px] font-bold text-emerald-800 dark:text-emerald-300 uppercase tracking-wider bg-emerald-50 dark:bg-emerald-950/60 px-2.5 py-1 rounded-full shadow-2xs">
+              <span className="text-[9px] font-bold text-emerald-700 dark:text-emerald-300 uppercase tracking-wider bg-emerald-500/15 px-2.5 py-1 rounded-full shadow-xs">
                 Connected &amp; Escrow Held
               </span>
               <button
@@ -185,7 +185,7 @@ export const SwipeDeck: React.FC = () => {
                   triggerHaptic('tap');
                   setLastMatchedDriver(null);
                 }}
-                className="p-1 rounded-lg text-stone-500 hover:text-stone-900 active:scale-95"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 active-spring"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -200,36 +200,36 @@ export const SwipeDeck: React.FC = () => {
                 />
               </div>
 
-              <h3 className="text-base font-serif font-black text-[#141210] dark:text-white">
+              <h3 className="text-base font-black text-slate-900 dark:text-white">
                 Connected with {lastMatchedDriver.name}!
               </h3>
 
               {/* Mutual Spark */}
               {lastMatchedDriver.mutual_spark && (
-                <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#B45309] dark:text-amber-300 bg-amber-50 dark:bg-amber-950/60 px-2.5 py-1 rounded-full shadow-2xs">
+                <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-amber-700 dark:text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-full shadow-xs">
                   <Sparkles className="w-3 h-3 text-amber-500" />
                   <span>{lastMatchedDriver.mutual_spark}</span>
                 </div>
               )}
 
               {lastMatchedDriver.trip_purpose && (
-                <div className="bg-[#EEF7F7] dark:bg-teal-950/40 rounded-xl px-2.5 py-1 text-[11px] text-[#0D6E6E] dark:text-[#14B8A6] font-semibold flex items-center justify-center gap-1.5 shadow-2xs">
-                  <Compass className="w-3.5 h-3.5 text-[#C25E2E] flex-shrink-0" />
+                <div className="bg-teal-500/10 rounded-xl px-2.5 py-1 text-[11px] text-teal-700 dark:text-teal-300 font-semibold flex items-center justify-center gap-1.5 shadow-xs">
+                  <Compass className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
                   <span className="truncate">{lastMatchedDriver.trip_purpose}</span>
                 </div>
               )}
 
               {/* Cabin Co-Riders Preview in Modal */}
               {lastMatchedDriver.cabin_passengers && lastMatchedDriver.cabin_passengers.length > 0 && (
-                <div className="bg-slate-50 dark:bg-stone-900/60 p-2.5 rounded-2xl text-left space-y-1 shadow-2xs">
-                  <span className="text-[9px] font-extrabold text-[#70665A] dark:text-stone-400 uppercase tracking-wider block">
+                <div className="bg-slate-100/80 dark:bg-slate-900/60 p-2.5 rounded-2xl text-left space-y-1 shadow-xs">
+                  <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block">
                     Cabin Mates on This Trip:
                   </span>
                   <div className="flex items-center gap-2">
                     {lastMatchedDriver.cabin_passengers.map((p: any) => (
-                      <div key={p.id} className="flex items-center gap-1 bg-white dark:bg-stone-800 px-2 py-0.5 rounded-lg shadow-2xs">
+                      <div key={p.id} className="flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-lg shadow-xs">
                         <img src={p.avatar} alt={p.name} className="w-4 h-4 rounded-full object-cover" />
-                        <span className="text-[10px] font-bold text-[#141210] dark:text-stone-200">{p.name} ({p.role})</span>
+                        <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200">{p.name} ({p.role})</span>
                       </div>
                     ))}
                   </div>
@@ -237,15 +237,15 @@ export const SwipeDeck: React.FC = () => {
               )}
 
               <div className="flex items-center justify-center gap-1.5 py-0.5">
-                <span className="text-xs font-bold text-[#141210]">
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
                   {lastMatchedDriver.vehicle.make} {lastMatchedDriver.vehicle.model}
                 </span>
-                <span className="font-mono text-[10px] font-black text-[#0D6E6E] bg-teal-50 dark:bg-teal-950/60 dark:text-[#14B8A6] px-2 py-0.5 rounded-md shadow-floating-sm">
+                <span className="font-mono tabular-nums text-[10px] font-black text-teal-700 dark:text-teal-300 bg-teal-500/15 px-2 py-0.5 rounded-md shadow-xs">
                   {lastMatchedDriver.vehicle.plate_number}
                 </span>
               </div>
-              <p className="text-[11px] text-[#70665A]">
-                Escrow hold of <strong>{formatNgn(customBidNgn)}</strong> secured.
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                Escrow hold of <strong className="font-mono tabular-nums text-slate-900 dark:text-slate-100">{formatNgn(customBidNgn)}</strong> secured.
               </p>
             </div>
 
@@ -256,9 +256,9 @@ export const SwipeDeck: React.FC = () => {
                   triggerHaptic('tap');
                   setShowChatModal(true);
                 }}
-                className="w-full py-2.5 px-3 bg-[#0D6E6E] hover:bg-[#094E4E] text-white text-xs font-black rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-95 transition-all"
+                className="w-full py-2.5 px-3 btn-electric-mint text-xs font-black rounded-xl flex items-center justify-center gap-2 shadow-specular active-spring transition-all"
               >
-                <MessageCircle className="w-4 h-4 text-amber-300" />
+                <MessageCircle className="w-4 h-4 text-slate-950" />
                 <span>Say Hello / Break the Ice</span>
               </button>
 
@@ -271,7 +271,7 @@ export const SwipeDeck: React.FC = () => {
                     : `https://linkedin.com/search/results/all/?keywords=${encodeURIComponent(lastMatchedDriver.name)}`;
                   window.open(url, '_blank');
                 }}
-                className="w-full py-2 px-3 bg-white dark:bg-[#1A2430] hover:bg-[#0A66C2]/10 text-[#0A66C2] dark:text-[#38BDF8] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
+                className="w-full py-2 px-3 floating-pill bg-white dark:bg-[#1A2430] hover:bg-[#0A66C2]/10 text-[#0A66C2] dark:text-[#38BDF8] text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-xs active-spring transition-all"
               >
                 <span className="w-3.5 h-3.5 bg-[#0A66C2] text-white rounded-xs flex items-center justify-center text-[9px] font-black leading-none">
                   in
@@ -285,7 +285,7 @@ export const SwipeDeck: React.FC = () => {
                   triggerHaptic('tap');
                   setLastMatchedDriver(null);
                 }}
-                className="w-full py-1.5 bg-[#ECE5D8] hover:bg-[#DDD4C5] text-[#141210] font-bold text-xs rounded-xl transition-colors"
+                className="w-full py-1.5 floating-pill bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold text-xs rounded-xl active-spring transition-colors"
               >
                 Keep Browsing
               </button>

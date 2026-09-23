@@ -4,12 +4,12 @@
 
 :root {
   --background: #F6F2EA;
-  --foreground: #141210;
+  --foreground: #0F172A;
 }
 
 html, body {
   background-color: #EFE9DF;
-  color: #141210;
+  color: #0F172A;
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   overflow-x: hidden;
   user-select: none;
@@ -19,7 +19,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Safe area insets for iPhone notch/dynamic island & home pill */
+/* Safe area insets for iPhone notch/dynamic island and home pill */
 .safe-top {
   padding-top: env(safe-area-inset-top, 0px);
 }
@@ -27,12 +27,19 @@ html, body {
   padding-bottom: max(0.6rem, env(safe-area-inset-bottom, 0px));
 }
 
-/* Tactile button depression */
+/* 2026 Tactile spring compression on press */
+.active-spring {
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), opacity 160ms ease-out;
+}
+.active-spring:active {
+  transform: scale(0.97);
+}
+
 .active-press:active {
   transform: scale(0.97) translateY(1px);
 }
 
-/* Custom Scrollbar for mobile panels */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -48,46 +55,74 @@ html, body {
 }
 
 html.dark, body.dark {
-  background-color: #0A0908;
-  color: #EDE8E1;
+  background-color: #0B0F12;
+  color: #F8FAFC;
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: #171513;
+  background: #11161B;
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: #2D2824;
+  background: #1E2730;
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #14B8A6;
 }
 
-/* 2026 Floating Borderless Surface System */
+/* 2026 Frosted Acrylic and Top-Edge Specular Lighting System */
+.frosted-glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
 .floating-surface {
   border: none !important;
-  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.85), 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.04);
 }
 
 .dark .floating-surface {
-  box-shadow: 0 16px 40px -6px rgba(0, 0, 0, 0.7), 0 6px 16px -3px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.09), 0 16px 40px -6px rgba(0, 0, 0, 0.7), 0 6px 16px -3px rgba(0, 0, 0, 0.5);
 }
 
 .floating-pill {
   border: none !important;
-  box-shadow: 0 6px 18px -2px rgba(15, 23, 42, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.9), 0 6px 18px -2px rgba(15, 23, 42, 0.08);
 }
 
 .dark .floating-pill {
-  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 8px 24px -4px rgba(0, 0, 0, 0.6);
 }
 
 .floating-dock {
   border: none !important;
-  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.08), 0 10px 30px rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.8), 0 -8px 30px rgba(0, 0, 0, 0.08), 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 .dark .floating-dock {
-  box-shadow: 0 -12px 36px rgba(0, 0, 0, 0.65), 0 16px 40px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.09), 0 -12px 36px rgba(0, 0, 0, 0.65), 0 16px 40px rgba(0, 0, 0, 0.8);
+}
+
+/* 2026 High-Luminance Primary Button */
+.btn-electric-mint {
+  background-color: #0F766E;
+  color: #FFFFFF;
+  font-weight: 800;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.25), 0 4px 14px -1px rgba(15, 118, 110, 0.3);
+  transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1), background-color 150ms ease, box-shadow 150ms ease;
+}
+
+.dark .btn-electric-mint {
+  background-color: #14B8A6;
+  color: #051614;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.4), 0 4px 18px -1px rgba(20, 184, 166, 0.45);
+}
+
+.btn-electric-mint:hover {
+  filter: brightness(1.05);
+}
+
+.btn-electric-mint:active {
+  transform: scale(0.97);
 }

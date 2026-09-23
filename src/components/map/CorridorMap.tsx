@@ -384,131 +384,93 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     <div className="relative w-full h-full min-h-[500px] flex flex-col bg-transparent overflow-hidden">
       {/* Top Floating Transit Command Strip (Only shown in full map mode) */}
       {!isBackgroundUnderlay && (
-        <div className="absolute top-2 left-2 right-2 z-[500] space-y-1.5 max-w-[420px] mx-auto animate-in fade-in duration-200">
-          {/* Discovery View Switcher: Swipe Cards vs Street Map */}
-          <div className="w-full flex bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl p-1 rounded-2xl shadow-floating">
+        <div className="absolute top-2.5 left-2.5 right-2.5 z-[500] max-w-[420px] mx-auto space-y-2 animate-in fade-in duration-200">
+          {/* Unibody Split Transit Capsule */}
+          <div className="floating-surface rounded-2xl p-1.5 flex items-center gap-1.5 shadow-specular">
+            {/* Origin Street Half */}
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowStreetPicker(true);
+              }}
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-500/10"
+              title="Tap to change origin pickup street"
+            >
+              <MapPin className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">
+                  Pickup
+                </span>
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
+                  {userStreet.name.split(',')[0]}
+                </span>
+              </div>
+            </button>
+
+            {/* Transit Direction Arrow Divider */}
+            <div className="flex items-center justify-center px-1 text-slate-400 dark:text-slate-500">
+              <ArrowRight className="w-3.5 h-3.5" />
+            </div>
+
+            {/* Destination Half */}
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowDestPicker(true);
+              }}
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-500/10"
+              title="Tap to filter destination"
+            >
+              <Compass className="w-3.5 h-3.5 text-teal-500 flex-shrink-0" />
+              <div className="min-w-0 flex-1">
+                <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">
+                  Destination
+                </span>
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
+                  {selectedDestination === 'all' ? 'Any Corridor' : selectedDestination}
+                </span>
+              </div>
+            </button>
+
+            {/* Switch to Deck View */}
             <button
               onClick={() => {
                 triggerHaptic('switch');
                 setActiveTab('deck');
               }}
-              className="flex-1 py-1 px-3 rounded-xl text-xs font-bold transition-all text-[#70665A] dark:text-stone-400 hover:text-[#141210] dark:hover:text-stone-200 flex items-center justify-center gap-1.5"
+              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 active-spring flex-shrink-0 hover:bg-slate-500/10"
+              title="Switch to Swipe Cards deck"
             >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Swipe Cards</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('map')}
-              className="flex-1 py-1 px-3 rounded-xl text-xs font-black transition-all bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-950 shadow-xs flex items-center justify-center gap-1.5"
-            >
-              <Navigation className="w-3.5 h-3.5" />
-              <span>Street Map</span>
+              <Sparkles className="w-4 h-4 text-amber-500" />
             </button>
           </div>
 
-          {/* Origin Street & Destination Selectors */}
-          <div className="bg-white/90 dark:bg-[#141C24]/90 backdrop-blur-xl rounded-2xl p-2.5 shadow-floating space-y-2">
-            {/* Row 1: Your Street Selector */}
-            <div className="flex items-center justify-between gap-1.5">
+          {/* Compact Day Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-1">
+            {(
+              [
+                { id: 'all', label: 'All Days' },
+                { id: 'now', label: '⚡ Leaving Now' },
+                { id: 'today', label: 'Today' },
+                { id: 'tomorrow', label: 'Tomorrow' },
+                { id: 'weekend', label: 'Weekend' },
+              ] as const
+            ).map((chip) => (
               <button
+                key={chip.id}
                 onClick={() => {
                   triggerHaptic('tap');
-                  setShowStreetPicker(true);
+                  setSelectedDayFilter(chip.id);
                 }}
-                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/90 dark:bg-stone-900/90 hover:bg-stone-100/90 dark:hover:bg-stone-800 rounded-xl text-left transition-colors backdrop-blur-md shadow-floating-sm"
+                className={`px-3 py-1 rounded-full text-[10.5px] font-bold whitespace-nowrap transition-all active-spring ${
+                  selectedDayFilter === chip.id
+                    ? 'btn-electric-mint'
+                    : 'floating-pill bg-white/80 dark:bg-[#12161A]/80 text-slate-600 dark:text-slate-300'
+                }`}
               >
-                <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <span className="text-[9px] uppercase font-bold text-[#70665A] dark:text-stone-400 block leading-tight">
-                    Your Street / Pickup Pin
-                  </span>
-                  <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate block">
-                    {userStreet.name}
-                  </span>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-[#70665A] dark:text-stone-400 flex-shrink-0" />
+                {chip.label}
               </button>
-
-              {/* Locate Me GPS Button */}
-              <button
-                onClick={handleLocateMe}
-                disabled={isLocating}
-                className="p-2.5 bg-teal-50/90 dark:bg-teal-950/70 hover:bg-teal-100 text-[#0D6E6E] dark:text-[#14B8A6] rounded-xl active-press transition-all flex-shrink-0 backdrop-blur-md shadow-floating-sm"
-                title="Pin my current GPS street"
-              >
-                <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
-              </button>
-            </div>
-
-            {/* Row 2: "Going To" Destination Selector */}
-            <div className="flex items-center justify-between gap-1.5">
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  setShowDestPicker(true);
-                }}
-                className="flex-1 flex items-center gap-2 px-2.5 py-1.5 bg-[#FAF6EE]/90 dark:bg-stone-900/90 hover:bg-stone-100/90 dark:hover:bg-stone-800 rounded-xl text-left transition-colors backdrop-blur-md shadow-floating-sm"
-              >
-                <Compass className="w-4 h-4 text-[#0D6E6E] dark:text-[#14B8A6] flex-shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <span className="text-[9px] uppercase font-bold text-[#70665A] dark:text-stone-400 block leading-tight">
-                    Going My Way To
-                  </span>
-                  <span className="text-xs font-bold text-[#141210] dark:text-stone-100 truncate block">
-                    {selectedDestination === 'all' ? 'Everywhere / Any Destination' : selectedDestination}
-                  </span>
-                </div>
-                <ChevronDown className="w-3.5 h-3.5 text-[#70665A] dark:text-stone-400 flex-shrink-0" />
-              </button>
-
-              {selectedDestination !== 'all' && (
-                <button
-                  onClick={() => setSelectedDestination('all')}
-                  className="px-2 py-1 bg-stone-100/80 dark:bg-stone-800/80 text-[10px] font-bold text-stone-600 dark:text-stone-300 rounded-lg hover:bg-stone-200 backdrop-blur-xs shadow-floating-sm"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-
-            {/* Row 3: Day & Timing Filter Chips */}
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
-              {(
-                [
-                  { id: 'all', label: 'All Days' },
-                  { id: 'now', label: '⚡ Leaving Now' },
-                  { id: 'today', label: 'Today' },
-                  { id: 'tomorrow', label: 'Tomorrow' },
-                  { id: 'weekend', label: 'This Weekend' },
-                ] as const
-              ).map((chip) => (
-                <button
-                  key={chip.id}
-                  onClick={() => {
-                    triggerHaptic('tap');
-                    setSelectedDayFilter(chip.id);
-                  }}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap transition-all active-press ${
-                    selectedDayFilter === chip.id
-                      ? 'bg-[#0D6E6E] dark:bg-[#14B8A6] text-white dark:text-stone-900 shadow-floating-sm'
-                      : 'bg-white/80 dark:bg-stone-800/80 backdrop-blur-md text-[#70665A] dark:text-stone-300 hover:bg-white/90 shadow-floating-sm'
-                  }`}
-                >
-                  {chip.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Street Tap Hint Banner */}
-          <div className="bg-stone-900/80 dark:bg-black/80 backdrop-blur-md text-white text-[10px] font-medium py-1.5 px-3 rounded-xl flex items-center justify-between shadow-floating-sm">
-            <span className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-              Tap anywhere on the map to set your street pin
-            </span>
-            <span className="font-bold text-teal-300">
-              {filteredRides.length} ride{filteredRides.length === 1 ? '' : 's'} near you
-            </span>
+            ))}
           </div>
         </div>
       )}
@@ -516,84 +478,97 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Main Full-Bleed Map Canvas */}
       <div ref={mapContainerRef} className="w-full h-full z-0" />
 
+      {/* Bottom-Right Floating GPS FAB */}
+      {!isBackgroundUnderlay && (
+        <button
+          onClick={handleLocateMe}
+          disabled={isLocating}
+          className="absolute bottom-24 right-3 z-30 w-11 h-11 rounded-full floating-pill bg-white/95 dark:bg-[#12161A]/95 text-teal-600 dark:text-teal-400 flex items-center justify-center active-spring shadow-specular"
+          title="Pin my current GPS street"
+        >
+          <Crosshair className={`w-5 h-5 ${isLocating ? 'animate-spin' : ''}`} />
+        </button>
+      )}
+
       {/* Bottom Floating Street Ride Card */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
-        <div className="absolute bottom-[4.75rem] left-2 right-2 z-30 max-w-[420px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-2xl shadow-floating-lg p-3.5 space-y-2.5 text-[#141210] dark:text-stone-100">
+        <div className="absolute bottom-[4.75rem] left-2.5 right-2.5 z-30 max-w-[420px] mx-auto animate-in slide-in-from-bottom duration-200">
+          <div className="floating-surface rounded-3xl p-3.5 space-y-2.5 text-slate-900 dark:text-slate-100 shadow-specular">
             {/* Top row: Driver, Car, Fuel Split */}
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2.5">
                 <img
                   src={selectedRide.driverAvatar}
                   alt={selectedRide.driverName}
-                  className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
+                  className="w-10 h-10 rounded-2xl object-cover shadow-xs"
                 />
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-serif font-black">{selectedRide.driverName}</h4>
-                    <span className="text-[9px] bg-teal-50 dark:bg-teal-950 text-[#0D6E6E] dark:text-[#14B8A6] font-bold px-1.5 py-0.5 rounded shadow-floating-sm">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100">{selectedRide.driverName}</h4>
+                    <span className="text-[9px] bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold px-1.5 py-0.5 rounded-full font-mono tabular-nums">
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
-                  <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium block">
+                  <span className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium block">
                     {selectedRide.driverRole}
                   </span>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="text-sm font-black text-[#0D6E6E] dark:text-[#14B8A6] block">
+                <span className="text-sm font-black text-teal-600 dark:text-teal-400 font-mono tabular-nums block">
                   {formatNgn(selectedRide.fuelSplitNgn)}
                 </span>
-                <span className="text-[9px] uppercase font-mono text-[#70665A] dark:text-stone-400">
-                  Fair Share Split
+                <span className="text-[9px] uppercase font-mono tracking-wide text-slate-500 dark:text-slate-400">
+                  Fair Split
                 </span>
               </div>
             </div>
 
             {/* Route & Pickup Corner Callout */}
-            <div className="bg-[#FAF6EE] dark:bg-stone-900 rounded-xl p-2.5 text-xs space-y-1.5 shadow-inner">
+            <div className="bg-slate-100/70 dark:bg-slate-900/60 rounded-2xl p-2.5 text-xs space-y-1.5">
               <div className="flex items-center justify-between text-[11px] font-bold">
-                <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
-                  <MapPin className="w-3.5 h-3.5 text-emerald-600" />
-                  {selectedRide.pickupStreetCorner}
+                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                  <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span className="truncate">{selectedRide.pickupStreetCorner}</span>
                 </span>
-                <span className="text-[10px] font-semibold text-[#70665A] dark:text-stone-400">
+                <span className="text-[10px] font-mono tabular-nums text-slate-500 dark:text-slate-400 flex-shrink-0">
                   ~{selectedRide.pickupWalkMinutes} min walk
                 </span>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 pt-1">
-                <span className="flex items-center gap-1 font-semibold text-stone-800 dark:text-stone-200">
-                  <ArrowRight className="w-3 h-3 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                  Heading to: <strong>{selectedRide.destination}</strong>
+              <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-0.5">
+                <span className="flex items-center gap-1 font-semibold text-slate-800 dark:text-slate-200">
+                  <ArrowRight className="w-3 h-3 text-teal-500" />
+                  Heading to: <strong className="text-slate-900 dark:text-slate-100">{selectedRide.destination}</strong>
                 </span>
                 <span className="flex items-center gap-1 font-mono font-bold text-amber-600 dark:text-amber-400">
                   <Clock className="w-3 h-3" />
-                  {selectedRide.departureDay} • {selectedRide.departureTime}
+                  {selectedRide.departureDay}, {selectedRide.departureTime}
                 </span>
               </div>
             </div>
 
             {/* Vehicle & Available Seats */}
-            <div className="flex items-center justify-between text-[10px] text-[#70665A] dark:text-stone-400 px-1">
-              <span className="flex items-center gap-1 font-semibold">
-                <Car className="w-3.5 h-3.5 text-[#0D6E6E] dark:text-[#14B8A6]" />
-                {selectedRide.vehicle.make} {selectedRide.vehicle.model} ({selectedRide.vehicle.color}) • {selectedRide.vehicle.plateNumber}
+            <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 px-1">
+              <span className="flex items-center gap-1 font-semibold truncate">
+                <Car className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                <span>{selectedRide.vehicle.make} {selectedRide.vehicle.model}</span>
+                <span className="font-mono tabular-nums">({selectedRide.vehicle.plateNumber})</span>
               </span>
-              <span className="font-bold text-teal-700 dark:text-teal-400">
+              <span className="font-bold text-teal-600 dark:text-teal-400 font-mono tabular-nums flex-shrink-0">
                 {selectedRide.availableSeats} of {selectedRide.totalSeats} seats open
               </span>
             </div>
 
-            {/* Action Buttons */}
-            <div className="grid grid-cols-3 gap-1.5 pt-0.5">
+            {/* Split Action Pill: Unibody Segmented Capsule */}
+            <div className="flex items-center gap-2 pt-0.5">
               <button
                 onClick={() => handleBookRide(selectedRide)}
-                className="col-span-2 py-2.5 bg-[#0D6E6E] hover:bg-[#094E4E] text-white dark:text-stone-950 dark:bg-[#14B8A6] text-xs font-black rounded-xl flex items-center justify-center gap-1.5 shadow-floating-sm active-press transition-all"
+                className="flex-1 py-3 btn-electric-mint rounded-2xl flex items-center justify-center gap-2 active-spring text-xs font-black shadow-specular"
               >
-                <Sparkles className="w-4 h-4 text-amber-300 dark:text-stone-900" />
-                <span>Join Carpool • {formatNgn(selectedRide.fuelSplitNgn)}</span>
+                <Sparkles className="w-4 h-4" />
+                <span>Join Carpool • <span className="font-mono tabular-nums">{formatNgn(selectedRide.fuelSplitNgn)}</span></span>
               </button>
 
               <button
@@ -610,7 +585,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   setActiveThreadId(threadId);
                   setActiveTab('chats');
                 }}
-                className="py-2.5 bg-[#FAF6EE] dark:bg-stone-800 hover:bg-stone-100 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-1 active-press transition-all shadow-floating-sm"
+                className="px-4 py-3 floating-pill bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-2xl flex items-center justify-center gap-1.5 active-spring shadow-specular"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Chat</span>
@@ -644,16 +619,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
+                <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
                   Select Your Street / Area
                 </h3>
-                <p className="text-[11px] text-[#70665A] dark:text-stone-400">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
                   Find carpool rides departing from or passing your street
                 </p>
               </div>
               <button
                 onClick={() => setShowStreetPicker(false)}
-                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
+                className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -661,13 +636,13 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
             {/* Search Input */}
             <div className="relative">
-              <Search className="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search street, estate, or neighborhood..."
                 value={searchStreetText}
                 onChange={(e) => setSearchStreetText(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-[#FAF6EE] dark:bg-stone-900 rounded-xl text-xs text-[#141210] dark:text-stone-100 focus:outline-hidden focus:ring-2 focus:ring-[#0D6E6E] shadow-inner"
+                className="w-full pl-9 pr-3 py-2 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden shadow-inner"
               />
             </div>
 
@@ -677,7 +652,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 setShowStreetPicker(false);
                 handleLocateMe();
               }}
-              className="w-full py-2 px-3 bg-teal-50 dark:bg-teal-950/60 hover:bg-teal-100/80 text-[#0D6E6E] dark:text-[#14B8A6] text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-floating-sm transition-all"
+              className="w-full py-2.5 px-3 btn-electric-mint text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-specular active-spring transition-all"
             >
               <Crosshair className="w-4 h-4" />
               <span>Use Current GPS Location</span>
@@ -696,22 +671,22 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                       mapInstanceRef.current.flyTo([st.coordinates.lat, st.coordinates.lng], 14);
                     }
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl transition-colors flex items-start justify-between shadow-floating-sm ${
+                  className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start justify-between active-spring ${
                     userStreet.id === st.id
-                      ? 'bg-teal-50 dark:bg-teal-950/60 ring-1 ring-teal-500'
-                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-specular'
+                      : 'bg-slate-100/60 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
                   }`}
                 >
                   <div>
-                    <span className="text-xs font-bold text-[#141210] dark:text-stone-100 block">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block">
                       {st.name}
                     </span>
-                    <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                       {st.area}
                     </span>
                   </div>
                   {userStreet.id === st.id && (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                   )}
                 </button>
               ))}
@@ -726,16 +701,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-sm font-serif font-black text-[#141210] dark:text-stone-100">
+                <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
                   Where Are You Going?
                 </h3>
-                <p className="text-[11px] text-[#70665A] dark:text-stone-400">
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
                   Filter drivers whose route is heading your way
                 </p>
               </div>
               <button
                 onClick={() => setShowDestPicker(false)}
-                className="p-1 rounded-full hover:bg-stone-100 dark:hover:bg-stone-800 text-stone-500 transition-colors"
+                className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -759,22 +734,22 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                     setSelectedDestination(dest.id);
                     setShowDestPicker(false);
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl transition-colors flex items-start justify-between shadow-floating-sm ${
+                  className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start justify-between active-spring ${
                     selectedDestination === dest.id
-                      ? 'bg-teal-50 dark:bg-teal-950/60 ring-1 ring-teal-500'
-                      : 'bg-[#FAF6EE] dark:bg-stone-900/60 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-specular'
+                      : 'bg-slate-100/60 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
                   }`}
                 >
                   <div>
-                    <span className="text-xs font-bold text-[#141210] dark:text-stone-100 block">
+                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block">
                       {dest.title}
                     </span>
-                    <span className="text-[10px] text-[#70665A] dark:text-stone-400 font-medium">
+                    <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium">
                       {dest.desc}
                     </span>
                   </div>
                   {selectedDestination === dest.id && (
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                   )}
                 </button>
               ))}
