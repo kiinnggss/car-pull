@@ -165,7 +165,7 @@ export const SwipeDeck: React.FC = () => {
       {/* Match Confirmation Modal with Back Button */}
       {lastMatchedDriver && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[350px] floating-surface rounded-3xl p-5 text-center space-y-3.5 shadow-specular">
+          <div className="w-full max-w-[350px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-xl floating-surface rounded-3xl p-5 text-center space-y-3.5 shadow-specular">
             <div className="flex items-center justify-between pb-2">
               <button
                 onClick={() => {
@@ -206,14 +206,14 @@ export const SwipeDeck: React.FC = () => {
 
               {/* Mutual Spark */}
               {lastMatchedDriver.mutual_spark && (
-                <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-amber-700 dark:text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-full shadow-xs">
+                <div className="inline-flex items-center gap-1 text-[10px] font-extrabold text-amber-950 dark:text-amber-300 bg-amber-500/15 px-2.5 py-1 rounded-full shadow-xs">
                   <Sparkles className="w-3 h-3 text-amber-500" />
                   <span>{lastMatchedDriver.mutual_spark}</span>
                 </div>
               )}
 
               {lastMatchedDriver.trip_purpose && (
-                <div className="bg-teal-500/10 rounded-xl px-2.5 py-1 text-[11px] text-teal-700 dark:text-teal-300 font-semibold flex items-center justify-center gap-1.5 shadow-xs">
+                <div className="bg-teal-500/15 rounded-xl px-2.5 py-1 text-[11px] text-teal-950 dark:text-teal-300 font-bold flex items-center justify-center gap-1.5 shadow-xs">
                   <Compass className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
                   <span className="truncate">{lastMatchedDriver.trip_purpose}</span>
                 </div>
@@ -221,15 +221,15 @@ export const SwipeDeck: React.FC = () => {
 
               {/* Cabin Co-Riders Preview in Modal */}
               {lastMatchedDriver.cabin_passengers && lastMatchedDriver.cabin_passengers.length > 0 && (
-                <div className="bg-slate-100/80 dark:bg-slate-900/60 p-2.5 rounded-2xl text-left space-y-1 shadow-xs">
-                  <span className="text-[9px] font-extrabold text-slate-400 uppercase tracking-wider block">
+                <div className="bg-slate-100/90 dark:bg-slate-900/60 p-2.5 rounded-2xl text-left space-y-1 shadow-xs">
+                  <span className="text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">
                     Cabin Mates on This Trip:
                   </span>
                   <div className="flex items-center gap-2">
                     {lastMatchedDriver.cabin_passengers.map((p: any) => (
                       <div key={p.id} className="flex items-center gap-1 bg-white dark:bg-slate-800 px-2 py-0.5 rounded-lg shadow-xs">
                         <img src={p.avatar} alt={p.name} className="w-4 h-4 rounded-full object-cover" />
-                        <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200">{p.name} ({p.role})</span>
+                        <span className="text-[10px] font-bold text-slate-900 dark:text-slate-200">{p.name} ({p.role})</span>
                       </div>
                     ))}
                   </div>
@@ -240,12 +240,12 @@ export const SwipeDeck: React.FC = () => {
                 <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
                   {lastMatchedDriver.vehicle.make} {lastMatchedDriver.vehicle.model}
                 </span>
-                <span className="font-mono tabular-nums text-[10px] font-black text-teal-700 dark:text-teal-300 bg-teal-500/15 px-2 py-0.5 rounded-md shadow-xs">
+                <span className="font-mono tabular-nums text-[10px] font-black text-teal-950 dark:text-teal-300 bg-teal-500/15 px-2 py-0.5 rounded-md shadow-xs">
                   {lastMatchedDriver.vehicle.plate_number}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                Escrow hold of <strong className="font-mono tabular-nums text-slate-900 dark:text-slate-100">{formatNgn(customBidNgn)}</strong> secured.
+              <p className="text-[11px] text-slate-700 dark:text-slate-300">
+                Escrow hold of <strong className="font-mono tabular-nums text-slate-950 dark:text-slate-100">{formatNgn(customBidNgn)}</strong> secured.
               </p>
             </div>
 
