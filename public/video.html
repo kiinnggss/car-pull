@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CAR PULL - Video Pitch</title>
+  <meta name="description" content="CAR PULL - Official Video Pitch. Closed Corporate Corridor Carpool Network for Metropolitan Lagos." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #06080B;
+      --card-bg: rgba(18, 24, 32, 0.78);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --teal: #0F766E;
+      --teal-light: #14B8A6;
+      --amber: #F58A25;
+      --emerald: #10B981;
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow: hidden;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+    .video-viewport {
+      position: relative;
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(circle at 50% 30%, #111822 0%, #06080B 100%);
+    }
+    .slide-stage {
+      position: relative;
+      width: 100%;
+      max-width: 1320px;
+      height: 88vh;
+      max-height: 820px;
+      margin: auto;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.12), 0 30px 80px -15px rgba(0, 0, 0, 0.95);
+      border: 1px solid var(--card-border);
+      background: #0A0E14;
+    }
+    .scene {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.98);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 44px 52px;
+      overflow: hidden;
+    }
+    .scene.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+    .scene-bg-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.38;
+      filter: saturate(1.1) brightness(0.7);
+      z-index: 1;
+      transition: transform 12s ease;
+    }
+    .scene.active .scene-bg-img {
+      transform: scale(1.06);
+    }
+    .scene-overlay {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 75% 40%, rgba(6, 8, 11, 0.4) 0%, rgba(6, 8, 11, 0.92) 80%),
+                  linear-gradient(to top, rgba(6, 8, 11, 0.98) 15%, transparent 70%);
+      z-index: 2;
+    }
+    .scene-content {
+      position: relative;
+      z-index: 3;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .top-pill-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      backdrop-filter: blur(16px);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+      width: fit-content;
+    }
+    .badge-crimson {
+      background: rgba(220, 38, 38, 0.2);
+      color: #FCA5A5;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+    .badge-teal {
+      background: rgba(20, 184, 166, 0.18);
+      color: #5EEAD4;
+      border: 1px solid rgba(20, 184, 166, 0.35);
+    }
+    .badge-amber {
+      background: rgba(245, 138, 37, 0.2);
+      color: #FDBA74;
+      border: 1px solid rgba(245, 138, 37, 0.35);
+    }
+    .badge-emerald {
+      background: rgba(16, 185, 129, 0.2);
+      color: #6EE7B7;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+    .scene-header {
+      max-width: 820px;
+      margin-top: 14px;
+    }
+    .scene-title {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #FFFFFF 30%, #CBD5E1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .scene-subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      font-weight: 500;
+      line-height: 1.45;
+    }
+    .middle-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+      align-items: center;
+      margin-top: 18px;
+      flex: 1;
+    }
+    .metrics-col {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .metric-glass-pill {
+      background: var(--card-bg);
+      backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1), 0 12px 28px -6px rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .metric-value {
+      font-family: var(--font-mono);
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .preview-card-wrap {
+      position: relative;
+      height: 100%;
+      max-height: 380px;
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 20px 50px rgba(0, 0, 0, 0.7);
+      background: #0D131A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-card-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+    .subtitles-banner {
+      background: rgba(10, 14, 20, 0.88);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 18px;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+    .voice-avatar-pulse {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-light), var(--amber));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .voice-avatar-pulse::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      border: 2px solid var(--teal-light);
+      opacity: 0.6;
+      animation: pulse-ring 2s infinite;
+    }
+    @keyframes pulse-ring {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.4); opacity: 0; }
+    }
+    .subtitles-text {
+      font-size: 15px;
+      font-weight: 600;
+      color: #E2E8F0;
+      line-height: 1.4;
+      flex: 1;
+    }
+    body.render-mode {
+      width: 1920px;
+      height: 1080px;
+      max-width: 1920px;
+      max-height: 1080px;
+      background: #06080B;
+    }
+    body.render-mode .controls-dock {
+      display: none !important;
+    }
+    body.render-mode .video-viewport {
+      padding: 0 !important;
+      margin: 0 !important;
+      width: 1920px !important;
+      height: 1080px !important;
+    }
+    body.render-mode .slide-stage {
+      max-width: 1920px !important;
+      width: 1920px !important;
+      height: 1080px !important;
+      max-height: 1080px !important;
+      border-radius: 0 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    body.render-mode .scene {
+      padding: 56px 72px 48px 72px !important;
+      transition: none !important;
+      transform: none !important;
+    }
+    body.render-mode .scene.active .scene-bg-img {
+      transition: none !important;
+      transform: none !important;
+    }
+    .controls-dock {
+      position: fixed;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      background: rgba(14, 20, 28, 0.92);
+      backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.15), 0 14px 40px rgba(0, 0, 0, 0.8);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .ctl-btn {
+      background: transparent;
+      border: none;
+      color: #CBD5E1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+    .ctl-btn:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.08);
+    }
+    .ctl-btn.primary {
+      background: var(--teal);
+      color: #FFFFFF;
+      box-shadow: 0 4px 14px rgba(15, 118, 110, 0.4);
+    }
+    .ctl-btn.primary:hover {
+      background: #0d655e;
+    }
+    .timeline-bar {
+      width: 280px;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+    .timeline-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--teal-light), var(--amber));
+      transition: width 0.1s linear;
+    }
+    .scene-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .scene-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .scene-dot.active {
+      background: var(--teal-light);
+      width: 20px;
+      border-radius: 4px;
+    }
+    .brand-top-nav {
+      position: fixed;
+      top: 14px;
+      left: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .brand-logo-pill {
+      pointer-events: auto;
+      background: rgba(14, 20, 28, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 6px 14px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .brand-logo-pill img {
+      width: 26px;
+      height: 26px;
+      object-fit: contain;
+    }
+    .brand-name {
+      font-size: 13px;
+      font-weight: 900;
+      color: #FFFFFF;
+      letter-spacing: -0.02em;
+    }
+    .brand-city {
+      font-size: 9px;
+      font-weight: 900;
+      background: var(--teal);
+      color: #FFFFFF;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Brand Navigation -->
+  <div class="brand-top-nav">
+    <a href="./" class="brand-logo-pill">
+      <img src="./logo.png" alt="CAR PULL" />
+      <span class="brand-name">CAR PULL</span>
+      <span class="brand-city">LAGOS</span>
+    </a>
+    <div style="pointer-events: auto; display: flex; gap: 8px;">
+      <a href="./pitch-video.mp4" download class="brand-logo-pill" style="color: var(--teal-light); font-size: 11px; font-weight: 700;">
+        Download MP4
+      </a>
+      <a href="./pitch.html" class="brand-logo-pill" style="color: #94A3B8; font-size: 11px; font-weight: 700;">
+        Slide Deck &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Stage Container -->
+  <div class="video-viewport">
+    <div class="slide-stage" id="stage">
+
+      <!-- Scene 1: The Problem -->
+      <div class="scene active" id="scene-1" data-duration="12.0">
+        <img src="./presentation/gridlock.jpg" class="scene-bg-img" alt="Lagos Gridlock" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-crimson">Lagos Commuter Crisis</div>
+            <div class="scene-header">
+              <h1 class="scene-title">30+ Hours Lost Every Week in Gridlock</h1>
+              <p class="scene-subtitle">Solo drivers burn ₦60,000 weekly on fuel while passenger seats sit completely empty.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Average Weekly Gridlock Delay</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Third Mainland &amp; Lekki-Epe Corridors</div>
+                </div>
+                <div class="metric-value" style="color: #F87171;">30.4 hrs</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Weekly Solo Driver Fuel Burn</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Post-Subsidy Lekki-VI Commute</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">₦60,000+</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Daily Island Commute Waste</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Estimated Capital Lost to Idling</div>
+                </div>
+                <div class="metric-value" style="color: #FCA5A5;">₦4.8B / day</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/gridlock.jpg" alt="Lekki Gridlock" style="object-fit: cover;" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-1">
+              "In Lagos, commuters lose over thirty hours every single week trapped in paralyzing gridlock. Solo drivers burn sixty thousand Naira weekly on fuel, while their passenger seats sit empty."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 2: The Solution -->
+      <div class="scene" id="scene-2" data-duration="9.4">
+        <img src="./presentation/hero.jpg" class="scene-bg-img" alt="Lagos Skyline" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-teal">The Solution</div>
+            <div class="scene-header">
+              <h1 class="scene-title">CAR PULL LAGOS</h1>
+              <p class="scene-subtitle">A closed corporate corridor carpool network connecting verified professionals traveling between Lekki, Victoria Island, and Marina.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Core Island Corridor</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Admiralty Way &bull; TotalEnergies Hubs &bull; VI</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light);">26.5 km</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Commuter Membership</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Closed Verified Professional Network</div>
+                </div>
+                <div class="metric-value" style="color: var(--emerald);">100% Vetted</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Commuter Fuel Savings</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Shared Daily Expense vs Commercial Cabs</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">-70% Cost</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/hero.jpg" alt="Lagos Corporate Commute" style="object-fit: cover;" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-2">
+              "This is CAR PULL. A closed corridor carpool network connecting verified professionals across Lekki, Victoria Island, and Marina."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 3: Discovery & Matching -->
+      <div class="scene" id="scene-3" data-duration="10.5">
+        <img src="./presentation/rider-deck.png" class="scene-bg-img" alt="Deck" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-amber">Smart Discovery</div>
+            <div class="scene-header">
+              <h1 class="scene-title">Swipe Deck &amp; Mutual Sparks</h1>
+              <p class="scene-subtitle">Commuters discover verified colleagues along their exact corridor. Match by workplace, commute vibe, or mutual LinkedIn connections.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Colleague Matching</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Verified LinkedIn &amp; Corporate Domains</div>
+                </div>
+                <div class="metric-value" style="color: #38BDF8;">LinkedIn [in]</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Mutual Vibe Sparks</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Tech &amp; Design &bull; Quiet Commute &bull; Afrobeat</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">Spark Tags</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Cabin Transparency</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">See co-riders before confirming seat</div>
+                </div>
+                <div class="metric-value" style="color: var(--emerald);">Full Roster</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/match-modal-live.png" alt="Match Confirmation Modal" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-3">
+              "Commuters discover verified colleagues along their exact corridor. Match by workplace, commute vibe, or mutual LinkedIn connections with zero awkwardness."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 4: CCTV Safe Hubs -->
+      <div class="scene" id="scene-4" data-duration="11.7">
+        <img src="./presentation/boarding-verified.png" class="scene-bg-img" alt="Pass" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-teal">Security &amp; Regulatory Standard</div>
+            <div class="scene-header">
+              <h1 class="scene-title">CCTV Safe Hubs &amp; Sec 44 Pass</h1>
+              <p class="scene-subtitle">No random street corners. Pickups happen exclusively at CCTV safe hubs, verified through offline cryptographic PINs and Lagos State Section 44 passes.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Designated Hubs</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">TotalEnergies Safe Zones with CCTV</div>
+                </div>
+                <div class="metric-value" style="color: var(--emerald);">CCTV Guarded</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Offline Verification</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Works without Cellular Reception</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light);">4-Digit PIN</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Regulatory Immunity</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Lagos State Non-Commercial Protection</div>
+                </div>
+                <div class="metric-value" style="color: #A78BFA;">Sec 44 Law</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/boarding-verified.png" alt="Boarding Verification" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-4">
+              "No random street corners. Pickups happen exclusively at CCTV safe hubs, secured by offline cryptographic PINs and Lagos State Section 44 certified commute passes."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 5: Escrow & Anti-Flake -->
+      <div class="scene" id="scene-5" data-duration="12.4">
+        <img src="./presentation/escrow-live.png" class="scene-bg-img" alt="Escrow" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-emerald">Zero-Cash Architecture</div>
+            <div class="scene-header">
+              <h1 class="scene-title">Automated Escrow &amp; Anti-Flake</h1>
+              <p class="scene-subtitle">Zero cash inside the vehicle. Rider fares sit safely in automated escrow and unlock instantly upon confirmed drop-off via NIP bank rails.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Vehicle Safety</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">No cash negotiations or road disputes</div>
+                </div>
+                <div class="metric-value" style="color: var(--emerald);">Zero Cash</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Driver Flake Guarantee</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Instant Commuter Reimbursement Voucher</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">+₦2,500</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Bank Payout Settlement</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Direct NIBSS Instant Payment Rail</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light);">Instant NIP</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/escrow-live.png" alt="Live Escrow Wallet" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-5">
+              "Zero cash inside the vehicle. Rider fares sit safely in automated escrow and unlock instantly to drivers upon confirmed arrival via NIP bank rails, backed by our Anti-Flake penalty guarantee."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 6: Roadside Resilience -->
+      <div class="scene" id="scene-6" data-duration="7.6">
+        <img src="./presentation/roadside-shield.png" class="scene-bg-img" alt="Roadside" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-amber">Operational Uptime</div>
+            <div class="scene-header">
+              <h1 class="scene-title">Integrated Roadside Resilience</h1>
+              <p class="scene-subtitle">When breakdowns strike, our integrated roadside resilience network deploys vetted mechanics and towing to keep the corridor moving.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Rapid Recovery Towing</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Island Corridor Standby Tow Trucks</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">15-min Dispatch</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Parts Verification</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Photo Approved Mechanic Invoicing</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light);">Escrow Guarded</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/roadside-shield.png" alt="Roadside Shield" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-6">
+              "When breakdowns strike, our integrated roadside resilience network deploys vetted mechanics and towing to keep the corridor moving."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 7: Market Economics -->
+      <div class="scene" id="scene-7" data-duration="8.0">
+        <img src="./presentation/corridor-map.png" class="scene-bg-img" alt="Map" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-teal">Market Opportunity</div>
+            <div class="scene-header">
+              <h1 class="scene-title">₦1.8B ARR on Core Island Corridor</h1>
+              <p class="scene-subtitle">A twelve percent platform take rate across three core Lagos Island corridors unlocks 1.8 billion Naira in annual recurring revenue.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Platform Take Rate</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Per Seat Shared Contribution</div>
+                </div>
+                <div class="metric-value" style="color: var(--emerald);">12%</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Corridor ARR Projection</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Admiralty &bull; VI &bull; Marina (Year 2)</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light);">₦1.8 Billion</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Commuter Retention</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Higher Than Spot Ride-Hailing Apps</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber);">3.2x</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap">
+              <img src="./presentation/corridor-map.png" alt="Corridor Map" />
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-7">
+              "A twelve percent platform take rate across three core Lagos Island corridors unlocks 1.8 billion Naira in annual recurring revenue."
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scene 8: Call to Action -->
+      <div class="scene" id="scene-8" data-duration="9.7">
+        <img src="./presentation/hero.jpg" class="scene-bg-img" alt="Hero" />
+        <div class="scene-overlay"></div>
+        <div class="scene-content">
+          <div>
+            <div class="top-pill-badge badge-teal">Pre-Seed Round Open</div>
+            <div class="scene-header">
+              <h1 class="scene-title">Join the Corridor Revolution</h1>
+              <p class="scene-subtitle">Smarter commutes, lower fuel burn, zero chaos. Welcome to the future of African metropolitan transit.</p>
+            </div>
+          </div>
+          <div class="middle-grid">
+            <div class="metrics-col">
+              <div class="metric-glass-pill" style="border-color: rgba(20, 184, 166, 0.4); background: rgba(20, 184, 166, 0.08);">
+                <div>
+                  <div style="font-size: 11px; color: var(--teal-light); font-weight: 800; text-transform: uppercase;">Production Prototype</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">Interactive PWA Live &amp; Tested</div>
+                </div>
+                <div class="metric-value" style="color: var(--teal-light); font-size: 18px;">Ready &rarr;</div>
+              </div>
+              <div class="metric-glass-pill">
+                <div>
+                  <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Live Application URL</div>
+                  <div style="font-size: 13px; color: #E2E8F0;">kiinnggss.github.io/car-pull/</div>
+                </div>
+                <div class="metric-value" style="color: var(--amber); font-size: 16px;">Verified</div>
+              </div>
+            </div>
+            <div class="preview-card-wrap" style="background: radial-gradient(circle, rgba(15, 118, 110, 0.3) 0%, rgba(6, 8, 11, 0.9) 70%);">
+              <div style="text-align: center; padding: 20px;">
+                <img src="./logo.png" alt="Logo" style="width: 80px; height: 80px; margin: 0 auto 12px; display: block;" />
+                <h3 style="font-size: 24px; font-weight: 900; color: #FFFFFF;">CAR PULL LAGOS</h3>
+                <p style="font-size: 13px; color: #94A3B8; margin-top: 4px;">Metropolitan Carpooling &amp; Roadside Resilience</p>
+                <div style="margin-top: 16px; display: inline-block; padding: 8px 18px; background: var(--teal); color: #fff; border-radius: 12px; font-weight: 800; font-size: 13px;">
+                  Pre-Seed Open
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="subtitles-banner">
+            <div class="voice-avatar-pulse">&#9658;</div>
+            <div class="subtitles-text" id="sub-8">
+              "CAR PULL. Smarter commutes, lower fuel burn, zero chaos. Welcome to the future of African metropolitan transit."
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Audio Elements -->
+  <audio id="audio-1" src="./presentation/audio/voice_1.mp3" preload="auto"></audio>
+  <audio id="audio-2" src="./presentation/audio/voice_2.mp3" preload="auto"></audio>
+  <audio id="audio-3" src="./presentation/audio/voice_3.mp3" preload="auto"></audio>
+  <audio id="audio-4" src="./presentation/audio/voice_4.mp3" preload="auto"></audio>
+  <audio id="audio-5" src="./presentation/audio/voice_5.mp3" preload="auto"></audio>
+  <audio id="audio-6" src="./presentation/audio/voice_6.mp3" preload="auto"></audio>
+  <audio id="audio-7" src="./presentation/audio/voice_7.mp3" preload="auto"></audio>
+  <audio id="audio-8" src="./presentation/audio/voice_8.mp3" preload="auto"></audio>
+
+  <!-- Controls Dock -->
+  <div class="controls-dock">
+    <button class="ctl-btn primary" id="playBtn">
+      <span id="playIcon">&#9658;</span>
+      <span id="playText">Play Pitch</span>
+    </button>
+    <button class="ctl-btn" id="prevBtn">&larr; Prev</button>
+    <div class="timeline-bar" id="timelineBar">
+      <div class="timeline-fill" id="timelineFill"></div>
+    </div>
+    <span style="font-family: var(--font-mono); font-size: 11px; color: #94A3B8;" id="timeLabel">0:00 / 1:21</span>
+    <button class="ctl-btn" id="nextBtn">Next &rarr;</button>
+    <div class="scene-dots" id="dotsContainer">
+      <div class="scene-dot active" data-index="1"></div>
+      <div class="scene-dot" data-index="2"></div>
+      <div class="scene-dot" data-index="3"></div>
+      <div class="scene-dot" data-index="4"></div>
+      <div class="scene-dot" data-index="5"></div>
+      <div class="scene-dot" data-index="6"></div>
+      <div class="scene-dot" data-index="7"></div>
+      <div class="scene-dot" data-index="8"></div>
+    </div>
+    <a href="./pitch-video.mp4" download="car-pull-pitch.mp4" class="ctl-btn" style="text-decoration: none; color: inherit; display: inline-flex; align-items: center; gap: 4px;" title="Download MP4 Video">
+      <span>&#8659;</span><span>MP4</span>
+    </a>
+  </div>
+
+  <script>
+    const totalScenes = 8;
+    let currentScene = 1;
+    let isPlaying = false;
+    let progressTimer = null;
+
+    const durations = [12.07, 9.36, 10.54, 11.69, 12.43, 7.63, 7.99, 9.65];
+    const totalDuration = durations.reduce((a, b) => a + b, 0);
+
+    const playBtn = document.getElementById('playBtn');
+    const playIcon = document.getElementById('playIcon');
+    const playText = document.getElementById('playText');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const timelineFill = document.getElementById('timelineFill');
+    const timeLabel = document.getElementById('timeLabel');
+    const dots = document.querySelectorAll('.scene-dot');
+
+    function showScene(idx) {
+      document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+      const target = document.getElementById(`scene-${idx}`);
+      if (target) target.classList.add('active');
+
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === idx - 1);
+      });
+      currentScene = idx;
+    }
+
+    function stopAllAudio() {
+      for (let i = 1; i <= totalScenes; i++) {
+        const a = document.getElementById(`audio-${i}`);
+        if (a) {
+          a.pause();
+          a.currentTime = 0;
+        }
+      }
+    }
+
+    function playCurrentAudio() {
+      stopAllAudio();
+      const a = document.getElementById(`audio-${currentScene}`);
+      if (a) {
+        a.play().catch(e => console.log('Audio autoplay blocked:', e));
+        a.onended = () => {
+          if (isPlaying) {
+            if (currentScene < totalScenes) {
+              nextScene();
+            } else {
+              pausePitch();
+            }
+          }
+        };
+      }
+    }
+
+    function startPitch() {
+      isPlaying = true;
+      playIcon.innerHTML = '&#10074;&#10074;';
+      playText.textContent = 'Pause';
+      playCurrentAudio();
+      startProgressLoop();
+    }
+
+    function pausePitch() {
+      isPlaying = false;
+      playIcon.innerHTML = '&#9658;';
+      playText.textContent = 'Play Pitch';
+      const a = document.getElementById(`audio-${currentScene}`);
+      if (a) a.pause();
+      cancelAnimationFrame(progressTimer);
+    }
+
+    function nextScene() {
+      if (currentScene < totalScenes) {
+        currentScene++;
+        showScene(currentScene);
+        if (isPlaying) playCurrentAudio();
+      }
+    }
+
+    function prevScene() {
+      if (currentScene > 1) {
+        currentScene--;
+        showScene(currentScene);
+        if (isPlaying) playCurrentAudio();
+      }
+    }
+
+    function getElapsedBefore(idx) {
+      let sum = 0;
+      for (let i = 0; i < idx - 1; i++) {
+        sum += durations[i];
+      }
+      return sum;
+    }
+
+    function startProgressLoop() {
+      function loop() {
+        const a = document.getElementById(`audio-${currentScene}`);
+        const currentElapsed = a ? a.currentTime : 0;
+        const totalElapsed = getElapsedBefore(currentScene) + currentElapsed;
+        const pct = Math.min(100, (totalElapsed / totalDuration) * 100);
+        timelineFill.style.width = `${pct}%`;
+
+        const curMin = Math.floor(totalElapsed / 60);
+        const curSec = Math.floor(totalElapsed % 60).toString().padStart(2, '0');
+        const totMin = Math.floor(totalDuration / 60);
+        const totSec = Math.floor(totalDuration % 60).toString().padStart(2, '0');
+        timeLabel.textContent = `${curMin}:${curSec} / ${totMin}:${totSec}`;
+
+        if (isPlaying) {
+          progressTimer = requestAnimationFrame(loop);
+        }
+      }
+      progressTimer = requestAnimationFrame(loop);
+    }
+
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        pausePitch();
+      } else {
+        startPitch();
+      }
+    });
+
+    nextBtn.addEventListener('click', nextScene);
+    prevBtn.addEventListener('click', prevScene);
+
+    dots.forEach(d => {
+      d.addEventListener('click', () => {
+        const idx = parseInt(d.getAttribute('data-index'), 10);
+        currentScene = idx;
+        showScene(idx);
+        if (isPlaying) playCurrentAudio();
+      });
+    });
+
+    // Keyboard navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        if (e.key === 'Space') {
+          e.preventDefault();
+          playBtn.click();
+        } else {
+          nextScene();
+        }
+      } else if (e.key === 'ArrowLeft') {
+        prevScene();
+      }
+    });
+
+    // Check URL parameters: e.g. ?slide=3
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('render') === '1') {
+      document.body.classList.add('render-mode');
+    }
+    const initialSlide = parseInt(params.get('slide'), 10);
+    if (initialSlide >= 1 && initialSlide <= totalScenes) {
+      showScene(initialSlide);
+    }
+    if (params.get('autoplay') === '1') {
+      startPitch();
+    }
+  </script>
+</body>
+</html>
