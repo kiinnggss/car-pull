@@ -20,6 +20,7 @@ import {
   TripCategory,
   ChatMessage,
   ChatThread,
+  ChatMessageReplyTo,
   DriverSchedule,
   StreetLocation,
   StreetCarpoolRide,
@@ -208,7 +209,16 @@ interface AppState {
   chatThreads: ChatThread[];
   activeThreadId: string | null;
   setActiveThreadId: (id: string | null) => void;
-  sendChatMessage: (threadId: string, text: string) => void;
+  sendChatMessage: (
+    threadId: string,
+    text: string,
+    options?: {
+      replyTo?: ChatMessageReplyTo;
+      isAudio?: boolean;
+      audioDuration?: string;
+      audioWaveform?: number[];
+    }
+  ) => void;
   markThreadAsRead: (threadId: string) => void;
   unreadChatCount: number;
   getOrCreateThreadForDriver: (driver: CorridorDriver | { id: string; name: string; avatar: string; vehicle?: any; employer?: string; phone?: string; safeZoneName?: string; plateNumber?: string }) => string;
@@ -250,6 +260,9 @@ const initialChatThreads: ChatThread[] = [
     unreadCount: 1,
     partnerPhone: '+234 803 219 4481',
     isOnline: true,
+    tripStatus: 'en-route',
+    etaMinutes: 4,
+    escrowSecuredNgn: 2500,
     messages: [
       {
         id: 'msg-1',
@@ -296,6 +309,8 @@ const initialChatThreads: ChatThread[] = [
     unreadCount: 0,
     partnerPhone: '+234 812 443 8920',
     isOnline: false,
+    tripStatus: 'scheduled',
+    escrowSecuredNgn: 3000,
     messages: [
       {
         id: 'msg-b1',
@@ -342,6 +357,9 @@ const initialChatThreads: ChatThread[] = [
     unreadCount: 1,
     partnerPhone: '+234 809 112 3344',
     isOnline: true,
+    tripStatus: 'en-route',
+    seatNumber: 2,
+    escrowSecuredNgn: 2500,
     messages: [
       {
         id: 'msg-t1',
@@ -1264,27 +1282,34 @@ export const useAppStore = create<AppState>()(
       return { chatThreads: updated, unreadChatCount: totalUnread };
     });
   },
-  sendChatMessage: (threadId, text) => {
+  sendChatMessage: (threadId, text, options) => {
     const state = get();
     const thread = state.chatThreads.find((t) => t.id === threadId);
-    if (!thread || !text.trim()) return;
+    if (!thread || (!text.trim() && !options?.isAudio)) return;
 
     const timeStr = new Date().toLocaleTimeString('en-NG', { hour: 'numeric', minute: '2-digit' });
+    const isAudioMsg = !!options?.isAudio;
+    const displayText = isAudioMsg ? 'Voice note' : text.trim();
+
     const userMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
       senderId: 'user-01',
       senderName: state.user.fullName || 'You',
-      text: text.trim(),
+      text: displayText,
       timestamp: timeStr,
       isUser: true,
       status: 'delivered',
+      replyTo: options?.replyTo,
+      isAudio: isAudioMsg,
+      audioDuration: options?.audioDuration || (isAudioMsg ? '0:04' : undefined),
+      audioWaveform: options?.audioWaveform || (isAudioMsg ? [35, 60, 45, 80, 50, 75, 40, 65, 85, 55, 45, 70, 35] : undefined),
     };
 
     const updatedThreads = state.chatThreads.map((t) => {
       if (t.id === threadId) {
         return {
           ...t,
-          lastMessage: text.trim(),
+          lastMessage: isAudioMsg ? 'Voice note' : text.trim(),
           lastMessageTimestamp: timeStr,
           messages: [...t.messages, userMsg],
         };
@@ -1298,7 +1323,9 @@ export const useAppStore = create<AppState>()(
     setTimeout(() => {
       const lower = text.toLowerCase();
       let replyText = 'Sounds good! See you in a minute.';
-      if (lower.includes('cctv') || lower.includes('safe hub') || lower.includes('here') || lower.includes('where')) {
+      if (isAudioMsg) {
+        replyText = 'Received your voice note! Loud and clear, see you shortly.';
+      } else if (lower.includes('cctv') || lower.includes('safe hub') || lower.includes('here') || lower.includes('where')) {
         replyText = 'Got it! Waiting right by the security post / CCTV pole with hazard lights on.';
       } else if (lower.includes('5 min') || lower.includes('late') || lower.includes('traffic') || lower.includes('delay')) {
         replyText = 'No rush at all! Traffic is moving steadily anyway. Take your time.';

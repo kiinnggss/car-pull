@@ -16,7 +16,7 @@ import { AuthLanding } from '@/components/auth/AuthLanding';
 import { ChatHub } from '@/components/chat/ChatHub';
 
 export default function Home() {
-  const { activeTab, setActiveTab, activeRole, isAuthenticated, theme } = useAppStore();
+  const { activeTab, setActiveTab, activeRole, isAuthenticated, theme, activeThreadId } = useAppStore();
 
   // Sync theme class to document root
   useEffect(() => {
@@ -57,6 +57,7 @@ export default function Home() {
 
   const isMapTab = activeTab === 'map';
   const isDeckTab = activeTab === 'deck';
+  const isChatThreadOpen = activeTab === 'chats' && !!activeThreadId;
 
   return (
     <main className="w-full max-w-[430px] h-screen h-[100dvh] bg-[#F8FAFC] dark:bg-[#0B0F12] relative flex flex-col justify-between shadow-2xl text-slate-900 dark:text-slate-100 overflow-hidden">
@@ -67,13 +68,17 @@ export default function Home() {
         </div>
       )}
 
-      {/* Top Application Header (VisionOS Liquid Glass) */}
-      <Header />
+      {/* Top Application Header (Hidden when inside full-screen chat thread) */}
+      {!isChatThreadOpen && <Header />}
 
       {/* Primary Dynamic Content Area */}
       <div
-        className={`flex-1 w-full pt-1 flex flex-col min-h-0 relative z-10 ${
-          isDeckTab ? 'overflow-hidden pb-[62px]' : 'overflow-y-auto no-scrollbar pb-24'
+        className={`flex-1 w-full flex flex-col min-h-0 relative z-10 ${
+          isChatThreadOpen
+            ? 'h-full overflow-hidden p-0'
+            : isDeckTab
+            ? 'pt-1 overflow-hidden pb-[62px]'
+            : 'pt-1 overflow-y-auto no-scrollbar pb-24'
         }`}
       >
         {isDeckTab && (activeRole === 'driver' ? <DriverSeatDeck /> : <SwipeDeck />)}
@@ -89,8 +94,8 @@ export default function Home() {
         {activeTab === 'sos' && <EmergencyBeacon />}
       </div>
 
-      {/* Fixed Bottom Thumb-Zone Navigation (VisionOS Liquid Glass) */}
-      <BottomNav />
+      {/* Fixed Bottom Navigation (Hidden when inside full-screen chat thread) */}
+      {!isChatThreadOpen && <BottomNav />}
     </main>
   );
 }

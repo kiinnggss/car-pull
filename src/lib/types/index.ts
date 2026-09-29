@@ -234,6 +234,12 @@ export interface TrafficAlert {
   message: string;
 }
 
+export interface ChatMessageReplyTo {
+  id: string;
+  senderName: string;
+  text: string;
+}
+
 export interface ChatMessage {
   id: string;
   senderId: string;
@@ -242,6 +248,10 @@ export interface ChatMessage {
   timestamp: string;
   isUser: boolean;
   status?: 'sent' | 'delivered' | 'read';
+  replyTo?: ChatMessageReplyTo;
+  isAudio?: boolean;
+  audioDuration?: string;
+  audioWaveform?: number[];
 }
 
 export interface ChatThread {
@@ -261,6 +271,10 @@ export interface ChatThread {
   messages: ChatMessage[];
   partnerPhone?: string;
   isOnline?: boolean;
+  tripStatus?: 'en-route' | 'scheduled' | 'completed';
+  etaMinutes?: number;
+  escrowSecuredNgn?: number;
+  seatNumber?: number;
 }
 
 export interface DriverSchedule {

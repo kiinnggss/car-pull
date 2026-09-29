@@ -13,7 +13,12 @@ export const BottomNav: React.FC = () => {
     unreadChatCount,
     isSosActive,
     triggerSosBeacon,
+    activeThreadId,
   } = useAppStore();
+
+  if (activeTab === 'chats' && activeThreadId) {
+    return null;
+  }
 
   const matchCount = activeMatches.length;
 
