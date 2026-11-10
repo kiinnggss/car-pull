@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { CalendarCheck, QrCode, MessageCircle, AlertOctagon, Navigation, Sparkles } from 'lucide-react';
+import { CalendarCheck, QrCode, MessageCircle, AlertOctagon, Navigation, Layers } from 'lucide-react';
 import { triggerHaptic } from '@/lib/haptics';
 
 export const BottomNav: React.FC = () => {
@@ -22,24 +22,27 @@ export const BottomNav: React.FC = () => {
 
   const matchCount = activeMatches.length;
 
+  const navButtonClass = (isActive: boolean) =>
+    `relative flex flex-col items-center justify-center py-1.5 px-2.5 rounded-xl transition-all min-h-[46px] active-spring ${
+      isActive
+        ? 'bg-teal-500/12 dark:bg-teal-400/15 text-[#0F766E] dark:text-[#14B8A6] font-extrabold'
+        : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 font-semibold'
+    }`;
+
   return (
-    <nav className="fixed bottom-2.5 inset-x-2.5 z-40 max-w-[414px] mx-auto rounded-3xl bg-white/90 dark:bg-[#10161D]/90 backdrop-blur-xl px-2.5 py-1.5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_12px_35px_-5px_rgba(0,0,0,0.12)] dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_20px_45px_-5px_rgba(0,0,0,0.8)] transition-all">
-      <div className="flex items-center justify-around">
-        {/* Tab 1: Swipe Cards Deck */}
+    <nav className="fixed sm:absolute bottom-2.5 inset-x-2.5 z-40 max-w-[410px] mx-auto rounded-2xl bg-white/95 dark:bg-[#0E141B]/95 backdrop-blur-xl px-2 py-1.5 floating-dock transition-all">
+      <div className="grid grid-cols-6 items-center gap-1">
+        {/* Tab 1: Commuter Deck */}
         <button
           onClick={() => {
             triggerHaptic('switch');
             setActiveTab('deck');
           }}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-spring ${
-            activeTab === 'deck'
-              ? 'text-[#0F766E] dark:text-[#14B8A6] font-black'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-          }`}
-          title="Swipe carpool cards deck"
+          className={navButtonClass(activeTab === 'deck')}
+          title="Corridor commuter deck"
         >
-          <Sparkles className="w-5 h-5" />
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Swipe</span>
+          <Layers className="w-4 h-4" />
+          <span className="text-[10px] mt-0.5 tracking-tight">Deck</span>
         </button>
 
         {/* Tab 2: Street Discovery Map */}
@@ -48,15 +51,11 @@ export const BottomNav: React.FC = () => {
             triggerHaptic('switch');
             setActiveTab('map');
           }}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-spring ${
-            activeTab === 'map'
-              ? 'text-[#0F766E] dark:text-[#14B8A6] font-black'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-          }`}
+          className={navButtonClass(activeTab === 'map')}
           title="Street-level carpool discovery map"
         >
-          <Navigation className="w-5 h-5" />
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Map</span>
+          <Navigation className="w-4 h-4" />
+          <span className="text-[10px] mt-0.5 tracking-tight">Map</span>
         </button>
 
         {/* Tab 3: Booked Rides */}
@@ -65,37 +64,18 @@ export const BottomNav: React.FC = () => {
             triggerHaptic('switch');
             setActiveTab('matches');
           }}
-          className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-spring ${
-            activeTab === 'matches'
-              ? 'text-[#0F766E] dark:text-[#14B8A6] font-black'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-          }`}
+          className={navButtonClass(activeTab === 'matches')}
+          title="Booked carpool rides"
         >
           <div className="relative">
-            <CalendarCheck className="w-5 h-5" />
+            <CalendarCheck className="w-4 h-4" />
             {matchCount > 0 && (
-              <span className="absolute -top-1 -right-2 bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[9px] font-mono font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+              <span className="absolute -top-1.5 -right-2.5 bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#041E1B] text-[9px] font-mono font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center">
                 {matchCount}
               </span>
             )}
           </div>
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Rides</span>
-        </button>
-
-        {/* Central Distress Beacon Button */}
-        <button
-          onClick={() => {
-            triggerHaptic('sos');
-            triggerSosBeacon();
-          }}
-          className={`flex flex-col items-center justify-center px-3 py-1 rounded-xl min-h-[44px] transition-all active-spring ${
-            isSosActive || activeTab === 'sos'
-              ? 'bg-rose-600 text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.3),0_4px_16px_rgba(225,29,72,0.4)]'
-              : 'bg-rose-50/80 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 shadow-floating-sm hover:bg-rose-100'
-          }`}
-        >
-          <AlertOctagon className="w-5 h-5" />
-          <span className="text-[8px] font-extrabold uppercase tracking-wider mt-0.5">SOS</span>
+          <span className="text-[10px] mt-0.5 tracking-tight">Rides</span>
         </button>
 
         {/* Tab 4: In-App Messenger */}
@@ -104,21 +84,18 @@ export const BottomNav: React.FC = () => {
             triggerHaptic('switch');
             setActiveTab('chats');
           }}
-          className={`relative flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-spring ${
-            activeTab === 'chats'
-              ? 'text-[#0F766E] dark:text-[#14B8A6] font-black'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-          }`}
+          className={navButtonClass(activeTab === 'chats')}
+          title="Corridor peer chats"
         >
           <div className="relative">
-            <MessageCircle className="w-5 h-5" />
+            <MessageCircle className="w-4 h-4" />
             {unreadChatCount > 0 && (
-              <span className="absolute -top-1 -right-2 bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#051614] text-[9px] font-mono font-black w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
+              <span className="absolute -top-1.5 -right-2.5 bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#041E1B] text-[9px] font-mono font-extrabold min-w-[16px] h-4 px-1 rounded-full flex items-center justify-center">
                 {unreadChatCount}
               </span>
             )}
           </div>
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Chats</span>
+          <span className="text-[10px] mt-0.5 tracking-tight">Chats</span>
         </button>
 
         {/* Tab 5: LASTMA Non-Commercial Pass */}
@@ -127,14 +104,28 @@ export const BottomNav: React.FC = () => {
             triggerHaptic('switch');
             setActiveTab('pass');
           }}
-          className={`flex flex-col items-center justify-center py-1 px-2 rounded-xl transition-all min-h-[44px] active-spring ${
-            activeTab === 'pass'
-              ? 'text-[#0F766E] dark:text-[#14B8A6] font-black'
-              : 'text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200'
-          }`}
+          className={navButtonClass(activeTab === 'pass')}
+          title="Section 44 statutory commute pass"
         >
-          <QrCode className="w-5 h-5" />
-          <span className="text-[10px] mt-0.5 tracking-tight font-medium">Pass</span>
+          <QrCode className="w-4 h-4" />
+          <span className="text-[10px] mt-0.5 tracking-tight">Pass</span>
+        </button>
+
+        {/* Tab 6: Distress Beacon Button */}
+        <button
+          onClick={() => {
+            triggerHaptic('sos');
+            triggerSosBeacon();
+          }}
+          className={`flex flex-col items-center justify-center py-1.5 px-2 rounded-xl min-h-[46px] transition-all active-spring ${
+            isSosActive || activeTab === 'sos'
+              ? 'bg-rose-600 text-white font-extrabold shadow-sm'
+              : 'bg-rose-500/10 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 hover:bg-rose-500/20 font-bold border border-rose-500/20'
+          }`}
+          title="LASDRI Roadside SOS Beacon"
+        >
+          <AlertOctagon className="w-4 h-4" />
+          <span className="text-[9.5px] uppercase tracking-wider mt-0.5">SOS</span>
         </button>
       </div>
     </nav>

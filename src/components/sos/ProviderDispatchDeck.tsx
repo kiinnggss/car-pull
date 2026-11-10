@@ -18,138 +18,152 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
   providers,
   onAcceptQuote,
 }) => {
-  const fastestCompatibleFlatbed = providers.find((p) => p.compatible && p.category === 'flatbed_tow') || providers.find((p) => p.compatible);
+  const fastestCompatibleFlatbed =
+    providers.find((p) => p.compatible && p.category === 'flatbed_tow') ||
+    providers.find((p) => p.compatible);
 
   return (
-    <div className="space-y-2.5">
+    <div className="space-y-3">
       {/* 1-Tap Instant Emergency Dispatch Hero */}
       {fastestCompatibleFlatbed && (
-        <div className="bg-gradient-to-r from-red-600 to-rose-600 rounded-2xl p-3.5 text-white shadow-floating space-y-2">
+        <div className="bg-red-600 dark:bg-red-700 border border-red-500 rounded-2xl p-3.5 text-white space-y-2.5">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 font-black text-xs uppercase tracking-wider">
-              <Zap className="w-4 h-4 fill-current text-yellow-300" />
-              <span>Instant Emergency Dispatch</span>
+            <div className="flex items-center gap-1.5 font-mono font-black text-[11px] uppercase tracking-wider">
+              <Zap className="w-3.5 h-3.5 fill-current text-amber-300" />
+              <span>INSTANT EXPRESSWAY DISPATCH</span>
             </div>
-            <span className="text-[10px] bg-white/20 px-2 py-0.5 rounded-full font-bold">
-              {fastestCompatibleFlatbed.traffic_eta_minutes} mins away
+            <span className="text-[10px] font-mono tabular-nums bg-black/25 px-2 py-0.5 rounded-md font-bold">
+              ETA {fastestCompatibleFlatbed.traffic_eta_minutes}M
             </span>
           </div>
 
-          <p className="text-[11px] text-white/90 leading-tight">
-            Urgent choke point on Lekki-Epe expressway? Dispatch the closest verified flatbed without comparing quotes.
+          <p className="text-[11px] text-red-50 leading-snug">
+            Stranded at a choke point on Lekki-Epe Expressway? Dispatch the closest compatible unit immediately.
           </p>
 
           <button
             onClick={() => onAcceptQuote(fastestCompatibleFlatbed)}
-            className="w-full py-2 bg-white text-red-700 hover:bg-zinc-100 font-black text-xs rounded-xl shadow-floating-sm active:scale-95 transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 bg-white text-red-700 hover:bg-red-50 font-black text-xs rounded-xl active-press transition-all flex items-center justify-center gap-1.5"
           >
             <Truck className="w-3.5 h-3.5" />
             <span>
-              Dispatch {fastestCompatibleFlatbed.name.split(' ')[0]} Now ({formatNgn(fastestCompatibleFlatbed.flat_quote_ngn)})
+              Dispatch {fastestCompatibleFlatbed.name.split(' ')[0]} Now (
+              {formatNgn(fastestCompatibleFlatbed.flat_quote_ngn)})
             </span>
           </button>
         </div>
       )}
 
-      <div className="flex items-center justify-between pt-1">
+      <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-1.5">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
-          <span className="text-xs font-black text-zinc-800 dark:text-stone-200 uppercase tracking-wider">
-            All Responding Providers
+          <span className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider">
+            RESPONDING DISPATCH UNITS
           </span>
         </div>
-        <span className="text-[10px] text-zinc-400 dark:text-stone-500 font-mono">
-          {providers.length} responding
+        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono tabular-nums">
+          {providers.length} UNITS
         </span>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         {providers.map((prov, index) => {
           const isTopPriority = index === 0 && prov.compatible;
 
           return (
             <div
               key={prov.id}
-              className={`p-3.5 rounded-2xl transition-all ${
+              className={`floating-surface rounded-2xl overflow-hidden transition-all ${
                 !prov.compatible
-                  ? 'bg-zinc-50/60 dark:bg-stone-900/60 opacity-75 shadow-floating-sm'
+                  ? 'opacity-70'
                   : isTopPriority
-                  ? 'bg-white dark:bg-[#141C24] ring-2 ring-[#0F766E] dark:ring-[#14B8A6] shadow-floating'
-                  : 'bg-white dark:bg-[#141C24] shadow-floating-sm'
+                  ? 'ring-1 ring-[#0F766E] dark:ring-[#14B8A6]'
+                  : ''
               }`}
             >
               {/* Header: Operator Photo, Name, Rating, and Priority Badge */}
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
+              <div className="p-3.5 flex items-center justify-between border-b border-slate-200/70 dark:border-white/8">
+                <div className="flex items-center gap-2.5 min-w-0">
                   <img
                     src={prov.operator_photo}
                     alt={prov.operator_name}
                     loading="lazy"
-                    className="w-10 h-10 rounded-xl object-cover shadow-floating-sm"
+                    className="w-10 h-10 rounded-xl object-cover border border-slate-200/80 dark:border-white/10 flex-shrink-0"
                   />
-                  <div>
-                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 leading-tight">
+                  <div className="min-w-0">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
                       {prov.name}
                     </h4>
-                    <span className="text-[11px] text-slate-500 dark:text-slate-400 block">
-                      Lead: {prov.operator_name}
-                    </span>
+                    <div className="flex items-center gap-2 text-[10.5px] text-slate-500 dark:text-slate-400">
+                      <span className="truncate">Lead: {prov.operator_name}</span>
+                      <span>•</span>
+                      <span className="text-amber-600 dark:text-amber-400 font-mono font-bold flex items-center gap-0.5 flex-shrink-0">
+                        <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-400" />
+                        {prov.rating}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                {isTopPriority && (
-                  <span className="text-[9px] font-extrabold uppercase tracking-wider bg-[#0F766E] text-white px-2 py-0.5 rounded-md shadow-floating-sm">
-                    Top Match
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  {isTopPriority && (
+                    <span className="text-[9px] font-mono font-extrabold uppercase tracking-wider bg-teal-500/12 border border-teal-500/25 text-[#0F766E] dark:text-[#14B8A6] px-2 py-0.5 rounded-md">
+                      TOP MATCH
+                    </span>
+                  )}
+                  <span className="plate-badge">{prov.plate_number}</span>
+                </div>
+              </div>
+
+              {/* Equipment Spec & Telemetry Strip */}
+              <div className="px-3.5 py-2.5 bg-slate-50/70 dark:bg-[#0D1218]/60 border-b border-slate-200/70 dark:border-white/8 space-y-2">
+                <div className="flex items-center justify-between gap-2 text-[10px]">
+                  <span className="text-slate-700 dark:text-slate-200 font-bold flex items-center gap-1 truncate">
+                    <Truck className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                    <span className="truncate">{prov.truck_type}</span>
                   </span>
-                )}
+
+                  <span className="text-emerald-700 dark:text-emerald-300 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-md font-mono font-bold flex items-center gap-1 flex-shrink-0 text-[9px]">
+                    <ShieldCheck className="w-3 h-3" />
+                    {prov.lasdri_id}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 divide-x divide-slate-200/70 dark:divide-white/8 pt-1 text-[10px] font-mono tabular-nums">
+                  <div>
+                    <span className="text-slate-400 dark:text-slate-500 block text-[8.5px]">DIST</span>
+                    <strong className="text-slate-900 dark:text-slate-100">{prov.distance_km} km</strong>
+                  </div>
+                  <div className="px-2">
+                    <span className="text-slate-400 dark:text-slate-500 block text-[8.5px]">TRAFFIC ETA</span>
+                    <strong className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                      <Clock className="w-2.5 h-2.5" /> {prov.traffic_eta_minutes}m
+                    </strong>
+                  </div>
+                  <div className="pl-2 text-right">
+                    <span className="text-slate-400 dark:text-slate-500 block text-[8.5px]">FIT SCORE</span>
+                    <strong className="text-[#0F766E] dark:text-[#14B8A6]">{prov.score}/100</strong>
+                  </div>
+                </div>
               </div>
 
-              {/* Equipment Spec & LASDRI Certification */}
-              <div className="mt-2 flex items-center gap-2 flex-wrap text-[10px]">
-                <span className="text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shadow-floating-sm">
-                  <Truck className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6]" />
-                  {prov.truck_type}
-                </span>
-
-                <span className="text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shadow-floating-sm">
-                  <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                  LASDRI Certified
-                </span>
-
-                <span className="text-amber-600 dark:text-amber-400 font-bold flex items-center gap-0.5">
-                  <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                  <span>{prov.rating}</span>
-                </span>
-              </div>
-
-              {/* Flowing Metrics Line */}
-              <div className="mt-2 py-1.5 px-2.5 bg-zinc-50 dark:bg-stone-900 rounded-xl flex items-center justify-between text-xs text-zinc-600 dark:text-stone-300 shadow-inner">
-                <span>Dist: <strong className="text-zinc-900 dark:text-stone-100">{prov.distance_km} km</strong></span>
-                <span className="text-zinc-300 dark:text-stone-700">•</span>
-                <span className="text-amber-700 dark:text-amber-400 font-semibold flex items-center gap-1">
-                  <Clock className="w-3 h-3" /> {prov.traffic_eta_minutes} mins ETA
-                </span>
-                <span className="text-zinc-300 dark:text-stone-700">•</span>
-                <span className="text-zinc-400 dark:text-stone-500 font-mono text-[10px]">Score: {prov.score}</span>
-              </div>
-
-              {/* Incompatibility Warning (Phase 1 Filter) */}
+              {/* Incompatibility Warning */}
               {!prov.compatible && (
-                <div className="mt-2 bg-red-500/10 dark:bg-red-950/40 rounded-xl p-2 flex items-start gap-1.5 shadow-floating-sm">
+                <div className="px-3.5 py-2 bg-red-500/10 border-b border-red-500/20 flex items-start gap-1.5">
                   <AlertTriangle className="w-3.5 h-3.5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
                   <p className="text-[10px] text-red-800 dark:text-red-300 leading-tight">
-                    <strong>Phase 1 Rejected:</strong> {prov.incompatibilityReason}
+                    <strong>Drivetrain Safety Block:</strong> {prov.incompatibilityReason}
                   </p>
                 </div>
               )}
 
               {/* Quote Amount & Acceptance CTA */}
-              <div className="mt-2.5 pt-2 flex items-center justify-between">
+              <div className="p-3.5 flex items-center justify-between">
                 <div>
-                  <span className="text-[9px] text-zinc-400 dark:text-stone-400 uppercase tracking-wider block font-medium">
-                    Fixed Escrow Quote
+                  <span className="text-[9px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider block font-bold">
+                    FIXED ESCROW QUOTE
                   </span>
-                  <span className="text-base font-black text-zinc-900 dark:text-stone-100">
+                  <span className="text-base font-black font-mono tabular-nums text-slate-900 dark:text-slate-100">
                     {formatNgn(prov.flat_quote_ngn)}
                   </span>
                 </div>
@@ -157,14 +171,14 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                 <button
                   onClick={() => onAcceptQuote(prov)}
                   disabled={!prov.compatible}
-                  className={`min-h-[38px] px-3.5 rounded-xl flex items-center gap-1.5 font-bold text-xs transition-all active:scale-95 shadow-floating-sm ${
+                  className={`min-h-[38px] px-3.5 rounded-xl flex items-center gap-1.5 font-extrabold text-xs transition-all active-press ${
                     !prov.compatible
-                      ? 'bg-zinc-100 dark:bg-stone-850 text-zinc-400 dark:text-stone-600 cursor-not-allowed'
+                      ? 'bg-slate-100 dark:bg-[#171F29] text-slate-400 dark:text-slate-600 border border-slate-200/80 dark:border-white/5 cursor-not-allowed'
                       : 'bg-red-600 hover:bg-red-700 text-white'
                   }`}
                 >
                   <Lock className="w-3 h-3" />
-                  <span>Accept & Escrow</span>
+                  <span>Accept & Lock Escrow</span>
                 </button>
               </div>
             </div>

@@ -14,7 +14,6 @@ import {
 
 export const EmergencyBeacon: React.FC = () => {
   const {
-    activeIncident,
     selectedIssueType,
     candidateProviders,
     selectedProvider,
@@ -24,26 +23,25 @@ export const EmergencyBeacon: React.FC = () => {
     cancelEmergency,
   } = useAppStore();
 
-  // If Assistance Shield is active, render full-screen digital clearance shield
   if (isAssistanceShieldVisible && selectedProvider) {
     return <AssistanceShield />;
   }
 
   return (
-    <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-4 animate-in fade-in">
-      {/* High Alert Header */}
-      <div className="bg-red-500/10 dark:bg-red-950/40 rounded-3xl p-4 shadow-floating">
-        <div className="flex items-center justify-between">
+    <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
+      {/* High Alert Telemetry Header */}
+      <div className="floating-surface rounded-2xl overflow-hidden border-red-500/30 dark:border-red-500/30">
+        <div className="p-3.5 bg-red-500/10 border-b border-red-500/20 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-red-500 animate-ping" />
-            <h2 className="text-sm font-black text-red-700 dark:text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Radio className="w-4 h-4 text-red-600 dark:text-red-400" />
-              Lagos Roadside Emergency Beacon
+            <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
+            <h2 className="text-xs font-mono font-black text-red-700 dark:text-red-400 uppercase tracking-wider flex items-center gap-1.5">
+              <Radio className="w-3.5 h-3.5" />
+              LAGOS ROADSIDE SOS BEACON
             </h2>
           </div>
           <button
             onClick={cancelEmergency}
-            className="text-xs text-zinc-500 hover:text-zinc-900 dark:text-stone-400 dark:hover:text-stone-200 p-1.5 rounded-lg font-bold transition-colors"
+            className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 p-1 rounded-lg font-bold transition-colors"
             title="Dismiss SOS"
           >
             <XCircle className="w-4 h-4" />
@@ -51,16 +49,18 @@ export const EmergencyBeacon: React.FC = () => {
         </div>
 
         {/* GPS Coordinates & Current Expressway Location */}
-        <div className="mt-3 bg-white dark:bg-[#1A1816] p-3 rounded-2xl flex items-start gap-2.5 text-xs shadow-floating-sm">
-          <Navigation className="w-4 h-4 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-          <div>
-            <span className="text-[10px] text-zinc-500 dark:text-stone-400 block uppercase font-mono">
-              Live GPS Lock (High Precision)
+        <div className="p-3.5 flex items-start gap-2.5 text-xs">
+          <div className="w-8 h-8 rounded-xl bg-red-500/12 border border-red-500/25 text-red-600 dark:text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+            <Navigation className="w-4 h-4" />
+          </div>
+          <div className="min-w-0">
+            <span className="text-[9px] font-mono uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 block">
+              LIVE GPS TELEMETRY LOCK
             </span>
-            <span className="text-zinc-900 dark:text-stone-100 font-bold block leading-tight">
+            <span className="text-slate-900 dark:text-slate-100 font-extrabold block leading-snug mt-0.5">
               Lekki-Epe Expressway, 200m before Chevron Toll Gate
             </span>
-            <span className="text-[10px] text-zinc-500 dark:text-stone-400 font-mono">
+            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono tabular-nums block mt-0.5">
               6.4428° N, 3.5186° E • Westbound Carriageway
             </span>
           </div>
@@ -75,16 +75,16 @@ export const EmergencyBeacon: React.FC = () => {
         />
       ) : (
         /* Step 2: Live Provider Bidding Deck */
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <button
               onClick={() => selectIncidentIssue(null as any)}
-              className="text-xs text-[#0F766E] dark:text-[#14B8A6] font-bold flex items-center gap-1 hover:underline"
+              className="text-xs text-[#0F766E] dark:text-[#14B8A6] font-extrabold flex items-center gap-1 hover:underline"
             >
-              <ArrowLeft className="w-3.5 h-3.5" /> Change Issue
+              <ArrowLeft className="w-3.5 h-3.5" /> Change Incident Type
             </button>
-            <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2.5 py-0.5 rounded-full shadow-floating-sm">
-              Verified LASDRI Responders
+            <span className="text-[9px] font-mono uppercase text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-500/12 border border-emerald-500/25 px-2 py-0.5 rounded-md">
+              LASDRI CERTIFIED
             </span>
           </div>
 

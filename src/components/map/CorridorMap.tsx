@@ -2,26 +2,19 @@
 
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { StreetCarpoolRide, StreetLocation, NeighborhoodRider } from '@/lib/types';
+import { StreetCarpoolRide, NeighborhoodRider } from '@/lib/types';
 import {
   MapPin,
   Car,
   Compass,
   CheckCircle2,
-  Navigation,
   Clock,
   ArrowRight,
   X,
-  Star,
-  Users,
   MessageCircle,
   Sparkles,
   Search,
   Crosshair,
-  Filter,
-  Calendar,
-  ShieldCheck,
-  ChevronDown,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
@@ -50,8 +43,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     streetLocations,
     neighborhoodRiders,
     bookEverydayRide,
-    activeRole,
-    postDriverStreetRide,
     setActiveTab,
     setActiveThreadId,
     getOrCreateThreadForDriver,
@@ -65,10 +56,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
   const [isLocating, setIsLocating] = useState(false);
   const [bookedSuccessRide, setBookedSuccessRide] = useState<StreetCarpoolRide | null>(null);
 
-  // Filter everyday rides based on destination and day filter
   const filteredRides = useMemo(() => {
     return everydayRides.filter((ride) => {
-      // Destination filter
       if (selectedDestination !== 'all') {
         const matchesDest =
           ride.destination.toLowerCase().includes(selectedDestination.toLowerCase()) ||
@@ -76,7 +65,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         if (!matchesDest) return false;
       }
 
-      // Day filter
       if (selectedDayFilter === 'now') {
         return ride.departureCategory === 'leaving_now';
       }
@@ -94,7 +82,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     });
   }, [everydayRides, selectedDestination, selectedDayFilter]);
 
-  // If no ride selected, default to the first matching ride that passes near user
   useEffect(() => {
     if (!selectedRide && filteredRides.length > 0) {
       const nearest = filteredRides.find((r) => r.passesNearUser) || filteredRides[0];
@@ -102,7 +89,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     }
   }, [filteredRides, selectedRide]);
 
-  // Invalidate map size when underlay mode toggles so tiles stay perfectly rendered
   useEffect(() => {
     if (mapInstanceRef.current) {
       setTimeout(() => {
@@ -111,10 +97,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     }
   }, [isBackgroundUnderlay]);
 
-  // Leaflet map initialization
   useEffect(() => {
-    let isMounted = true;
-
     async function initMap() {
       if (typeof window === 'undefined' || !mapContainerRef.current) return;
 
@@ -125,7 +108,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         mapInstanceRef.current = null;
       }
 
-      // Center map around user's street
       const initialCenter: [number, number] = [userStreet.coordinates.lat, userStreet.coordinates.lng];
 
       const map = L.map(mapContainerRef.current, {
@@ -138,19 +120,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      // OpenStreetMap standard tiles
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors',
         maxZoom: 19,
       }).addTo(map);
 
-      // Map click handler: allows tapping anywhere on the map to set your street pin
       map.on('click', (e: Leaflet.LeafletMouseEvent) => {
         triggerHaptic('tap');
         const lat = e.latlng.lat;
         const lng = e.latlng.lng;
 
-        // Find nearest known street location or name it
         let closest = streetLocations[0];
         let minD = Infinity;
         streetLocations.forEach((st) => {
@@ -172,7 +151,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     initMap();
 
     return () => {
-      isMounted = false;
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -180,7 +158,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     };
   }, []);
 
-  // Re-render markers and polylines whenever userStreet or filteredRides change
   useEffect(() => {
     async function updateLayers() {
       if (!mapInstanceRef.current) return;
@@ -191,7 +168,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
   }, [userStreet, filteredRides, selectedRide]);
 
   const renderMapElements = (L: typeof Leaflet, map: Leaflet.Map) => {
-    // Clear previous polylines & markers
     polylinesRef.current.forEach((p) => p.remove());
     polylinesRef.current = [];
 
@@ -200,10 +176,9 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
     const userCoords: [number, number] = [userStreet.coordinates.lat, userStreet.coordinates.lng];
 
-    // 1. User Street Pin with 500m walking radius halo
     const userWalkingCircle = L.circle(userCoords, {
       radius: 400,
-      color: '#0D6E6E',
+      color: '#0F766E',
       fillColor: '#14B8A6',
       fillOpacity: 0.12,
       weight: 1.5,
@@ -220,8 +195,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             <circle cx="12" cy="10" r="3"/>
           </svg>
         </div>
-        <span class="mt-1 bg-stone-900/90 text-white px-2 py-0.5 rounded-full text-[9px] font-black shadow-md whitespace-nowrap z-20">
-          Your Street
+        <span class="mt-1 bg-slate-900/95 text-white px-2 py-0.5 rounded-md text-[9px] font-mono font-black shadow-md whitespace-nowrap z-20">
+          YOUR STREET
         </span>
       </div>
     `;
@@ -236,13 +211,11 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     const userMarker = L.marker(userCoords, { icon: userIcon, zIndexOffset: 1000 }).addTo(map);
     markersRef.current['user-pin'] = userMarker;
 
-    // 2. Draw Everyday Carpool Routes & Drivers
     filteredRides.forEach((ride) => {
       const isSelected = selectedRide?.id === ride.id;
       const isPasses = ride.passesNearUser;
 
-      // Polyline styles
-      const routeColor = isSelected ? '#0D6E6E' : isPasses ? '#14B8A6' : '#8B5CF6';
+      const routeColor = isSelected ? '#0F766E' : isPasses ? '#14B8A6' : '#64748B';
       const routeWeight = isSelected ? 6 : isPasses ? 4.5 : 3;
       const routeOpacity = isSelected ? 0.95 : isPasses ? 0.8 : 0.45;
 
@@ -261,14 +234,13 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       });
       polylinesRef.current.push(polyline);
 
-      // Driver vehicle marker at route origin / current spot
       const driverCoords = ride.routePath[0];
       const vehicleHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
           ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-teal-400/50 animate-ping"></span>' : ''}
-          <div class="relative w-8 h-8 rounded-full ${isSelected ? 'ring-2 ring-amber-400' : ''} bg-stone-900 shadow-md overflow-hidden">
+          <div class="relative w-8 h-8 rounded-full ${isSelected ? 'ring-2 ring-amber-400' : ''} bg-slate-900 shadow-md overflow-hidden">
             <img src="${ride.driverAvatar}" class="w-full h-full object-cover" alt="${ride.driverName}" />
-            <div class="absolute bottom-0 right-0 bg-[#0D6E6E] text-white p-0.5 rounded-tl-sm">
+            <div class="absolute bottom-0 right-0 bg-[#0F766E] text-white p-0.5 rounded-tl-sm">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-2 h-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
                 <circle cx="7" cy="17" r="2"/>
@@ -277,8 +249,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </svg>
             </div>
           </div>
-          <span class="mt-0.5 bg-white/95 dark:bg-stone-900/95 text-stone-900 dark:text-stone-100 px-1.5 py-0.2 rounded text-[8px] font-black shadow-xs whitespace-nowrap">
-            ${ride.driverName.split(' ')[0]} • ${ride.availableSeats} seat${ride.availableSeats === 1 ? '' : 's'}
+          <span class="mt-0.5 bg-white/95 dark:bg-slate-900/95 text-slate-900 dark:text-slate-100 px-1.5 py-0.5 rounded text-[8px] font-mono font-black shadow-xs whitespace-nowrap">
+            ${ride.driverName.split(' ')[0]} • ${ride.availableSeats} SEAT${ride.availableSeats === 1 ? '' : 'S'}
           </span>
         </div>
       `;
@@ -299,15 +271,14 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       markersRef.current[`driver-${ride.id}`] = driverMarker;
     });
 
-    // 3. Neighbors on nearby streets waiting for rides
     neighborhoodRiders.forEach((rider) => {
       const riderHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-          <div class="w-6 h-6 rounded-full bg-stone-900 overflow-hidden shadow-sm">
+          <div class="w-6 h-6 rounded-full bg-slate-900 overflow-hidden shadow-sm">
             <img src="${rider.avatar}" class="w-full h-full object-cover" alt="${rider.name}" />
           </div>
-          <span class="bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1 rounded text-[7px] font-bold shadow-xs whitespace-nowrap">
-            Co-Rider: ${rider.name.split(' ')[0]}
+          <span class="bg-amber-100 dark:bg-amber-950 text-amber-900 dark:text-amber-200 px-1 rounded text-[7px] font-mono font-bold shadow-xs whitespace-nowrap">
+            CO-RIDER: ${rider.name.split(' ')[0].toUpperCase()}
           </span>
         </div>
       `;
@@ -328,7 +299,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     });
   };
 
-  // Center on user's current GPS location
   const handleLocateMe = () => {
     if (typeof navigator !== 'undefined' && navigator.geolocation) {
       setIsLocating(true);
@@ -344,7 +314,6 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         },
         () => {
           setIsLocating(false);
-          // Fallback to Lekki Phase 1
           setUserStreetByNameOrCoords('Admiralty Way, Lekki Phase 1', { lat: 6.4480, lng: 3.4720 }, 'Lekki Phase 1');
         },
         { enableHighAccuracy: true, timeout: 5000 }
@@ -361,7 +330,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       particleCount: 50,
       spread: 60,
       origin: { y: 0.6 },
-      colors: ['#0D6E6E', '#14B8A6', '#F59E0B'],
+      colors: ['#0F766E', '#14B8A6', '#F59E0B'],
     });
 
     setTimeout(() => {
@@ -385,60 +354,55 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Top Floating Transit Command Strip (Only shown in full map mode) */}
       {!isBackgroundUnderlay && (
         <div className="absolute top-2.5 left-2.5 right-2.5 z-[500] max-w-[420px] mx-auto space-y-2 animate-in fade-in duration-200">
-          {/* Unibody Split Transit Capsule */}
-          <div className="floating-surface rounded-2xl p-1.5 flex items-center gap-1.5 shadow-specular">
-            {/* Origin Street Half */}
+          <div className="floating-surface rounded-2xl p-1.5 flex items-center gap-1">
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setShowStreetPicker(true);
               }}
-              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-500/10"
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-100 dark:hover:bg-[#171F29]"
               title="Tap to change origin pickup street"
             >
               <MapPin className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">
-                  Pickup
+                <span className="text-[8.5px] font-mono uppercase font-bold text-slate-400 block leading-none">
+                  PICKUP
                 </span>
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
+                <span className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
                   {userStreet.name.split(',')[0]}
                 </span>
               </div>
             </button>
 
-            {/* Transit Direction Arrow Divider */}
             <div className="flex items-center justify-center px-1 text-slate-400 dark:text-slate-500">
               <ArrowRight className="w-3.5 h-3.5" />
             </div>
 
-            {/* Destination Half */}
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setShowDestPicker(true);
               }}
-              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-500/10"
+              className="flex-1 flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-left transition-all active-spring hover:bg-slate-100 dark:hover:bg-[#171F29]"
               title="Tap to filter destination"
             >
-              <Compass className="w-3.5 h-3.5 text-teal-500 flex-shrink-0" />
+              <Compass className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] uppercase font-bold text-slate-400 block leading-none">
-                  Destination
+                <span className="text-[8.5px] font-mono uppercase font-bold text-slate-400 block leading-none">
+                  DESTINATION
                 </span>
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
+                <span className="text-xs font-extrabold text-slate-900 dark:text-slate-100 truncate block mt-0.5">
                   {selectedDestination === 'all' ? 'Any Corridor' : selectedDestination}
                 </span>
               </div>
             </button>
 
-            {/* Switch to Deck View */}
             <button
               onClick={() => {
                 triggerHaptic('switch');
                 setActiveTab('deck');
               }}
-              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 active-spring flex-shrink-0 hover:bg-slate-500/10"
+              className="p-2 rounded-xl text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 active-spring flex-shrink-0 hover:bg-slate-100 dark:hover:bg-[#171F29]"
               title="Switch to Swipe Cards deck"
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
@@ -446,11 +410,11 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           </div>
 
           {/* Compact Day Filter Chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-1">
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-0.5">
             {(
               [
                 { id: 'all', label: 'All Days' },
-                { id: 'now', label: '⚡ Leaving Now' },
+                { id: 'now', label: 'Leaving Now' },
                 { id: 'today', label: 'Today' },
                 { id: 'tomorrow', label: 'Tomorrow' },
                 { id: 'weekend', label: 'Weekend' },
@@ -462,10 +426,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   triggerHaptic('tap');
                   setSelectedDayFilter(chip.id);
                 }}
-                className={`px-3 py-1 rounded-full text-[10.5px] font-bold whitespace-nowrap transition-all active-spring ${
+                className={`px-3 py-1 rounded-xl text-[10.5px] font-bold whitespace-nowrap transition-all active-spring ${
                   selectedDayFilter === chip.id
                     ? 'btn-electric-mint'
-                    : 'floating-pill bg-white/80 dark:bg-[#12161A]/80 text-slate-600 dark:text-slate-300'
+                    : 'floating-pill text-slate-700 dark:text-slate-300'
                 }`}
               >
                 {chip.label}
@@ -483,113 +447,126 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         <button
           onClick={handleLocateMe}
           disabled={isLocating}
-          className="absolute bottom-24 right-3 z-30 w-11 h-11 rounded-full floating-pill bg-white/95 dark:bg-[#12161A]/95 text-teal-600 dark:text-teal-400 flex items-center justify-center active-spring shadow-specular"
+          className="absolute bottom-24 right-3 z-30 w-10 h-10 rounded-xl floating-pill text-[#0F766E] dark:text-[#14B8A6] flex items-center justify-center active-spring"
           title="Pin my current GPS street"
         >
-          <Crosshair className={`w-5 h-5 ${isLocating ? 'animate-spin' : ''}`} />
+          <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
         </button>
       )}
 
       {/* Bottom Floating Street Ride Card */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
         <div className="absolute bottom-[4.75rem] left-2.5 right-2.5 z-30 max-w-[420px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="floating-surface rounded-3xl p-3.5 space-y-2.5 text-slate-900 dark:text-slate-100 shadow-specular">
+          <div className="floating-surface rounded-2xl overflow-hidden text-slate-900 dark:text-slate-100">
             {/* Top row: Driver, Car, Fuel Split */}
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-2.5">
-                <img
-                  src={selectedRide.driverAvatar}
-                  alt={selectedRide.driverName}
-                  className="w-10 h-10 rounded-2xl object-cover shadow-xs"
-                />
-                <div>
+            <div className="p-3.5 flex items-start justify-between border-b border-slate-200/70 dark:border-white/8">
+              <div className="flex items-center gap-2.5 min-w-0">
+                <div className="relative w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-mono font-bold text-xs border border-slate-200/80 dark:border-white/10 flex-shrink-0 overflow-hidden">
+                  <span>{selectedRide.driverName.split(' ').map((n) => n[0]).join('')}</span>
+                  <img
+                    src={selectedRide.driverAvatar}
+                    alt={selectedRide.driverName}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={(e) => {
+                      (e.target as HTMLElement).style.display = 'none';
+                    }}
+                  />
+                </div>
+                <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
-                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100">{selectedRide.driverName}</h4>
-                    <span className="text-[9px] bg-teal-500/15 text-teal-700 dark:text-teal-300 font-bold px-1.5 py-0.5 rounded-full font-mono tabular-nums">
+                    <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
+                      {selectedRide.driverName}
+                    </h4>
+                    <span className="text-[9px] bg-teal-500/12 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] font-bold px-1.5 py-0.5 rounded-md font-mono tabular-nums flex-shrink-0">
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
-                  <span className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium block">
+                  <span className="text-[10.5px] text-slate-500 dark:text-slate-400 font-medium truncate block">
                     {selectedRide.driverRole}
                   </span>
                 </div>
               </div>
 
-              <div className="text-right">
-                <span className="text-sm font-black text-teal-600 dark:text-teal-400 font-mono tabular-nums block">
+              <div className="text-right flex-shrink-0">
+                <span className="text-sm font-black text-[#0F766E] dark:text-[#14B8A6] font-mono tabular-nums block">
                   {formatNgn(selectedRide.fuelSplitNgn)}
                 </span>
-                <span className="text-[9px] uppercase font-mono tracking-wide text-slate-500 dark:text-slate-400">
-                  Fair Split
+                <span className="text-[8.5px] uppercase font-mono tracking-wider text-slate-500 dark:text-slate-400">
+                  FAIR SPLIT
                 </span>
               </div>
             </div>
 
             {/* Route & Pickup Corner Callout */}
-            <div className="bg-slate-100/70 dark:bg-slate-900/60 rounded-2xl p-2.5 text-xs space-y-1.5">
+            <div className="px-3.5 py-2.5 bg-slate-50/70 dark:bg-[#0D1218]/60 border-b border-slate-200/70 dark:border-white/8 text-xs space-y-1.5">
               <div className="flex items-center justify-between text-[11px] font-bold">
-                <span className="flex items-center gap-1.5 text-emerald-600 dark:text-emerald-400">
+                <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 truncate">
                   <MapPin className="w-3.5 h-3.5 flex-shrink-0" />
                   <span className="truncate">{selectedRide.pickupStreetCorner}</span>
                 </span>
                 <span className="text-[10px] font-mono tabular-nums text-slate-500 dark:text-slate-400 flex-shrink-0">
-                  ~{selectedRide.pickupWalkMinutes} min walk
+                  ~{selectedRide.pickupWalkMinutes}m walk
                 </span>
               </div>
 
-              <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-0.5">
-                <span className="flex items-center gap-1 font-semibold text-slate-800 dark:text-slate-200">
-                  <ArrowRight className="w-3 h-3 text-teal-500" />
-                  Heading to: <strong className="text-slate-900 dark:text-slate-100">{selectedRide.destination}</strong>
+              <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+                <span className="flex items-center gap-1 font-semibold text-slate-700 dark:text-slate-200 truncate">
+                  <ArrowRight className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                  <span>To:</span>
+                  <strong className="text-slate-900 dark:text-slate-100 truncate">{selectedRide.destination}</strong>
                 </span>
-                <span className="flex items-center gap-1 font-mono font-bold text-amber-600 dark:text-amber-400">
+                <span className="flex items-center gap-1 font-mono font-bold text-amber-600 dark:text-amber-400 flex-shrink-0">
                   <Clock className="w-3 h-3" />
                   {selectedRide.departureDay}, {selectedRide.departureTime}
                 </span>
               </div>
             </div>
 
-            {/* Vehicle & Available Seats */}
-            <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 px-1">
-              <span className="flex items-center gap-1 font-semibold truncate">
-                <Car className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                <span>{selectedRide.vehicle.make} {selectedRide.vehicle.model}</span>
-                <span className="font-mono tabular-nums">({selectedRide.vehicle.plateNumber})</span>
-              </span>
-              <span className="font-bold text-teal-600 dark:text-teal-400 font-mono tabular-nums flex-shrink-0">
-                {selectedRide.availableSeats} of {selectedRide.totalSeats} seats open
-              </span>
-            </div>
+            {/* Vehicle & Action Bar */}
+            <div className="p-3 space-y-2.5">
+              <div className="flex items-center justify-between text-[10.5px] text-slate-600 dark:text-slate-300">
+                <span className="flex items-center gap-1.5 font-bold truncate">
+                  <Car className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                  <span>{selectedRide.vehicle.make} {selectedRide.vehicle.model}</span>
+                  <span className="plate-badge">{selectedRide.vehicle.plateNumber}</span>
+                </span>
+                <span className="font-bold text-[#0F766E] dark:text-[#14B8A6] font-mono tabular-nums text-[10px] flex-shrink-0">
+                  {selectedRide.availableSeats}/{selectedRide.totalSeats} SEATS
+                </span>
+              </div>
 
-            {/* Split Action Pill: Unibody Segmented Capsule */}
-            <div className="flex items-center gap-2 pt-0.5">
-              <button
-                onClick={() => handleBookRide(selectedRide)}
-                className="flex-1 py-3 btn-electric-mint rounded-2xl flex items-center justify-center gap-2 active-spring text-xs font-black shadow-specular"
-              >
-                <Sparkles className="w-4 h-4" />
-                <span>Join Carpool • <span className="font-mono tabular-nums">{formatNgn(selectedRide.fuelSplitNgn)}</span></span>
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => handleBookRide(selectedRide)}
+                  className="flex-1 py-2.5 btn-electric-mint rounded-xl flex items-center justify-center gap-1.5 active-spring text-xs font-black"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>
+                    Join Carpool •{' '}
+                    <span className="font-mono tabular-nums">{formatNgn(selectedRide.fuelSplitNgn)}</span>
+                  </span>
+                </button>
 
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  const threadId = getOrCreateThreadForDriver({
-                    id: selectedRide.driverId,
-                    name: selectedRide.driverName,
-                    avatar: selectedRide.driverAvatar,
-                    plateNumber: selectedRide.vehicle.plateNumber,
-                    safeZoneName: selectedRide.pickupStreetCorner,
-                    employer: selectedRide.driverRole,
-                  });
-                  setActiveThreadId(threadId);
-                  setActiveTab('chats');
-                }}
-                className="px-4 py-3 floating-pill bg-slate-100/90 dark:bg-slate-800/90 hover:bg-slate-200 dark:hover:bg-slate-700 text-teal-600 dark:text-teal-400 text-xs font-bold rounded-2xl flex items-center justify-center gap-1.5 active-spring shadow-specular"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span>Chat</span>
-              </button>
+                <button
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    const threadId = getOrCreateThreadForDriver({
+                      id: selectedRide.driverId,
+                      name: selectedRide.driverName,
+                      avatar: selectedRide.driverAvatar,
+                      plateNumber: selectedRide.vehicle.plateNumber,
+                      safeZoneName: selectedRide.pickupStreetCorner,
+                      employer: selectedRide.driverRole,
+                    });
+                    setActiveThreadId(threadId);
+                    setActiveTab('chats');
+                  }}
+                  className="px-3.5 py-2.5 bg-slate-100 dark:bg-[#171F29] hover:bg-slate-200/70 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/10 text-[#0F766E] dark:text-[#14B8A6] text-xs font-extrabold rounded-xl flex items-center justify-center gap-1.5 active-spring"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  <span>Chat</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -597,68 +574,65 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
       {/* Booking Success Banner */}
       {!isBackgroundUnderlay && bookedSuccessRide && (
-        <div className="absolute bottom-[4.75rem] left-3 right-3 z-30 max-w-[400px] mx-auto bg-emerald-600/95 backdrop-blur-xl text-white rounded-2xl p-3.5 shadow-floating-lg flex items-center justify-between animate-in zoom-in-95">
+        <div className="absolute bottom-[4.75rem] left-3 right-3 z-30 max-w-[400px] mx-auto bg-emerald-600 text-white rounded-2xl p-3.5 border border-emerald-400/40 flex items-center justify-between animate-in zoom-in-95">
           <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-6 h-6 text-white" />
+            <CheckCircle2 className="w-5 h-5 text-white" />
             <div>
-              <h4 className="text-xs font-black">Seat Reserved!</h4>
+              <h4 className="text-xs font-black">Seat Reserved</h4>
               <p className="text-[10px] text-emerald-100">
                 Opening chat with {bookedSuccessRide.driverName}...
               </p>
             </div>
           </div>
-          <span className="font-mono text-xs font-black bg-emerald-700/80 px-2 py-1 rounded-lg shadow-floating-sm">
-            {formatNgn(bookedSuccessRide.fuelSplitNgn)} Held
+          <span className="font-mono tabular-nums text-xs font-black bg-black/20 px-2 py-1 rounded-lg">
+            {formatNgn(bookedSuccessRide.fuelSplitNgn)} HELD
           </span>
         </div>
       )}
 
       {/* Street Picker Modal */}
       {!isBackgroundUnderlay && showStreetPicker && (
-        <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-md flex items-end justify-center p-3 animate-in fade-in">
-          <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-[1000] bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 animate-in fade-in">
+          <div className="w-full max-w-[400px] floating-surface rounded-2xl p-4 space-y-3 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200/70 dark:border-white/8">
               <div>
                 <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
-                  Select Your Street / Area
+                  Select Pickup Street
                 </h3>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Find carpool rides departing from or passing your street
+                  Find carpool rides passing your neighborhood
                 </p>
               </div>
               <button
                 onClick={() => setShowStreetPicker(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
+                className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#171F29] text-slate-500 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Search Input */}
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 placeholder="Search street, estate, or neighborhood..."
                 value={searchStreetText}
                 onChange={(e) => setSearchStreetText(e.target.value)}
-                className="w-full pl-9 pr-3 py-2 bg-slate-100/80 dark:bg-slate-900/80 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden shadow-inner"
+                className="w-full pl-8 pr-3 py-2 bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 rounded-xl text-xs text-slate-900 dark:text-slate-100 focus:outline-hidden"
               />
             </div>
 
-            {/* Quick GPS Location Option */}
             <button
               onClick={() => {
                 setShowStreetPicker(false);
                 handleLocateMe();
               }}
-              className="w-full py-2.5 px-3 btn-electric-mint text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-specular active-spring transition-all"
+              className="w-full py-2.5 px-3 btn-electric-mint text-xs font-black rounded-xl flex items-center justify-center gap-2 active-spring transition-all"
             >
               <Crosshair className="w-4 h-4" />
               <span>Use Current GPS Location</span>
             </button>
 
-            {/* Street List */}
             <div className="flex-1 overflow-y-auto space-y-1.5 max-h-[300px] pr-1">
               {filteredLocations.map((st) => (
                 <button
@@ -671,10 +645,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                       mapInstanceRef.current.flyTo([st.coordinates.lat, st.coordinates.lng], 14);
                     }
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start justify-between active-spring ${
+                  className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-start justify-between active-spring ${
                     userStreet.id === st.id
-                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-specular'
-                      : 'bg-slate-100/60 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
+                      ? 'bg-teal-500/12 border-teal-500/30 text-[#0F766E] dark:text-[#14B8A6]'
+                      : 'bg-slate-50 dark:bg-[#171F29] border-slate-200/70 dark:border-white/8 hover:border-slate-300'
                   }`}
                 >
                   <div>
@@ -697,26 +671,25 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
       {/* Destination Picker Modal */}
       {!isBackgroundUnderlay && showDestPicker && (
-        <div className="fixed inset-0 z-[1000] bg-black/50 backdrop-blur-md flex items-end justify-center p-3 animate-in fade-in">
-          <div className="w-full max-w-[400px] bg-white/95 dark:bg-[#141C24]/95 backdrop-blur-2xl rounded-3xl p-4 shadow-floating-lg space-y-3 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between">
+        <div className="fixed inset-0 z-[1000] bg-slate-950/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 animate-in fade-in">
+          <div className="w-full max-w-[400px] floating-surface rounded-2xl p-4 space-y-3 max-h-[85vh] flex flex-col">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-200/70 dark:border-white/8">
               <div>
                 <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
-                  Where Are You Going?
+                  Select Corridor Destination
                 </h3>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Filter drivers whose route is heading your way
+                  Filter drivers heading toward your commercial hub
                 </p>
               </div>
               <button
                 onClick={() => setShowDestPicker(false)}
-                className="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors"
+                className="p-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-[#171F29] text-slate-500 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
 
-            {/* Common Destinations List */}
             <div className="flex-1 overflow-y-auto space-y-1.5 max-h-[350px] pr-1">
               {[
                 { id: 'all', title: 'Anywhere / Show All Rides', desc: 'See all drivers near your street' },
@@ -734,10 +707,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                     setSelectedDestination(dest.id);
                     setShowDestPicker(false);
                   }}
-                  className={`w-full text-left p-2.5 rounded-xl transition-all flex items-start justify-between active-spring ${
+                  className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-start justify-between active-spring ${
                     selectedDestination === dest.id
-                      ? 'bg-teal-500/15 text-teal-700 dark:text-teal-300 shadow-specular'
-                      : 'bg-slate-100/60 dark:bg-slate-900/60 hover:bg-slate-100 dark:hover:bg-slate-800 shadow-xs'
+                      ? 'bg-teal-500/12 border-teal-500/30 text-[#0F766E] dark:text-[#14B8A6]'
+                      : 'bg-slate-50 dark:bg-[#171F29] border-slate-200/70 dark:border-white/8 hover:border-slate-300'
                   }`}
                 >
                   <div>

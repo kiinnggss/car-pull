@@ -39,7 +39,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   viewportFit: 'cover',
-  themeColor: '#F6F2EA',
+  themeColor: '#090D11',
 };
 
 export default function RootLayout({
@@ -49,7 +49,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen bg-slate-100 dark:bg-[#06080A] text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col items-center">
+      <body className="min-h-screen bg-[#E8EEF5] dark:bg-[#05080B] text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col items-center justify-center selection:bg-teal-500/20">
         {children}
       </body>
     </html>

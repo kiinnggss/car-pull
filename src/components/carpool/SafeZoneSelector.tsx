@@ -26,32 +26,35 @@ export const SafeZoneSelector: React.FC = () => {
   const getZoneTag = (type: SafeZoneType) => {
     switch (type) {
       case 'fuel_station':
-        return 'Fuel Station Forecourt';
+        return 'FUEL FORECOURT';
       case 'shopping_mall':
-        return 'Mall Security Staging';
+        return 'MALL STAGING';
       case 'gated_estate_gate':
-        return 'Estate Visitor Bay';
+        return 'ESTATE GATE';
       case 'bank_premises':
-        return 'Bank Secure Forecourt';
+        return 'BANK FORECOURT';
       default:
-        return 'Safe Zone';
+        return 'SAFE HUB';
     }
   };
 
   return (
     <div className="space-y-3">
       {/* Geofencing Anti-Agbero Banner */}
-      <div className="bg-amber-500/10 dark:bg-amber-950/40 rounded-2xl p-3 flex items-start gap-2.5 shadow-floating-sm">
+      <div className="bg-amber-500/10 border border-amber-500/25 rounded-2xl p-3 flex items-start gap-2.5">
         <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0 mt-0.5" />
         <div className="text-[11px] text-amber-950 dark:text-amber-200 leading-snug">
-          <span className="font-bold text-amber-900 dark:text-amber-300">Anti-Agbero Geofenced Snapping:</span> Expressways, bus stops, and roundabouts are blocked. Pickups are strictly restricted to CCTV-monitored off-street safe hubs with max 45s dwell time.
+          <span className="font-mono font-bold uppercase text-amber-900 dark:text-amber-300">
+            ANTI-AGBERO GEOFENCE:
+          </span>{' '}
+          Expressways, bus stops, and roundabouts are blocked. Pickups are restricted to CCTV-monitored off-street hubs with max 45s dwell time.
         </div>
       </div>
 
       {/* List of Verified Safe Zones */}
       <div className="space-y-2">
-        <label className="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block px-1">
-          Select Off-Street Pickup Hub (Ajah ➔ VI)
+        <label className="text-[10px] font-mono font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider block px-1">
+          SELECT OFF-STREET PICKUP HUB (AJAH → VI)
         </label>
         {safeZones.map((zone) => {
           const isSelected = selectedSafeZone.id === zone.id;
@@ -59,39 +62,41 @@ export const SafeZoneSelector: React.FC = () => {
             <button
               key={zone.id}
               onClick={() => setSelectedSafeZone(zone)}
-              className={`w-full text-left p-3.5 rounded-2xl transition-all flex items-center justify-between ${
+              className={`w-full text-left p-3.5 floating-surface rounded-2xl transition-all flex items-center justify-between gap-2 ${
                 isSelected
-                  ? 'bg-teal-50 dark:bg-teal-950/60 ring-2 ring-[#0F766E] dark:ring-[#14B8A6] shadow-floating'
-                  : 'bg-white dark:bg-[#141C24] shadow-floating-sm hover:shadow-floating'
+                  ? 'ring-2 ring-[#0F766E] dark:ring-[#14B8A6]'
+                  : 'hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
-              <div className="flex items-start gap-3">
+              <div className="flex items-start gap-3 min-w-0">
                 <div
-                  className={`p-2 rounded-xl mt-0.5 shadow-floating-sm ${
-                    isSelected ? 'bg-[#0F766E] text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
+                  className={`p-2 rounded-xl mt-0.5 border flex-shrink-0 ${
+                    isSelected
+                      ? 'bg-[#0F766E] border-teal-600 text-white'
+                      : 'bg-slate-100 dark:bg-[#171F29] border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300'
                   }`}
                 >
                   {getZoneIcon(zone.zone_type)}
                 </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">{zone.name}</span>
-                    <span className="text-[9px] font-semibold text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full shadow-floating-sm">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="text-xs font-black text-slate-900 dark:text-slate-100">{zone.name}</span>
+                    <span className="text-[8.5px] font-mono font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 px-1.5 py-0.5 rounded-md">
                       {getZoneTag(zone.zone_type)}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-600 dark:text-slate-400 line-clamp-1 mt-0.5">{zone.address}</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">{zone.address}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium flex items-center gap-1">
-                      <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> Armed Security Guarded
+                    <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-bold flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-600 dark:text-emerald-400" /> Security Guarded
                     </span>
-                    <span className="text-[10px] text-slate-400 dark:text-slate-500">• 45s Max Dwell</span>
+                    <span className="text-[10px] font-mono text-slate-400 dark:text-slate-500">• 45S MAX DWELL</span>
                   </div>
                 </div>
               </div>
 
               {isSelected && (
-                <div className="w-6 h-6 rounded-full bg-[#0F766E] flex items-center justify-center text-white flex-shrink-0 shadow-floating-sm">
+                <div className="w-6 h-6 rounded-lg bg-[#0F766E] flex items-center justify-center text-white flex-shrink-0">
                   <Check className="w-3.5 h-3.5" />
                 </div>
               )}

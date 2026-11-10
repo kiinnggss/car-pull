@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { formatNgn } from '@/lib/utils';
 import {
-  Clock,
   Car,
   Users,
   ShieldCheck,
@@ -20,7 +19,7 @@ interface DeparturesSheetProps {
 }
 
 export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClose }) => {
-  const { drivers, selectDriverById, currentDriver, commuteDirection } = useAppStore();
+  const { drivers, selectDriverById, currentDriver } = useAppStore();
   const [mounted, setMounted] = useState(false);
   const [selectedTimeFilter, setSelectedTimeFilter] = useState<string>('all');
 
@@ -28,7 +27,6 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
     setMounted(true);
   }, []);
 
-  // Back button integration: hardware or browser back navigates back a step
   useEffect(() => {
     if (!isOpen) return;
 
@@ -54,43 +52,42 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
     }
   };
 
-  // Distinct departure times
   const timeSlots = Array.from(new Set(drivers.map((d) => d.corridor.departure_time)));
 
-  const filteredDrivers = selectedTimeFilter === 'all'
-    ? drivers
-    : drivers.filter((d) => d.corridor.departure_time === selectedTimeFilter);
+  const filteredDrivers =
+    selectedTimeFilter === 'all'
+      ? drivers
+      : drivers.filter((d) => d.corridor.departure_time === selectedTimeFilter);
 
   return createPortal(
-    <div className="fixed inset-0 z-[600] bg-black/60 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
-      <div className="w-full max-w-[420px] bg-white dark:bg-[#141C24] rounded-t-3xl sm:rounded-3xl p-5 space-y-3.5 shadow-floating-lg max-h-[88vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
-        
+    <div className="fixed inset-0 z-[600] bg-slate-950/70 backdrop-blur-xs overflow-y-auto p-2 sm:p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
+      <div className="w-full max-w-[410px] floating-surface rounded-2xl p-4 space-y-3.5 max-h-[88vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
         {/* Header with Step-Back Navigation */}
-        <div className="flex items-center justify-between pb-2.5">
+        <div className="flex items-center justify-between pb-2.5 border-b border-slate-200/70 dark:border-white/8">
           <button
             onClick={handleBack}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100/90 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-bold text-xs transition-all active:scale-95 shadow-floating-sm"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 font-bold text-xs transition-all active-press"
             title="Return to corridor deck"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#F58A25]" />
+            <ArrowLeft className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
             <span>Back</span>
           </button>
 
           <div className="text-center">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 tracking-tight">
+            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
               Corridor Schedule
             </h3>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium block">
-              Flexible Timetable &amp; Community Rides
+            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold block">
+              VERIFIED TIMETABLE
             </span>
           </div>
 
           <button
             onClick={handleBack}
-            className="w-7 h-7 rounded-full bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center shadow-floating-sm transition-all"
+            className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all"
             title="Close"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -98,22 +95,22 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar text-xs">
           <button
             onClick={() => setSelectedTimeFilter('all')}
-            className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs shadow-floating-sm ${
+            className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs border ${
               selectedTimeFilter === 'all'
-                ? 'bg-[#0F766E] text-white'
-                : 'bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                ? 'btn-electric-mint border-transparent'
+                : 'bg-slate-100 dark:bg-[#171F29] border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300'
             }`}
           >
-            All Departures ({drivers.length})
+            All ({drivers.length})
           </button>
           {timeSlots.map((time) => (
             <button
               key={time}
               onClick={() => setSelectedTimeFilter(time)}
-              className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all text-xs shadow-floating-sm ${
+              className={`px-3 py-1.5 rounded-xl font-mono font-bold whitespace-nowrap transition-all text-xs border ${
                 selectedTimeFilter === time
-                  ? 'bg-[#0F766E] text-white'
-                  : 'bg-slate-100/90 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                  ? 'btn-electric-mint border-transparent'
+                  : 'bg-slate-100 dark:bg-[#171F29] border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300'
               }`}
             >
               {time}
@@ -129,96 +126,93 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
             return (
               <div
                 key={driver.id}
-                className={`bg-slate-50/90 dark:bg-slate-900/60 rounded-2xl p-3.5 shadow-floating-sm transition-all ${
-                  isSelected
-                    ? 'ring-2 ring-[#0F766E]/40'
-                    : ''
+                className={`bg-slate-50/90 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 rounded-2xl p-3.5 transition-all space-y-2.5 ${
+                  isSelected ? 'ring-1 ring-[#0F766E] dark:ring-[#14B8A6]' : ''
                 }`}
               >
                 {/* Time & Cost Header */}
-                <div className="flex items-center justify-between pb-1.5">
+                <div className="flex items-center justify-between pb-2 border-b border-slate-200/70 dark:border-white/8">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-50 dark:bg-teal-950/60 px-2.5 py-1 rounded-lg shadow-2xs">
+                    <span className="text-xs font-mono tabular-nums font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-500/12 border border-teal-500/20 px-2.5 py-0.5 rounded-lg">
                       {driver.corridor.departure_time}
                     </span>
-                    <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
+                    <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1">
                       <Users className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6]" />
-                      {driver.corridor.available_seats} seats left
+                      {driver.corridor.available_seats} SEATS
                     </span>
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                    <span className="text-xs font-black font-mono tabular-nums text-slate-900 dark:text-slate-100">
                       {formatNgn(driver.corridor.fuel_split_ngn)}
                     </span>
-                    <span className="text-[9px] text-slate-500 dark:text-slate-400 block uppercase font-mono">
-                      Fair Split
+                    <span className="text-[8.5px] text-slate-500 dark:text-slate-400 block uppercase font-mono">
+                      FAIR SPLIT
                     </span>
                   </div>
                 </div>
 
                 {/* Driver Info & Vehicle Plate */}
-                <div className="flex items-center justify-between pt-2">
-                  <div className="flex items-center gap-2.5">
-                    <div className="relative w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 overflow-hidden shadow-floating-sm">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="relative w-10 h-10 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold text-xs flex-shrink-0 overflow-hidden border border-slate-200/80 dark:border-white/10">
                       <span>{driver.name.split(' ').map((n) => n[0]).join('')}</span>
                       <img
                         src={driver.avatar}
                         alt={driver.name}
                         className="absolute inset-0 w-full h-full object-cover"
-                        onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }}
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = 'none';
+                        }}
                       />
                     </div>
-                    <div>
+                    <div className="min-w-0">
                       <div className="flex items-center gap-1">
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">
+                        <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
                           {driver.name}
                         </h4>
-                        <ShieldCheck className="w-3 h-3 text-[#0F766E] dark:text-[#14B8A6]" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
                       </div>
-                      <span className="text-[10px] font-semibold text-[#0F766E] dark:text-[#14B8A6] block">
+                      <span className="text-[10px] font-semibold text-[#0F766E] dark:text-[#14B8A6] truncate block">
                         {driver.employer}
                       </span>
                     </div>
                   </div>
 
-                  {/* Vehicle & Plate Tag */}
-                  <div className="text-right text-xs">
-                    <div className="flex items-center gap-1 text-slate-800 dark:text-slate-200 font-semibold text-[11px]">
+                  <div className="text-right text-xs flex-shrink-0">
+                    <div className="flex items-center justify-end gap-1 text-slate-700 dark:text-slate-200 font-bold text-[10.5px] mb-1">
                       <Car className="w-3 h-3 text-slate-400" />
-                      <span>{driver.vehicle.make} {driver.vehicle.model}</span>
+                      <span>
+                        {driver.vehicle.make} {driver.vehicle.model}
+                      </span>
                     </div>
-                    <span className="text-[9px] font-mono font-bold text-[#F58A25] bg-amber-50 dark:bg-amber-950/40 px-2 py-0.5 rounded-md shadow-2xs inline-block mt-0.5">
-                      {driver.vehicle.plate_number}
-                    </span>
+                    <span className="plate-badge">{driver.vehicle.plate_number}</span>
                   </div>
                 </div>
 
                 {/* Action CTA Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={() => {
-                      selectDriverById(driver.id);
-                      onClose();
-                    }}
-                    className={`w-full py-2 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 shadow-floating-sm active:scale-[0.99] ${
-                      isSelected
-                        ? 'bg-teal-50 dark:bg-teal-950/60 text-[#0F766E] dark:text-[#14B8A6] font-bold shadow-inner'
-                        : 'bg-[#0F766E] hover:bg-[#0D655E] text-white'
-                    }`}
-                  >
-                    <span>{isSelected ? 'Active On Your Deck' : `Select & View Profile`}</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    selectDriverById(driver.id);
+                    onClose();
+                  }}
+                  className={`w-full py-2 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1.5 active-press ${
+                    isSelected
+                      ? 'bg-teal-500/12 border border-teal-500/25 text-[#0F766E] dark:text-[#14B8A6]'
+                      : 'btn-electric-mint'
+                  }`}
+                >
+                  <span>{isSelected ? 'Active On Your Deck' : 'Select & View Profile'}</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
               </div>
             );
           })}
         </div>
 
         {/* Muted Legal Notice */}
-        <div className="pt-2 text-center text-[10px] text-slate-500 dark:text-slate-400">
-          <span>Lagos State Transport Reform Act (Sec 44): Non-Commercial Commute</span>
+        <div className="pt-1 text-center text-[10px] font-mono text-slate-500 dark:text-slate-400">
+          <span>LAGOS TRANSPORT REFORM ACT (SEC 44) • NON-COMMERCIAL</span>
         </div>
       </div>
     </div>,
