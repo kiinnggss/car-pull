@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { RoutePlannerBar } from './RoutePlannerBar';
-import { RotateCcw, Sparkles, Compass, Car, ShieldCheck, ArrowRight, KeyRound } from 'lucide-react';
+import { RotateCcw, Sparkles, Compass, Check, ArrowRight, X } from 'lucide-react';
 import { CorridorDriver } from '@/lib/types';
 import { formatNgn } from '@/lib/utils';
 import { triggerHaptic } from '@/lib/haptics';
@@ -26,10 +26,19 @@ export const SwipeDeck: React.FC = () => {
   } = useAppStore();
 
   const [exitX, setExitX] = useState<number>(0);
-  const [bookedTicket, setBookedTicket] = useState<{
+  const [dispatchPill, setDispatchPill] = useState<{
+    id: number;
     driver: CorridorDriver;
     fareNgn: number;
   } | null>(null);
+
+  useEffect(() => {
+    if (!dispatchPill) return;
+    const timer = setTimeout(() => {
+      setDispatchPill(null);
+    }, 4500);
+    return () => clearTimeout(timer);
+  }, [dispatchPill]);
 
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-8, 8]);
@@ -47,7 +56,11 @@ export const SwipeDeck: React.FC = () => {
       triggerHaptic('match');
       setTimeout(() => {
         swipeRight();
-        setBookedTicket({ driver: driverSnapshot, fareNgn: fareSnapshot });
+        setDispatchPill({
+          id: Date.now(),
+          driver: driverSnapshot,
+          fareNgn: fareSnapshot,
+        });
         setExitX(0);
         x.set(0);
       }, 220);
@@ -70,7 +83,11 @@ export const SwipeDeck: React.FC = () => {
     triggerHaptic('match');
     setTimeout(() => {
       swipeRight();
-      setBookedTicket({ driver: driverSnapshot, fareNgn: fareSnapshot });
+      setDispatchPill({
+        id: Date.now(),
+        driver: driverSnapshot,
+        fareNgn: fareSnapshot,
+      });
       setExitX(0);
       x.set(0);
     }, 220);
@@ -169,173 +186,99 @@ export const SwipeDeck: React.FC = () => {
         <QuickBidPills onReject={handleManualReject} onAccept={handleManualAccept} />
       </div>
 
-      {/* Animated Boarding Pass Ticket Modal */}
+      {/* Top-Down Live Dispatch Pill (Zero Modal, Dynamic Island Style) */}
       <AnimatePresence>
-        {bookedTicket && (
+        {dispatchPill && (
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4"
-            onClick={() => setBookedTicket(null)}
+            key={dispatchPill.id}
+            initial={{ opacity: 0, y: -36, scale: 0.92 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -28, scale: 0.94 }}
+            transition={{ type: 'spring', stiffness: 420, damping: 28 }}
+            className="fixed top-3 left-1/2 -translate-x-1/2 z-[600] w-[calc(100%-28px)] max-w-[392px] pointer-events-auto"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9, y: 28, rotateX: 14 }}
-              animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 16 }}
-              transition={{ type: 'spring', stiffness: 360, damping: 26 }}
-              className="w-full max-w-[350px] rounded-[28px] overflow-hidden shadow-2xl relative"
+            <div
+              className="rounded-full p-1.5 pl-2 pr-1.5 shadow-2xl relative overflow-hidden flex items-center justify-between gap-2.5 backdrop-blur-xl"
               style={{
                 backgroundColor: 'var(--bg-sheet)',
                 color: 'var(--text-primary)',
                 border: 'var(--card-border-width, 1px) solid var(--border-subtle)',
               }}
-              onClick={(e) => e.stopPropagation()}
             >
-              {/* Top Boarding Pass Header */}
-              <div
-                className="px-5 pt-4 pb-3.5 flex items-center justify-between"
-                style={{
-                  backgroundColor: 'var(--accent-primary)',
-                  color: 'var(--accent-primary-fg)',
-                }}
-              >
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="w-4 h-4" />
-                  <span className="text-[11px] font-mono font-black uppercase tracking-wider">
-                    Seat Locked
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/15 text-[10.5px] font-mono font-black">
-                  <KeyRound className="w-3 h-3" />
-                  <span>PIN {offlinePin || '4829'}</span>
-                </div>
-              </div>
-
-              {/* Driver & Vehicle Stub */}
-              <div className="p-5 space-y-4">
-                <div className="flex items-center gap-3">
+              {/* Animated Checkmark + Driver Avatar */}
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="relative flex-shrink-0">
                   <img
-                    src={bookedTicket.driver.avatar}
-                    alt={bookedTicket.driver.name}
-                    className="w-12 h-12 rounded-2xl object-cover object-top flex-shrink-0 border"
-                    style={{ borderColor: 'var(--border-subtle)' }}
+                    src={dispatchPill.driver.avatar}
+                    alt={dispatchPill.driver.name}
+                    className="w-9 h-9 rounded-full object-cover object-top"
                   />
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-sm font-display font-black truncate">
-                      {bookedTicket.driver.name}
-                    </h4>
-                    <p
-                      className="text-[11px] font-medium truncate"
-                      style={{ color: 'var(--text-secondary)' }}
-                    >
-                      {bookedTicket.driver.vehicle.make} {bookedTicket.driver.vehicle.model}
-                    </p>
-                  </div>
-                  <span
-                    className="px-2.5 py-1 rounded-full text-[10px] font-mono font-black flex-shrink-0"
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 20, delay: 0.08 }}
+                    className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center ring-2 ring-black/40"
                     style={{
-                      backgroundColor: 'var(--bg-subtle)',
-                      color: 'var(--text-primary)',
+                      backgroundColor: 'var(--accent-primary)',
+                      color: 'var(--accent-primary-fg)',
                     }}
                   >
-                    {bookedTicket.driver.vehicle.plate_number}
-                  </span>
+                    <Check className="w-2.5 h-2.5 stroke-[3]" />
+                  </motion.span>
                 </div>
 
-                {/* Live Pickup Progress Track */}
-                <div
-                  className="p-3.5 rounded-2xl space-y-2.5"
-                  style={{ backgroundColor: 'var(--bg-subtle)' }}
-                >
-                  <div className="flex items-center justify-between text-[10.5px] font-bold">
-                    <span className="truncate max-w-[165px]">
-                      {selectedSafeZone.name}
-                    </span>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-1.5 text-xs font-extrabold truncate">
                     <span className="font-mono font-black">
-                      {bookedTicket.driver.corridor.departure_time}
+                      {formatNgn(dispatchPill.fareNgn)} locked
                     </span>
+                    <span className="opacity-40">·</span>
+                    <span className="truncate">{dispatchPill.driver.name.split(' ')[0]}</span>
                   </div>
-
-                  <div className="relative h-5 flex items-center">
-                    <div
-                      className="w-full h-1 rounded-full overflow-hidden"
-                      style={{ backgroundColor: 'var(--border-subtle)' }}
-                    >
-                      <motion.div
-                        initial={{ width: '10%' }}
-                        animate={{ width: '58%' }}
-                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full rounded-full"
-                        style={{ backgroundColor: 'var(--accent-primary)' }}
-                      />
-                    </div>
-                    <motion.div
-                      initial={{ left: '10%' }}
-                      animate={{ left: '54%' }}
-                      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-                      className="absolute w-6 h-6 rounded-full flex items-center justify-center shadow-md"
-                      style={{
-                        backgroundColor: 'var(--accent-primary)',
-                        color: 'var(--accent-primary-fg)',
-                      }}
-                    >
-                      <Car className="w-3.5 h-3.5" />
-                    </motion.div>
-                  </div>
-
-                  <div className="flex items-center justify-between text-[10px]">
-                    <span style={{ color: 'var(--text-secondary)' }}>
-                      Zero-Cash Escrow Held
-                    </span>
-                    <span className="font-mono font-black">
-                      {formatNgn(bookedTicket.fareNgn)}
-                    </span>
+                  <div
+                    className="text-[10px] font-mono truncate"
+                    style={{ color: 'var(--text-secondary)' }}
+                  >
+                    {selectedSafeZone.name} · PIN {offlinePin || '4829'}
                   </div>
                 </div>
               </div>
 
-              {/* Perforated Tear Line with Side Notches */}
-              <div className="relative flex items-center px-4">
-                <span
-                  className="w-4 h-4 rounded-full -ml-6 flex-shrink-0"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
-                />
-                <div
-                  className="flex-1 border-t-2 border-dashed mx-1"
-                  style={{ borderColor: 'var(--border-subtle)' }}
-                />
-                <span
-                  className="w-4 h-4 rounded-full -mr-6 flex-shrink-0"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
-                />
-              </div>
-
-              {/* Ticket Actions */}
-              <div className="p-4 pt-3.5 grid grid-cols-2 gap-2.5">
-                <button
-                  onClick={() => setBookedTicket(null)}
-                  className="py-2.5 rounded-full text-xs font-extrabold active-press transition-opacity hover:opacity-90"
-                  style={{ backgroundColor: 'var(--bg-subtle)' }}
-                >
-                  Keep Swiping
-                </button>
+              {/* Right: View Ride Pill + Dismiss */}
+              <div className="flex items-center gap-1 flex-shrink-0">
                 <button
                   onClick={() => {
-                    setBookedTicket(null);
+                    setDispatchPill(null);
                     setActiveTab('matches');
                   }}
-                  className="py-2.5 rounded-full text-xs font-extrabold flex items-center justify-center gap-1.5 active-press transition-opacity hover:opacity-90"
+                  className="h-8 px-3 rounded-full text-[11px] font-extrabold flex items-center gap-1 active-press"
                   style={{
                     backgroundColor: 'var(--accent-primary)',
                     color: 'var(--accent-primary-fg)',
                   }}
                 >
                   <span>View Ride</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+
+                <button
+                  onClick={() => setDispatchPill(null)}
+                  className="w-7 h-7 rounded-full flex items-center justify-center opacity-60 hover:opacity-100 active-press"
+                  aria-label="Dismiss dispatch pill"
+                >
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
-            </motion.div>
+
+              {/* Subtle 4.5s Drain Bar along bottom edge */}
+              <motion.div
+                initial={{ scaleX: 1 }}
+                animate={{ scaleX: 0 }}
+                transition={{ duration: 4.5, ease: 'linear' }}
+                className="absolute bottom-0 left-4 right-4 h-[2px] origin-left rounded-full opacity-75"
+                style={{ backgroundColor: 'var(--accent-primary)' }}
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
