@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useTransform, AnimatePresence } from 'framer-motion';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
@@ -26,11 +27,16 @@ export const SwipeDeck: React.FC = () => {
   } = useAppStore();
 
   const [exitX, setExitX] = useState<number>(0);
+  const [mounted, setMounted] = useState(false);
   const [dispatchPill, setDispatchPill] = useState<{
     id: number;
     driver: CorridorDriver;
     fareNgn: number;
   } | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (!dispatchPill) return;
@@ -103,90 +109,9 @@ export const SwipeDeck: React.FC = () => {
     }, 200);
   };
 
-  if (!currentDriver) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[420px] p-6 text-center space-y-4">
-        <div className="w-16 h-16 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center shadow-lg">
-          <Sparkles className="w-7 h-7" />
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-lg font-display font-black text-[#0B0C0E] dark:text-white">
-            All Corridor Peers Reviewed
-          </h3>
-          <p className="text-xs text-[#525866] dark:text-[#9BA1AE] max-w-xs">
-            You have swiped through every verified driver for this departure window. Reload the deck or explore the live street map.
-          </p>
-        </div>
-        <div className="flex items-center gap-2.5">
-          <button
-            onClick={resetDeck}
-            className="px-5 py-3 btn-electric-mint text-xs font-extrabold rounded-full flex items-center gap-2 active-press"
-          >
-            <RotateCcw className="w-4 h-4" />
-            <span>Reload Deck</span>
-          </button>
-          <button
-            onClick={() => setActiveTab('map')}
-            className="px-5 py-3 rounded-full bg-white dark:bg-[#14161B] border border-black/10 dark:border-white/10 text-xs font-extrabold text-[#0B0C0E] dark:text-white flex items-center gap-2 active-press"
-          >
-            <Compass className="w-4 h-4" />
-            <span>Open Map</span>
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="relative w-full max-w-[404px] mx-auto flex flex-col justify-between h-full min-h-0 select-none">
-      {/* Compact Route & Wishes Trigger Bar */}
-      <RoutePlannerBar />
-
-      {/* Swipeable Full-Bleed Card Stack */}
-      <div className="relative w-full px-3 flex-1 min-h-0 flex flex-col">
-        {/* Next Card Peek Stack */}
-        {activeDriverIndex + 1 < drivers.length && (
-          <div className="absolute inset-x-6 top-2 bottom-1 rounded-[30px] bg-black/25 dark:bg-white/5 scale-[0.96] translate-y-1.5 pointer-events-none" />
-        )}
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentDriver.id}
-            style={{ x, rotate, opacity }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            onDragEnd={handleDragEnd}
-            animate={{ x: exitX }}
-            transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="w-full flex-1 min-h-0 cursor-grab active:cursor-grabbing relative z-10 flex flex-col"
-          >
-            {/* Swipe Right Stamp */}
-            <motion.div
-              style={{ opacity: likeOpacity }}
-              className="absolute top-12 left-5 z-30 bg-[#C8FF00] text-[#0B0C0E] font-mono font-black text-xs px-3.5 py-1.5 rounded-full -rotate-12 pointer-events-none uppercase tracking-wider shadow-lg"
-            >
-              CONNECT • {formatNgn(customBidNgn)}
-            </motion.div>
-
-            {/* Swipe Left Stamp */}
-            <motion.div
-              style={{ opacity: nopeOpacity }}
-              className="absolute top-12 right-5 z-30 bg-red-600 text-white font-mono font-black text-xs px-3.5 py-1.5 rounded-full rotate-12 pointer-events-none uppercase tracking-wider shadow-lg"
-            >
-              PASS
-            </motion.div>
-
-            <ProfileCard driver={currentDriver} />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Bottom Action Dock */}
-      <div className="w-full px-3 flex-shrink-0">
-        <QuickBidPills onReject={handleManualReject} onAccept={handleManualAccept} />
-      </div>
-
-      {/* Top-Down Live Dispatch Pill (Zero Modal, Dynamic Island Style) */}
+  const dispatchToastNode =
+    mounted &&
+    createPortal(
       <AnimatePresence>
         {dispatchPill && (
           <motion.div
@@ -195,7 +120,7 @@ export const SwipeDeck: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -28, scale: 0.94 }}
             transition={{ type: 'spring', stiffness: 420, damping: 28 }}
-            className="fixed top-3 left-1/2 -translate-x-1/2 z-[600] w-[calc(100%-28px)] max-w-[392px] pointer-events-auto"
+            className="fixed top-3 left-1/2 -translate-x-1/2 z-[950] w-[calc(100%-28px)] max-w-[392px] pointer-events-auto"
           >
             <div
               className="rounded-full p-1.5 pl-2 pr-1.5 shadow-2xl relative overflow-hidden flex items-center justify-between gap-2.5 backdrop-blur-xl"
@@ -281,7 +206,97 @@ export const SwipeDeck: React.FC = () => {
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence>,
+      document.body
+    );
+
+  if (!currentDriver) {
+    return (
+      <>
+        {dispatchToastNode}
+        <div className="flex flex-col items-center justify-center min-h-[420px] p-6 text-center space-y-4">
+          <div className="w-16 h-16 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center shadow-lg">
+            <Sparkles className="w-7 h-7" />
+          </div>
+          <div className="space-y-1">
+            <h3 className="text-lg font-display font-black text-[#0B0C0E] dark:text-white">
+              All Corridor Peers Reviewed
+            </h3>
+            <p className="text-xs text-[#525866] dark:text-[#9BA1AE] max-w-xs">
+              You have swiped through every verified driver for this departure window. Reload the deck or explore the live street map.
+            </p>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <button
+              onClick={resetDeck}
+              className="px-5 py-3 btn-electric-mint text-xs font-extrabold rounded-full flex items-center gap-2 active-press"
+            >
+              <RotateCcw className="w-4 h-4" />
+              <span>Reload Deck</span>
+            </button>
+            <button
+              onClick={() => setActiveTab('map')}
+              className="px-5 py-3 rounded-full bg-white dark:bg-[#14161B] border border-black/10 dark:border-white/10 text-xs font-extrabold text-[#0B0C0E] dark:text-white flex items-center gap-2 active-press"
+            >
+              <Compass className="w-4 h-4" />
+              <span>Open Map</span>
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <div className="relative w-full max-w-[404px] mx-auto flex flex-col justify-between h-full min-h-0 select-none">
+      {/* Compact Route & Wishes Trigger Bar */}
+      <RoutePlannerBar />
+
+      {/* Swipeable Full-Bleed Card Stack */}
+      <div className="relative w-full px-3 flex-1 min-h-0 flex flex-col">
+        {/* Next Card Peek Stack */}
+        {activeDriverIndex + 1 < drivers.length && (
+          <div className="absolute inset-x-6 top-2 bottom-1 rounded-[30px] bg-black/25 dark:bg-white/5 scale-[0.96] translate-y-1.5 pointer-events-none" />
+        )}
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentDriver.id}
+            style={{ x, rotate, opacity }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            onDragEnd={handleDragEnd}
+            animate={{ x: exitX }}
+            transition={{ type: 'spring', stiffness: 320, damping: 26 }}
+            className="w-full flex-1 min-h-0 cursor-grab active:cursor-grabbing relative z-10 flex flex-col"
+          >
+            {/* Swipe Right Stamp */}
+            <motion.div
+              style={{ opacity: likeOpacity }}
+              className="absolute top-12 left-5 z-30 bg-[#C8FF00] text-[#0B0C0E] font-mono font-black text-xs px-3.5 py-1.5 rounded-full -rotate-12 pointer-events-none uppercase tracking-wider shadow-lg"
+            >
+              CONNECT • {formatNgn(customBidNgn)}
+            </motion.div>
+
+            {/* Swipe Left Stamp */}
+            <motion.div
+              style={{ opacity: nopeOpacity }}
+              className="absolute top-12 right-5 z-30 bg-red-600 text-white font-mono font-black text-xs px-3.5 py-1.5 rounded-full rotate-12 pointer-events-none uppercase tracking-wider shadow-lg"
+            >
+              PASS
+            </motion.div>
+
+            <ProfileCard driver={currentDriver} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Bottom Action Dock */}
+      <div className="w-full px-3 flex-shrink-0">
+        <QuickBidPills onReject={handleManualReject} onAccept={handleManualAccept} />
+      </div>
+
+      {dispatchToastNode}
     </div>
   );
 };
