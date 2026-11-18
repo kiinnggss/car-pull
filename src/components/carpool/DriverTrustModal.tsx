@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   Building2,
   Car,
-  FileCheck,
   ArrowLeft,
   X,
 } from 'lucide-react';
@@ -56,145 +55,115 @@ export const DriverTrustModal: React.FC<DriverTrustModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[700] bg-slate-950/70 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-center justify-center animate-in fade-in duration-150">
-      <div className="w-full max-w-[390px] floating-surface rounded-2xl overflow-hidden my-auto animate-in zoom-in-95 duration-150">
-        {/* Header with Step-Back Navigation */}
-        <div className="p-4 flex items-center justify-between border-b border-slate-200/70 dark:border-white/8">
+    <div className="fixed inset-0 z-[700] bg-black/75 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-center justify-center animate-in fade-in duration-150">
+      {/* Professional Network Tinder Style Dark Editorial Sheet */}
+      <div className="w-full max-w-[390px] bg-[#0B0C0E] text-white rounded-[32px] p-5 space-y-3.5 my-auto border border-white/10 shadow-2xl animate-in zoom-in-95 duration-150">
+        {/* Top Navigation Row */}
+        <div className="flex items-center justify-between">
           <button
             onClick={handleBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 font-bold text-xs active-press transition-all"
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center active-press"
             title="Go back"
           >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
-            <span>Back</span>
+            <ArrowLeft className="w-4 h-4" />
           </button>
 
-          <div className="text-center">
-            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
-              Trust &amp; Verification
-            </h3>
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">
-              LAGOS SEC 44 DOSSIER
-            </span>
-          </div>
+          <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-bold text-white/90">
+            {driver.employer}
+          </span>
 
           <button
             onClick={handleBack}
-            className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all"
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center active-press"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Driver Summary Banner */}
-        <div className="p-4 bg-slate-50/70 dark:bg-[#0D1218]/60 border-b border-slate-200/70 dark:border-white/8 flex items-center justify-between gap-3">
+        {/* Driver Header & Overlapping Network Badges */}
+        <div className="flex items-center justify-between gap-3 pt-1">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-12 h-12 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-bold text-sm flex-shrink-0 overflow-hidden border border-slate-200/80 dark:border-white/10">
-              <span>{driver.name.split(' ').map((n) => n[0]).join('')}</span>
-              <img
-                src={driver.avatar}
-                alt={driver.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLElement).style.display = 'none';
-                }}
-              />
-            </div>
+            <img
+              src={driver.avatar}
+              alt={driver.name}
+              className="w-14 h-14 rounded-2xl object-cover flex-shrink-0"
+            />
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
-                <h4 className="font-black text-sm text-slate-900 dark:text-slate-100 truncate">
+                <h3 className="text-base font-display font-black text-white truncate">
                   {driver.name}
-                </h4>
-                <ShieldCheck className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                </h3>
+                <ShieldCheck className="w-4 h-4 text-[#C8FF00] flex-shrink-0" />
               </div>
-              <p className="text-xs font-bold text-[#0F766E] dark:text-[#14B8A6] truncate">
-                {driver.employer}
-              </p>
-              <span className="text-[10px] font-mono tabular-nums text-slate-500 dark:text-slate-400">
-                {driver.trips_completed} TRIPS • {driver.rating} ★
-              </span>
-            </div>
-          </div>
-
-          <span className="plate-badge flex-shrink-0">{driver.vehicle.plate_number}</span>
-        </div>
-
-        {/* 4 Trust Verification Pillars (Hairline-Divided) */}
-        <div className="divide-y divide-slate-200/70 dark:divide-white/8 text-xs">
-          <div className="p-3.5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-teal-500/12 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Building2 className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 dark:text-slate-100 block text-[11px]">
-                01. Corporate Domain Authenticated
-              </span>
-              <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
-                Verified work email under{' '}
-                <strong className="font-mono text-[#0F766E] dark:text-[#14B8A6]">
-                  @{driver.employer_domain}
-                </strong>{' '}
-                with active corporate directory confirmation.
+              <p className="text-xs text-white/70 truncate">
+                {driver.employer} • {driver.trips_completed} verified trips
               </p>
             </div>
           </div>
 
-          <div className="p-3.5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-emerald-500/12 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <CheckCircle2 className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 dark:text-slate-100 block text-[11px]">
-                02. Government NIN / BVN Match
-              </span>
-              <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
-                National Identity Number (NIN) and Bank Verification Number (BVN) cross-referenced via Dojah identity rails.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-3.5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/12 border border-amber-500/20 text-amber-700 dark:text-amber-400 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <Car className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 dark:text-slate-100 block text-[11px]">
-                03. Vehicle Registry &amp; Roadworthiness
-              </span>
-              <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
-                {driver.vehicle.make} {driver.vehicle.model} ({driver.vehicle.color}) registered under{' '}
-                <strong className="font-mono text-slate-900 dark:text-slate-100">
-                  {driver.vehicle.plate_number}
-                </strong>{' '}
-                verified against Lagos State VIS records.
-              </p>
-            </div>
-          </div>
-
-          <div className="p-3.5 flex items-start gap-3">
-            <div className="w-8 h-8 rounded-xl bg-teal-500/12 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] flex items-center justify-center flex-shrink-0 mt-0.5">
-              <FileCheck className="w-4 h-4" />
-            </div>
-            <div>
-              <span className="font-extrabold text-slate-900 dark:text-slate-100 block text-[11px]">
-                04. Statutory Non-Commercial Safe Harbor
-              </span>
-              <p className="text-[10.5px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
-                Protected under <strong>Lagos State Transport Law (Cap T1, Sec 44)</strong>. Cost-sharing fuel offset only; exempt from commercial hackney permits.
-              </p>
-            </div>
+          <div className="flex items-center -space-x-2 flex-shrink-0">
+            <span className="w-8 h-8 rounded-full bg-[#FF9F0A] text-[#0B0C0E] ring-2 ring-[#0B0C0E] text-[10px] font-black flex items-center justify-center">
+              {driver.employer.slice(0, 2).toUpperCase()}
+            </span>
+            <span className="w-8 h-8 rounded-full bg-[#C8FF00] text-[#0B0C0E] ring-2 ring-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center">
+              ★{driver.rating}
+            </span>
           </div>
         </div>
 
-        {/* Close CTA */}
-        <div className="p-4 border-t border-slate-200/70 dark:border-white/8">
-          <button
-            onClick={handleBack}
-            className="w-full py-2.5 btn-electric-mint font-black text-xs rounded-xl active-press transition-all"
-          >
-            Close &amp; Return to Deck
-          </button>
+        {/* 1. Professional Network Tinder Warm Amber "Goals" Block */}
+        <div className="amber-quote-surface p-4 relative overflow-hidden">
+          <span className="absolute right-3 -top-2 font-display text-6xl font-black text-white/25 select-none pointer-events-none">
+            &ldquo;
+          </span>
+          <span className="text-[10px] font-mono uppercase tracking-wider font-black text-white/85 block">
+            Commute Goal
+          </span>
+          <p className="text-sm font-extrabold text-white leading-snug mt-1 relative z-10">
+            {driver.trip_purpose ||
+              `Sharing daily ${driver.corridor.origin} to ${driver.corridor.destination} expressway rides with verified peers.`}
+          </p>
         </div>
+
+        {/* 2. Dark Charcoal Bento Blocks (`Available for` & `Verification`) */}
+        <div className="p-4 rounded-[24px] bg-[#1E2028] space-y-1.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 font-bold block">
+            Corporate &amp; Identity Verification
+          </span>
+          <p className="text-xs font-semibold text-white/90 leading-relaxed">
+            Work email authenticated under <strong className="text-[#C8FF00]">@{driver.employer_domain}</strong>. Government NIN and BVN matched via Dojah.
+          </p>
+        </div>
+
+        <div className="p-4 rounded-[24px] bg-[#1E2028] space-y-1.5">
+          <span className="text-[10px] font-mono uppercase tracking-wider text-white/60 font-bold block">
+            Vehicle &amp; Sec 44 Exemption
+          </span>
+          <p className="text-xs font-semibold text-white/90 leading-relaxed">
+            {driver.vehicle.make} {driver.vehicle.model} ({driver.vehicle.color}) • Plate{' '}
+            <strong className="text-[#FF9F0A] font-mono">{driver.vehicle.plate_number}</strong>. Non-commercial fuel split under Lagos Transport Reform Act Sec 44.
+          </p>
+        </div>
+
+        {/* 3. Pill Tags Grid */}
+        <div className="flex flex-wrap gap-1.5">
+          {(driver.interests || ['Tech & Design', 'FinTech', 'Startups', 'Afrobeats']).map((item, idx) => (
+            <span
+              key={idx}
+              className="px-3 py-1 rounded-full bg-[#1E2028] text-white/85 text-[11px] font-bold"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
+
+        {/* Close Button */}
+        <button
+          onClick={handleBack}
+          className="w-full py-3.5 btn-volt font-extrabold text-xs rounded-full active-press"
+        >
+          Back to Swipe Deck
+        </button>
       </div>
     </div>,
     document.body

@@ -8,7 +8,7 @@ import { AssistanceShield } from './AssistanceShield';
 import {
   Navigation,
   ArrowLeft,
-  XCircle,
+  X,
   Radio,
 } from 'lucide-react';
 
@@ -28,46 +28,44 @@ export const EmergencyBeacon: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-[390px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
-      {/* High Alert Telemetry Header */}
-      <div className="floating-surface rounded-2xl overflow-hidden border-red-500/30 dark:border-red-500/30">
-        <div className="p-3.5 bg-red-500/10 border-b border-red-500/20 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
-            <h2 className="text-xs font-mono font-black text-red-700 dark:text-red-400 uppercase tracking-wider flex items-center gap-1.5">
-              <Radio className="w-3.5 h-3.5" />
-              LAGOS ROADSIDE SOS BEACON
-            </h2>
+    <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in pt-1">
+      {/* High-Contrast SOS Header Card */}
+      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-3.5 border border-black/10 dark:border-white/10">
+        <div className="flex items-center justify-between">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600 text-white text-[10px] font-mono font-black uppercase">
+            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <Radio className="w-3.5 h-3.5" />
+            ROADSIDE SOS BEACON
           </div>
           <button
             onClick={cancelEmergency}
-            className="text-xs text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200 p-1 rounded-lg font-bold transition-colors"
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center active-press"
             title="Dismiss SOS"
           >
-            <XCircle className="w-4 h-4" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* GPS Coordinates & Current Expressway Location */}
-        <div className="p-3.5 flex items-start gap-2.5 text-xs">
-          <div className="w-8 h-8 rounded-xl bg-red-500/12 border border-red-500/25 text-red-600 dark:text-red-400 flex items-center justify-center flex-shrink-0 mt-0.5">
+        {/* GPS Lock Pill */}
+        <div className="p-3.5 rounded-[22px] bg-[#1E2028] flex items-start gap-3">
+          <div className="w-9 h-9 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center flex-shrink-0 mt-0.5">
             <Navigation className="w-4 h-4" />
           </div>
           <div className="min-w-0">
-            <span className="text-[9px] font-mono uppercase tracking-wider font-bold text-slate-500 dark:text-slate-400 block">
+            <span className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[#C8FF00] block">
               LIVE GPS TELEMETRY LOCK
             </span>
-            <span className="text-slate-900 dark:text-slate-100 font-extrabold block leading-snug mt-0.5">
+            <span className="text-xs font-extrabold text-white block leading-snug mt-0.5">
               Lekki-Epe Expressway, 200m before Chevron Toll Gate
             </span>
-            <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono tabular-nums block mt-0.5">
-              6.4428° N, 3.5186° E • Westbound Carriageway
+            <span className="text-[10px] text-white/65 font-mono tabular-nums block mt-0.5">
+              6.4428° N, 3.5186° E • Westbound
             </span>
           </div>
         </div>
       </div>
 
-      {/* Step 1: Issue Selection */}
+      {/* Step 1: Uber Green 2x2 Bento Issue Selector */}
       {!selectedIssueType ? (
         <IssueSelector
           onSelectIssue={selectIncidentIssue}
@@ -79,11 +77,11 @@ export const EmergencyBeacon: React.FC = () => {
           <div className="flex items-center justify-between px-1">
             <button
               onClick={() => selectIncidentIssue(null as any)}
-              className="text-xs text-[#0F766E] dark:text-[#14B8A6] font-extrabold flex items-center gap-1 hover:underline"
+              className="text-xs text-[#0B0C0E] dark:text-[#C8FF00] font-extrabold flex items-center gap-1.5"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Change Incident Type
             </button>
-            <span className="text-[9px] font-mono uppercase text-emerald-800 dark:text-emerald-300 font-bold bg-emerald-500/12 border border-emerald-500/25 px-2 py-0.5 rounded-md">
+            <span className="text-[10px] font-mono uppercase bg-[#C8FF00] text-[#0B0C0E] font-black px-2.5 py-0.5 rounded-full">
               LASDRI CERTIFIED
             </span>
           </div>

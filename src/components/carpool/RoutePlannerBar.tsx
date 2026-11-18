@@ -1,299 +1,359 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useAppStore } from '@/lib/store/useAppStore';
-import { LagosLocation } from '@/lib/types';
 import {
   MapPin,
-  ChevronDown,
-  Clock,
-  Car,
   ShieldCheck,
-  ArrowLeft,
   X,
-  ArrowRight,
+  Check,
+  ArrowUpDown,
+  Clock,
+  Zap,
+  Sparkles,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
-import { SafeZoneSelector } from './SafeZoneSelector';
 import { DeparturesSheet } from './DeparturesSheet';
 import { triggerHaptic } from '@/lib/haptics';
 
 export const RoutePlannerBar: React.FC = () => {
   const {
     riderRoute,
+    lagosLocations,
     setRiderOrigin,
     setRiderDestination,
-    lagosLocations,
+    swapRiderRoute,
     selectedSafeZone,
+    safeZones,
+    setSelectedSafeZone,
     drivers,
   } = useAppStore();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showSafeZoneModal, setShowSafeZoneModal] = useState(false);
+  const [showRouteModal, setShowRouteModal] = useState(false);
+  const [showHubModal, setShowHubModal] = useState(false);
   const [showDeparturesSheet, setShowDeparturesSheet] = useState(false);
-  const [originQuery, setOriginQuery] = useState(riderRoute.origin);
-  const [destQuery, setDestQuery] = useState(riderRoute.destination);
-  const [activeInput, setActiveInput] = useState<'origin' | 'dest'>('origin');
+  const [selectingType, setSelectingType] = useState<'origin' | 'destination'>('origin');
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isModalOpen && !showSafeZoneModal) return;
+    setMounted(true);
+  }, []);
 
-    window.history.pushState({ modal: isModalOpen ? 'route' : 'safezone' }, '');
+  useEffect(() => {
+    const anySubModalOpen = showRouteModal || showHubModal;
+    if (!anySubModalOpen) return;
+
+    window.history.pushState({ modal: 'route-planner' }, '');
 
     const handlePopState = () => {
-      setIsModalOpen(false);
-      setShowSafeZoneModal(false);
+      setShowRouteModal(false);
+      setShowHubModal(false);
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
     };
-  }, [isModalOpen, showSafeZoneModal]);
+  }, [showRouteModal, showHubModal]);
 
-  const filteredOrigins = lagosLocations.filter(
-    (loc) =>
-      loc.name.toLowerCase().includes(originQuery.toLowerCase()) ||
-      loc.area.toLowerCase().includes(originQuery.toLowerCase())
-  );
-
-  const filteredDestinations = lagosLocations.filter(
-    (loc) =>
-      loc.name.toLowerCase().includes(destQuery.toLowerCase()) ||
-      loc.area.toLowerCase().includes(destQuery.toLowerCase())
-  );
-
-  const handleSelectLocation = (loc: LagosLocation, type: 'origin' | 'dest') => {
-    if (type === 'origin') {
-      setOriginQuery(loc.name);
-      setRiderOrigin(loc.name, loc.coordinates);
-      setActiveInput('dest');
+  const closeModalsWithHistory = () => {
+    if (window.history.state?.modal === 'route-planner') {
+      window.history.back();
     } else {
-      setDestQuery(loc.name);
-      setRiderDestination(loc.name, loc.coordinates);
+      setShowRouteModal(false);
+      setShowHubModal(false);
     }
-  };
-
-  const handleApplyRoute = () => {
-    if (originQuery.trim()) setRiderOrigin(originQuery);
-    if (destQuery.trim()) setRiderDestination(destQuery);
-    setIsModalOpen(false);
-    confetti({
-      particleCount: 30,
-      spread: 50,
-      origin: { y: 0.6 },
-      colors: ['#0F766E', '#D97706', '#14B8A6'],
-    });
   };
 
   return (
     <>
-      {/* Corridor Transit Console Bar */}
-      <div className="w-full floating-surface rounded-2xl p-2 flex items-center justify-between gap-2 text-xs">
-        {/* Left: Route Summary & Safe Hub */}
-        <button
-          onClick={() => {
-            triggerHaptic('tap');
-            setOriginQuery(riderRoute.origin);
-            setDestQuery(riderRoute.destination);
-            setIsModalOpen(true);
-          }}
-          className="flex items-center gap-2.5 text-left hover:bg-slate-50 dark:hover:bg-white/5 px-2 py-1 rounded-xl min-w-0 flex-1 transition-colors active-spring"
-          title="Change commute corridor"
-        >
-          {/* Connected Transit Nodes */}
-          <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-            <span className="w-2 h-2 rounded-full bg-[#0F766E] dark:bg-[#14B8A6]" />
-            <span className="w-px h-2.5 bg-slate-300 dark:bg-slate-700" />
-            <span className="w-2 h-2 rounded-full bg-amber-500" />
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-1">
-              <span className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
-                {riderRoute.origin.split('/')[0].trim()}
-              </span>
-              <ArrowRight className="w-3 h-3 text-slate-400 flex-shrink-0" />
-              <span className="font-extrabold text-xs text-slate-900 dark:text-white tracking-tight truncate">
-                {riderRoute.destination.split('(')[0].trim()}
-              </span>
-              <ChevronDown className="w-3 h-3 text-slate-400 flex-shrink-0" />
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400 truncate mt-0.5">
-              <span className="truncate">
-                Hub: <strong className="text-slate-700 dark:text-slate-300 font-semibold">{selectedSafeZone.name}</strong>
-              </span>
-              <span className="font-mono tabular-nums text-slate-400 dark:text-slate-500 flex-shrink-0">
-                ({riderRoute.distanceKm} km)
-              </span>
-            </div>
-          </div>
-        </button>
-
-        {/* Right: Timetable & Safe Hub Selector */}
-        <div className="flex items-center gap-1 flex-shrink-0">
+      <div className="w-full max-w-[404px] mx-auto px-3 mb-2">
+        {/* Redesigned Uber + Uber Green Compact Route Pill Bar */}
+        <div className="floating-surface rounded-full p-1.5 pl-3.5 flex items-center justify-between gap-2">
           <button
             onClick={() => {
               triggerHaptic('tap');
-              setShowDeparturesSheet(true);
+              setSelectingType('origin');
+              setShowRouteModal(true);
             }}
-            className="flex items-center gap-1 bg-slate-100 dark:bg-[#161F29] hover:bg-slate-200/80 dark:hover:bg-slate-800 border border-slate-200/80 dark:border-white/8 text-slate-800 dark:text-slate-200 px-2.5 py-1.5 rounded-xl font-bold text-[11px] active-spring"
-            title="View corridor timetable"
+            className="flex-1 min-w-0 text-left flex items-center gap-2.5 active-press"
+            title="Edit pickup and destination"
           >
-            <Clock className="w-3 h-3 text-amber-500" />
-            <span className="font-mono tabular-nums text-[#0F766E] dark:text-[#14B8A6]">{drivers.length}</span>
+            {/* Connected Vertical Dots */}
+            <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+              <span className="w-2 h-2 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00]" />
+              <span className="w-0.5 h-2.5 border-l border-dotted border-[#525866]" />
+              <span className="w-2 h-2 rounded-full bg-[#FF9F0A]" />
+            </div>
+
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
+                <span className="text-[#525866] dark:text-[#9BA1AE]">→</span>
+                <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
+              </div>
+              <div className="text-[10px] text-[#525866] dark:text-[#9BA1AE] truncate font-medium">
+                Hub: <strong className="text-[#0B0C0E] dark:text-white">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm} km
+              </div>
+            </div>
           </button>
 
-          <button
-            onClick={() => {
-              triggerHaptic('tap');
-              setShowSafeZoneModal(true);
-            }}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-teal-500/10 hover:bg-teal-500/20 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] text-[11px] font-bold active-spring"
-            title="Change CCTV Safe Pickup Hub"
-          >
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Hub</span>
-          </button>
+          {/* Right Pill Triggers: Schedule & Safe Hub */}
+          <div className="flex items-center gap-1 flex-shrink-0">
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowDeparturesSheet(true);
+              }}
+              className="h-9 px-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white text-[11px] font-mono font-extrabold flex items-center gap-1 active-press"
+              title="View Departure Schedule"
+            >
+              <Clock className="w-3.5 h-3.5 text-[#FF9F0A]" />
+              <span>{drivers.length}</span>
+            </button>
+
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setShowHubModal(true);
+              }}
+              className="h-9 px-3.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[11px] font-extrabold flex items-center gap-1 active-press"
+              title="Select CCTV Safe Pickup Hub"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Hub</span>
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Route Picker Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md p-2 sm:p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[410px] floating-surface rounded-2xl p-4 shadow-floating-lg dark:shadow-floating-dark-lg max-h-[88vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-150">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200/80 dark:border-white/8">
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 active-spring"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
-                <span>Back</span>
-              </button>
-              <div className="text-center">
-                <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">Set Commute Corridor</h3>
-                <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400">Ajah - Lekki - VI - Marina</p>
-              </div>
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="space-y-2.5 py-3">
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                  Pickup Origin
-                </label>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#090D11] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6]">
-                  <MapPin className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
-                  <input
-                    type="text"
-                    value={originQuery}
-                    onChange={(e) => {
-                      setOriginQuery(e.target.value);
-                      setActiveInput('origin');
-                    }}
-                    placeholder="Enter pickup origin..."
-                    className="w-full bg-transparent text-xs font-bold text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400"
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                  Destination
-                </label>
-                <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#090D11] border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6]">
-                  <Car className="w-3.5 h-3.5 text-amber-500" />
-                  <input
-                    type="text"
-                    value={destQuery}
-                    onChange={(e) => {
-                      setDestQuery(e.target.value);
-                      setActiveInput('dest');
-                    }}
-                    placeholder="Enter destination..."
-                    className="w-full bg-transparent text-xs font-bold text-slate-900 dark:text-slate-100 focus:outline-none placeholder:text-slate-400"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex-1 overflow-y-auto space-y-1 py-1 max-h-[220px]">
-              <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400 block px-1 mb-1">
-                Verified Corridor Landmarks
-              </span>
-              {(activeInput === 'origin' ? filteredOrigins : filteredDestinations).map((loc) => (
-                <button
-                  key={loc.id}
-                  onClick={() => handleSelectLocation(loc, activeInput)}
-                  className="w-full p-2.5 rounded-xl bg-slate-50 dark:bg-[#090D11] hover:bg-teal-500/10 border border-slate-200/70 dark:border-white/5 text-left flex items-center justify-between text-xs transition-colors"
-                >
-                  <div>
-                    <span className="font-bold text-slate-900 dark:text-slate-100 block">{loc.name}</span>
-                    <span className="text-[10px] text-slate-500 dark:text-slate-400">{loc.area}</span>
-                  </div>
-                  <span className="text-[10px] font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-500/10 px-2.5 py-0.5 rounded-md">
-                    Select
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={handleApplyRoute}
-              className="w-full mt-3 py-2.5 btn-electric-mint text-xs rounded-xl active-spring"
-            >
-              Update Commute Route
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Safe Zone Picker Modal */}
-      {showSafeZoneModal && (
-        <div className="fixed inset-0 z-[600] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-md p-2 sm:p-4 animate-in fade-in duration-150">
-          <div className="w-full max-w-[410px] floating-surface rounded-2xl p-4 shadow-floating-lg dark:shadow-floating-dark-lg max-h-[88vh] flex flex-col overflow-hidden animate-in slide-in-from-bottom duration-150">
-            <div className="flex items-center justify-between pb-2.5 border-b border-slate-200/80 dark:border-white/8">
-              <button
-                onClick={() => setShowSafeZoneModal(false)}
-                className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs font-bold text-slate-800 dark:text-slate-200 active-spring"
-              >
-                <ArrowLeft className="w-3.5 h-3.5 text-slate-500" />
-                <span>Back</span>
-              </button>
-              <h3 className="text-xs font-extrabold text-slate-900 dark:text-white flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
-                CCTV Safe Pickup Hubs
-              </h3>
-              <button
-                onClick={() => setShowSafeZoneModal(false)}
-                className="w-7 h-7 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-y-auto py-2.5">
-              <SafeZoneSelector />
-            </div>
-            <button
-              onClick={() => setShowSafeZoneModal(false)}
-              className="w-full mt-2 py-2.5 btn-electric-mint text-xs rounded-xl active-spring"
-            >
-              Confirm Safe Zone Hub
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Corridor Departures Sheet */}
       <DeparturesSheet
         isOpen={showDeparturesSheet}
         onClose={() => setShowDeparturesSheet(false)}
       />
+
+      {/* Uber Green "Order Taxi" Style Route & Wishes Sheet Modal */}
+      {showRouteModal &&
+        mounted &&
+        createPortal(
+          <div className="fixed inset-0 z-[700] bg-black/70 backdrop-blur-xs overflow-y-auto p-3 flex items-end sm:items-center justify-center animate-in fade-in duration-150">
+            <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-4 my-auto animate-in slide-in-from-bottom duration-200">
+              {/* Top Handle & Title (Uber Green Middle Screen) */}
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-display font-black text-[#0B0C0E] dark:text-white">
+                  Plan Commute
+                </h3>
+                <button
+                  onClick={closeModalsWithHistory}
+                  className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Uber Green Vertical Dotted Pickup -> Dropoff Timeline */}
+              <div className="p-3.5 rounded-[24px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between gap-3">
+                <div className="flex items-stretch gap-3 flex-1 min-w-0">
+                  <div className="flex flex-col items-center justify-between py-2">
+                    <MapPin className="w-4 h-4 text-[#0B0C0E] dark:text-[#C8FF00]" />
+                    <div className="w-0.5 flex-1 my-1 border-l-2 border-dotted border-[#525866]" />
+                    <MapPin className="w-4 h-4 text-[#FF9F0A]" />
+                  </div>
+
+                  <div className="flex-1 min-w-0 space-y-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setSelectingType('origin')}
+                      className={`w-full text-left p-2 rounded-2xl transition-colors ${
+                        selectingType === 'origin'
+                          ? 'bg-white dark:bg-[#14161B] shadow-2xs'
+                          : ''
+                      }`}
+                    >
+                      <span className="text-[10px] font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                        Pickup Point
+                      </span>
+                      <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block">
+                        {riderRoute.origin}
+                      </span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setSelectingType('destination')}
+                      className={`w-full text-left p-2 rounded-2xl transition-colors ${
+                        selectingType === 'destination'
+                          ? 'bg-white dark:bg-[#14161B] shadow-2xs'
+                          : ''
+                      }`}
+                    >
+                      <span className="text-[10px] font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                        Drop-off Point
+                      </span>
+                      <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block">
+                        {riderRoute.destination}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    swapRiderRoute();
+                  }}
+                  className="w-9 h-9 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press flex-shrink-0"
+                  title="Swap Origin & Destination"
+                >
+                  <ArrowUpDown className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Uber Green "Additional Wishes" 2-Column Square Bento Cards */}
+              <div className="space-y-2">
+                <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white block">
+                  Additional Wishes
+                </span>
+                <div className="grid grid-cols-2 gap-2.5">
+                  <div className="volt-surface rounded-[24px] p-3.5 flex flex-col justify-between min-h-[104px]">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-xs font-extrabold block text-[#0B0C0E]">
+                          Sec 44 Split
+                        </span>
+                        <span className="text-[11px] font-mono font-bold text-[#0B0C0E]/75">
+                          -40% Fuel Cap
+                        </span>
+                      </div>
+                      <Check className="w-4 h-4 text-[#0B0C0E] stroke-[2.5]" />
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center mt-2">
+                      <Zap className="w-4 h-4 fill-current" />
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowRouteModal(false);
+                      setShowHubModal(true);
+                    }}
+                    className="rounded-[24px] bg-[#F4F5F7] dark:bg-[#1E2028] p-3.5 flex flex-col justify-between min-h-[104px] text-left active-press"
+                  >
+                    <div>
+                      <span className="text-xs font-extrabold block text-[#0B0C0E] dark:text-white">
+                        CCTV Safe Hub
+                      </span>
+                      <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] line-clamp-1 mt-0.5">
+                        {selectedSafeZone.name}
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white flex items-center justify-center mt-2">
+                      <ShieldCheck className="w-4 h-4" />
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              {/* Corridor Stops Selector */}
+              <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1 no-scrollbar">
+                <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                  Select {selectingType === 'origin' ? 'Pickup' : 'Drop-off'} Stop
+                </span>
+                {lagosLocations.map((loc) => {
+                  const isCurrent =
+                    selectingType === 'origin'
+                      ? riderRoute.origin === loc.name
+                      : riderRoute.destination === loc.name;
+
+                  return (
+                    <button
+                      key={loc.id}
+                      onClick={() => {
+                        if (selectingType === 'origin') {
+                          setRiderOrigin(loc.name, loc.coordinates);
+                        } else {
+                          setRiderDestination(loc.name, loc.coordinates);
+                        }
+                        closeModalsWithHistory();
+                      }}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-2xl transition-all flex items-center justify-between ${
+                        isCurrent
+                          ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white hover:opacity-90'
+                      }`}
+                    >
+                      <div>
+                        <span className="text-xs font-bold block">{loc.name}</span>
+                        <span className="text-[10px] opacity-70">{loc.area}</span>
+                      </div>
+                      {isCurrent && <Check className="w-4 h-4 flex-shrink-0" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+      {/* Safe Hub Selector Sheet */}
+      {showHubModal &&
+        mounted &&
+        createPortal(
+          <div className="fixed inset-0 z-[700] bg-black/70 backdrop-blur-xs overflow-y-auto p-3 flex items-end sm:items-center justify-center animate-in fade-in duration-150">
+            <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-3.5 my-auto animate-in slide-in-from-bottom duration-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                    CCTV Safe Pickup Hubs
+                  </h3>
+                  <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+                    Off-street guarded forecourts • 45s max dwell
+                  </span>
+                </div>
+                <button
+                  onClick={closeModalsWithHistory}
+                  className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="space-y-2 max-h-[340px] overflow-y-auto pr-1 no-scrollbar">
+                {safeZones.map((zone) => {
+                  const isSelected = selectedSafeZone.id === zone.id;
+                  return (
+                    <button
+                      key={zone.id}
+                      onClick={() => {
+                        setSelectedSafeZone(zone);
+                        closeModalsWithHistory();
+                      }}
+                      className={`w-full text-left p-3.5 rounded-[22px] transition-all flex items-center justify-between ${
+                        isSelected
+                          ? 'volt-surface'
+                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                      }`}
+                    >
+                      <div className="pr-2">
+                        <span className="text-xs font-extrabold block">{zone.name}</span>
+                        <span className="text-[10px] opacity-75 block mt-0.5">{zone.address}</span>
+                      </div>
+                      {isSelected && (
+                        <div className="w-7 h-7 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center flex-shrink-0">
+                          <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
     </>
   );
 };

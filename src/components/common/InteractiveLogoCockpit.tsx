@@ -12,10 +12,9 @@ import {
   X,
   Volume2,
   VolumeX,
-  ArrowLeft,
+  Zap,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
-import { getAssetPath } from '@/lib/assets';
 
 const playCockpitTone = (freq: number, type: OscillatorType = 'sine', duration = 0.1) => {
   try {
@@ -61,7 +60,6 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
     resetDeck,
   } = useAppStore();
 
-  const [hoveredHotspot, setHoveredHotspot] = useState<HotspotId>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [mounted, setMounted] = useState(false);
 
@@ -133,196 +131,101 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           particleCount: 35,
           spread: 50,
           origin: { y: 0.6 },
-          colors: ['#D97706', '#0F766E', '#14B8A6'],
+          colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
         });
         break;
     }
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-center justify-center">
-      <div className="w-full max-w-[390px] floating-surface rounded-2xl p-4 space-y-3.5 my-auto animate-in zoom-in-95 duration-150">
-        {/* Header with Back Button */}
-        <div className="flex items-center justify-between pb-2.5 border-b border-slate-200/70 dark:border-white/8">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 font-bold text-xs transition-all active-press"
-            title="Go back a step"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
-            <span>Back</span>
-          </button>
-
-          <div className="text-center">
-            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100 tracking-tight">
-              Cockpit Telemetry
+    <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-center justify-center">
+      <div className="w-full max-w-[390px] floating-surface rounded-[32px] p-5 space-y-4 my-auto animate-in zoom-in-95 duration-150">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+              Quick Actions
             </h3>
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold block">
-              HARDWARE SHORTCUTS
+            <span className="text-[10px] font-mono uppercase text-[#525866] dark:text-[#9BA1AE] font-bold">
+              CORRIDOR SHORTCUTS
             </span>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setSoundEnabled(!soundEnabled)}
-              className="p-1.5 rounded-xl text-slate-500 hover:text-slate-900 dark:hover:text-slate-200 transition-colors"
-              title={soundEnabled ? 'Mute audio feedback' : 'Enable audio feedback'}
+              className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center text-[#0B0C0E] dark:text-white"
             >
-              {soundEnabled ? (
-                <Volume2 className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6]" />
-              ) : (
-                <VolumeX className="w-4 h-4 text-slate-400" />
-              )}
+              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </button>
             <button
               onClick={handleBack}
-              className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-colors"
-              title="Close console"
+              className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center text-[#0B0C0E] dark:text-white"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* Interactive Logo Display with Calibrated Touch Hotspots */}
-        <div className="relative w-36 h-36 mx-auto rounded-2xl overflow-hidden bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 p-2 flex items-center justify-center">
-          <img
-            src={getAssetPath('/logo.png')}
-            alt="CAR PULL Interactive Logo"
-            className="w-full h-full object-contain select-none pointer-events-none rounded-xl"
-          />
+        {/* Uber Green Concentric Ring Hero */}
+        <div className="volt-surface rounded-[28px] p-5 flex flex-col items-center justify-center">
+          <div className="w-24 h-24 rounded-full border border-[#0B0C0E]/15 flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full border border-[#0B0C0E]/25 flex items-center justify-center">
+              <button
+                onClick={() => handleAction('car')}
+                className="w-11 h-11 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center shadow-lg active-press"
+              >
+                <Zap className="w-5 h-5 fill-current" />
+              </button>
+            </div>
+          </div>
+          <span className="text-xs font-extrabold text-[#0B0C0E] mt-2">
+            Tap Emblem to Flip Rider / Driver
+          </span>
+        </div>
 
+        {/* 2x2 Bento Shortcut Grid */}
+        <div className="grid grid-cols-2 gap-2.5 text-xs">
           <button
             onClick={() => handleAction('pin')}
-            onMouseEnter={() => setHoveredHotspot('pin')}
-            onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '10%', left: '20%', width: '28%', height: '26%' }}
-            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
-              hoveredHotspot === 'pin'
-                ? 'ring-2 ring-amber-400 bg-amber-400/30 scale-105'
-                : 'hover:bg-amber-400/20'
-            }`}
-            title="Safe Zones: Open Corridor Map"
-            aria-label="Open Corridor Map"
+            className="p-3.5 bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white rounded-[22px] font-extrabold flex items-center gap-2 active-press text-left"
           >
-            <span className="sr-only">Safe Zones</span>
+            <MapPin className="w-4 h-4 text-[#FF9F0A] flex-shrink-0" />
+            <span>Route Map</span>
           </button>
 
           <button
             onClick={() => handleAction('arrow')}
-            onMouseEnter={() => setHoveredHotspot('arrow')}
-            onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '10%', left: '52%', width: '28%', height: '26%' }}
-            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
-              hoveredHotspot === 'arrow'
-                ? 'ring-2 ring-teal-400 bg-teal-400/30 scale-105'
-                : 'hover:bg-teal-400/20'
-            }`}
-            title="Toggle AM/PM Commute Corridor"
-            aria-label="Toggle AM/PM Commute Route"
+            className="p-3.5 bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white rounded-[22px] font-extrabold flex items-center gap-2 active-press text-left"
           >
-            <span className="sr-only">Route Direction</span>
+            <Compass className="w-4 h-4 text-[#FF9F0A] flex-shrink-0" />
+            <span>{commuteDirection === 'morning' ? 'AM Outbound' : 'PM Return'}</span>
           </button>
 
           <button
             onClick={() => handleAction('circle')}
-            onMouseEnter={() => setHoveredHotspot('circle')}
-            onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '38%', left: '20%', width: '28%', height: '26%' }}
-            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
-              hoveredHotspot === 'circle'
-                ? 'ring-2 ring-cyan-400 bg-cyan-400/30 scale-105'
-                : 'hover:bg-cyan-400/20'
-            }`}
-            title="Reset & Refresh Corridor Deck"
-            aria-label="Refresh Corridor Deck"
+            className="p-3.5 bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white rounded-[22px] font-extrabold flex items-center gap-2 active-press text-left"
           >
-            <span className="sr-only">Corridor Deck</span>
+            <RefreshCw className="w-4 h-4 text-[#FF9F0A] flex-shrink-0" />
+            <span>Reload Deck</span>
           </button>
 
           <button
             onClick={() => handleAction('shield')}
-            onMouseEnter={() => setHoveredHotspot('shield')}
-            onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '38%', left: '52%', width: '28%', height: '26%' }}
-            className={`absolute rounded-xl cursor-pointer transition-all active:scale-90 ${
-              hoveredHotspot === 'shield'
-                ? 'ring-2 ring-emerald-400 bg-emerald-400/30 scale-105'
-                : 'hover:bg-emerald-400/20'
-            }`}
-            title="LASTMA Sec 44 Non-Commercial Certificate"
-            aria-label="Open LASTMA Sec 44 Pass"
+            className="p-3.5 bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white rounded-[22px] font-extrabold flex items-center gap-2 active-press text-left"
           >
-            <span className="sr-only">LASTMA Pass</span>
-          </button>
-
-          <button
-            onClick={() => handleAction('car')}
-            onMouseEnter={() => setHoveredHotspot('car')}
-            onMouseLeave={() => setHoveredHotspot(null)}
-            style={{ top: '66%', left: '14%', width: '72%', height: '28%' }}
-            className={`absolute rounded-xl cursor-pointer transition-all active:scale-95 ${
-              hoveredHotspot === 'car'
-                ? 'ring-2 ring-[#0F766E] bg-[#0F766E]/30 scale-102'
-                : 'hover:bg-[#0F766E]/20'
-            }`}
-            title="Switch Between Rider and Driver Mode"
-            aria-label="Toggle Rider or Driver Role"
-          >
-            <span className="sr-only">Switch Rider/Driver</span>
+            <ShieldCheck className="w-4 h-4 text-[#FF9F0A] flex-shrink-0" />
+            <span>Sec 44 Pass</span>
           </button>
         </div>
 
-        {/* Logo Hardware Control Buttons */}
-        <div className="space-y-2">
-          <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase tracking-wider font-bold block px-0.5">
-            1-TAP COCKPIT CONTROLS
-          </span>
-
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <button
-              onClick={() => handleAction('pin')}
-              className="p-2.5 bg-slate-50 dark:bg-[#171F29] hover:bg-slate-100 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/8 text-slate-900 dark:text-slate-100 rounded-xl font-bold flex items-center gap-2 transition-all active-press text-left"
-            >
-              <MapPin className="w-3.5 h-3.5 text-amber-500 flex-shrink-0" />
-              <span className="text-[11px]">01. Route Map</span>
-            </button>
-
-            <button
-              onClick={() => handleAction('arrow')}
-              className="p-2.5 bg-slate-50 dark:bg-[#171F29] hover:bg-slate-100 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/8 text-slate-900 dark:text-slate-100 rounded-xl font-bold flex items-center gap-2 transition-all active-press text-left"
-            >
-              <Compass className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
-              <span className="text-[11px]">
-                02. {commuteDirection === 'morning' ? 'AM Outbound' : 'PM Return'}
-              </span>
-            </button>
-
-            <button
-              onClick={() => handleAction('circle')}
-              className="p-2.5 bg-slate-50 dark:bg-[#171F29] hover:bg-slate-100 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/8 text-slate-900 dark:text-slate-100 rounded-xl font-bold flex items-center gap-2 transition-all active-press text-left"
-            >
-              <RefreshCw className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
-              <span className="text-[11px]">03. Refresh Deck</span>
-            </button>
-
-            <button
-              onClick={() => handleAction('shield')}
-              className="p-2.5 bg-slate-50 dark:bg-[#171F29] hover:bg-slate-100 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/8 text-slate-900 dark:text-slate-100 rounded-xl font-bold flex items-center gap-2 transition-all active-press text-left"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 flex-shrink-0" />
-              <span className="text-[11px]">04. Sec 44 Pass</span>
-            </button>
-          </div>
-
-          <button
-            onClick={() => handleAction('car')}
-            className="w-full py-2.5 px-3 btn-electric-mint rounded-xl font-black text-xs flex items-center justify-center gap-2 transition-all active-press"
-          >
-            <Car className="w-4 h-4" />
-            <span>Switch to {activeRole === 'rider' ? 'Driver Console' : 'Rider Deck'}</span>
-          </button>
-        </div>
+        <button
+          onClick={() => handleAction('car')}
+          className="w-full py-3.5 btn-electric-mint rounded-full font-extrabold text-xs flex items-center justify-center gap-2 active-press"
+        >
+          <Car className="w-4 h-4" />
+          <span>Switch to {activeRole === 'rider' ? 'Driver Console' : 'Rider Swipe Deck'}</span>
+        </button>
       </div>
     </div>,
     document.body

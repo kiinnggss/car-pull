@@ -1,26 +1,34 @@
 import type { Metadata, Viewport } from 'next';
-import { Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
+import { Outfit, Plus_Jakarta_Sans, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-const sans = Plus_Jakarta_Sans({
+const outfit = Outfit({
   subsets: ['latin'],
-  variable: '--font-sans',
+  variable: '--font-outfit',
+  display: 'swap',
+  weight: ['600', '700', '800', '900'],
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
   display: 'swap',
   weight: ['400', '500', '600', '700', '800'],
 });
 
-const mono = JetBrains_Mono({
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
+  weight: ['500', '600', '700'],
 });
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || (process.env.NODE_ENV === 'production' ? '/car-pull' : '');
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
 export const metadata: Metadata = {
-  title: 'CAR PULL - Lagos Commuter & Roadside Resilience PWA',
-  description: 'Double opt-in commuter carpooling and emergency roadside assistance along the Ajah - Lekki - Victoria Island - Marina corridor.',
+  title: 'CAR PULL | Lagos Peer Commute & Roadside Dispatch',
+  description:
+    'Swipe-based corporate carpool matching, NIBSS fuel-split escrow, and LASDRI roadside recovery for Lagos commuters.',
   manifest: `${basePath}/manifest.json`,
   icons: {
     icon: `${basePath}/logo.png`,
@@ -28,7 +36,7 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: 'default',
+    statusBarStyle: 'black-translucent',
     title: 'CAR PULL',
   },
 };
@@ -38,8 +46,10 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  viewportFit: 'cover',
-  themeColor: '#090D11',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F4F5F7' },
+    { media: '(prefers-color-scheme: dark)', color: '#0B0C0E' },
+  ],
 };
 
 export default function RootLayout({
@@ -48,8 +58,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body className="min-h-screen bg-[#E8EEF5] dark:bg-[#05080B] text-slate-900 dark:text-slate-100 font-sans antialiased flex flex-col items-center justify-center selection:bg-teal-500/20">
+    <html
+      lang="en"
+      className={`${outfit.variable} ${jakarta.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body className="antialiased min-h-screen min-h-[100dvh] bg-[#E4E6EB] dark:bg-[#050608] text-[#0B0C0E] dark:text-white flex flex-col items-center justify-start sm:justify-center sm:py-3 selection:bg-[#C8FF00] selection:text-[#0B0C0E]">
         {children}
       </body>
     </html>

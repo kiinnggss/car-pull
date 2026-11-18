@@ -3,627 +3,426 @@
 import React, { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
-  ShieldCheck,
+  Zap,
   Car,
-  User,
-  Lock,
+  UserCheck,
   ArrowRight,
-  MapPin,
-  Fuel,
-  Building2,
-  Phone,
+  Lock,
   Mail,
-  ArrowLeft,
+  Phone,
+  Building2,
+  User,
   Sun,
   Moon,
+  Check,
 } from 'lucide-react';
-import { getAssetPath } from '@/lib/assets';
-import confetti from 'canvas-confetti';
-import { triggerHaptic } from '@/lib/haptics';
 
 export const AuthLanding: React.FC = () => {
   const { login, registerRider, registerDriver, theme, toggleTheme } = useAppStore();
-  const [authTab, setAuthTab] = useState<'signin' | 'signup'>('signin');
-  const [signUpRole, setSignUpRole] = useState<'rider' | 'driver'>('rider');
 
-  // Sign In Form State
+  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [signupRole, setSignupRole] = useState<'rider' | 'driver'>('rider');
+
   const [signInIdentifier, setSignInIdentifier] = useState('');
   const [signInPassword, setSignInPassword] = useState('');
 
-  // Rider Sign Up State
-  const [riderName, setRiderName] = useState('');
-  const [riderEmail, setRiderEmail] = useState('');
-  const [riderPhone, setRiderPhone] = useState('');
-  const [riderCompany, setRiderCompany] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [employer, setEmployer] = useState('');
+  const [password, setPassword] = useState('');
 
-  // Driver & Car Sign Up State
-  const [driverName, setDriverName] = useState('');
-  const [driverEmail, setDriverEmail] = useState('');
-  const [driverPhone, setDriverPhone] = useState('');
-  const [driverCompany, setDriverCompany] = useState('');
-  const [carMake, setCarMake] = useState('');
-  const [carModel, setCarModel] = useState('');
-  const [carYear, setCarYear] = useState('');
-  const [carColor, setCarColor] = useState('');
-  const [carPlate, setCarPlate] = useState('');
-  const [carSeats, setCarSeats] = useState(3);
-  const [carHasAc, setCarHasAc] = useState(true);
+  const [vehicleMake, setVehicleMake] = useState('Toyota');
+  const [vehicleModel, setVehicleModel] = useState('Camry');
+  const [vehicleYear, setVehicleYear] = useState('2021');
+  const [vehicleColor, setVehicleColor] = useState('Midnight Black');
+  const [plateNumber, setPlateNumber] = useState('LSR-482-KJ');
+  const [totalSeats, setTotalSeats] = useState(3);
+  const [hasAc, setHasAc] = useState(true);
+
+  const [error, setError] = useState('');
 
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
-    triggerHaptic('match');
-    login(signInIdentifier || 'femi.adeyemi@dangote.com', 'rider');
+    if (!signInIdentifier.trim()) {
+      setError('Enter your work email or phone number.');
+      return;
+    }
+    setError('');
+    login(signInIdentifier.trim(), 'rider');
   };
 
-  const handleRiderSignUp = (e: React.FormEvent) => {
+  const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!riderName.trim()) return;
-    triggerHaptic('match');
-    registerRider({
-      fullName: riderName.trim(),
-      email: riderEmail.trim() || `${riderName.toLowerCase().replace(/\s+/g, '.')}@corporate.ng`,
-      phone: riderPhone.trim() || '+234 812 000 1234',
-      employer: riderCompany.trim() || 'Corporate Professional',
-    });
-    confetti({
-      particleCount: 35,
-      spread: 55,
-      origin: { y: 0.6 },
-      colors: ['#0F766E', '#D97706', '#14B8A6'],
-    });
+    if (!fullName.trim() || !email.trim() || !phone.trim()) {
+      setError('Complete your name, work email, and phone number.');
+      return;
+    }
+    setError('');
+
+    if (signupRole === 'rider') {
+      registerRider({
+        fullName: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        employer: employer.trim() || 'Verified Corporate Member',
+      });
+    } else {
+      if (!plateNumber.trim()) {
+        setError('Enter your vehicle plate number.');
+        return;
+      }
+      registerDriver({
+        fullName: fullName.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        employer: employer.trim() || 'Verified Corporate Driver',
+        vehicle: {
+          make: vehicleMake.trim() || 'Toyota',
+          model: vehicleModel.trim() || 'Camry',
+          year: parseInt(vehicleYear, 10) || 2021,
+          color: vehicleColor.trim() || 'Silver',
+          plate_number: plateNumber.trim().toUpperCase(),
+          total_seats: totalSeats,
+          has_ac: hasAc,
+        },
+      });
+    }
   };
 
-  const handleDriverSignUp = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!driverName.trim()) return;
-    triggerHaptic('match');
-    registerDriver({
-      fullName: driverName.trim(),
-      email: driverEmail.trim() || `${driverName.toLowerCase().replace(/\s+/g, '.')}@corporate.ng`,
-      phone: driverPhone.trim() || '+234 803 111 5678',
-      employer: driverCompany.trim() || 'Executive Driver',
-      vehicle: {
-        make: carMake.trim() || 'Toyota',
-        model: carModel.trim() || 'Corolla',
-        year: parseInt(carYear) || 2022,
-        color: carColor.trim() || 'Silver',
-        plate_number: carPlate.trim().toUpperCase() || 'EPE-101-XZ',
-        total_seats: Number(carSeats) || 3,
-        has_ac: carHasAc,
-      },
-    });
-    confetti({
-      particleCount: 45,
-      spread: 60,
-      origin: { y: 0.6 },
-      colors: ['#0F766E', '#D97706', '#14B8A6'],
-    });
+  const handleQuickDemo = (demoRole: 'rider' | 'driver') => {
+    login(
+      demoRole === 'rider' ? 'femi.adeyemi@dangote.com' : 'babatunde@flutterwave.com',
+      demoRole
+    );
   };
 
   return (
-    <div className="w-full max-w-[430px] mx-auto min-h-full bg-[#F1F5F9] dark:bg-[#090D11] text-slate-900 dark:text-slate-100 flex flex-col justify-between p-4 py-5 space-y-4">
-      {/* Top Status & Theme Bar */}
-      <div className="flex items-center justify-between">
-        <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-500/10 border border-teal-600/20 dark:border-teal-400/20 text-[#0F766E] dark:text-[#14B8A6] text-[10px] font-bold tracking-wide">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          <span>LAGOS SEC 44 SAFE HARBOR</span>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            triggerHaptic('switch');
-            toggleTheme();
-          }}
-          className="p-2 rounded-xl floating-surface text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white active-spring"
-          title={`Switch to ${theme === 'dark' ? 'Light' : 'Dark'} Mode`}
-          aria-label="Toggle color theme"
-        >
-          {theme === 'dark' ? (
-            <Sun className="w-4 h-4 text-amber-400" />
-          ) : (
-            <Moon className="w-4 h-4 text-slate-600" />
-          )}
-        </button>
-      </div>
-
-      {/* Brand Identity Header */}
-      <div className="flex items-center gap-3.5 pt-1">
-        <div className="w-14 h-14 rounded-2xl p-2 floating-surface flex items-center justify-center flex-shrink-0">
-          <img
-            src={getAssetPath('/logo.png')}
-            alt="CAR PULL Logo"
-            className="w-full h-full object-contain"
-          />
-        </div>
-
-        <div className="min-w-0">
-          <div className="flex items-center gap-2">
-            <h1 className="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-              CAR PULL
-            </h1>
-            <span className="font-mono text-[10px] font-bold px-2 py-0.5 rounded bg-slate-200/80 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
-              AJAH - VI - MARINA
-            </span>
+    <div className="min-h-screen sm:min-h-0 flex-1 bg-[#F4F5F7] dark:bg-[#0B0C0E] text-[#0B0C0E] dark:text-white flex flex-col justify-between p-3.5 select-none">
+      {/* Uber Green Inspired Volt Hero Card with Concentric Radar Rings */}
+      <div className="volt-surface rounded-[32px] p-5 relative overflow-hidden">
+        {/* Top Row: Brand Pill & Theme Toggle */}
+        <div className="flex items-center justify-between relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] text-[10px] font-mono font-bold tracking-wider uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
+            CAR PULL • SEC 44
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug mt-0.5">
-            Peer-to-peer commuter transit, escrow fuel splits, and LASDRI roadside dispatch.
+
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="w-9 h-9 rounded-full bg-[#0B0C0E]/10 hover:bg-[#0B0C0E]/20 flex items-center justify-center text-[#0B0C0E] active-press transition-colors"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {/* Concentric Rings Emblem (Uber Green "Try Electricity" motif) */}
+        <div className="my-4 flex flex-col items-center justify-center relative z-10">
+          <div className="w-28 h-28 rounded-full border border-[#0B0C0E]/12 flex items-center justify-center">
+            <div className="w-20 h-20 rounded-full border border-[#0B0C0E]/22 flex items-center justify-center">
+              <div className="w-13 h-13 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center shadow-lg">
+                <Zap className="w-6 h-6 fill-current" />
+              </div>
+            </div>
+          </div>
+
+          <h1 className="text-2xl font-black tracking-tight text-[#0B0C0E] mt-3 text-center leading-none">
+            Share the Corridor.
+          </h1>
+          <p className="text-xs font-medium text-[#0B0C0E]/75 text-center mt-1.5 max-w-[260px] leading-snug">
+            Swipe verified corporate peers along Ajah, Lekki, and Victoria Island with zero-cash fuel splits.
           </p>
         </div>
       </div>
 
-      {/* Main Authentication Surface */}
-      <div className="floating-surface rounded-2xl p-4 space-y-3.5">
-        {/* 2-Tab Segmented Control */}
-        <div className="grid grid-cols-2 gap-1 bg-slate-100 dark:bg-[#0C1117] p-1 rounded-xl text-xs font-bold border border-slate-200/70 dark:border-white/5">
+      {/* 1-Tap Demo Access Bento Tiles (Uber Green "Additional Wishes" 2-column style) */}
+      <div className="my-3 space-y-2">
+        <div className="flex items-center justify-between px-1">
+          <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white">
+            Instant Demo Access
+          </span>
+          <span className="text-[10px] font-mono font-bold text-[#525866] dark:text-[#9BA1AE]">
+            1-TAP SANDBOX
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2.5">
+          {/* Active Volt Tile: Rider Demo */}
           <button
             type="button"
-            onClick={() => setAuthTab('signin')}
-            className={`py-2 rounded-lg transition-all active-spring ${
-              authTab === 'signin'
-                ? 'bg-white dark:bg-[#18212C] text-slate-900 dark:text-white shadow-xs font-extrabold'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            onClick={() => handleQuickDemo('rider')}
+            className="p-3.5 rounded-[24px] bg-[#0B0C0E] dark:bg-[#1E2028] text-white text-left flex flex-col justify-between min-h-[108px] active-press transition-transform relative overflow-hidden border border-[#0B0C0E] dark:border-white/10"
+          >
+            <div className="flex items-start justify-between w-full">
+              <div>
+                <span className="text-xs font-extrabold block text-white">Femi Adeyemi</span>
+                <span className="text-[10px] text-white/70 block mt-0.5">Rider • Dangote</span>
+              </div>
+              <span className="w-5 h-5 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+                <Check className="w-3 h-3 stroke-[3]" />
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between mt-3">
+              <div className="w-8 h-8 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+                <UserCheck className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#C8FF00] flex items-center gap-1">
+                Swipe Deck <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
+          </button>
+
+          {/* Secondary Crisp Tile: Driver Demo */}
+          <button
+            type="button"
+            onClick={() => handleQuickDemo('driver')}
+            className="p-3.5 rounded-[24px] bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white text-left flex flex-col justify-between min-h-[108px] active-press transition-transform border border-black/8 dark:border-white/10"
+          >
+            <div className="flex items-start justify-between w-full">
+              <div>
+                <span className="text-xs font-extrabold block">Babatunde A.</span>
+                <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] block mt-0.5">
+                  Driver • 3 Seats
+                </span>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028]">
+                AC
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between mt-3">
+              <div className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-[#C8FF00] flex items-center justify-center">
+                <Car className="w-4 h-4" />
+              </div>
+              <span className="text-[10px] font-mono font-bold text-[#0B0C0E] dark:text-white flex items-center gap-1">
+                Host Ride <ArrowRight className="w-3 h-3" />
+              </span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Auth Sheet Card (Paw Tinder + Uber Green Pill Form) */}
+      <div className="floating-surface p-4 space-y-3.5">
+        {/* Segmented Pill Switcher */}
+        <div className="grid grid-cols-2 p-1 rounded-full bg-[#F4F5F7] dark:bg-[#0B0C0E]">
+          <button
+            type="button"
+            onClick={() => {
+              setMode('signin');
+              setError('');
+            }}
+            className={`py-2 rounded-full text-xs font-extrabold transition-all ${
+              mode === 'signin'
+                ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                : 'text-[#525866] dark:text-[#9BA1AE]'
             }`}
           >
             Sign In
           </button>
           <button
             type="button"
-            onClick={() => setAuthTab('signup')}
-            className={`py-2 rounded-lg transition-all active-spring ${
-              authTab === 'signup'
-                ? 'bg-white dark:bg-[#18212C] text-slate-900 dark:text-white shadow-xs font-extrabold'
-                : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+            onClick={() => {
+              setMode('signup');
+              setError('');
+            }}
+            className={`py-2 rounded-full text-xs font-extrabold transition-all ${
+              mode === 'signup'
+                ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                : 'text-[#525866] dark:text-[#9BA1AE]'
             }`}
           >
             Create Account
           </button>
         </div>
 
-        {/* 1. SIGN IN TAB */}
-        {authTab === 'signin' && (
-          <form onSubmit={handleSignIn} className="space-y-3">
-            <div className="space-y-1">
-              <label
-                htmlFor="signin-identifier"
-                className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block"
-              >
-                Work Email or Phone Number
-              </label>
-              <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-3 py-2.5 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6] focus-within:ring-2 focus-within:ring-teal-500/20 transition-all">
-                <Mail className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
-                <input
-                  id="signin-identifier"
-                  type="text"
-                  value={signInIdentifier}
-                  onChange={(e) => setSignInIdentifier(e.target.value)}
-                  placeholder="name@company.ng or +234..."
-                  className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
-                  required
-                />
-              </div>
+        {error && (
+          <div className="px-3.5 py-2 rounded-2xl bg-red-500/10 border border-red-500/25 text-red-600 dark:text-red-400 text-[11px] font-bold">
+            {error}
+          </div>
+        )}
+
+        {mode === 'signin' ? (
+          <form onSubmit={handleSignIn} className="space-y-2.5">
+            <div className="relative">
+              <Mail className="w-4 h-4 text-[#525866] dark:text-[#9BA1AE] absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                id="signin-id"
+                type="text"
+                value={signInIdentifier}
+                onChange={(e) => setSignInIdentifier(e.target.value)}
+                placeholder="Work email or phone (+234...)"
+                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[#C8FF00]"
+              />
             </div>
 
-            <div className="space-y-1">
-              <label
-                htmlFor="signin-password"
-                className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block"
+            <div className="relative">
+              <Lock className="w-4 h-4 text-[#525866] dark:text-[#9BA1AE] absolute left-4 top-1/2 -translate-y-1/2" />
+              <input
+                id="signin-pw"
+                type="password"
+                value={signInPassword}
+                onChange={(e) => setSignInPassword(e.target.value)}
+                placeholder="Password or passcode"
+                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[#C8FF00]"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press"
+            >
+              <span>Continue to Corridor</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleSignUp} className="space-y-2.5">
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setSignupRole('rider')}
+                className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2 ${
+                  signupRole === 'rider'
+                    ? 'bg-[#C8FF00] border-[#0B0C0E] text-[#0B0C0E]'
+                    : 'bg-[#F4F5F7] dark:bg-[#1E2028] border-transparent text-[#525866] dark:text-[#9BA1AE]'
+                }`}
               >
-                Password or Passcode
-              </label>
-              <div className="flex items-center gap-2.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-3 py-2.5 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6] focus-within:ring-2 focus-within:ring-teal-500/20 transition-all">
-                <Lock className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
+                <UserCheck className="w-4 h-4 flex-shrink-0" />
+                <div>
+                  <div className="text-xs font-extrabold">Rider</div>
+                  <div className="text-[9px] opacity-75">Book seats</div>
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setSignupRole('driver')}
+                className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2 ${
+                  signupRole === 'driver'
+                    ? 'bg-[#C8FF00] border-[#0B0C0E] text-[#0B0C0E]'
+                    : 'bg-[#F4F5F7] dark:bg-[#1E2028] border-transparent text-[#525866] dark:text-[#9BA1AE]'
+                }`}
+              >
+                <Car className="w-4 h-4 flex-shrink-0" />
+                <div>
+                  <div className="text-xs font-extrabold">Car Owner</div>
+                  <div className="text-[9px] opacity-75">Offset fuel</div>
+                </div>
+              </button>
+            </div>
+
+            <div className="space-y-2 max-h-[210px] overflow-y-auto pr-0.5 no-scrollbar">
+              <div className="relative">
+                <User className="w-3.5 h-3.5 text-[#525866] absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
-                  id="signin-password"
+                  type="text"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  placeholder="Full Name (e.g. Chidi Nwosu)"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="relative">
+                  <Mail className="w-3.5 h-3.5 text-[#525866] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Work Email"
+                    className="w-full pl-9 pr-3 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white"
+                  />
+                </div>
+                <div className="relative">
+                  <Phone className="w-3.5 h-3.5 text-[#525866] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+234 803..."
+                    className="w-full pl-9 pr-3 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="relative">
+                <Building2 className="w-3.5 h-3.5 text-[#525866] absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={employer}
+                  onChange={(e) => setEmployer(e.target.value)}
+                  placeholder="Employer / Victoria Island Hub"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white"
+                />
+              </div>
+
+              {signupRole === 'driver' && (
+                <div className="p-3 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={vehicleMake}
+                      onChange={(e) => setVehicleMake(e.target.value)}
+                      placeholder="Make (Toyota)"
+                      className="px-3 py-2 rounded-full bg-white dark:bg-[#14161B] text-xs font-semibold"
+                    />
+                    <input
+                      type="text"
+                      value={vehicleModel}
+                      onChange={(e) => setVehicleModel(e.target.value)}
+                      placeholder="Model (Camry)"
+                      className="px-3 py-2 rounded-full bg-white dark:bg-[#14161B] text-xs font-semibold"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="text"
+                      value={plateNumber}
+                      onChange={(e) => setPlateNumber(e.target.value)}
+                      placeholder="Plate (LSR-482-KJ)"
+                      className="px-3 py-2 rounded-full bg-white dark:bg-[#14161B] text-xs font-mono font-bold uppercase"
+                    />
+                    <select
+                      value={totalSeats}
+                      onChange={(e) => setTotalSeats(Number(e.target.value))}
+                      className="px-3 py-2 rounded-full bg-white dark:bg-[#14161B] text-xs font-bold"
+                    >
+                      <option value={1}>1 Seat</option>
+                      <option value={2}>2 Seats</option>
+                      <option value={3}>3 Seats</option>
+                      <option value={4}>4 Seats</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              <div className="relative">
+                <Lock className="w-3.5 h-3.5 text-[#525866] absolute left-4 top-1/2 -translate-y-1/2" />
+                <input
                   type="password"
-                  value={signInPassword}
-                  onChange={(e) => setSignInPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none"
-                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Create Passcode"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white"
                 />
               </div>
             </div>
 
             <button
               type="submit"
-              className="w-full py-2.5 btn-electric-mint text-xs rounded-xl flex items-center justify-center gap-1.5 active-spring"
+              className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press"
             >
-              <span>Sign In to Corridor</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span>{signupRole === 'driver' ? 'Launch Driver Deck' : 'Join Corridor'}</span>
+              <ArrowRight className="w-4 h-4" />
             </button>
-
-            {/* Instant Demo Personas */}
-            <div className="pt-2.5 border-t border-slate-200/70 dark:border-white/8 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                  Quick Demo Access
-                </span>
-                <span className="text-[10px] font-mono text-teal-700 dark:text-teal-400">
-                  1-Tap Login
-                </span>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHaptic('match');
-                    login('femi.adeyemi@dangote.com', 'rider');
-                  }}
-                  className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0C1117] hover:bg-teal-500/10 dark:hover:bg-teal-500/15 border border-slate-200/80 dark:border-white/10 hover:border-teal-500/40 text-left transition-all active-spring group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-[#0F766E] dark:text-[#14B8A6]">
-                      <User className="w-3 h-3" />
-                      Rider
-                    </span>
-                    <ArrowRight className="w-3 h-3 text-slate-400 group-hover:text-[#0F766E] dark:group-hover:text-[#14B8A6] transition-colors" />
-                  </div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100 mt-1 truncate">
-                    Femi Adeyemi
-                  </div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                    Dangote • Ajah to VI
-                  </div>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    triggerHaptic('match');
-                    login('babatunde.adeleke@flutterwave.com', 'driver');
-                  }}
-                  className="p-2.5 rounded-xl bg-slate-50 dark:bg-[#0C1117] hover:bg-amber-500/10 dark:hover:bg-amber-500/15 border border-slate-200/80 dark:border-white/10 hover:border-amber-500/40 text-left transition-all active-spring group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1 text-[10px] font-extrabold text-amber-600 dark:text-amber-400">
-                      <Car className="w-3 h-3" />
-                      Driver
-                    </span>
-                    <ArrowRight className="w-3 h-3 text-slate-400 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors" />
-                  </div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-slate-100 mt-1 truncate">
-                    Babatunde Adeleke
-                  </div>
-                  <div className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
-                    Flutterwave • 3 Seats
-                  </div>
-                </button>
-              </div>
-            </div>
           </form>
         )}
-
-        {/* 2. SIGN UP TAB */}
-        {authTab === 'signup' && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <button
-                type="button"
-                onClick={() => setAuthTab('signin')}
-                className="flex items-center gap-1 text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>Back to Sign In</span>
-              </button>
-
-              <div className="flex bg-slate-100 dark:bg-[#0C1117] p-0.5 rounded-xl border border-slate-200/70 dark:border-white/5 text-[11px] font-bold">
-                <button
-                  type="button"
-                  onClick={() => setSignUpRole('rider')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
-                    signUpRole === 'rider'
-                      ? 'bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#041E1B] font-extrabold'
-                      : 'text-slate-500 dark:text-slate-400'
-                  }`}
-                >
-                  Rider
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setSignUpRole('driver')}
-                  className={`px-2.5 py-1 rounded-lg transition-all ${
-                    signUpRole === 'driver'
-                      ? 'bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#041E1B] font-extrabold'
-                      : 'text-slate-500 dark:text-slate-400'
-                  }`}
-                >
-                  Driver
-                </button>
-              </div>
-            </div>
-
-            {/* Rider Sign Up Form */}
-            {signUpRole === 'rider' && (
-              <form onSubmit={handleRiderSignUp} className="space-y-2.5">
-                <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                    Full Name
-                  </label>
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-3 py-2 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6] transition-all">
-                    <User className="w-3.5 h-3.5 text-slate-400" />
-                    <input
-                      type="text"
-                      value={riderName}
-                      onChange={(e) => setRiderName(e.target.value)}
-                      placeholder="Chioma Okafor"
-                      className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                    Work Email
-                  </label>
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-3 py-2 focus-within:border-[#0F766E] dark:focus-within:border-[#14B8A6] transition-all">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" />
-                    <input
-                      type="email"
-                      value={riderEmail}
-                      onChange={(e) => setRiderEmail(e.target.value)}
-                      placeholder="chioma@paystack.com"
-                      className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                      Phone
-                    </label>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-2.5 py-2 focus-within:border-[#0F766E] transition-all">
-                      <Phone className="w-3.5 h-3.5 text-slate-400" />
-                      <input
-                        type="tel"
-                        value={riderPhone}
-                        onChange={(e) => setRiderPhone(e.target.value)}
-                        placeholder="+234 812..."
-                        className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                      Organization
-                    </label>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-2.5 py-2 focus-within:border-[#0F766E] transition-all">
-                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      <input
-                        type="text"
-                        value={riderCompany}
-                        onChange={(e) => setRiderCompany(e.target.value)}
-                        placeholder="Paystack"
-                        className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-2.5 btn-electric-mint rounded-xl flex items-center justify-center gap-1.5 text-xs active-spring mt-1"
-                >
-                  <span>Create Rider Account</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </button>
-              </form>
-            )}
-
-            {/* Driver & Car Sign Up Form */}
-            {signUpRole === 'driver' && (
-              <form onSubmit={handleDriverSignUp} className="space-y-2.5">
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                      Full Name
-                    </label>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-2.5 py-2">
-                      <User className="w-3.5 h-3.5 text-slate-400" />
-                      <input
-                        type="text"
-                        value={driverName}
-                        onChange={(e) => setDriverName(e.target.value)}
-                        placeholder="Tunde Balogun"
-                        className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                      Organization
-                    </label>
-                    <div className="flex items-center gap-1.5 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-2.5 py-2">
-                      <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                      <input
-                        type="text"
-                        value={driverCompany}
-                        onChange={(e) => setDriverCompany(e.target.value)}
-                        placeholder="Access Bank"
-                        className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  <label className="text-[11px] font-bold text-slate-700 dark:text-slate-300 block">
-                    Work Email
-                  </label>
-                  <div className="flex items-center gap-2 bg-slate-50 dark:bg-[#0C1117] border border-slate-200/90 dark:border-white/10 rounded-xl px-3 py-2">
-                    <Mail className="w-3.5 h-3.5 text-slate-400" />
-                    <input
-                      type="email"
-                      value={driverEmail}
-                      onChange={(e) => setDriverEmail(e.target.value)}
-                      placeholder="tunde@accessbank.com"
-                      className="w-full bg-transparent text-xs font-semibold text-slate-900 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Vehicle Specs Module */}
-                <div className="bg-slate-50 dark:bg-[#0C1117] border border-slate-200/80 dark:border-white/8 rounded-xl p-3 space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-bold text-[#0F766E] dark:text-[#14B8A6] flex items-center gap-1.5">
-                      <Car className="w-3.5 h-3.5" />
-                      Vehicle Registration
-                    </span>
-                    <span className="text-[9px] font-mono font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">
-                      SEC 44 EXEMPT
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
-                        Make
-                      </label>
-                      <input
-                        type="text"
-                        value={carMake}
-                        onChange={(e) => setCarMake(e.target.value)}
-                        placeholder="Toyota"
-                        className="w-full bg-white dark:bg-[#11171E] border border-slate-200 dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:outline-none"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
-                        Model
-                      </label>
-                      <input
-                        type="text"
-                        value={carModel}
-                        onChange={(e) => setCarModel(e.target.value)}
-                        placeholder="Camry"
-                        className="w-full bg-white dark:bg-[#11171E] border border-slate-200 dark:border-white/10 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:outline-none"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 block mb-0.5">
-                        Lagos Plate
-                      </label>
-                      <input
-                        type="text"
-                        value={carPlate}
-                        onChange={(e) => setCarPlate(e.target.value)}
-                        placeholder="APP-842-EY"
-                        className="w-full plate-badge rounded-lg px-2.5 py-1.5 text-xs font-bold uppercase focus:outline-none"
-                        required
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] font-semibold text-slate-500 dark:text-slate-400 block mb-0.5">
-                        Year &amp; Color
-                      </label>
-                      <div className="flex gap-1">
-                        <input
-                          type="text"
-                          value={carYear}
-                          onChange={(e) => setCarYear(e.target.value)}
-                          placeholder="2022"
-                          className="w-14 bg-white dark:bg-[#11171E] border border-slate-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:outline-none"
-                        />
-                        <input
-                          type="text"
-                          value={carColor}
-                          onChange={(e) => setCarColor(e.target.value)}
-                          placeholder="Silver"
-                          className="flex-1 min-w-0 bg-white dark:bg-[#11171E] border border-slate-200 dark:border-white/10 rounded-lg px-2 py-1.5 text-xs font-semibold text-slate-900 dark:text-slate-100 focus:outline-none"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between pt-1">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-[10px] font-semibold text-slate-500 dark:text-slate-400">
-                        Seats:
-                      </span>
-                      {[1, 2, 3, 4].map((num) => (
-                        <button
-                          key={num}
-                          type="button"
-                          onClick={() => setCarSeats(num)}
-                          className={`w-6 h-6 rounded-md text-[11px] font-mono font-bold transition-all ${
-                            carSeats === num
-                              ? 'bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-[#041E1B]'
-                              : 'bg-white dark:bg-[#11171E] text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-white/10'
-                          }`}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
-
-                    <label className="flex items-center gap-1.5 cursor-pointer select-none">
-                      <input
-                        type="checkbox"
-                        checked={carHasAc}
-                        onChange={(e) => setCarHasAc(e.target.checked)}
-                        className="w-3.5 h-3.5 accent-[#0F766E] rounded"
-                      />
-                      <span className="text-[11px] font-semibold text-slate-700 dark:text-slate-300">
-                        AC Verified
-                      </span>
-                    </label>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-2.5 btn-electric-mint rounded-xl flex items-center justify-center gap-1.5 text-xs active-spring mt-1"
-                >
-                  <Car className="w-3.5 h-3.5" />
-                  <span>Register Vehicle &amp; Start Driving</span>
-                </button>
-              </form>
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* Architectural Trust Strip (Hairline-divided instead of separate small cards) */}
-      <div className="floating-surface rounded-2xl grid grid-cols-3 divide-x divide-slate-200/80 dark:divide-white/8 py-2.5 px-1 text-center">
-        <div className="px-2 flex flex-col items-center">
-          <ShieldCheck className="w-4 h-4 text-[#0F766E] dark:text-[#14B8A6] mb-1" />
-          <span className="text-[10px] font-bold text-slate-900 dark:text-slate-100 leading-tight">
-            Verified Peers
-          </span>
-          <span className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">
-            NIN &amp; Work Domain
-          </span>
-        </div>
-        <div className="px-2 flex flex-col items-center">
-          <Fuel className="w-4 h-4 text-amber-600 dark:text-amber-400 mb-1" />
-          <span className="text-[10px] font-bold text-slate-900 dark:text-slate-100 leading-tight">
-            Zero-Cash Split
-          </span>
-          <span className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">
-            1.2x PMS Ceiling
-          </span>
-        </div>
-        <div className="px-2 flex flex-col items-center">
-          <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 mb-1" />
-          <span className="text-[10px] font-bold text-slate-900 dark:text-slate-100 leading-tight">
-            Safe Hubs
-          </span>
-          <span className="text-[9px] text-slate-500 dark:text-slate-400 mt-0.5">
-            Off-Street CCTV
-          </span>
-        </div>
       </div>
     </div>
   );

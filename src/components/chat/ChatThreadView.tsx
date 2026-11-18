@@ -8,7 +8,6 @@ import {
   Phone,
   Share2,
   Send,
-  ShieldCheck,
   Car,
   CheckCheck,
   Mic,
@@ -83,10 +82,10 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
   if (!thread) {
     return (
       <div className="p-6 text-center space-y-3">
-        <p className="text-xs text-slate-500 dark:text-slate-400">Thread not found.</p>
+        <p className="text-xs text-[#525866]">Thread not found.</p>
         <button
           onClick={() => setActiveThreadId(null)}
-          className="text-xs text-[#0F766E] dark:text-[#14B8A6] font-bold underline"
+          className="text-xs font-extrabold underline"
         >
           Return to inbox
         </button>
@@ -149,23 +148,23 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
   ];
 
   return (
-    <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-[#F1F5F9] dark:bg-[#090D11] select-none animate-in fade-in">
-      {/* Top Fixed Thread Navigation & Partner Header */}
-      <div className="bg-white/95 dark:bg-[#11171E]/95 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/10 px-3 py-2.5 flex items-center justify-between gap-2 flex-shrink-0 z-20">
-        <div className="flex items-center gap-2 min-w-0">
+    <div className="w-full h-full flex flex-col justify-between overflow-hidden bg-[#F4F5F7] dark:bg-[#0B0C0E] select-none animate-in fade-in">
+      {/* Top Partner Header */}
+      <div className="bg-white dark:bg-[#14161B] px-3.5 py-2.5 flex items-center justify-between gap-2 flex-shrink-0 z-20 border-b border-black/6 dark:border-white/8">
+        <div className="flex items-center gap-2.5 min-w-0">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setActiveThreadId(null);
             }}
-            className="p-1.5 -ml-1 rounded-xl hover:bg-slate-100 dark:hover:bg-[#171F29] text-slate-700 dark:text-slate-300 active-press transition-all"
+            className="w-9 h-9 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press flex-shrink-0"
             title="Back to inbox"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-4 h-4" />
           </button>
 
           <div className="relative flex-shrink-0">
-            <div className="relative w-9 h-9 rounded-xl bg-[#0F766E] text-white flex items-center justify-center font-mono font-bold text-xs border border-slate-200/80 dark:border-white/10 overflow-hidden">
+            <div className="relative w-10 h-10 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center font-mono font-bold text-xs overflow-hidden">
               <span>{thread.partnerName.split(' ').map((n) => n[0]).join('')}</span>
               <img
                 src={thread.partnerAvatar}
@@ -177,32 +176,31 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               />
             </div>
             {thread.isOnline && (
-              <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-[#11171E] z-10" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#C8FF00] ring-2 ring-white dark:ring-[#14161B] z-10" />
             )}
           </div>
 
           <div className="min-w-0">
             <div className="flex items-center gap-1.5 truncate">
-              <h3 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
+              <h3 className="text-xs font-display font-black text-[#0B0C0E] dark:text-white truncate">
                 {thread.partnerName}
               </h3>
-              <span className="text-[9px] font-mono uppercase font-bold px-1.5 py-0.5 rounded-md bg-teal-500/12 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0">
+              <span className="text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex-shrink-0">
                 {thread.partnerRole === 'driver' ? 'DRIVER' : 'CO-RIDER'}
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate font-medium">
+            <p className="text-[10px] text-[#525866] dark:text-[#9BA1AE] truncate font-medium">
               {thread.partnerEmployer}
             </p>
           </div>
         </div>
 
-        {/* Quick Voice Call & WhatsApp Actions */}
         <div className="flex items-center gap-1.5 flex-shrink-0">
           {thread.partnerPhone && (
             <a
               href={`tel:${thread.partnerPhone}`}
               onClick={() => triggerHaptic('tap')}
-              className="p-2 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-[#0F766E] dark:text-[#14B8A6] hover:bg-teal-500/12 active-press transition-all"
+              className="w-9 h-9 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press"
               title="Voice Call"
             >
               <Phone className="w-3.5 h-3.5" />
@@ -214,7 +212,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               const text = `*CAR PULL - Connecting with ${thread.partnerName}*\nRoute: ${thread.routeSummary}\nSafe Hub: ${thread.pickupSafeZoneName}`;
               window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
             }}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/12 active-press transition-all"
+            className="w-9 h-9 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-emerald-500 flex items-center justify-center active-press"
             title="Open WhatsApp"
           >
             <Share2 className="w-3.5 h-3.5" />
@@ -222,14 +220,15 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
         </div>
       </div>
 
-      {/* Pinned Live Ride Telemetry Banner */}
-      <div className="floating-surface rounded-2xl p-2.5 mx-2.5 mt-2 space-y-1.5 flex-shrink-0 z-10">
+      {/* Charlie Waite "The re-designed Uber App" Frosted Live Car Progress Widget */}
+      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[24px] p-3.5 mx-3 mt-2.5 text-white space-y-2 flex-shrink-0 z-10 shadow-md">
         <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-800 dark:text-slate-200 truncate">
-            <Car className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+          <div className="flex items-center gap-2 text-xs font-extrabold truncate">
             <span className="truncate">{thread.routeSummary}</span>
             {thread.vehiclePlate && (
-              <span className="plate-badge flex-shrink-0">{thread.vehiclePlate}</span>
+              <span className="px-2 py-0.5 rounded-full bg-[#FF9F0A] text-[#0B0C0E] font-mono text-[10px] font-black">
+                {thread.vehiclePlate}
+              </span>
             )}
           </div>
           <button
@@ -237,25 +236,30 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               triggerHaptic('tap');
               setActiveTab('pass');
             }}
-            className="inline-flex items-center gap-1 px-2 py-1 rounded-lg bg-teal-500/12 border border-teal-500/20 text-[#0F766E] dark:text-[#14B8A6] text-[10px] font-mono font-bold hover:bg-teal-500/20 transition-all flex-shrink-0"
-            title="View Section 44 Commute Pass"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[10px] font-mono font-black active-press flex-shrink-0"
           >
             <QrCode className="w-3 h-3" />
             <span>SEC 44 PASS</span>
           </button>
         </div>
 
-        <div className="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-200/70 dark:border-white/8 text-[10px]">
-          <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-400 truncate">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-            <span className="truncate font-medium">
-              {thread.tripStatus === 'en-route'
-                ? `ETA ${thread.etaMinutes || 4}m • ${thread.pickupSafeZoneName.split(',')[0]}`
-                : `Hub: ${thread.pickupSafeZoneName.split(',')[0]}`}
-            </span>
+        {/* Horizontal Car Progress Track */}
+        <div className="relative h-1.5 w-full rounded-full bg-white/20 flex items-center my-1">
+          <div className="h-full w-[62%] rounded-full bg-[#C8FF00]" />
+          <div
+            style={{ left: '58%' }}
+            className="absolute -translate-x-1/2 w-8 h-4 rounded-full bg-white text-[#0B0C0E] flex items-center justify-center shadow-sm"
+          >
+            <Car className="w-2.5 h-2.5 fill-current" />
           </div>
-          <span className="text-[#0F766E] dark:text-[#14B8A6] font-mono tabular-nums font-bold flex items-center gap-1 flex-shrink-0">
-            <ShieldCheck className="w-3 h-3" />
+          <span className="absolute right-0 w-2 h-2 rounded-full bg-[#FF9F0A]" />
+        </div>
+
+        <div className="flex items-center justify-between text-[10px] font-mono text-white/75">
+          <span className="truncate">
+            ETA {thread.etaMinutes || 4}m • {thread.pickupSafeZoneName.split(',')[0]}
+          </span>
+          <span className="text-[#C8FF00] font-bold">
             ₦{(thread.escrowSecuredNgn || 2500).toLocaleString()} ESCROW
           </span>
         </div>
@@ -263,12 +267,9 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
 
       {/* Message Stream */}
       <div className="flex-1 overflow-y-auto p-3 space-y-2.5 no-scrollbar">
-        <div className="flex items-center justify-between px-1">
-          <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            TODAY • SWIPE RIGHT TO QUOTE
-          </span>
-          <span className="text-[9px] font-mono text-emerald-700 dark:text-emerald-400">
-            END-TO-END VERIFIED
+        <div className="text-center">
+          <span className="text-[9px] font-mono uppercase tracking-wider text-[#525866] dark:text-[#9BA1AE]">
+            SWIPE RIGHT ON ANY MESSAGE TO QUOTE REPLY
           </span>
         </div>
 
@@ -282,7 +283,6 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               key={msg.id}
               className={`relative group w-full flex flex-col ${isMe ? 'items-end' : 'items-start'}`}
             >
-              {/* Swipe-to-reply reveal indicator and click shortcut */}
               <button
                 type="button"
                 onClick={() => {
@@ -293,18 +293,17 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                     text: msg.isAudio ? 'Voice note' : msg.text,
                   });
                 }}
-                className={`absolute ${isMe ? 'right-[calc(82%+8px)]' : 'left-0'} top-1/2 -translate-y-1/2 p-1 text-[#0F766E] dark:text-[#14B8A6] opacity-60 hover:opacity-100 z-0 transition-opacity`}
-                title="Reply to this message"
+                className={`absolute ${isMe ? 'right-[calc(82%+8px)]' : 'left-0'} top-1/2 -translate-y-1/2 p-1 text-[#525866] opacity-60 hover:opacity-100 z-0`}
+                title="Reply to message"
               >
                 <CornerUpLeft className="w-4 h-4" />
               </button>
 
-              {/* Draggable Message Bubble */}
               <motion.div
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={{ left: 0, right: 0.35 }}
-                onDragEnd={(e, info) => {
+                onDragEnd={(_e, info) => {
                   if (info.offset.x > 38) {
                     triggerHaptic('tap');
                     setReplyingTo({
@@ -314,41 +313,36 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                     });
                   }
                 }}
-                className={`relative z-10 max-w-[82%] rounded-2xl px-3.5 py-2 text-xs leading-relaxed ${
+                className={`relative z-10 max-w-[82%] rounded-[22px] px-4 py-2.5 text-xs leading-relaxed ${
                   isMe
-                    ? 'bg-[#0F766E] dark:bg-[#0D9488] text-white rounded-tr-xs border border-teal-600/40'
-                    : 'bg-white dark:bg-[#11171E] text-slate-900 dark:text-slate-100 border border-slate-200/80 dark:border-white/10 rounded-tl-xs'
+                    ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E] rounded-tr-xs font-medium'
+                    : 'bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white border border-black/6 dark:border-white/8 rounded-tl-xs'
                 }`}
               >
-                {/* Quoted Reply Box (Full 1px Border, No Side-Stripe) */}
                 {msg.replyTo && (
                   <div
-                    className={`mb-1.5 px-2.5 py-1.5 rounded-xl border text-[10px] ${
+                    className={`mb-1.5 px-3 py-1.5 rounded-2xl border text-[10px] ${
                       isMe
-                        ? 'bg-black/20 border-white/20 text-teal-50'
-                        : 'bg-slate-100/90 dark:bg-[#171F29] border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300'
+                        ? 'bg-white/10 dark:bg-black/10 border-white/15 dark:border-black/15'
+                        : 'bg-[#F4F5F7] dark:bg-[#1E2028] border-black/8 dark:border-white/10'
                     }`}
                   >
-                    <div className="font-mono font-bold uppercase tracking-wider text-[9px] truncate opacity-90">
+                    <div className="font-mono font-bold uppercase text-[9px] truncate opacity-80">
                       {msg.replyTo.senderName}
                     </div>
-                    <div className="truncate opacity-85">
-                      {msg.replyTo.text}
-                    </div>
+                    <div className="truncate opacity-90">{msg.replyTo.text}</div>
                   </div>
                 )}
 
-                {/* Body: Voice note waveform or text */}
                 {isAudio ? (
                   <div className="flex items-center gap-2.5 py-1">
                     <button
                       onClick={() => togglePlayAudio(msg.id)}
-                      className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 active-press transition-all ${
+                      className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 active-press ${
                         isMe
-                          ? 'bg-white text-[#0F766E]'
-                          : 'bg-[#0F766E] dark:bg-[#14B8A6] text-white dark:text-slate-950'
+                          ? 'bg-[#C8FF00] dark:bg-[#0B0C0E] text-[#0B0C0E] dark:text-[#C8FF00]'
+                          : 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
                       }`}
-                      title={isPlaying ? 'Pause' : 'Play audio note'}
                     >
                       {isPlaying ? (
                         <Pause className="w-3.5 h-3.5 fill-current" />
@@ -364,21 +358,15 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                           <div
                             key={idx}
                             style={{ height: `${barHeight}px` }}
-                            className={`w-1 rounded-full transition-all ${
-                              isPlaying
-                                ? isMe
-                                  ? 'bg-white animate-pulse'
-                                  : 'bg-[#14B8A6] animate-pulse'
-                                : isMe
-                                ? 'bg-teal-200/70'
-                                : 'bg-slate-300 dark:bg-slate-600'
+                            className={`w-1 rounded-full ${
+                              isPlaying ? 'animate-pulse bg-[#FF9F0A]' : 'bg-current opacity-60'
                             }`}
                           />
                         );
                       })}
                     </div>
 
-                    <div className="flex items-center gap-1 text-[10px] font-mono tabular-nums opacity-90 flex-shrink-0">
+                    <div className="flex items-center gap-1 text-[10px] font-mono tabular-nums opacity-80">
                       <Mic className="w-2.5 h-2.5" />
                       <span>{msg.audioDuration || '0:04'}</span>
                     </div>
@@ -387,13 +375,9 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                   <p>{msg.text}</p>
                 )}
 
-                <div
-                  className={`flex items-center justify-end gap-1 text-[9px] mt-1 ${
-                    isMe ? 'text-teal-100/90' : 'text-slate-400 dark:text-slate-500'
-                  }`}
-                >
+                <div className="flex items-center justify-end gap-1 text-[9px] mt-1 opacity-70">
                   <span className="font-mono tabular-nums">{msg.timestamp}</span>
-                  {isMe && <CheckCheck className="w-3 h-3 text-teal-100" />}
+                  {isMe && <CheckCheck className="w-3 h-3" />}
                 </div>
               </motion.div>
             </div>
@@ -402,44 +386,43 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Quick Pings Row */}
-      <div className="py-1.5 px-2.5 overflow-x-auto no-scrollbar flex items-center gap-1.5 bg-transparent flex-shrink-0">
+      {/* Quick Pings Strip */}
+      <div className="py-1.5 px-3 overflow-x-auto no-scrollbar flex items-center gap-1.5 flex-shrink-0">
         {quickPings.map((ping, idx) => (
           <button
             key={idx}
             onClick={() => handleQuickPing(ping.text)}
-            className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#11171E] hover:bg-slate-100 dark:hover:bg-[#171F29] text-slate-800 dark:text-slate-200 text-[10.5px] font-bold border border-slate-200/80 dark:border-white/10 whitespace-nowrap active-press transition-all"
+            className="px-3 py-1.5 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white text-[11px] font-bold border border-black/6 dark:border-white/10 whitespace-nowrap active-press"
           >
             {ping.label}
           </button>
         ))}
       </div>
 
-      {/* Bottom Area: Replying-to Preview & Input Bar */}
-      <div className="p-2 pt-1.5 space-y-1.5 bg-white/95 dark:bg-[#11171E]/95 border-t border-slate-200/80 dark:border-white/10 flex-shrink-0">
+      {/* Bottom Composer Pill Bar */}
+      <div className="p-2.5 bg-white dark:bg-[#14161B] border-t border-black/6 dark:border-white/8 space-y-1.5 flex-shrink-0">
         <AnimatePresence>
           {replyingTo && (
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 8 }}
-              className="bg-slate-100 dark:bg-[#171F29] border border-teal-500/30 rounded-xl p-2 px-3 flex items-center justify-between gap-2"
+              className="bg-[#F4F5F7] dark:bg-[#1E2028] rounded-2xl p-2 px-3 flex items-center justify-between gap-2"
             >
               <div className="flex items-center gap-2 min-w-0">
-                <CornerUpLeft className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6] flex-shrink-0" />
+                <CornerUpLeft className="w-3.5 h-3.5 text-[#FF9F0A] flex-shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[10px] font-mono font-bold text-[#0F766E] dark:text-[#14B8A6] uppercase">
+                  <div className="text-[10px] font-mono font-bold text-[#0B0C0E] dark:text-[#C8FF00] uppercase">
                     Replying to {replyingTo.senderName}
                   </div>
-                  <div className="text-[11px] text-slate-600 dark:text-slate-400 truncate">
+                  <div className="text-[11px] text-[#525866] dark:text-[#9BA1AE] truncate">
                     {replyingTo.text}
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => setReplyingTo(null)}
-                className="p-1 rounded-lg hover:bg-slate-200 dark:hover:bg-white/10 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
-                title="Cancel reply"
+                className="p-1 rounded-full hover:bg-black/5 text-[#525866]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -448,41 +431,41 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
         </AnimatePresence>
 
         {isRecording ? (
-          <div className="bg-red-500/12 border border-red-500/30 p-2 rounded-xl flex items-center justify-between gap-2">
+          <div className="bg-red-500/12 rounded-full p-2 px-4 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-red-600 animate-ping" />
               <span className="text-xs font-mono tabular-nums font-bold text-red-600 dark:text-red-400">
                 REC 0:{recordingSeconds.toString().padStart(2, '0')}
               </span>
             </div>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => {
                   triggerHaptic('tap');
                   setIsRecording(false);
                   setRecordingSeconds(0);
                 }}
-                className="px-2.5 py-1 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                className="text-xs font-bold text-[#525866]"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSendAudio}
-                className="px-3 py-1.5 rounded-lg btn-electric-mint text-xs font-black active-press"
+                className="px-4 py-1.5 rounded-full btn-electric-mint text-xs font-extrabold active-press"
               >
                 Send Voice
               </button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSend} className="flex items-center gap-1.5">
+          <form onSubmit={handleSend} className="flex items-center gap-2">
             <input
               ref={inputRef}
               type="text"
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               placeholder={`Message ${thread.partnerName.split(' ')[0]}...`}
-              className="flex-1 px-3.5 py-2.5 bg-slate-100 dark:bg-[#171F29] rounded-xl text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 border border-slate-200/80 dark:border-white/8 focus:outline-hidden focus:border-[#0F766E] dark:focus:border-[#14B8A6] transition-colors"
+              className="flex-1 px-4 py-2.5 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden"
             />
 
             <button
@@ -491,7 +474,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                 triggerHaptic('tap');
                 setIsRecording(true);
               }}
-              className="p-2.5 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 hover:border-teal-500/30 text-slate-600 dark:text-slate-300 hover:text-[#0F766E] dark:hover:text-[#14B8A6] transition-all active-press"
+              className="w-10 h-10 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press flex-shrink-0"
               title="Record voice note"
             >
               <Mic className="w-4 h-4" />
@@ -500,10 +483,10 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
             <button
               type="submit"
               disabled={!inputMessage.trim()}
-              className={`p-2.5 rounded-xl transition-all flex-shrink-0 ${
+              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all flex-shrink-0 ${
                 inputMessage.trim()
                   ? 'btn-electric-mint active-press'
-                  : 'bg-slate-200 dark:bg-[#171F29] text-slate-400 dark:text-slate-600 border border-slate-200/80 dark:border-white/5 cursor-not-allowed'
+                  : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#9BA1AE] cursor-not-allowed'
               }`}
               title="Send message"
             >

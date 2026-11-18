@@ -5,7 +5,6 @@ import { createPortal } from 'react-dom';
 import {
   Share2,
   Sparkles,
-  ArrowLeft,
   X,
   Send,
   Compass,
@@ -37,7 +36,6 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
   tripPurpose,
   conversationVibe,
   musicVibe,
-  interests = [],
   vehiclePlate,
   linkedinHandle,
 }) => {
@@ -96,7 +94,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       particleCount: 30,
       spread: 45,
       origin: { y: 0.6 },
-      colors: ['#0F766E', '#14B8A6', '#25D366'],
+      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
     });
 
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
@@ -116,7 +114,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       particleCount: 25,
       spread: 40,
       origin: { y: 0.6 },
-      colors: ['#0F766E', '#D97706', '#14B8A6'],
+      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
     });
 
     setSentSuccess(true);
@@ -135,84 +133,56 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[600] bg-slate-950/70 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
-      <div className="w-full max-w-[390px] floating-surface rounded-2xl p-4 space-y-3.5 max-h-[90vh] flex flex-col my-auto animate-in slide-in-from-bottom sm:zoom-in-95 duration-200">
-        {/* Header with Step-Back Navigation */}
-        <div className="flex items-center justify-between pb-2.5 border-b border-slate-200/70 dark:border-white/8">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-800 dark:text-slate-100 font-bold text-xs active-press transition-all"
-            title="Go back"
-          >
-            <ArrowLeft className="w-3.5 h-3.5 text-[#0F766E] dark:text-[#14B8A6]" />
-            <span>Back</span>
-          </button>
-
-          <div className="text-center">
-            <h3 className="text-sm font-black text-slate-900 dark:text-slate-100">
-              Direct Note
+    <div className="fixed inset-0 z-[600] bg-black/70 backdrop-blur-xs overflow-y-auto p-3 overscroll-contain flex items-end sm:items-center justify-center animate-in fade-in duration-200">
+      <div className="w-full max-w-[390px] floating-surface rounded-[32px] p-5 space-y-3.5 max-h-[90vh] flex flex-col my-auto animate-in slide-in-from-bottom duration-200">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+              Quick Pickup Note
             </h3>
-            <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400 font-bold block">
-              CO-RIDER COORDINATION
+            <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+              Direct peer coordination
             </span>
           </div>
 
           <button
             onClick={handleBack}
-            className="w-8 h-8 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/10 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all"
+            className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
             title="Close"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        {/* Matched Person Profile Capsule */}
-        <div className="bg-slate-50/90 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 rounded-2xl p-3.5 space-y-2.5">
+        {/* Matched Person Capsule */}
+        <div className="bg-[#F4F5F7] dark:bg-[#1E2028] rounded-[24px] p-3.5 space-y-2.5">
           <div className="flex items-center gap-3">
             <img
               src={personAvatar}
               alt={personName}
-              className="w-11 h-11 rounded-xl object-cover border border-slate-200/80 dark:border-white/10 flex-shrink-0"
+              className="w-11 h-11 rounded-full object-cover flex-shrink-0"
             />
-            <div className="min-w-0 flex-1 space-y-0.5">
+            <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
-                <h4 className="text-xs font-black text-slate-900 dark:text-slate-100 truncate">
+                <h4 className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
                   {personName}
                 </h4>
-                {vehiclePlate && (
-                  <span className="plate-badge flex-shrink-0">{vehiclePlate}</span>
-                )}
+                {vehiclePlate && <span className="plate-badge flex-shrink-0">{vehiclePlate}</span>}
               </div>
 
               {tripPurpose && (
-                <p className="text-[10.5px] text-[#0F766E] dark:text-[#14B8A6] font-semibold truncate flex items-center gap-1">
-                  <Compass className="w-3 h-3 text-amber-500 flex-shrink-0" />
+                <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] truncate flex items-center gap-1 mt-0.5">
+                  <Compass className="w-3 h-3 text-[#FF9F0A] flex-shrink-0" />
                   <span>{tripPurpose}</span>
                 </p>
               )}
-
-              <div className="flex items-center gap-1 flex-wrap pt-0.5">
-                {conversationVibe && (
-                  <span className="text-[8.5px] font-mono font-bold text-[#0F766E] dark:text-[#14B8A6] bg-teal-500/12 border border-teal-500/20 px-1.5 py-0.5 rounded-md">
-                    {conversationVibe}
-                  </span>
-                )}
-                {interests.slice(0, 2).map((item, idx) => (
-                  <span
-                    key={idx}
-                    className="text-[8.5px] font-mono text-slate-600 dark:text-slate-300 bg-white dark:bg-[#11171E] border border-slate-200/70 dark:border-white/8 px-1.5 py-0.5 rounded-md"
-                  >
-                    #{item}
-                  </span>
-                ))}
-              </div>
             </div>
           </div>
 
           <button
             type="button"
             onClick={handleOpenLinkedIn}
-            className="w-full py-2 px-3 rounded-xl bg-[#0A66C2]/10 hover:bg-[#0A66C2]/20 border border-[#0A66C2]/25 text-[#0A66C2] dark:text-blue-400 text-xs font-bold flex items-center justify-center gap-1.5 active-press transition-all"
+            className="w-full py-2 px-3 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white text-xs font-bold flex items-center justify-center gap-1.5 active-press"
           >
             <span className="w-4 h-4 bg-[#0A66C2] text-white rounded flex items-center justify-center text-[9px] font-black leading-none">
               in
@@ -224,9 +194,9 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
 
         {/* Icebreaker Suggestions */}
         <div className="space-y-1.5">
-          <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-slate-500 dark:text-slate-400 flex items-center gap-1">
-            <Sparkles className="w-3 h-3 text-amber-500" />
-            QUICK CORRIDOR NOTES (TAP TO USE)
+          <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#525866] dark:text-[#9BA1AE] flex items-center gap-1">
+            <Sparkles className="w-3 h-3 text-[#FF9F0A]" />
+            TAP TO PRE-FILL
           </span>
           <div className="space-y-1.5">
             {icebreakerSuggestions.map((prompt, idx) => (
@@ -237,7 +207,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
                   triggerHaptic('tap');
                   setMessage(prompt);
                 }}
-                className="w-full text-left p-2.5 rounded-xl bg-slate-50 dark:bg-[#171F29] hover:bg-slate-100 dark:hover:bg-[#1E2936] border border-slate-200/80 dark:border-white/8 text-[11px] text-slate-800 dark:text-slate-200 font-medium transition-all active-press leading-snug"
+                className="w-full text-left p-3 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] text-[11px] text-[#0B0C0E] dark:text-white font-semibold active-press leading-snug"
               >
                 &ldquo;{prompt}&rdquo;
               </button>
@@ -251,16 +221,15 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
             rows={2}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder={`Write a quick pickup note to ${firstName}...`}
-            className="w-full p-3 rounded-xl bg-slate-100 dark:bg-[#171F29] border border-slate-200/80 dark:border-white/8 text-xs text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-hidden focus:border-[#0F766E] dark:focus:border-[#14B8A6] resize-none"
+            placeholder={`Write a note to ${firstName}...`}
+            className="w-full p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] focus:outline-hidden resize-none"
           />
 
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={handleSendWhatsApp}
-              className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 transition-all active-press"
-              title="Open WhatsApp chat"
+              className="py-3 px-4 rounded-full bg-emerald-600 text-white text-xs font-extrabold flex items-center justify-center gap-1.5 active-press"
             >
               <Share2 className="w-3.5 h-3.5" />
               <span>WhatsApp</span>
@@ -269,11 +238,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
             <button
               type="submit"
               disabled={!message.trim()}
-              className={`py-2.5 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all active-press ${
-                message.trim()
-                  ? 'btn-electric-mint'
-                  : 'bg-slate-200 dark:bg-[#171F29] text-slate-400 dark:text-slate-600 border border-slate-200/80 dark:border-white/5 cursor-not-allowed'
-              }`}
+              className="py-3 px-4 rounded-full btn-electric-mint disabled:opacity-40 text-xs font-extrabold flex items-center justify-center gap-1.5 active-press"
             >
               {sentSuccess ? (
                 <>
