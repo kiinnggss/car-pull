@@ -93,7 +93,7 @@ export const DriverTrustModal: React.FC<DriverTrustModalProps> = ({
                 <h3 className="text-base font-display font-black text-white truncate">
                   {driver.name}
                 </h3>
-                <ShieldCheck className="w-4 h-4 text-[#C8FF00] flex-shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-[var(--accent-primary)] flex-shrink-0" />
               </div>
               <p className="text-xs text-white/70 truncate">
                 {driver.employer} • {driver.trips_completed} verified trips
@@ -105,7 +105,7 @@ export const DriverTrustModal: React.FC<DriverTrustModalProps> = ({
             <span className="w-8 h-8 rounded-full bg-[#FF9F0A] text-[#0B0C0E] ring-2 ring-[#0B0C0E] text-[10px] font-black flex items-center justify-center">
               {driver.employer.slice(0, 2).toUpperCase()}
             </span>
-            <span className="w-8 h-8 rounded-full bg-[#C8FF00] text-[#0B0C0E] ring-2 ring-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center">
+            <span className="w-8 h-8 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] ring-2 ring-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center">
               ★{driver.rating}
             </span>
           </div>
@@ -131,7 +131,7 @@ export const DriverTrustModal: React.FC<DriverTrustModalProps> = ({
             Corporate &amp; Identity Verification
           </span>
           <p className="text-xs font-semibold text-white/90 leading-relaxed">
-            Work email authenticated under <strong className="text-[#C8FF00]">@{driver.employer_domain}</strong>. Government NIN and BVN matched via Dojah.
+            Work email authenticated under <strong className="text-[var(--accent-primary)]">@{driver.employer_domain}</strong>. Government NIN and BVN matched via Dojah.
           </p>
         </div>
 

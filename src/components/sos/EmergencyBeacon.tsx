@@ -48,11 +48,11 @@ export const EmergencyBeacon: React.FC = () => {
 
         {/* GPS Lock Pill */}
         <div className="p-3.5 rounded-[22px] bg-[#1E2028] flex items-start gap-3">
-          <div className="w-9 h-9 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center flex-shrink-0 mt-0.5">
+          <div className="w-9 h-9 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center flex-shrink-0 mt-0.5">
             <Navigation className="w-4 h-4" />
           </div>
           <div className="min-w-0">
-            <span className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[#C8FF00] block">
+            <span className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[var(--accent-primary)] block">
               LIVE GPS TELEMETRY LOCK
             </span>
             <span className="text-xs font-extrabold text-white block leading-snug mt-0.5">
@@ -77,11 +77,11 @@ export const EmergencyBeacon: React.FC = () => {
           <div className="flex items-center justify-between px-1">
             <button
               onClick={() => selectIncidentIssue(null as any)}
-              className="text-xs text-[#0B0C0E] dark:text-[#C8FF00] font-extrabold flex items-center gap-1.5"
+              className="text-xs text-[var(--text-primary)] dark:text-[var(--accent-primary)] font-extrabold flex items-center gap-1.5"
             >
               <ArrowLeft className="w-3.5 h-3.5" /> Change Incident Type
             </button>
-            <span className="text-[10px] font-mono uppercase bg-[#C8FF00] text-[#0B0C0E] font-black px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-mono uppercase bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] font-black px-2.5 py-0.5 rounded-full">
               LASDRI CERTIFIED
             </span>
           </div>

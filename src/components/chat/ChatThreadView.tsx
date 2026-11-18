@@ -164,7 +164,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
           </button>
 
           <div className="relative flex-shrink-0">
-            <div className="relative w-10 h-10 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center font-mono font-bold text-xs overflow-hidden">
+            <div className="relative w-10 h-10 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center font-mono font-bold text-xs overflow-hidden">
               <span>{thread.partnerName.split(' ').map((n) => n[0]).join('')}</span>
               <img
                 src={thread.partnerAvatar}
@@ -176,7 +176,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               />
             </div>
             {thread.isOnline && (
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[#C8FF00] ring-2 ring-white dark:ring-[#14161B] z-10" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-[var(--accent-primary)] ring-2 ring-white dark:ring-[#14161B] z-10" />
             )}
           </div>
 
@@ -185,7 +185,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               <h3 className="text-xs font-display font-black text-[#0B0C0E] dark:text-white truncate">
                 {thread.partnerName}
               </h3>
-              <span className="text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex-shrink-0">
+              <span className="text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex-shrink-0">
                 {thread.partnerRole === 'driver' ? 'DRIVER' : 'CO-RIDER'}
               </span>
             </div>
@@ -236,7 +236,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               triggerHaptic('tap');
               setActiveTab('pass');
             }}
-            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[10px] font-mono font-black active-press flex-shrink-0"
+            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black active-press flex-shrink-0"
           >
             <QrCode className="w-3 h-3" />
             <span>SEC 44 PASS</span>
@@ -245,7 +245,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
 
         {/* Horizontal Car Progress Track */}
         <div className="relative h-1.5 w-full rounded-full bg-white/20 flex items-center my-1">
-          <div className="h-full w-[62%] rounded-full bg-[#C8FF00]" />
+          <div className="h-full w-[62%] rounded-full bg-[var(--accent-primary)]" />
           <div
             style={{ left: '58%' }}
             className="absolute -translate-x-1/2 w-8 h-4 rounded-full bg-white text-[#0B0C0E] flex items-center justify-center shadow-sm"
@@ -259,7 +259,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
           <span className="truncate">
             ETA {thread.etaMinutes || 4}m • {thread.pickupSafeZoneName.split(',')[0]}
           </span>
-          <span className="text-[#C8FF00] font-bold">
+          <span className="text-[var(--accent-primary)] font-bold">
             ₦{(thread.escrowSecuredNgn || 2500).toLocaleString()} ESCROW
           </span>
         </div>
@@ -315,7 +315,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                 }}
                 className={`relative z-10 max-w-[82%] rounded-[22px] px-4 py-2.5 text-xs leading-relaxed ${
                   isMe
-                    ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E] rounded-tr-xs font-medium'
+                    ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] rounded-tr-xs font-medium'
                     : 'bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white border border-black/6 dark:border-white/8 rounded-tl-xs'
                 }`}
               >
@@ -340,8 +340,8 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
                       onClick={() => togglePlayAudio(msg.id)}
                       className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 active-press ${
                         isMe
-                          ? 'bg-[#C8FF00] dark:bg-[#0B0C0E] text-[#0B0C0E] dark:text-[#C8FF00]'
-                          : 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                          ? 'bg-[var(--accent-primary)] dark:bg-[#0B0C0E] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
+                          : 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                       }`}
                     >
                       {isPlaying ? (
@@ -412,7 +412,7 @@ export const ChatThreadView: React.FC<ChatThreadViewProps> = ({ threadId }) => {
               <div className="flex items-center gap-2 min-w-0">
                 <CornerUpLeft className="w-3.5 h-3.5 text-[#FF9F0A] flex-shrink-0" />
                 <div className="min-w-0">
-                  <div className="text-[10px] font-mono font-bold text-[#0B0C0E] dark:text-[#C8FF00] uppercase">
+                  <div className="text-[10px] font-mono font-bold text-[var(--text-primary)] dark:text-[var(--accent-primary)] uppercase">
                     Replying to {replyingTo.senderName}
                   </div>
                   <div className="text-[11px] text-[#525866] dark:text-[#9BA1AE] truncate">

@@ -155,7 +155,7 @@ export const RoutePlannerBar: React.FC = () => {
               <div className="p-3.5 rounded-[24px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between gap-3">
                 <div className="flex items-stretch gap-3 flex-1 min-w-0">
                   <div className="flex flex-col items-center justify-between py-2">
-                    <MapPin className="w-4 h-4 text-[#0B0C0E] dark:text-[#C8FF00]" />
+                    <MapPin className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
                     <div className="w-0.5 flex-1 my-1 border-l-2 border-dotted border-[#525866]" />
                     <MapPin className="w-4 h-4 text-[#FF9F0A]" />
                   </div>
@@ -219,16 +219,16 @@ export const RoutePlannerBar: React.FC = () => {
                   <div className="volt-surface rounded-[24px] p-3.5 flex flex-col justify-between min-h-[104px]">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-xs font-extrabold block text-[#0B0C0E]">
+                        <span className="text-xs font-extrabold block">
                           Sec 44 Split
                         </span>
-                        <span className="text-[11px] font-mono font-bold text-[#0B0C0E]/75">
+                        <span className="text-[11px] font-mono font-bold opacity-75">
                           -40% Fuel Cap
                         </span>
                       </div>
-                      <Check className="w-4 h-4 text-[#0B0C0E] stroke-[2.5]" />
+                      <Check className="w-4 h-4 stroke-[2.5]" />
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center mt-2">
+                    <div className="w-8 h-8 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center mt-2">
                       <Zap className="w-4 h-4 fill-current" />
                     </div>
                   </div>
@@ -280,7 +280,7 @@ export const RoutePlannerBar: React.FC = () => {
                       }}
                       className={`w-full text-left px-3.5 py-2.5 rounded-2xl transition-all flex items-center justify-between ${
                         isCurrent
-                          ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                          ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                           : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white hover:opacity-90'
                       }`}
                     >
@@ -334,7 +334,7 @@ export const RoutePlannerBar: React.FC = () => {
                       className={`w-full text-left p-3.5 rounded-[22px] transition-all flex items-center justify-between ${
                         isSelected
                           ? 'volt-surface'
-                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] dark:text-white'
                       }`}
                     >
                       <div className="pr-2">
@@ -342,7 +342,7 @@ export const RoutePlannerBar: React.FC = () => {
                         <span className="text-[10px] opacity-75 block mt-0.5">{zone.address}</span>
                       </div>
                       {isSelected && (
-                        <div className="w-7 h-7 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center flex-shrink-0">
+                        <div className="w-7 h-7 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center flex-shrink-0">
                           <Check className="w-3.5 h-3.5 stroke-[2.5]" />
                         </div>
                       )}

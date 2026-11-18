@@ -63,7 +63,7 @@ export default function RootLayout({
       className={`${outfit.variable} ${jakarta.variable} ${jetbrainsMono.variable}`}
       suppressHydrationWarning
     >
-      <body className="antialiased min-h-screen min-h-[100dvh] bg-[#E4E6EB] dark:bg-[#050608] text-[#0B0C0E] dark:text-white flex flex-col items-center justify-start sm:justify-center sm:py-3 selection:bg-[#C8FF00] selection:text-[#0B0C0E]">
+      <body className="antialiased min-h-screen min-h-[100dvh] bg-[#E4E6EB] dark:bg-[#050608] text-[#0B0C0E] dark:text-white flex flex-col items-center justify-start sm:justify-center sm:py-3 selection:bg-[var(--accent-primary)] selection:text-[var(--accent-primary-fg)]">
         {children}
       </body>
     </html>

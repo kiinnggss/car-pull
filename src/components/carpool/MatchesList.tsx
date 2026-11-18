@@ -45,7 +45,7 @@ export const MatchesList: React.FC = () => {
       particleCount: 60,
       spread: 65,
       origin: { y: 0.7 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
     });
   };
 
@@ -67,7 +67,7 @@ export const MatchesList: React.FC = () => {
     return (
       <div className="w-full max-w-[404px] mx-auto px-3 py-8">
         <div className="floating-surface rounded-[32px] p-6 text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center mx-auto">
+          <div className="w-16 h-16 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center mx-auto">
             <Car className="w-7 h-7" />
           </div>
           <div className="space-y-1">
@@ -111,7 +111,7 @@ export const MatchesList: React.FC = () => {
           </p>
         </div>
 
-        <span className="px-3 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-xs font-mono tabular-nums font-black">
+        <span className="px-3 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-xs font-mono tabular-nums font-black">
           {activeMatches.length} ACTIVE
         </span>
       </div>
@@ -137,7 +137,7 @@ export const MatchesList: React.FC = () => {
               <div className="bg-[#0B0C0E] dark:bg-[#1E2028] rounded-[24px] p-4 text-white space-y-3 relative overflow-hidden">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#C8FF00] font-bold block">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent-primary)] font-bold block">
                       {isCompleted ? 'TRIP COMPLETED' : 'EN ROUTE TO SAFE HUB'}
                     </span>
                     <h4 className="text-sm font-display font-black text-white mt-0.5">
@@ -167,7 +167,7 @@ export const MatchesList: React.FC = () => {
                 <div className="pt-2 pb-1">
                   <div className="relative h-1.5 w-full rounded-full bg-white/20 flex items-center">
                     <div
-                      className={`h-full rounded-full bg-[#C8FF00] transition-all duration-500 ${
+                      className={`h-full rounded-full bg-[var(--accent-primary)] transition-all duration-500 ${
                         isCompleted ? 'w-full' : 'w-[58%]'
                       }`}
                     />
@@ -182,10 +182,10 @@ export const MatchesList: React.FC = () => {
 
                   <div className="flex items-center justify-between text-[10px] font-mono text-white/75 mt-2">
                     <span className="truncate max-w-[180px] flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-[#C8FF00] flex-shrink-0" />
+                      <MapPin className="w-3 h-3 text-[var(--accent-primary)] flex-shrink-0" />
                       {safeZoneLabel}
                     </span>
-                    <span className="text-[#C8FF00] font-bold">
+                    <span className="text-[var(--accent-primary)] font-bold">
                       {isCompleted ? 'ESCROW RELEASED' : `${formatNgn(match.fareNgn)} HELD`}
                     </span>
                   </div>
@@ -196,7 +196,7 @@ export const MatchesList: React.FC = () => {
               {(match.trip_purpose || match.mutual_spark || match.conversation_vibe) && (
                 <div className="flex items-center gap-1.5 flex-wrap px-1">
                   {match.mutual_spark && (
-                    <span className="text-[10px] font-bold text-[#0B0C0E] bg-[#C8FF00] px-2.5 py-1 rounded-full flex items-center gap-1">
+                    <span className="text-[10px] font-bold text-[#0B0C0E] bg-[var(--accent-primary)] px-2.5 py-1 rounded-full flex items-center gap-1">
                       <Sparkles className="w-3 h-3" />
                       {match.mutual_spark}
                     </span>
@@ -229,7 +229,7 @@ export const MatchesList: React.FC = () => {
                     setActiveThreadId(threadId);
                     setActiveTab('chats');
                   }}
-                  className="py-2 px-2 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E] text-[11px] font-extrabold flex items-center justify-center gap-1 active-press"
+                  className="py-2 px-2 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[11px] font-extrabold flex items-center justify-center gap-1 active-press"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span>Chat</span>
@@ -286,7 +286,7 @@ export const MatchesList: React.FC = () => {
                     className="flex items-center gap-2 text-left active-press"
                     title="Open Section 44 Pass"
                   >
-                    <QrCode className="w-4 h-4 text-[#0B0C0E] dark:text-[#C8FF00]" />
+                    <QrCode className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
                     <div>
                       <span className="text-[9px] font-mono uppercase tracking-wider text-[#525866] dark:text-[#9BA1AE] font-bold block leading-none">
                         BOARDING PIN
@@ -306,7 +306,7 @@ export const MatchesList: React.FC = () => {
                   </button>
                 </div>
               ) : (
-                <div className="py-2.5 px-4 rounded-full bg-[#C8FF00]/20 text-[#0B0C0E] dark:text-[#C8FF00] text-xs font-extrabold flex items-center justify-center gap-1.5">
+                <div className="py-2.5 px-4 rounded-full bg-[var(--accent-primary)]/15 text-[var(--text-primary)] text-xs font-extrabold flex items-center justify-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4" />
                   <span>Trip Verified &amp; Fuel Split Released</span>
                 </div>
@@ -337,7 +337,7 @@ export const MatchesList: React.FC = () => {
           </button>
           <button
             onClick={() => simulateFlakePenalty('driver_flake')}
-            className="py-2.5 px-3 rounded-full bg-[#C8FF00] text-[#0B0C0E] font-extrabold text-[11px] active-press"
+            className="py-2.5 px-3 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] font-extrabold text-[11px] active-press"
           >
             Driver Flake (+₦2.5k)
           </button>

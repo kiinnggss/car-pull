@@ -80,7 +80,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver }) => {
               <span className="inline-flex items-center gap-1">
                 <Star
                   className="w-3 h-3 fill-current"
-                  style={{ color: 'var(--accent-primary)' }}
+                  style={{ color: 'var(--accent-signal)' }}
                 />
                 {driver.rating}
               </span>
@@ -162,7 +162,7 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ driver }) => {
           <div className="flex items-center gap-1.5 text-[10.5px] font-medium text-white/75 truncate">
             <MapPin
               className="w-3 h-3 flex-shrink-0"
-              style={{ color: 'var(--accent-primary)' }}
+              style={{ color: 'var(--accent-signal)' }}
             />
             <span className="truncate">
               {selectedSafeZone.name} → {driver.corridor.destination.split('(')[0].trim()}

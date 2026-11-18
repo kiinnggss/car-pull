@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Check, RotateCcw } from 'lucide-react';
+import { X, Check, RotateCcw, Ticket, Sparkles, Bell } from 'lucide-react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
   APP_THEMES,
   ThemeId,
+  MatchFeedbackStyle,
   getThemeDefinition,
   getContrastForeground,
   applyThemeToDocument,
@@ -19,12 +20,24 @@ interface ThemeSwitcherModalProps {
 }
 
 const QUICK_ACCENTS = [
-  '#C8FF00',
+  '#0B0C0E',
+  '#3B82F6',
   '#DF8E52',
   '#F5A623',
   '#9D7BFF',
   '#56CCF2',
   '#DE5D76',
+];
+
+const CONFIRMATION_OPTIONS: {
+  id: MatchFeedbackStyle;
+  label: string;
+  sub: string;
+  icon: React.ElementType;
+}[] = [
+  { id: 'ticket', label: 'Ticket', sub: 'Boarding pass', icon: Ticket },
+  { id: 'ripple', label: 'Ripple', sub: 'Avatar ring', icon: Sparkles },
+  { id: 'pill', label: 'Pill', sub: 'Top banner', icon: Bell },
 ];
 
 export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
@@ -35,6 +48,7 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
     colorTheme,
     customAccentHex,
     transparentDock,
+    matchFeedbackStyle,
     setAppearancePreferences,
   } = useAppStore();
 
@@ -45,6 +59,8 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
   );
   const [hasCustomHex, setHasCustomHex] = useState<boolean>(!!customAccentHex);
   const [draftTransparent, setDraftTransparent] = useState<boolean>(transparentDock);
+  const [draftFeedback, setDraftFeedback] =
+    useState<MatchFeedbackStyle>(matchFeedbackStyle);
 
   useEffect(() => {
     setMounted(true);
@@ -56,8 +72,9 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
       setDraftHex(customAccentHex || getThemeDefinition(colorTheme).accentPrimary);
       setHasCustomHex(!!customAccentHex);
       setDraftTransparent(transparentDock);
+      setDraftFeedback(matchFeedbackStyle);
     }
-  }, [isOpen, colorTheme, customAccentHex, transparentDock]);
+  }, [isOpen, colorTheme, customAccentHex, transparentDock, matchFeedbackStyle]);
 
   if (!isOpen || !mounted) return null;
 
@@ -76,7 +93,6 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
     setDraftTheme(id);
     setDraftHex(def.accentPrimary);
     setHasCustomHex(false);
-    // Live preview immediately so user sees the palette before saving
     applyThemeToDocument(id, null, draftTransparent);
   };
 
@@ -105,7 +121,6 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
 
   const handleCancel = () => {
     triggerHaptic('tap');
-    // Revert live preview back to saved store preferences
     applyThemeToDocument(colorTheme, customAccentHex, transparentDock);
     onClose();
   };
@@ -116,6 +131,7 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
       colorTheme: draftTheme,
       customAccentHex: hasCustomHex ? normalizedHex : null,
       transparentDock: draftTransparent,
+      matchFeedbackStyle: draftFeedback,
     });
     onClose();
   };
@@ -153,7 +169,7 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
         </div>
 
         {/* Body */}
-        <div className="p-5 space-y-5 max-h-[75vh] overflow-y-auto no-scrollbar">
+        <div className="p-5 space-y-4 max-h-[75vh] overflow-y-auto no-scrollbar">
           {/* Section 1: Interface theme */}
           <div className="space-y-2.5">
             <div>
@@ -181,13 +197,12 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
                   >
                     {/* Miniature UI Preview */}
                     <div
-                      className="w-full h-16 rounded-xl overflow-hidden flex border"
+                      className="w-full h-15 rounded-xl overflow-hidden flex border"
                       style={{
                         backgroundColor: t.bgCanvas,
                         borderColor: t.borderColor,
                       }}
                     >
-                      {/* Mini Sidebar */}
                       <div
                         className="w-1/3 h-full p-1.5 flex flex-col justify-between"
                         style={{ backgroundColor: t.previewSidebar }}
@@ -195,7 +210,7 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
                         <div className="flex items-center gap-0.5">
                           <span className="w-1 h-1 rounded-full bg-red-400" />
                           <span className="w-1 h-1 rounded-full bg-amber-400" />
-                          <span className="w-1 h-1 rounded-full bg-emerald-400" />
+                          <span className="w-1 h-1 rounded-full bg-blue-400" />
                         </div>
                         <div className="space-y-1">
                           <div
@@ -213,7 +228,6 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
                         </div>
                       </div>
 
-                      {/* Mini Main Content */}
                       <div className="flex-1 p-1.5 flex flex-col justify-center gap-1.5">
                         <div className="flex items-center gap-1">
                           <span
@@ -236,13 +250,12 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
                           />
                         </div>
                         <div
-                          className="h-1.5 w-3/5 rounded-full opacity-30 ml-2.5"
+                          className="h-1.5 w-3/5 rounded-full opacity-35 ml-2.5"
                           style={{ backgroundColor: t.accentSecondary }}
                         />
                       </div>
                     </div>
 
-                    {/* Label & Checkmark Radio */}
                     <div className="flex items-center justify-between gap-1 pt-1.5 px-0.5">
                       <span className="text-[10px] font-bold truncate">
                         {t.name}
@@ -266,9 +279,58 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
             </div>
           </div>
 
-          {/* Section 2: Customize primary color */}
+          {/* Section 2: Ride Confirmation Style (Option 1, 2, 3) */}
           <div
-            className="pt-4 border-t flex items-center justify-between gap-3"
+            className="pt-3.5 border-t space-y-2"
+            style={{ borderColor: 'var(--border-subtle)' }}
+          >
+            <div>
+              <h4 className="text-xs font-extrabold">Ride confirmation</h4>
+              <p className="text-[11px]" style={{ color: 'var(--text-secondary)' }}>
+                Choose what happens when you book a seat
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              {CONFIRMATION_OPTIONS.map((opt) => {
+                const Icon = opt.icon;
+                const active = draftFeedback === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => {
+                      triggerHaptic('tap');
+                      setDraftFeedback(opt.id);
+                    }}
+                    className="p-2.5 rounded-2xl text-left transition-all active-press flex flex-col gap-1"
+                    style={
+                      active
+                        ? {
+                            backgroundColor: activeSaveBg,
+                            color: activeSaveFg,
+                          }
+                        : {
+                            backgroundColor: 'var(--bg-subtle)',
+                            color: 'var(--text-primary)',
+                          }
+                    }
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span className="text-[11px] font-extrabold leading-tight">
+                      {opt.label}
+                    </span>
+                    <span className="text-[9.5px] opacity-75 leading-tight">
+                      {opt.sub}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Section 3: Customize primary color */}
+          <div
+            className="pt-3.5 border-t flex items-center justify-between gap-3"
             style={{ borderColor: 'var(--border-subtle)' }}
           >
             <div className="min-w-0">
@@ -333,9 +395,9 @@ export const ThemeSwitcherModal: React.FC<ThemeSwitcherModalProps> = ({
             </div>
           </div>
 
-          {/* Section 3: Transparent Dock */}
+          {/* Section 4: Transparent Dock */}
           <div
-            className="pt-4 border-t flex items-center justify-between gap-3"
+            className="pt-3.5 border-t flex items-center justify-between gap-3"
             style={{ borderColor: 'var(--border-subtle)' }}
           >
             <div>

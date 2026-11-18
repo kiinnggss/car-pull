@@ -225,14 +225,14 @@ export const Header: React.FC = () => {
                         <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
                           {user.fullName}
                         </span>
-                        <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E]">
+                        <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]">
                           NIN VERIFIED
                         </span>
                       </div>
                       <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] block truncate mt-0.5">
                         {user.email}
                       </span>
-                      <span className="text-[10px] font-bold text-[#0B0C0E] dark:text-[#C8FF00] block mt-0.5">
+                      <span className="text-[10px] font-bold text-[var(--text-primary)] dark:text-[var(--accent-primary)] block mt-0.5">
                         {user.employer}
                       </span>
                     </div>
@@ -304,7 +304,7 @@ export const Header: React.FC = () => {
             <div className="w-full max-w-[380px] floating-surface p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
                     <Smartphone className="w-5 h-5" />
                   </div>
                   <div>

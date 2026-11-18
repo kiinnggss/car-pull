@@ -87,7 +87,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
             onClick={() => setSelectedTimeFilter('all')}
             className={`px-3.5 py-1.5 rounded-full font-extrabold whitespace-nowrap transition-all text-xs ${
               selectedTimeFilter === 'all'
-                ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                 : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#9BA1AE]'
             }`}
           >
@@ -99,7 +99,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
               onClick={() => setSelectedTimeFilter(time)}
               className={`px-3.5 py-1.5 rounded-full font-mono font-bold whitespace-nowrap transition-all text-xs ${
                 selectedTimeFilter === time
-                  ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                  ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                   : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#9BA1AE]'
               }`}
             >
@@ -140,7 +140,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                     </div>
                   </div>
 
-                  <span className="px-2.5 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] text-[10px] font-mono font-black flex-shrink-0">
+                  <span className="px-2.5 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-black flex-shrink-0">
                     {driver.corridor.departure_time}
                   </span>
                 </div>
@@ -164,7 +164,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                     }}
                     className={`px-4 py-2 rounded-full text-xs font-extrabold flex items-center gap-1.5 active-press ${
                       isSelected
-                        ? 'bg-[#0B0C0E] text-[#C8FF00]'
+                        ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
                         : 'btn-electric-mint'
                     }`}
                   >

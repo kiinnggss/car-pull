@@ -28,22 +28,22 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
       {fastestCompatibleFlatbed && (
         <div className="volt-surface rounded-[28px] p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] font-mono font-black text-[10px] uppercase">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] font-mono font-black text-[10px] uppercase">
               <Zap className="w-3 h-3 fill-current" />
               <span>FASTEST UNIT</span>
             </div>
-            <span className="text-xs font-mono tabular-nums font-black text-[#0B0C0E]">
+            <span className="text-xs font-mono tabular-nums font-black">
               ETA {fastestCompatibleFlatbed.traffic_eta_minutes} MINS
             </span>
           </div>
 
-          <p className="text-xs font-semibold text-[#0B0C0E]/80 leading-snug">
+          <p className="text-xs font-semibold opacity-80 leading-snug">
             Stranded on the expressway? Dispatch {fastestCompatibleFlatbed.name} immediately with Zero-Cash Escrow protection.
           </p>
 
           <button
             onClick={() => onAcceptQuote(fastestCompatibleFlatbed)}
-            className="w-full py-3 bg-[#0B0C0E] text-[#C8FF00] font-extrabold text-xs rounded-full active-press flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[var(--bg-sheet)] text-[var(--text-primary)] font-extrabold text-xs rounded-full active-press flex items-center justify-center gap-2"
           >
             <Truck className="w-4 h-4" />
             <span>
@@ -78,7 +78,7 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                         {prov.name}
                       </h4>
                       {isTopPriority && (
-                        <span className="text-[9px] font-mono font-black bg-[#C8FF00] text-[#0B0C0E] px-2 py-0.5 rounded-full">
+                        <span className="text-[9px] font-mono font-black bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] px-2 py-0.5 rounded-full">
                           TOP
                         </span>
                       )}

@@ -1,10 +1,12 @@
 export type ThemeId =
-  | 'obsidian-volt'
   | 'clean-daylight'
+  | 'midnight-cobalt'
   | 'paw-cream'
   | 'orange-mechanic'
   | 'purple-disco'
   | 'blue-powder';
+
+export type MatchFeedbackStyle = 'ticket' | 'ripple' | 'pill';
 
 export interface AppThemeDefinition {
   id: ThemeId;
@@ -26,23 +28,6 @@ export interface AppThemeDefinition {
 
 export const APP_THEMES: AppThemeDefinition[] = [
   {
-    id: 'obsidian-volt',
-    name: 'Obsidian Volt',
-    subtitle: 'Pitch dark with electric lime',
-    isDark: true,
-    bgCanvas: '#0B0C0E',
-    bgSheet: '#14161B',
-    bgSubtle: '#1E2028',
-    textPrimary: '#FFFFFF',
-    textSecondary: '#9BA1AE',
-    accentPrimary: '#C8FF00',
-    accentPrimaryFg: '#0B0C0E',
-    accentSecondary: '#A3E635',
-    borderColor: 'rgba(255, 255, 255, 0.1)',
-    cardBorderWidth: '1px',
-    previewSidebar: '#1B1E24',
-  },
-  {
     id: 'clean-daylight',
     name: 'Clean Daylight',
     subtitle: 'Crisp white & obsidian ink',
@@ -54,10 +39,27 @@ export const APP_THEMES: AppThemeDefinition[] = [
     textSecondary: '#525866',
     accentPrimary: '#0B0C0E',
     accentPrimaryFg: '#FFFFFF',
-    accentSecondary: '#10B981',
+    accentSecondary: '#3B82F6',
     borderColor: 'rgba(11, 12, 14, 0.08)',
     cardBorderWidth: '1px',
     previewSidebar: '#E5E7EB',
+  },
+  {
+    id: 'midnight-cobalt',
+    name: 'Midnight Cobalt',
+    subtitle: 'Deep obsidian & cobalt blue',
+    isDark: true,
+    bgCanvas: '#0D1117',
+    bgSheet: '#161B22',
+    bgSubtle: '#21262D',
+    textPrimary: '#F0F6FC',
+    textSecondary: '#8B949E',
+    accentPrimary: '#3B82F6',
+    accentPrimaryFg: '#FFFFFF',
+    accentSecondary: '#60A5FA',
+    borderColor: 'rgba(240, 246, 252, 0.1)',
+    cardBorderWidth: '1px',
+    previewSidebar: '#1B222C',
   },
   {
     id: 'paw-cream',
@@ -141,7 +143,7 @@ function isValidHex(hex: string): boolean {
  * Compute readable foreground (#0B0C0E or #FFFFFF) for a given hex background.
  */
 export function getContrastForeground(hex: string): string {
-  if (!isValidHex(hex)) return '#0B0C0E';
+  if (!isValidHex(hex)) return '#FFFFFF';
   const clean = hex.replace('#', '');
   const r = parseInt(clean.slice(0, 2), 16);
   const g = parseInt(clean.slice(2, 4), 16);

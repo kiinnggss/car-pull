@@ -179,7 +179,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     const userWalkingCircle = L.circle(userCoords, {
       radius: 400,
       color: '#0B0C0E',
-      fillColor: '#C8FF00',
+      fillColor: '#3B82F6',
       fillOpacity: 0.22,
       weight: 2,
       dashArray: '4, 4',
@@ -188,14 +188,14 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
     const userPinHtml = `
       <div class="relative flex flex-col items-center">
-        <span class="absolute -inset-2 rounded-full bg-[#C8FF00]/60 animate-ping"></span>
-        <div class="w-8 h-8 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center shadow-lg ring-2 ring-[#C8FF00] z-20">
+        <span class="absolute -inset-2 rounded-full bg-[var(--accent-primary)]/60 animate-ping"></span>
+        <div class="w-8 h-8 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center shadow-lg ring-2 ring-[var(--accent-primary)] z-20">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
             <circle cx="12" cy="10" r="3"/>
           </svg>
         </div>
-        <span class="mt-1 bg-[#0B0C0E] text-[#C8FF00] px-2 py-0.5 rounded-full text-[9px] font-mono font-black shadow-md whitespace-nowrap z-20">
+        <span class="mt-1 bg-[var(--bg-sheet)] text-[var(--text-primary)] px-2 py-0.5 rounded-full text-[9px] font-mono font-black shadow-md whitespace-nowrap z-20">
           YOUR STREET
         </span>
       </div>
@@ -237,8 +237,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       const driverCoords = ride.routePath[0];
       const vehicleHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
-          ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-[#C8FF00]/60 animate-ping"></span>' : ''}
-          <div class="relative w-8 h-8 rounded-full ${isSelected ? 'ring-2 ring-[#C8FF00]' : ''} bg-[#0B0C0E] shadow-md overflow-hidden">
+          ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-[var(--accent-primary)]/60 animate-ping"></span>' : ''}
+          <div class="relative w-8 h-8 rounded-full ${isSelected ? 'ring-2 ring-[var(--accent-primary)]' : ''} bg-[#0B0C0E] shadow-md overflow-hidden">
             <img src="${ride.driverAvatar}" class="w-full h-full object-cover" alt="${ride.driverName}" />
           </div>
           <span class="mt-0.5 bg-[#0B0C0E] text-white px-2 py-0.5 rounded-full text-[8px] font-mono font-black shadow-xs whitespace-nowrap">
@@ -322,7 +322,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       particleCount: 50,
       spread: 60,
       origin: { y: 0.6 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
     });
 
     setTimeout(() => {
@@ -355,7 +355,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               className="flex-1 flex items-center gap-2 py-1 text-left active-press min-w-0"
               title="Change pickup street"
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00] flex-shrink-0" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)] flex-shrink-0" />
               <div className="min-w-0 flex-1">
                 <span className="text-[8.5px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] block leading-none">
                   PICKUP
@@ -392,7 +392,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 triggerHaptic('switch');
                 setActiveTab('deck');
               }}
-              className="w-9 h-9 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center active-press flex-shrink-0"
+              className="w-9 h-9 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center active-press flex-shrink-0"
               title="Switch to Swipe Deck"
             >
               <Sparkles className="w-4 h-4" />
@@ -418,7 +418,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 }}
                 className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold whitespace-nowrap transition-all active-press ${
                   selectedDayFilter === chip.id
-                    ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E] shadow-sm'
+                    ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] shadow-sm'
                     : 'floating-pill text-[#0B0C0E] dark:text-white'
                 }`}
               >
@@ -437,7 +437,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         <button
           onClick={handleLocateMe}
           disabled={isLocating}
-          className="absolute top-28 right-3.5 z-30 w-10 h-10 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center active-press shadow-lg"
+          className="absolute top-28 right-3.5 z-30 w-10 h-10 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center active-press shadow-lg"
           title="Pin current GPS street"
         >
           <Crosshair className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
@@ -451,7 +451,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             {/* Driver Identity & Rating */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="relative w-11 h-11 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 overflow-hidden">
+                <div className="relative w-11 h-11 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 overflow-hidden">
                   <span>{selectedRide.driverName.split(' ').map((n) => n[0]).join('')}</span>
                   <img
                     src={selectedRide.driverAvatar}
@@ -467,7 +467,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                     <h4 className="text-sm font-display font-black truncate">
                       {selectedRide.driverName}
                     </h4>
-                    <span className="px-2 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[10px] font-mono font-black flex-shrink-0">
+                    <span className="px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black flex-shrink-0">
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
@@ -485,7 +485,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             {/* Uber Green Connected Dotted Pickup -> Dropoff Timeline */}
             <div className="p-3 rounded-[22px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-stretch gap-3 text-xs">
               <div className="flex flex-col items-center justify-between py-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)]" />
                 <div className="w-0.5 flex-1 my-1 border-l-2 border-dotted border-[#525866]" />
                 <span className="w-2.5 h-2.5 rounded-full bg-[#FF9F0A]" />
               </div>
@@ -546,7 +546,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   setActiveThreadId(threadId);
                   setActiveTab('chats');
                 }}
-                className="w-11 h-11 rounded-full bg-[#0B0C0E] dark:bg-[#1E2028] text-[#C8FF00] flex items-center justify-center active-press flex-shrink-0"
+                className="w-11 h-11 rounded-full bg-[#0B0C0E] dark:bg-[#1E2028] text-[var(--accent-primary)] flex items-center justify-center active-press flex-shrink-0"
                 title="Chat with Driver"
               >
                 <MessageCircle className="w-4 h-4" />
@@ -560,17 +560,17 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {!isBackgroundUnderlay && bookedSuccessRide && (
         <div className="absolute bottom-[4.75rem] left-3 right-3 z-30 max-w-[400px] mx-auto volt-surface rounded-[28px] p-4 flex items-center justify-between animate-in zoom-in-95">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center">
+            <div className="w-10 h-10 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center">
               <CheckCircle2 className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-sm font-display font-black text-[#0B0C0E]">Seat Reserved!</h4>
-              <p className="text-[11px] font-semibold text-[#0B0C0E]/75">
+              <h4 className="text-sm font-display font-black">Seat Reserved!</h4>
+              <p className="text-[11px] font-semibold opacity-75">
                 Opening chat with {bookedSuccessRide.driverName}...
               </p>
             </div>
           </div>
-          <span className="font-mono tabular-nums text-xs font-black bg-[#0B0C0E] text-[#C8FF00] px-3 py-1.5 rounded-full">
+          <span className="font-mono tabular-nums text-xs font-black bg-[var(--bg-sheet)] text-[var(--text-primary)] px-3 py-1.5 rounded-full">
             {formatNgn(bookedSuccessRide.fuelSplitNgn)}
           </span>
         </div>
@@ -633,7 +633,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   }}
                   className={`w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between active-press ${
                     userStreet.id === st.id
-                      ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                      ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                       : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
                   }`}
                 >
@@ -689,7 +689,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   }}
                   className={`w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between active-press ${
                     selectedDestination === dest.id
-                      ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                      ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                       : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
                   }`}
                 >

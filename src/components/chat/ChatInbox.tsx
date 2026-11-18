@@ -43,7 +43,7 @@ export const ChatInbox: React.FC = () => {
                 Messages
               </h2>
               {totalUnread > 0 && (
-                <span className="bg-[#C8FF00] text-[#0B0C0E] text-[10px] font-mono tabular-nums font-black px-2.5 py-0.5 rounded-full">
+                <span className="bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono tabular-nums font-black px-2.5 py-0.5 rounded-full">
                   {totalUnread} NEW
                 </span>
               )}
@@ -53,8 +53,8 @@ export const ChatInbox: React.FC = () => {
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-[#C8FF00] text-[10px] font-mono font-bold">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)] text-[10px] font-mono font-bold">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
             <span>LIVE</span>
           </div>
         </div>
@@ -99,7 +99,7 @@ export const ChatInbox: React.FC = () => {
                 }}
                 className={`py-1.5 rounded-full text-[11px] font-extrabold transition-all active-press ${
                   isActive
-                    ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                    ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                     : 'text-[#525866] dark:text-[#9BA1AE]'
                 }`}
               >
@@ -133,12 +133,12 @@ export const ChatInbox: React.FC = () => {
                   setActiveThreadId(thread.id);
                 }}
                 className={`w-full text-left floating-surface rounded-[28px] p-4 transition-all active-press flex items-start gap-3.5 relative ${
-                  hasUnread ? 'ring-2 ring-[#0B0C0E] dark:ring-[#C8FF00]' : ''
+                  hasUnread ? 'ring-2 ring-[#0B0C0E] dark:ring-[var(--accent-primary)]' : ''
                 }`}
               >
                 {/* Circular Avatar with Online Dot */}
                 <div className="relative flex-shrink-0">
-                  <div className="relative w-12 h-12 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center font-mono font-bold text-xs overflow-hidden">
+                  <div className="relative w-12 h-12 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center font-mono font-bold text-xs overflow-hidden">
                     <span>{thread.partnerName.split(' ').map((n) => n[0]).join('')}</span>
                     <img
                       src={thread.partnerAvatar}
@@ -151,7 +151,7 @@ export const ChatInbox: React.FC = () => {
                   </div>
                   {thread.isOnline && (
                     <span
-                      className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#C8FF00] ring-2 ring-white dark:ring-[#14161B] z-10"
+                      className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[var(--accent-primary)] ring-2 ring-white dark:ring-[#14161B] z-10"
                       title="Online now"
                     />
                   )}
@@ -165,7 +165,7 @@ export const ChatInbox: React.FC = () => {
                         {thread.partnerName}
                       </h4>
                       {isEnRoute && (
-                        <span className="px-2 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[9px] font-mono font-black">
+                        <span className="px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[9px] font-mono font-black">
                           EN ROUTE
                         </span>
                       )}
@@ -199,7 +199,7 @@ export const ChatInbox: React.FC = () => {
                       {thread.lastMessage}
                     </p>
                     {hasUnread && (
-                      <span className="ml-2 w-5 h-5 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00] text-[#C8FF00] dark:text-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center flex-shrink-0">
+                      <span className="ml-2 w-5 h-5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)] text-[var(--accent-primary)] dark:text-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center flex-shrink-0">
                         {thread.unreadCount}
                       </span>
                     )}

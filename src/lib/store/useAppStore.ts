@@ -47,7 +47,12 @@ import {
   calculateProviderDispatchScore,
   MARKET_PMS_PRICE_PER_LITER,
 } from '../utils';
-import { ThemeId, getThemeDefinition, applyThemeToDocument } from '../themes';
+import {
+  ThemeId,
+  MatchFeedbackStyle,
+  getThemeDefinition,
+  applyThemeToDocument,
+} from '../themes';
 
 export interface EscrowTransaction {
   id: string;
@@ -199,12 +204,14 @@ interface AppState {
   colorTheme: ThemeId;
   customAccentHex: string | null;
   transparentDock: boolean;
+  matchFeedbackStyle: MatchFeedbackStyle;
   toggleTheme: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
   setAppearancePreferences: (prefs: {
     colorTheme: ThemeId;
     customAccentHex: string | null;
     transparentDock: boolean;
+    matchFeedbackStyle: MatchFeedbackStyle;
   }) => void;
 
   // Driver Schedule & Customization
@@ -1235,13 +1242,14 @@ export const useAppStore = create<AppState>()(
   },
 
   // Theme Mode & Multi-Theme Appearance
-  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'light') ? 'light' : 'dark',
-  colorTheme: 'obsidian-volt',
+  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'dark') ? 'dark' : 'light',
+  colorTheme: 'clean-daylight',
   customAccentHex: null,
   transparentDock: true,
+  matchFeedbackStyle: 'ticket',
   toggleTheme: () => {
     const currentDef = getThemeDefinition(get().colorTheme);
-    const nextColorTheme: ThemeId = currentDef.isDark ? 'clean-daylight' : 'obsidian-volt';
+    const nextColorTheme: ThemeId = currentDef.isDark ? 'clean-daylight' : 'midnight-cobalt';
     const nextDef = getThemeDefinition(nextColorTheme);
     const nextPolarity = nextDef.isDark ? 'dark' : 'light';
     if (typeof window !== 'undefined') {
@@ -1257,7 +1265,7 @@ export const useAppStore = create<AppState>()(
     });
   },
   setTheme: (theme) => {
-    const nextColorTheme: ThemeId = theme === 'dark' ? 'obsidian-volt' : 'clean-daylight';
+    const nextColorTheme: ThemeId = theme === 'dark' ? 'midnight-cobalt' : 'clean-daylight';
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('carpull_theme', theme);
@@ -1270,7 +1278,12 @@ export const useAppStore = create<AppState>()(
       customAccentHex: null,
     });
   },
-  setAppearancePreferences: ({ colorTheme, customAccentHex, transparentDock }) => {
+  setAppearancePreferences: ({
+    colorTheme,
+    customAccentHex,
+    transparentDock,
+    matchFeedbackStyle,
+  }) => {
     const def = getThemeDefinition(colorTheme);
     const nextPolarity = def.isDark ? 'dark' : 'light';
     if (typeof window !== 'undefined') {
@@ -1284,6 +1297,7 @@ export const useAppStore = create<AppState>()(
       colorTheme,
       customAccentHex,
       transparentDock,
+      matchFeedbackStyle,
     });
   },
 
@@ -1718,6 +1732,7 @@ export const useAppStore = create<AppState>()(
       colorTheme: state.colorTheme,
       customAccentHex: state.customAccentHex,
       transparentDock: state.transparentDock,
+      matchFeedbackStyle: state.matchFeedbackStyle,
       userStreet: state.userStreet,
       selectedDestination: state.selectedDestination,
       selectedDayFilter: state.selectedDayFilter,

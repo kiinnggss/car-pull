@@ -47,8 +47,8 @@ export const SafeZoneSelector: React.FC = () => {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     isSelected
-                      ? 'bg-[#0B0C0E] text-[#C8FF00]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-[#C8FF00]'
+                      ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
+                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
                   }`}
                 >
                   {getZoneIcon(zone.zone_type)}
@@ -63,7 +63,7 @@ export const SafeZoneSelector: React.FC = () => {
               </div>
 
               {isSelected && (
-                <div className="w-7 h-7 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center flex-shrink-0">
+                <div className="w-7 h-7 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center flex-shrink-0">
                   <Check className="w-4 h-4" />
                 </div>
               )}

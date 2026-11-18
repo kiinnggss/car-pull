@@ -63,7 +63,7 @@ export const EscrowWallet: React.FC = () => {
         particleCount: 45,
         spread: 55,
         origin: { y: 0.6 },
-        colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+        colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
       });
       setTimeout(() => {
         setWithdrawSuccess(false);
@@ -77,7 +77,7 @@ export const EscrowWallet: React.FC = () => {
       {/* 1. Uber Green Inspired Volt Escrow Hero Card */}
       <div className="volt-surface rounded-[32px] p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] text-[10px] font-mono font-bold uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-bold uppercase">
             <ShieldCheck className="w-3.5 h-3.5" />
             ZERO-CASH ESCROW
           </div>
@@ -95,19 +95,19 @@ export const EscrowWallet: React.FC = () => {
         {/* Concentric Balance Display */}
         <div className="flex items-end justify-between gap-2 pt-1">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#0B0C0E]/70 block">
+            <span className="text-[10px] font-mono uppercase tracking-wider font-bold opacity-70 block">
               AVAILABLE TO WITHDRAW
             </span>
-            <span className="text-3xl font-display font-black font-mono tabular-nums text-[#0B0C0E] tracking-tight block mt-0.5">
+            <span className="text-3xl font-display font-black font-mono tabular-nums tracking-tight block mt-0.5">
               {formatNgn(escrowBalanceNgn)}
             </span>
           </div>
 
           <div className="text-right bg-[#0B0C0E]/10 px-3.5 py-2 rounded-2xl">
-            <span className="text-[9px] font-mono uppercase font-bold text-[#0B0C0E]/75 flex items-center justify-end gap-1">
+            <span className="text-[9px] font-mono uppercase font-bold opacity-75 flex items-center justify-end gap-1">
               <Lock className="w-2.5 h-2.5" /> HELD IN TRIPS
             </span>
-            <span className="text-base font-black font-mono tabular-nums text-[#0B0C0E] block">
+            <span className="text-base font-black font-mono tabular-nums block">
               {formatNgn(heldEscrowNgn)}
             </span>
           </div>
@@ -117,7 +117,7 @@ export const EscrowWallet: React.FC = () => {
         <div className="bg-white/90 rounded-full p-1.5 pl-3 flex items-center justify-between gap-2">
           <button
             onClick={() => topUpWallet(10000)}
-            className="flex items-center gap-1.5 py-2 px-3 rounded-full text-xs font-extrabold text-[#0B0C0E] hover:bg-black/5 active-press"
+            className="flex items-center gap-1.5 py-2 px-3 rounded-full text-xs font-extrabold hover:bg-black/5 active-press"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Top-up (+₦10k)</span>
@@ -130,7 +130,7 @@ export const EscrowWallet: React.FC = () => {
             }}
             className="py-2.5 px-5 rounded-full bg-[#0B0C0E] text-white text-xs font-extrabold flex items-center gap-1.5 active-press"
           >
-            <ArrowUpRight className="w-4 h-4 text-[#C8FF00]" />
+            <ArrowUpRight className="w-4 h-4 text-[var(--accent-primary)]" />
             <span>Withdraw Now</span>
           </button>
         </div>
@@ -153,7 +153,7 @@ export const EscrowWallet: React.FC = () => {
           </div>
           <button
             onClick={() => setShowWithdrawModal(true)}
-            className="text-[10px] font-mono uppercase font-extrabold text-[#525866] dark:text-[#C8FF00]"
+            className="text-[10px] font-mono uppercase font-extrabold text-[var(--text-secondary)] dark:text-[var(--accent-primary)]"
           >
             CHANGE
           </button>
@@ -181,7 +181,7 @@ export const EscrowWallet: React.FC = () => {
                 <div
                   className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     tx.type === 'TOPUP' || tx.type.includes('RELEASE')
-                      ? 'bg-[#C8FF00] text-[#0B0C0E]'
+                      ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                       : tx.type === 'FLAKE_PENALTY'
                       ? 'bg-[#FF9F0A] text-[#0B0C0E]'
                       : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
@@ -213,7 +213,7 @@ export const EscrowWallet: React.FC = () => {
                   {tx.type === 'TOPUP' ? '+' : '-'}
                   {formatNgn(tx.amountNgn)}
                 </span>
-                <span className="inline-block text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#C8FF00]">
+                <span className="inline-block text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-secondary)] dark:text-[var(--accent-primary)]">
                   {tx.type === 'WITHDRAWAL' ? 'SENT' : tx.status}
                 </span>
               </div>
@@ -228,7 +228,7 @@ export const EscrowWallet: React.FC = () => {
           <div className="w-full max-w-[380px] floating-surface rounded-[32px] p-5 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-9 h-9 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+                <div className="w-9 h-9 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
@@ -250,7 +250,7 @@ export const EscrowWallet: React.FC = () => {
 
             {withdrawSuccess ? (
               <div className="py-6 text-center space-y-2">
-                <div className="w-14 h-14 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center mx-auto">
+                <div className="w-14 h-14 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-7 h-7" />
                 </div>
                 <h4 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
@@ -295,7 +295,7 @@ export const EscrowWallet: React.FC = () => {
                     className="w-full px-4 py-3 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-mono tabular-nums font-bold text-[#0B0C0E] dark:text-white focus:outline-hidden"
                   />
                   {accountNumber.length === 10 && (
-                    <div className="mt-1.5 px-3.5 py-1.5 bg-[#C8FF00]/25 rounded-full flex items-center justify-between text-[10px] text-[#0B0C0E] dark:text-[#C8FF00]">
+                    <div className="mt-1.5 px-3.5 py-1.5 bg-[var(--accent-primary)]/15 rounded-full flex items-center justify-between text-[10px] text-[var(--text-primary)]">
                       <span className="font-mono font-bold">VERIFIED:</span>
                       <strong className="uppercase font-mono">{user.fullName}</strong>
                     </div>

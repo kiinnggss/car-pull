@@ -103,8 +103,8 @@ export const AuthLanding: React.FC = () => {
       <div className="volt-surface rounded-[32px] p-5 relative overflow-hidden">
         {/* Top Row: Brand Pill & Theme Toggle */}
         <div className="flex items-center justify-between relative z-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] text-[10px] font-mono font-bold tracking-wider uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#C8FF00] animate-pulse" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-bold tracking-wider uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
             CAR PULL • SEC 44
           </div>
 
@@ -113,7 +113,7 @@ export const AuthLanding: React.FC = () => {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
             title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="w-9 h-9 rounded-full bg-[#0B0C0E]/10 hover:bg-[#0B0C0E]/20 flex items-center justify-center text-[#0B0C0E] active-press transition-colors"
+            className="w-9 h-9 rounded-full bg-[#0B0C0E]/10 hover:bg-[#0B0C0E]/20 flex items-center justify-center active-press transition-colors"
           >
             {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
           </button>
@@ -123,16 +123,16 @@ export const AuthLanding: React.FC = () => {
         <div className="my-4 flex flex-col items-center justify-center relative z-10">
           <div className="w-28 h-28 rounded-full border border-[#0B0C0E]/12 flex items-center justify-center">
             <div className="w-20 h-20 rounded-full border border-[#0B0C0E]/22 flex items-center justify-center">
-              <div className="w-13 h-13 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center shadow-lg">
+              <div className="w-13 h-13 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center shadow-lg">
                 <Zap className="w-6 h-6 fill-current" />
               </div>
             </div>
           </div>
 
-          <h1 className="text-2xl font-black tracking-tight text-[#0B0C0E] mt-3 text-center leading-none">
+          <h1 className="text-2xl font-black tracking-tight mt-3 text-center leading-none">
             Share the Corridor.
           </h1>
-          <p className="text-xs font-medium text-[#0B0C0E]/75 text-center mt-1.5 max-w-[260px] leading-snug">
+          <p className="text-xs font-medium opacity-75 text-center mt-1.5 max-w-[260px] leading-snug">
             Swipe verified corporate peers along Ajah, Lekki, and Victoria Island with zero-cash fuel splits.
           </p>
         </div>
@@ -161,16 +161,16 @@ export const AuthLanding: React.FC = () => {
                 <span className="text-xs font-extrabold block text-white">Femi Adeyemi</span>
                 <span className="text-[10px] text-white/70 block mt-0.5">Rider • Dangote</span>
               </div>
-              <span className="w-5 h-5 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+              <span className="w-5 h-5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
                 <Check className="w-3 h-3 stroke-[3]" />
               </span>
             </div>
 
             <div className="flex items-center justify-between mt-3">
-              <div className="w-8 h-8 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
                 <UserCheck className="w-4 h-4" />
               </div>
-              <span className="text-[10px] font-mono font-bold text-[#C8FF00] flex items-center gap-1">
+              <span className="text-[10px] font-mono font-bold text-[var(--accent-primary)] flex items-center gap-1">
                 Swipe Deck <ArrowRight className="w-3 h-3" />
               </span>
             </div>
@@ -195,7 +195,7 @@ export const AuthLanding: React.FC = () => {
             </div>
 
             <div className="flex items-center justify-between mt-3">
-              <div className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-[#C8FF00] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)] flex items-center justify-center">
                 <Car className="w-4 h-4" />
               </div>
               <span className="text-[10px] font-mono font-bold text-[#0B0C0E] dark:text-white flex items-center gap-1">
@@ -218,7 +218,7 @@ export const AuthLanding: React.FC = () => {
             }}
             className={`py-2 rounded-full text-xs font-extrabold transition-all ${
               mode === 'signin'
-                ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                 : 'text-[#525866] dark:text-[#9BA1AE]'
             }`}
           >
@@ -232,7 +232,7 @@ export const AuthLanding: React.FC = () => {
             }}
             className={`py-2 rounded-full text-xs font-extrabold transition-all ${
               mode === 'signup'
-                ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                 : 'text-[#525866] dark:text-[#9BA1AE]'
             }`}
           >
@@ -256,7 +256,7 @@ export const AuthLanding: React.FC = () => {
                 value={signInIdentifier}
                 onChange={(e) => setSignInIdentifier(e.target.value)}
                 placeholder="Work email or phone (+234...)"
-                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[#C8FF00]"
+                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[var(--accent-primary)]"
               />
             </div>
 
@@ -268,7 +268,7 @@ export const AuthLanding: React.FC = () => {
                 value={signInPassword}
                 onChange={(e) => setSignInPassword(e.target.value)}
                 placeholder="Password or passcode"
-                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[#C8FF00]"
+                className="w-full pl-10 pr-4 py-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden focus:ring-2 focus:ring-[#0B0C0E] dark:focus:ring-[var(--accent-primary)]"
               />
             </div>
 
@@ -288,7 +288,7 @@ export const AuthLanding: React.FC = () => {
                 onClick={() => setSignupRole('rider')}
                 className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2 ${
                   signupRole === 'rider'
-                    ? 'bg-[#C8FF00] border-[#0B0C0E] text-[#0B0C0E]'
+                    ? 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                     : 'bg-[#F4F5F7] dark:bg-[#1E2028] border-transparent text-[#525866] dark:text-[#9BA1AE]'
                 }`}
               >
@@ -304,7 +304,7 @@ export const AuthLanding: React.FC = () => {
                 onClick={() => setSignupRole('driver')}
                 className={`p-2.5 rounded-2xl border text-left transition-all flex items-center gap-2 ${
                   signupRole === 'driver'
-                    ? 'bg-[#C8FF00] border-[#0B0C0E] text-[#0B0C0E]'
+                    ? 'bg-[var(--accent-primary)] border-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                     : 'bg-[#F4F5F7] dark:bg-[#1E2028] border-transparent text-[#525866] dark:text-[#9BA1AE]'
                 }`}
               >

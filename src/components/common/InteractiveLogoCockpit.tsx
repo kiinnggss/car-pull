@@ -131,7 +131,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
           particleCount: 35,
           spread: 50,
           origin: { y: 0.6 },
-          colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+          colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
         });
         break;
     }
@@ -173,7 +173,7 @@ export const InteractiveLogoCockpit: React.FC<InteractiveLogoCockpitProps> = ({
             <div className="w-16 h-16 rounded-full border border-[#0B0C0E]/25 flex items-center justify-center">
               <button
                 onClick={() => handleAction('car')}
-                className="w-11 h-11 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center shadow-lg active-press"
+                className="w-11 h-11 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center shadow-lg active-press"
               >
                 <Zap className="w-5 h-5 fill-current" />
               </button>

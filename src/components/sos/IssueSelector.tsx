@@ -83,7 +83,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
                   </h4>
                   <p
                     className={`text-[11px] font-medium mt-0.5 ${
-                      useVolt ? 'text-[#0B0C0E]/75' : 'text-[#525866] dark:text-[#9BA1AE]'
+                      useVolt ? 'opacity-75' : 'text-[#525866] dark:text-[#9BA1AE]'
                     }`}
                   >
                     {issue.subtitle}
@@ -97,8 +97,8 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center ${
                     useVolt
-                      ? 'bg-[#0B0C0E] text-[#C8FF00]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-[#C8FF00]'
+                      ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
+                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
                   }`}
                 >
                   {issue.icon}

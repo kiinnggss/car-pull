@@ -81,7 +81,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
       <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 border border-black/10 dark:border-white/10 shadow-xl">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[#C8FF00] font-bold block">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
               LAGOS TRANSPORT REFORM ACT
             </span>
             <h2 className="text-base font-display font-black text-white mt-0.5">
@@ -89,7 +89,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             </h2>
           </div>
 
-          <span className="px-3 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[10px] font-mono font-black flex items-center gap-1.5">
+          <span className="px-3 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-[#0B0C0E] animate-ping" />
             EXEMPT
           </span>
@@ -97,22 +97,22 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
         {/* Scannable QR & Token Row */}
         <div className="p-4 rounded-[24px] bg-[#1E2028] flex items-center gap-4">
-          <div className="bg-[#C8FF00] p-2.5 rounded-2xl flex-shrink-0">
+          <div className="bg-[var(--accent-primary)] p-2.5 rounded-2xl flex-shrink-0">
             <svg
               viewBox="0 0 120 120"
               className="w-22 h-22 text-[#0B0C0E] fill-current"
               shapeRendering="crispEdges"
             >
               <rect x="10" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="15" width="20" height="20" fill="#C8FF00" />
+              <rect x="15" y="15" width="20" height="20" fill="var(--accent-primary)" />
               <rect x="20" y="20" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="80" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="85" y="15" width="20" height="20" fill="#C8FF00" />
+              <rect x="85" y="15" width="20" height="20" fill="var(--accent-primary)" />
               <rect x="90" y="20" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="10" y="80" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="85" width="20" height="20" fill="#C8FF00" />
+              <rect x="15" y="85" width="20" height="20" fill="var(--accent-primary)" />
               <rect x="20" y="90" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="45" y="15" width="5" height="5" />
@@ -148,7 +148,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
           </div>
 
           <div className="space-y-1.5 min-w-0">
-            <span className="text-[9px] font-mono uppercase tracking-widest text-[#C8FF00] font-bold block">
+            <span className="text-[9px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
               STATUTORY AUDIT TOKEN
             </span>
             <div className="text-xs font-mono font-black text-white tracking-wider">
@@ -159,14 +159,14 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             </p>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 text-[10px] font-mono">
               <span className="text-white/60">PIN:</span>
-              <strong className="text-[#C8FF00] font-black tracking-widest">{offlinePin}</strong>
+              <strong className="text-[var(--accent-primary)] font-black tracking-widest">{offlinePin}</strong>
             </div>
           </div>
         </div>
 
         {/* Live Telemetry Clock Pill */}
         <div className="px-4 py-2.5 rounded-full bg-white/8 flex items-center justify-between text-[10px] font-mono tabular-nums">
-          <span className="text-[#C8FF00] font-bold">LIVE AUDIT CLOCK</span>
+          <span className="text-[var(--accent-primary)] font-bold">LIVE AUDIT CLOCK</span>
           <span className="text-white font-bold">{currentTime}</span>
         </div>
       </div>
@@ -175,16 +175,16 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
       <div className="grid grid-cols-2 gap-2.5">
         <div className="volt-surface rounded-[26px] p-4 flex flex-col justify-between min-h-[104px]">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-black text-[#0B0C0E]/75">
+            <span className="text-[10px] font-mono uppercase font-black opacity-75">
               VEHICLE
             </span>
-            <Car className="w-4 h-4 text-[#0B0C0E]" />
+            <Car className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-xs font-extrabold text-[#0B0C0E] block truncate">
+            <span className="text-xs font-extrabold block truncate">
               {activeVehicleModel}
             </span>
-            <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[#0B0C0E] text-[#C8FF00] font-mono text-[10px] font-black">
+            <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] font-mono text-[10px] font-black">
               {activeVehiclePlate}
             </span>
           </div>
@@ -195,7 +195,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             <span className="text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE]">
               COMMERCIAL PROFIT
             </span>
-            <ShieldCheck className="w-4 h-4 text-[#0B0C0E] dark:text-[#C8FF00]" />
+            <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
           </div>
           <div>
             <span className="text-base font-black font-mono tabular-nums text-[#0B0C0E] dark:text-white block">

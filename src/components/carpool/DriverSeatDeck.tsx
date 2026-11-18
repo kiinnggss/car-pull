@@ -81,7 +81,7 @@ export const DriverSeatDeck: React.FC = () => {
       particleCount: 40,
       spread: 55,
       origin: { y: 0.65 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
     });
   };
 
@@ -92,7 +92,7 @@ export const DriverSeatDeck: React.FC = () => {
       particleCount: 55,
       spread: 65,
       origin: { y: 0.6 },
-      colors: ['#C8FF00', '#0B0C0E', '#FFFFFF'],
+      colors: ['#3B82F6', '#0B0C0E', '#FFFFFF'],
     });
   };
 
@@ -126,7 +126,7 @@ export const DriverSeatDeck: React.FC = () => {
       {/* 1. Uber Green Inspired Volt Driver Telemetry Card */}
       <div className="volt-surface rounded-[32px] p-5 space-y-4">
         <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B0C0E] text-[#C8FF00] text-[10px] font-mono font-bold uppercase">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-bold uppercase">
             <Zap className="w-3 h-3 fill-current" />
             DRIVER HOST MODE
           </div>
@@ -150,7 +150,7 @@ export const DriverSeatDeck: React.FC = () => {
               }}
               className="px-3 py-1.5 rounded-full bg-[#0B0C0E] text-white text-[11px] font-extrabold flex items-center gap-1 active-press"
             >
-              <Compass className="w-3 h-3 text-[#C8FF00]" />
+              <Compass className="w-3 h-3 text-[var(--accent-primary)]" />
               <span>Map</span>
             </button>
           </div>
@@ -159,10 +159,10 @@ export const DriverSeatDeck: React.FC = () => {
         {/* Route & Earnings Headline */}
         <div className="flex items-end justify-between gap-2">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#0B0C0E]/70 block">
+            <span className="text-[10px] font-mono uppercase tracking-wider font-bold opacity-70 block">
               {driverSchedule.departureDay || 'Today'} • {driverSchedule.departureTime}
             </span>
-            <h2 className="text-xl font-display font-black text-[#0B0C0E] leading-tight mt-0.5">
+            <h2 className="text-xl font-display font-black leading-tight mt-0.5">
               {commuteDirection === 'morning'
                 ? 'Admiralty Way → Victoria Island'
                 : 'Victoria Island → Admiralty Way'}
@@ -170,10 +170,10 @@ export const DriverSeatDeck: React.FC = () => {
           </div>
 
           <div className="text-right flex-shrink-0">
-            <span className="text-[9px] font-mono uppercase font-bold text-[#0B0C0E]/70 block">
+            <span className="text-[9px] font-mono uppercase font-bold opacity-70 block">
               ESCROW OFFSET
             </span>
-            <span className="text-xl font-black font-mono tabular-nums text-[#0B0C0E]">
+            <span className="text-xl font-black font-mono tabular-nums">
               +{formatNgn(totalEscrowEarned)}
             </span>
           </div>
@@ -188,12 +188,12 @@ export const DriverSeatDeck: React.FC = () => {
             }}
             className="text-left flex items-center gap-2 active-press"
           >
-            <Car className="w-4 h-4 text-[#C8FF00]" />
+            <Car className="w-4 h-4 text-[var(--accent-primary)]" />
             <div>
               <span className="text-[11px] font-extrabold block leading-none">
                 {driverVehicle.make} {driverVehicle.model}
               </span>
-              <span className="text-[9px] font-mono text-[#C8FF00] block mt-0.5">
+              <span className="text-[9px] font-mono text-[var(--accent-primary)] block mt-0.5">
                 {driverVehicle.plate_number} • Tap to flip AM/PM
               </span>
             </div>
@@ -207,7 +207,7 @@ export const DriverSeatDeck: React.FC = () => {
             >
               <Minus className="w-3 h-3" />
             </button>
-            <span className="text-xs font-mono tabular-nums font-black px-1.5 text-[#C8FF00]">
+            <span className="text-xs font-mono tabular-nums font-black px-1.5 text-[var(--accent-primary)]">
               {availableSeats}/{driverVehicle.total_seats} Seats
             </span>
             <button
@@ -228,7 +228,7 @@ export const DriverSeatDeck: React.FC = () => {
             <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white">
               Confirmed Cabin Manifest ({acceptedRiders.length})
             </span>
-            <span className="text-[10px] font-mono font-bold text-[#0B0C0E] bg-[#C8FF00] px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-mono font-bold text-[#0B0C0E] bg-[var(--accent-primary)] px-2.5 py-0.5 rounded-full">
               ESCROW LOCKED
             </span>
           </div>
@@ -251,7 +251,7 @@ export const DriverSeatDeck: React.FC = () => {
                     </h4>
                     <p className="text-[10px] text-[#525866] dark:text-[#9BA1AE] truncate">
                       {rider.pickupSafeZone.name} •{' '}
-                      <strong className="font-mono text-[#0B0C0E] dark:text-[#C8FF00]">
+                      <strong className="font-mono text-[var(--text-primary)] dark:text-[var(--accent-primary)]">
                         {formatNgn(rider.bidNgn)}
                       </strong>
                     </p>
@@ -308,7 +308,7 @@ export const DriverSeatDeck: React.FC = () => {
               onClick={() => setRideFilter(tab.id)}
               className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold whitespace-nowrap transition-all active-press ${
                 rideFilter === tab.id
-                  ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
+                  ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                   : 'bg-white dark:bg-[#14161B] text-[#525866] dark:text-[#9BA1AE]'
               }`}
             >
@@ -333,7 +333,7 @@ export const DriverSeatDeck: React.FC = () => {
                       alt={rider.name}
                       className="w-13 h-13 rounded-2xl object-cover"
                     />
-                    <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[9px] font-mono font-black">
+                    <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[9px] font-mono font-black">
                       ★ {rider.rating}
                     </span>
                   </div>
@@ -343,7 +343,7 @@ export const DriverSeatDeck: React.FC = () => {
                       <h4 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white truncate">
                         {rider.name}
                       </h4>
-                      <ShieldCheck className="w-4 h-4 text-[#0B0C0E] dark:text-[#C8FF00] flex-shrink-0" />
+                      <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)] flex-shrink-0" />
                     </div>
                     <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] font-semibold flex items-center gap-1 truncate">
                       <Briefcase className="w-3 h-3 flex-shrink-0" />

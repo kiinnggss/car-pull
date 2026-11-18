@@ -94,7 +94,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       particleCount: 30,
       spread: 45,
       origin: { y: 0.6 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
     });
 
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
@@ -114,7 +114,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       particleCount: 25,
       spread: 40,
       origin: { y: 0.6 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
+      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
     });
 
     setSentSuccess(true);

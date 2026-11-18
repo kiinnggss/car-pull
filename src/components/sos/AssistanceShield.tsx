@@ -65,16 +65,16 @@ export const AssistanceShield: React.FC = () => {
         <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[#C8FF00] font-bold block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
                 AUTHORIZED RECOVERY EN ROUTE
               </span>
               <div className="text-3xl font-display font-black font-mono tabular-nums text-white flex items-center gap-2 mt-1">
-                <Clock className="w-6 h-6 text-[#C8FF00]" />
+                <Clock className="w-6 h-6 text-[var(--accent-primary)]" />
                 <span>{formattedCountdown}</span>
               </div>
             </div>
 
-            <div className="relative w-13 h-13 rounded-full ring-2 ring-[#C8FF00] overflow-hidden flex-shrink-0">
+            <div className="relative w-13 h-13 rounded-full ring-2 ring-[var(--accent-primary)] overflow-hidden flex-shrink-0">
               <img
                 src={selectedProvider.operator_photo}
                 alt={selectedProvider.operator_name}
@@ -86,7 +86,7 @@ export const AssistanceShield: React.FC = () => {
           {/* Horizontal Tow Truck Track */}
           <div className="py-1">
             <div className="relative h-1.5 w-full rounded-full bg-white/20 flex items-center">
-              <div className="h-full w-[64%] rounded-full bg-[#C8FF00]" />
+              <div className="h-full w-[64%] rounded-full bg-[var(--accent-primary)]" />
               <div
                 style={{ left: '60%' }}
                 className="absolute -translate-x-1/2 w-9 h-4.5 rounded-full bg-white text-[#0B0C0E] flex items-center justify-center shadow-md"
@@ -102,7 +102,7 @@ export const AssistanceShield: React.FC = () => {
               <span className="font-extrabold block">{selectedProvider.operator_name}</span>
               <span className="text-[11px] text-white/70">{selectedProvider.truck_type}</span>
             </div>
-            <span className="px-3 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] font-mono text-xs font-black">
+            <span className="px-3 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] font-mono text-xs font-black">
               {selectedProvider.plate_number}
             </span>
           </div>
@@ -116,14 +116,14 @@ export const AssistanceShield: React.FC = () => {
             <span className="text-[10px] font-mono uppercase text-[#525866] dark:text-[#9BA1AE] font-bold block">
               DISPATCH AUTH CODE
             </span>
-            <strong className="text-sm font-mono font-black text-[#0B0C0E] dark:text-[#C8FF00]">
+            <strong className="text-sm font-mono font-black text-[var(--text-primary)] dark:text-[var(--accent-primary)]">
               {activeIncident.dispatchAuthCode}
             </strong>
           </div>
 
           <a
             href={`tel:${selectedProvider.phone}`}
-            className="w-11 h-11 rounded-full bg-[#C8FF00] text-[#0B0C0E] flex items-center justify-center active-press shadow-md"
+            className="w-11 h-11 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center active-press shadow-md"
             title="Call Operator"
           >
             <Phone className="w-4 h-4" />
@@ -198,7 +198,7 @@ export const AssistanceShield: React.FC = () => {
               </div>
               <div className="flex justify-between pt-1">
                 <span className="text-[#525866] dark:text-[#9BA1AE]">Total</span>
-                <span className="font-mono font-black text-[#0B0C0E] dark:text-[#C8FF00]">₦14,500</span>
+                <span className="font-mono font-black text-[var(--text-primary)] dark:text-[var(--accent-primary)]">₦14,500</span>
               </div>
             </div>
 
