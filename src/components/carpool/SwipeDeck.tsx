@@ -6,8 +6,8 @@ import { useAppStore } from '@/lib/store/useAppStore';
 import { ProfileCard } from './ProfileCard';
 import { QuickBidPills } from './QuickBidPills';
 import { RoutePlannerBar } from './RoutePlannerBar';
-import { RotateCcw, CheckCircle2, Sparkles, Compass } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { RotateCcw, Sparkles, Compass, Car, ShieldCheck, ArrowRight, KeyRound } from 'lucide-react';
+import { CorridorDriver } from '@/lib/types';
 import { formatNgn } from '@/lib/utils';
 import { triggerHaptic } from '@/lib/haptics';
 
@@ -22,10 +22,14 @@ export const SwipeDeck: React.FC = () => {
     customBidNgn,
     selectedSafeZone,
     setActiveTab,
+    offlinePin,
   } = useAppStore();
 
   const [exitX, setExitX] = useState<number>(0);
-  const [matchSuccessModal, setMatchSuccessModal] = useState(false);
+  const [bookedTicket, setBookedTicket] = useState<{
+    driver: CorridorDriver;
+    fareNgn: number;
+  } | null>(null);
 
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-8, 8]);
@@ -34,24 +38,16 @@ export const SwipeDeck: React.FC = () => {
   const likeOpacity = useTransform(x, [25, 110], [0, 1]);
   const nopeOpacity = useTransform(x, [-25, -110], [0, 1]);
 
-  const triggerMatchConfetti = () => {
-    confetti({
-      particleCount: 55,
-      spread: 60,
-      origin: { y: 0.65 },
-      colors: ['#C8FF00', '#0B0C0E', '#FF9F0A'],
-    });
-  };
-
   const handleDragEnd = (_event: any, info: any) => {
     const threshold = 95;
-    if (info.offset.x > threshold) {
+    if (info.offset.x > threshold && currentDriver) {
+      const driverSnapshot = currentDriver;
+      const fareSnapshot = customBidNgn;
       setExitX(280);
       triggerHaptic('match');
-      triggerMatchConfetti();
-      setMatchSuccessModal(true);
       setTimeout(() => {
         swipeRight();
+        setBookedTicket({ driver: driverSnapshot, fareNgn: fareSnapshot });
         setExitX(0);
         x.set(0);
       }, 220);
@@ -67,12 +63,14 @@ export const SwipeDeck: React.FC = () => {
   };
 
   const handleManualAccept = () => {
+    if (!currentDriver) return;
+    const driverSnapshot = currentDriver;
+    const fareSnapshot = customBidNgn;
     setExitX(280);
     triggerHaptic('match');
-    triggerMatchConfetti();
-    setMatchSuccessModal(true);
     setTimeout(() => {
       swipeRight();
+      setBookedTicket({ driver: driverSnapshot, fareNgn: fareSnapshot });
       setExitX(0);
       x.set(0);
     }, 220);
@@ -171,46 +169,176 @@ export const SwipeDeck: React.FC = () => {
         <QuickBidPills onReject={handleManualReject} onAccept={handleManualAccept} />
       </div>
 
-      {/* Match Reserved Modal */}
-      {matchSuccessModal && (
-        <div
-          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150"
-          onClick={() => setMatchSuccessModal(false)}
-        >
-          <div
-            className="volt-surface rounded-[32px] p-6 max-w-xs w-full text-center space-y-3"
-            onClick={(e) => e.stopPropagation()}
+      {/* Animated Boarding Pass Ticket Modal */}
+      <AnimatePresence>
+        {bookedTicket && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/75 backdrop-blur-xs flex items-center justify-center p-4"
+            onClick={() => setBookedTicket(null)}
           >
-            <div className="w-14 h-14 rounded-full bg-[#0B0C0E] text-[#C8FF00] flex items-center justify-center mx-auto shadow-lg">
-              <CheckCircle2 className="w-7 h-7" />
-            </div>
-            <h4 className="text-xl font-display font-black text-[#0B0C0E]">
-              Seat Reserved!
-            </h4>
-            <p className="text-xs font-medium text-[#0B0C0E]/80 leading-relaxed">
-              <strong className="font-mono font-black">{formatNgn(customBidNgn)}</strong> is locked in Zero-Cash Escrow. Meet at{' '}
-              <strong>{selectedSafeZone.name}</strong>.
-            </p>
-            <div className="grid grid-cols-2 gap-2 pt-2">
-              <button
-                onClick={() => setMatchSuccessModal(false)}
-                className="py-3 bg-white/80 hover:bg-white text-[#0B0C0E] font-extrabold text-xs rounded-full transition-colors"
-              >
-                Keep Swiping
-              </button>
-              <button
-                onClick={() => {
-                  setMatchSuccessModal(false);
-                  setActiveTab('matches');
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 28, rotateX: 14 }}
+              animate={{ opacity: 1, scale: 1, y: 0, rotateX: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 16 }}
+              transition={{ type: 'spring', stiffness: 360, damping: 26 }}
+              className="w-full max-w-[350px] rounded-[28px] overflow-hidden shadow-2xl relative"
+              style={{
+                backgroundColor: 'var(--bg-sheet)',
+                color: 'var(--text-primary)',
+                border: 'var(--card-border-width, 1px) solid var(--border-subtle)',
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Top Boarding Pass Header */}
+              <div
+                className="px-5 pt-4 pb-3.5 flex items-center justify-between"
+                style={{
+                  backgroundColor: 'var(--accent-primary)',
+                  color: 'var(--accent-primary-fg)',
                 }}
-                className="py-3 bg-[#0B0C0E] text-[#C8FF00] font-extrabold text-xs rounded-full transition-colors"
               >
-                View Ride
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span className="text-[11px] font-mono font-black uppercase tracking-wider">
+                    Seat Locked
+                  </span>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-black/15 text-[10.5px] font-mono font-black">
+                  <KeyRound className="w-3 h-3" />
+                  <span>PIN {offlinePin || '4829'}</span>
+                </div>
+              </div>
+
+              {/* Driver & Vehicle Stub */}
+              <div className="p-5 space-y-4">
+                <div className="flex items-center gap-3">
+                  <img
+                    src={bookedTicket.driver.avatar}
+                    alt={bookedTicket.driver.name}
+                    className="w-12 h-12 rounded-2xl object-cover object-top flex-shrink-0 border"
+                    style={{ borderColor: 'var(--border-subtle)' }}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-display font-black truncate">
+                      {bookedTicket.driver.name}
+                    </h4>
+                    <p
+                      className="text-[11px] font-medium truncate"
+                      style={{ color: 'var(--text-secondary)' }}
+                    >
+                      {bookedTicket.driver.vehicle.make} {bookedTicket.driver.vehicle.model}
+                    </p>
+                  </div>
+                  <span
+                    className="px-2.5 py-1 rounded-full text-[10px] font-mono font-black flex-shrink-0"
+                    style={{
+                      backgroundColor: 'var(--bg-subtle)',
+                      color: 'var(--text-primary)',
+                    }}
+                  >
+                    {bookedTicket.driver.vehicle.plate_number}
+                  </span>
+                </div>
+
+                {/* Live Pickup Progress Track */}
+                <div
+                  className="p-3.5 rounded-2xl space-y-2.5"
+                  style={{ backgroundColor: 'var(--bg-subtle)' }}
+                >
+                  <div className="flex items-center justify-between text-[10.5px] font-bold">
+                    <span className="truncate max-w-[165px]">
+                      {selectedSafeZone.name}
+                    </span>
+                    <span className="font-mono font-black">
+                      {bookedTicket.driver.corridor.departure_time}
+                    </span>
+                  </div>
+
+                  <div className="relative h-5 flex items-center">
+                    <div
+                      className="w-full h-1 rounded-full overflow-hidden"
+                      style={{ backgroundColor: 'var(--border-subtle)' }}
+                    >
+                      <motion.div
+                        initial={{ width: '10%' }}
+                        animate={{ width: '58%' }}
+                        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                        className="h-full rounded-full"
+                        style={{ backgroundColor: 'var(--accent-primary)' }}
+                      />
+                    </div>
+                    <motion.div
+                      initial={{ left: '10%' }}
+                      animate={{ left: '54%' }}
+                      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute w-6 h-6 rounded-full flex items-center justify-center shadow-md"
+                      style={{
+                        backgroundColor: 'var(--accent-primary)',
+                        color: 'var(--accent-primary-fg)',
+                      }}
+                    >
+                      <Car className="w-3.5 h-3.5" />
+                    </motion.div>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px]">
+                    <span style={{ color: 'var(--text-secondary)' }}>
+                      Zero-Cash Escrow Held
+                    </span>
+                    <span className="font-mono font-black">
+                      {formatNgn(bookedTicket.fareNgn)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Perforated Tear Line with Side Notches */}
+              <div className="relative flex items-center px-4">
+                <span
+                  className="w-4 h-4 rounded-full -ml-6 flex-shrink-0"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
+                />
+                <div
+                  className="flex-1 border-t-2 border-dashed mx-1"
+                  style={{ borderColor: 'var(--border-subtle)' }}
+                />
+                <span
+                  className="w-4 h-4 rounded-full -mr-6 flex-shrink-0"
+                  style={{ backgroundColor: 'rgba(0,0,0,0.75)' }}
+                />
+              </div>
+
+              {/* Ticket Actions */}
+              <div className="p-4 pt-3.5 grid grid-cols-2 gap-2.5">
+                <button
+                  onClick={() => setBookedTicket(null)}
+                  className="py-2.5 rounded-full text-xs font-extrabold active-press transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: 'var(--bg-subtle)' }}
+                >
+                  Keep Swiping
+                </button>
+                <button
+                  onClick={() => {
+                    setBookedTicket(null);
+                    setActiveTab('matches');
+                  }}
+                  className="py-2.5 rounded-full text-xs font-extrabold flex items-center justify-center gap-1.5 active-press transition-opacity hover:opacity-90"
+                  style={{
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                  }}
+                >
+                  <span>View Ride</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
