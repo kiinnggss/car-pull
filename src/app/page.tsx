@@ -14,16 +14,23 @@ import { CommutePass } from '@/components/pass/CommutePass';
 import { CorridorMap } from '@/components/map/CorridorMap';
 import { AuthLanding } from '@/components/auth/AuthLanding';
 import { ChatHub } from '@/components/chat/ChatHub';
+import { applyThemeToDocument } from '@/lib/themes';
 
 export default function Home() {
-  const { activeTab, setActiveTab, activeRole, isAuthenticated, theme, activeThreadId } = useAppStore();
+  const {
+    activeTab,
+    setActiveTab,
+    activeRole,
+    isAuthenticated,
+    colorTheme,
+    customAccentHex,
+    transparentDock,
+    activeThreadId,
+  } = useAppStore();
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const isDark = theme === 'dark';
-      document.documentElement.classList.toggle('dark', isDark);
-    }
-  }, [theme]);
+    applyThemeToDocument(colorTheme, customAccentHex, transparentDock);
+  }, [colorTheme, customAccentHex, transparentDock]);
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -46,7 +53,7 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen sm:min-h-[860px] sm:max-h-[94vh] sm:my-auto sm:rounded-[40px] bg-[#F4F5F7] dark:bg-[#0B0C0E] sm:border-[6px] sm:border-[#0B0C0E] dark:sm:border-[#1E2028] relative flex flex-col justify-between shadow-[0_30px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-[#0B0C0E] dark:text-white overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen sm:min-h-[860px] sm:max-h-[94vh] sm:my-auto sm:rounded-[40px] bg-[var(--bg-canvas)] sm:border-[6px] sm:border-[#0B0C0E] dark:sm:border-[#1E2028] relative flex flex-col justify-between shadow-[0_30px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-[var(--text-primary)] overflow-x-hidden">
         <AuthLanding />
       </main>
     );
@@ -57,7 +64,7 @@ export default function Home() {
   const isChatThreadOpen = activeTab === 'chats' && !!activeThreadId;
 
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] sm:h-[870px] sm:max-h-[94vh] sm:my-auto sm:rounded-[40px] bg-[#F4F5F7] dark:bg-[#0B0C0E] sm:border-[6px] sm:border-[#0B0C0E] dark:sm:border-[#1E2028] relative flex flex-col justify-between shadow-[0_30px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-[#0B0C0E] dark:text-white overflow-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] sm:h-[870px] sm:max-h-[94vh] sm:my-auto sm:rounded-[40px] bg-[var(--bg-canvas)] sm:border-[6px] sm:border-[#0B0C0E] dark:sm:border-[#1E2028] relative flex flex-col justify-between shadow-[0_30px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-[var(--text-primary)] overflow-hidden">
       {/* Top Application Bar (Hidden when inside full-screen chat thread) */}
       {!isChatThreadOpen && <Header />}
 

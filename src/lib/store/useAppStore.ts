@@ -47,6 +47,7 @@ import {
   calculateProviderDispatchScore,
   MARKET_PMS_PRICE_PER_LITER,
 } from '../utils';
+import { ThemeId, getThemeDefinition, applyThemeToDocument } from '../themes';
 
 export interface EscrowTransaction {
   id: string;
@@ -193,10 +194,18 @@ interface AppState {
   // Corridor Driver Selection
   selectDriverById: (driverId: string) => void;
 
-  // Theme Mode
+  // Theme Mode & Multi-Theme Appearance
   theme: 'light' | 'dark';
+  colorTheme: ThemeId;
+  customAccentHex: string | null;
+  transparentDock: boolean;
   toggleTheme: () => void;
   setTheme: (theme: 'light' | 'dark') => void;
+  setAppearancePreferences: (prefs: {
+    colorTheme: ThemeId;
+    customAccentHex: string | null;
+    transparentDock: boolean;
+  }) => void;
 
   // Driver Schedule & Customization
   driverSchedule: DriverSchedule;
@@ -1225,35 +1234,57 @@ export const useAppStore = create<AppState>()(
     }
   },
 
-  // Theme Mode
-  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'dark') ? 'dark' : 'light',
+  // Theme Mode & Multi-Theme Appearance
+  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'light') ? 'light' : 'dark',
+  colorTheme: 'obsidian-volt',
+  customAccentHex: null,
+  transparentDock: true,
   toggleTheme: () => {
-    const current = get().theme;
-    const next = current === 'light' ? 'dark' : 'light';
+    const currentDef = getThemeDefinition(get().colorTheme);
+    const nextColorTheme: ThemeId = currentDef.isDark ? 'clean-daylight' : 'obsidian-volt';
+    const nextDef = getThemeDefinition(nextColorTheme);
+    const nextPolarity = nextDef.isDark ? 'dark' : 'light';
     if (typeof window !== 'undefined') {
       try {
-        localStorage.setItem('carpull_theme', next);
-        if (next === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
+        localStorage.setItem('carpull_theme', nextPolarity);
+        applyThemeToDocument(nextColorTheme, null, get().transparentDock);
       } catch (e) {}
     }
-    set({ theme: next });
+    set({
+      theme: nextPolarity,
+      colorTheme: nextColorTheme,
+      customAccentHex: null,
+    });
   },
   setTheme: (theme) => {
+    const nextColorTheme: ThemeId = theme === 'dark' ? 'obsidian-volt' : 'clean-daylight';
     if (typeof window !== 'undefined') {
       try {
         localStorage.setItem('carpull_theme', theme);
-        if (theme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
+        applyThemeToDocument(nextColorTheme, null, get().transparentDock);
       } catch (e) {}
     }
-    set({ theme });
+    set({
+      theme,
+      colorTheme: nextColorTheme,
+      customAccentHex: null,
+    });
+  },
+  setAppearancePreferences: ({ colorTheme, customAccentHex, transparentDock }) => {
+    const def = getThemeDefinition(colorTheme);
+    const nextPolarity = def.isDark ? 'dark' : 'light';
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem('carpull_theme', nextPolarity);
+        applyThemeToDocument(colorTheme, customAccentHex, transparentDock);
+      } catch (e) {}
+    }
+    set({
+      theme: nextPolarity,
+      colorTheme,
+      customAccentHex,
+      transparentDock,
+    });
   },
 
   // Messenger & Chat Subsystem
@@ -1684,6 +1715,9 @@ export const useAppStore = create<AppState>()(
       user: state.user,
       activeRole: state.activeRole,
       theme: state.theme,
+      colorTheme: state.colorTheme,
+      customAccentHex: state.customAccentHex,
+      transparentDock: state.transparentDock,
       userStreet: state.userStreet,
       selectedDestination: state.selectedDestination,
       selectedDayFilter: state.selectedDayFilter,

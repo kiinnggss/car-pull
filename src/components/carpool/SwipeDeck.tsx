@@ -123,15 +123,15 @@ export const SwipeDeck: React.FC = () => {
   }
 
   return (
-    <div className="relative w-full max-w-[404px] mx-auto flex flex-col items-center justify-between h-full select-none">
+    <div className="relative w-full max-w-[404px] mx-auto flex flex-col justify-between h-full min-h-0 select-none">
       {/* Compact Route & Wishes Trigger Bar */}
       <RoutePlannerBar />
 
       {/* Swipeable Full-Bleed Card Stack */}
-      <div className="relative w-full px-3 flex-1 flex flex-col justify-center">
+      <div className="relative w-full px-3 flex-1 min-h-0 flex flex-col">
         {/* Next Card Peek Stack */}
         {activeDriverIndex + 1 < drivers.length && (
-          <div className="absolute inset-x-6 top-3 bottom-2 rounded-[32px] bg-[#0B0C0E]/40 dark:bg-white/5 scale-[0.95] translate-y-2 pointer-events-none" />
+          <div className="absolute inset-x-6 top-2 bottom-1 rounded-[30px] bg-black/25 dark:bg-white/5 scale-[0.96] translate-y-1.5 pointer-events-none" />
         )}
 
         <AnimatePresence mode="wait">
@@ -143,7 +143,7 @@ export const SwipeDeck: React.FC = () => {
             onDragEnd={handleDragEnd}
             animate={{ x: exitX }}
             transition={{ type: 'spring', stiffness: 320, damping: 26 }}
-            className="w-full cursor-grab active:cursor-grabbing relative z-10"
+            className="w-full flex-1 min-h-0 cursor-grab active:cursor-grabbing relative z-10 flex flex-col"
           >
             {/* Swipe Right Stamp */}
             <motion.div
@@ -167,7 +167,7 @@ export const SwipeDeck: React.FC = () => {
       </div>
 
       {/* Bottom Action Dock */}
-      <div className="w-full px-3">
+      <div className="w-full px-3 flex-shrink-0">
         <QuickBidPills onReject={handleManualReject} onAccept={handleManualAccept} />
       </div>
 

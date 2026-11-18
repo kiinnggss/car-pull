@@ -67,34 +67,26 @@ export const RoutePlannerBar: React.FC = () => {
 
   return (
     <>
-      <div className="w-full max-w-[404px] mx-auto px-3 mb-2">
-        {/* Redesigned Uber + Uber Green Compact Route Pill Bar */}
-        <div className="floating-surface rounded-full p-1.5 pl-3.5 flex items-center justify-between gap-2">
+      <div className="w-full max-w-[404px] mx-auto px-3 mb-1.5 flex-shrink-0">
+        {/* Slim Single-Row Route Pill */}
+        <div className="floating-surface rounded-full p-1 pl-3 flex items-center justify-between gap-2">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setSelectingType('origin');
               setShowRouteModal(true);
             }}
-            className="flex-1 min-w-0 text-left flex items-center gap-2.5 active-press"
+            className="flex-1 min-w-0 text-left flex items-center gap-2 active-press"
             title="Edit pickup and destination"
           >
-            {/* Connected Vertical Dots */}
-            <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
-              <span className="w-2 h-2 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00]" />
-              <span className="w-0.5 h-2.5 border-l border-dotted border-[#525866]" />
-              <span className="w-2 h-2 rounded-full bg-[#FF9F0A]" />
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5 text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
-                <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
-                <span className="text-[#525866] dark:text-[#9BA1AE]">→</span>
-                <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
-              </div>
-              <div className="text-[10px] text-[#525866] dark:text-[#9BA1AE] truncate font-medium">
-                Hub: <strong className="text-[#0B0C0E] dark:text-white">{selectedSafeZone.name}</strong> • {riderRoute.distanceKm} km
-              </div>
+            <span
+              className="w-2 h-2 rounded-full flex-shrink-0"
+              style={{ backgroundColor: 'var(--accent-primary)' }}
+            />
+            <div className="min-w-0 flex-1 flex items-center gap-1.5 text-[11.5px] font-extrabold truncate">
+              <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
+              <span style={{ color: 'var(--text-secondary)' }}>→</span>
+              <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
             </div>
           </button>
 
@@ -105,10 +97,14 @@ export const RoutePlannerBar: React.FC = () => {
                 triggerHaptic('tap');
                 setShowDeparturesSheet(true);
               }}
-              className="h-9 px-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white text-[11px] font-mono font-extrabold flex items-center gap-1 active-press"
+              className="h-7 px-2.5 rounded-full text-[10.5px] font-mono font-extrabold flex items-center gap-1 active-press"
+              style={{
+                backgroundColor: 'var(--bg-subtle)',
+                color: 'var(--text-primary)',
+              }}
               title="View Departure Schedule"
             >
-              <Clock className="w-3.5 h-3.5 text-[#FF9F0A]" />
+              <Clock className="w-3 h-3" style={{ color: 'var(--accent-primary)' }} />
               <span>{drivers.length}</span>
             </button>
 
@@ -117,10 +113,14 @@ export const RoutePlannerBar: React.FC = () => {
                 triggerHaptic('tap');
                 setShowHubModal(true);
               }}
-              className="h-9 px-3.5 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[11px] font-extrabold flex items-center gap-1 active-press"
+              className="h-7 px-2.5 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 active-press"
+              style={{
+                backgroundColor: 'var(--accent-primary)',
+                color: 'var(--accent-primary-fg)',
+              }}
               title="Select CCTV Safe Pickup Hub"
             >
-              <ShieldCheck className="w-3.5 h-3.5" />
+              <ShieldCheck className="w-3 h-3" />
               <span>Hub</span>
             </button>
           </div>

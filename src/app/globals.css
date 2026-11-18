@@ -4,13 +4,17 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg-canvas: #F4F5F7;
-  --bg-sheet: #FFFFFF;
-  --bg-subtle: #ECEDF0;
-  --text-primary: #0B0C0E;
-  --text-secondary: #525866;
+  --bg-canvas: #0B0C0E;
+  --bg-sheet: #14161B;
+  --bg-subtle: #1E2028;
+  --text-primary: #FFFFFF;
+  --text-secondary: #9BA1AE;
   --accent-volt: #C8FF00;
+  --accent-primary: #C8FF00;
+  --accent-primary-fg: #0B0C0E;
   --accent-signal: #FF9F0A;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --card-border-width: 1px;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -21,7 +25,11 @@
   --text-primary: #FFFFFF;
   --text-secondary: #9BA1AE;
   --accent-volt: #C8FF00;
+  --accent-primary: #C8FF00;
+  --accent-primary-fg: #0B0C0E;
   --accent-signal: #FF9F0A;
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --card-border-width: 1px;
 }
 
 body {
@@ -43,27 +51,38 @@ h1, h2, h3, h4, .font-display {
   font-variant-numeric: tabular-nums;
 }
 
-/* Uber Green / Redesigned Uber Sheet Card */
+/* Theme-aware Sheet Card */
 .floating-surface {
-  background: #FFFFFF;
+  background: var(--bg-sheet);
+  color: var(--text-primary);
   border-radius: 28px;
-  border: 1px solid rgba(11, 12, 14, 0.06);
-  box-shadow: 0 10px 30px -6px rgba(11, 12, 14, 0.06), 0 2px 6px rgba(11, 12, 14, 0.03);
+  border: var(--card-border-width, 1px) solid var(--border-subtle);
+  box-shadow: 0 10px 30px -6px rgba(11, 12, 14, 0.12), 0 2px 6px rgba(11, 12, 14, 0.05);
 }
 
 .dark .floating-surface {
-  background: #14161B;
+  background: var(--bg-sheet);
+  color: var(--text-primary);
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: var(--card-border-width, 1px) solid var(--border-subtle);
   box-shadow: 0 14px 36px -8px rgba(0, 0, 0, 0.65);
 }
 
-/* Electric Volt Lime Card (Uber Green signature tile) */
+[data-theme="paw-cream"] .floating-surface {
+  box-shadow: 4px 4px 0px #1A1412;
+}
+
+/* Primary Accent Surface */
 .volt-surface {
-  background: linear-gradient(145deg, #D4FF33 0%, #C8FF00 65%, #B5EB00 100%);
-  color: #0B0C0E;
+  background: var(--accent-primary);
+  color: var(--accent-primary-fg);
   border-radius: 28px;
-  box-shadow: 0 10px 28px -6px rgba(200, 255, 0, 0.35);
+  border: var(--card-border-width, 1px) solid var(--border-subtle);
+  box-shadow: 0 10px 28px -6px color-mix(in srgb, var(--accent-primary) 35%, transparent);
+}
+
+[data-theme="paw-cream"] .volt-surface {
+  box-shadow: 4px 4px 0px #1A1412;
 }
 
 /* Warm Signal Amber Quote Block (Professional Network Tinder signature tile) */
@@ -96,58 +115,68 @@ h1, h2, h3, h4, .font-display {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
 }
 
-/* Minimalist Floating Bottom Dock (Tinder BLK + Redesigned Uber) */
+/* Minimalist Floating Bottom Dock */
 .floating-dock {
-  background: rgba(255, 255, 255, 0.94);
+  background: color-mix(in srgb, var(--bg-sheet) 88%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(11, 12, 14, 0.07);
-  box-shadow: 0 12px 32px -4px rgba(11, 12, 14, 0.12);
+  border: var(--card-border-width, 1px) solid var(--border-subtle);
+  box-shadow: 0 12px 32px -4px rgba(11, 12, 14, 0.14);
 }
 
 .dark .floating-dock {
-  background: rgba(20, 22, 27, 0.94);
+  background: color-mix(in srgb, var(--bg-sheet) 88%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: var(--card-border-width, 1px) solid var(--border-subtle);
   box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75);
 }
 
-/* Primary Pill CTA: Pitch Black in Light Mode, Electric Volt Lime in Dark Mode */
+[data-transparent-dock="false"] .floating-dock {
+  background: var(--bg-sheet);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+[data-theme="paw-cream"] .floating-dock {
+  box-shadow: 3px 3px 0px #1A1412;
+}
+
+/* Primary Pill CTA: Driven by active theme accent */
 .btn-electric-mint {
-  background: #0B0C0E;
-  color: #FFFFFF;
+  background: var(--accent-primary);
+  color: var(--accent-primary-fg);
   border-radius: 9999px;
   font-weight: 800;
-  transition: transform 160ms var(--ease-out-expo), background-color 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+  transition: transform 160ms var(--ease-out-expo), opacity 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
 }
 
 .btn-electric-mint:hover {
-  background: #1E2028;
+  opacity: 0.92;
 }
 
 .dark .btn-electric-mint {
-  background: #C8FF00;
-  color: #0B0C0E;
-  box-shadow: 0 6px 20px -4px rgba(200, 255, 0, 0.35);
+  background: var(--accent-primary);
+  color: var(--accent-primary-fg);
+  box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--accent-primary) 35%, transparent);
 }
 
 .dark .btn-electric-mint:hover {
-  background: #D4FF33;
+  opacity: 0.92;
 }
 
-/* Explicit Volt CTA in both modes */
+/* Explicit Accent CTA in both modes */
 .btn-volt {
-  background: #C8FF00;
-  color: #0B0C0E;
+  background: var(--accent-primary);
+  color: var(--accent-primary-fg);
   border-radius: 9999px;
   font-weight: 800;
-  box-shadow: 0 6px 20px -4px rgba(200, 255, 0, 0.35);
-  transition: transform 160ms var(--ease-out-expo), background-color 160ms var(--ease-out-expo);
+  box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  transition: transform 160ms var(--ease-out-expo), opacity 160ms var(--ease-out-expo);
 }
 
 .btn-volt:hover {
-  background: #D4FF33;
+  opacity: 0.92;
 }
 
 /* Nigerian License Plate Pill */

@@ -5,8 +5,7 @@ import { createPortal } from 'react-dom';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
   ShieldCheck,
-  Sun,
-  Moon,
+  Palette,
   LogOut,
   UserCheck,
   Car,
@@ -20,6 +19,7 @@ import {
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { InteractiveLogoCockpit } from './InteractiveLogoCockpit';
+import { ThemeSwitcherModal } from './ThemeSwitcherModal';
 import { triggerHaptic } from '@/lib/haptics';
 
 export const Header: React.FC = () => {
@@ -35,6 +35,7 @@ export const Header: React.FC = () => {
   } = useAppStore();
 
   const [isLogoCockpitOpen, setIsLogoCockpitOpen] = useState(false);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
@@ -73,7 +74,10 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="sticky top-0 z-30 w-full px-3.5 pt-2.5 pb-1.5 bg-[#F4F5F7]/90 dark:bg-[#0B0C0E]/90 backdrop-blur-xl">
+      <header
+        className="sticky top-0 z-30 w-full px-3.5 pt-2.5 pb-1.5 backdrop-blur-xl"
+        style={{ backgroundColor: 'color-mix(in srgb, var(--bg-canvas) 88%, transparent)' }}
+      >
         <div className="max-w-[430px] mx-auto flex items-center justify-between gap-2">
           {/* Left: Brand Pill Trigger */}
           <button
@@ -81,30 +85,51 @@ export const Header: React.FC = () => {
               triggerHaptic('tap');
               setIsLogoCockpitOpen(true);
             }}
-            className="flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-white dark:bg-[#14161B] border border-black/6 dark:border-white/10 active-press transition-transform"
+            className="flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full active-press transition-transform border"
+            style={{
+              backgroundColor: 'var(--bg-sheet)',
+              borderColor: 'var(--border-subtle)',
+              color: 'var(--text-primary)',
+            }}
             title="Open Cockpit Shortcuts"
           >
-            <span className="w-7 h-7 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00] text-[#C8FF00] dark:text-[#0B0C0E] flex items-center justify-center">
+            <span
+              className="w-7 h-7 rounded-full flex items-center justify-center"
+              style={{
+                backgroundColor: 'var(--accent-primary)',
+                color: 'var(--accent-primary-fg)',
+              }}
+            >
               <Zap className="w-3.5 h-3.5 fill-current" />
             </span>
-            <span className="font-display font-black text-xs tracking-tight text-[#0B0C0E] dark:text-white">
+            <span className="font-display font-black text-xs tracking-tight">
               CAR PULL
             </span>
           </button>
 
           {/* Center: Segmented Rider / Driver Pill */}
-          <div className="flex items-center p-0.5 rounded-full bg-white dark:bg-[#14161B] border border-black/6 dark:border-white/10">
+          <div
+            className="flex items-center p-0.5 rounded-full border"
+            style={{
+              backgroundColor: 'var(--bg-sheet)',
+              borderColor: 'var(--border-subtle)',
+            }}
+          >
             <button
               onClick={() => {
                 triggerHaptic('switch');
                 setActiveRole('rider');
                 setActiveTab('deck');
               }}
-              className={`px-3 py-1 rounded-full text-[11px] font-extrabold transition-all ${
+              className="px-3 py-1 rounded-full text-[11px] font-extrabold transition-all"
+              style={
                 activeRole === 'rider'
-                  ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
-                  : 'text-[#525866] dark:text-[#9BA1AE]'
-              }`}
+                  ? {
+                      backgroundColor: 'var(--accent-primary)',
+                      color: 'var(--accent-primary-fg)',
+                    }
+                  : { color: 'var(--text-secondary)' }
+              }
             >
               Rider
             </button>
@@ -114,24 +139,32 @@ export const Header: React.FC = () => {
                 setActiveRole('driver');
                 setActiveTab('deck');
               }}
-              className={`px-3 py-1 rounded-full text-[11px] font-extrabold transition-all ${
+              className="px-3 py-1 rounded-full text-[11px] font-extrabold transition-all"
+              style={
                 activeRole === 'driver'
-                  ? 'bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E]'
-                  : 'text-[#525866] dark:text-[#9BA1AE]'
-              }`}
+                  ? {
+                      backgroundColor: 'var(--accent-primary)',
+                      color: 'var(--accent-primary-fg)',
+                    }
+                  : { color: 'var(--text-secondary)' }
+              }
             >
               Driver
             </button>
           </div>
 
-          {/* Right: Volt Escrow Pill + Theme + Profile */}
+          {/* Right: Escrow Pill + Theme Switcher + Profile */}
           <div className="flex items-center gap-1.5">
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setActiveTab('wallet');
               }}
-              className="px-2.5 py-1 rounded-full bg-[#C8FF00] text-[#0B0C0E] text-[11px] font-mono tabular-nums font-extrabold active-press transition-transform"
+              className="px-2.5 py-1 rounded-full text-[11px] font-mono tabular-nums font-extrabold active-press transition-transform"
+              style={{
+                backgroundColor: 'var(--accent-primary)',
+                color: 'var(--accent-primary-fg)',
+              }}
               title="Open Escrow Wallet"
             >
               {formatNgn(escrowBalanceNgn)}
@@ -140,17 +173,22 @@ export const Header: React.FC = () => {
             <button
               onClick={() => {
                 triggerHaptic('tap');
-                toggleTheme();
+                setIsThemeModalOpen(true);
               }}
-              className="w-8 h-8 rounded-full bg-white dark:bg-[#14161B] border border-black/6 dark:border-white/10 flex items-center justify-center text-[#0B0C0E] dark:text-white active-press"
-              title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              aria-label="Toggle color theme"
+              className="w-8 h-8 rounded-full border flex items-center justify-center active-press relative"
+              style={{
+                backgroundColor: 'var(--bg-sheet)',
+                borderColor: 'var(--border-subtle)',
+                color: 'var(--text-primary)',
+              }}
+              title="Appearance & Themes"
+              aria-label="Open Theme Switcher"
             >
-              {theme === 'dark' ? (
-                <Sun className="w-3.5 h-3.5 text-[#C8FF00]" />
-              ) : (
-                <Moon className="w-3.5 h-3.5" />
-              )}
+              <Palette className="w-3.5 h-3.5" />
+              <span
+                className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-white dark:border-black"
+                style={{ backgroundColor: 'var(--accent-primary)' }}
+              />
             </button>
 
             {/* User Avatar Menu */}
@@ -163,7 +201,13 @@ export const Header: React.FC = () => {
                 className="flex items-center gap-0.5 p-0.5 pr-1.5 rounded-full bg-white dark:bg-[#14161B] border border-black/6 dark:border-white/10 active-press"
                 title="Account Menu"
               >
-                <div className="w-7 h-7 rounded-full bg-[#0B0C0E] dark:bg-[#C8FF00] text-white dark:text-[#0B0C0E] font-extrabold text-[11px] flex items-center justify-center">
+                <div
+                  className="w-7 h-7 rounded-full font-extrabold text-[11px] flex items-center justify-center"
+                  style={{
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                  }}
+                >
                   {user.fullName.charAt(0)}
                 </div>
                 <ChevronDown className="w-3 h-3 text-[#525866] dark:text-[#9BA1AE]" />
@@ -246,6 +290,11 @@ export const Header: React.FC = () => {
       <InteractiveLogoCockpit
         isOpen={isLogoCockpitOpen}
         onClose={() => setIsLogoCockpitOpen(false)}
+      />
+
+      <ThemeSwitcherModal
+        isOpen={isThemeModalOpen}
+        onClose={() => setIsThemeModalOpen(false)}
       />
 
       {showInstallModal &&
