@@ -83,6 +83,13 @@ export interface SafeZone {
 
 export type TripCategory = 'all' | 'leaving_now' | 'morning' | 'evening' | 'flexible' | 'commute';
 
+export interface DeckFilters {
+  timeWindow: 'all' | 'morning' | 'evening' | 'leaving_now';
+  acOnly: boolean;
+  femaleOnly: boolean;
+  maxFareNgn: number | null;
+}
+
 export type RideMood = 'chat' | 'easy' | 'quiet';
 
 export interface CabinPassenger {
@@ -97,6 +104,7 @@ export interface CorridorDriver {
   id: string;
   name: string;
   avatar: string;
+  gender?: GenderType;
   employer: string;
   employer_domain: string;
   alumni: string;

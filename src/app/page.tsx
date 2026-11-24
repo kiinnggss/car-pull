@@ -14,6 +14,7 @@ import { CommutePass } from '@/components/pass/CommutePass';
 import { CorridorMap } from '@/components/map/CorridorMap';
 import { AuthLanding } from '@/components/auth/AuthLanding';
 import { ChatHub } from '@/components/chat/ChatHub';
+import { ActionFeedbackBanner } from '@/components/common/ActionFeedbackBanner';
 import { applyThemeToDocument } from '@/lib/themes';
 
 export default function Home() {
@@ -39,8 +40,13 @@ export default function Home() {
       window.history.pushState({ tab: activeTab }, '');
     }
 
-    const handlePopState = () => {
-      if (activeTab !== 'map') {
+    const handlePopState = (e: PopStateEvent) => {
+      const targetTab = e.state?.tab;
+      if (targetTab) {
+        if (targetTab !== activeTab) {
+          setActiveTab(targetTab);
+        }
+      } else if (activeTab !== 'map') {
         setActiveTab('map');
       }
     };
@@ -55,6 +61,7 @@ export default function Home() {
     return (
       <main className="w-full max-w-[430px] min-h-screen sm:min-h-[860px] sm:max-h-[94vh] sm:my-auto sm:rounded-[40px] bg-[var(--bg-canvas)] sm:border-[6px] sm:border-[#0B0C0E] dark:sm:border-[#1E2028] relative flex flex-col justify-between shadow-[0_30px_80px_rgba(0,0,0,0.18)] dark:shadow-[0_30px_90px_rgba(0,0,0,0.85)] text-[var(--text-primary)] overflow-x-hidden">
         <AuthLanding />
+        <ActionFeedbackBanner />
       </main>
     );
   }
@@ -92,6 +99,7 @@ export default function Home() {
 
       {/* Minimalist Bottom Navigation Dock */}
       {!isChatThreadOpen && <BottomNav />}
+      <ActionFeedbackBanner />
     </main>
   );
 }

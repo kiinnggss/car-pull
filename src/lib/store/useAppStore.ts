@@ -18,6 +18,7 @@ import {
   CommuteRoute,
   Coordinates,
   TripCategory,
+  DeckFilters,
   ChatMessage,
   ChatThread,
   ChatMessageReplyTo,
@@ -53,6 +54,7 @@ import {
   getThemeDefinition,
   applyThemeToDocument,
 } from '../themes';
+import { filterAndRankDrivers } from '../routeMatching';
 
 export interface EscrowTransaction {
   id: string;
@@ -103,7 +105,11 @@ interface AppState {
   // Carpool Corridor & Deck State
   activeTripMode: TripCategory;
   setActiveTripMode: (mode: TripCategory) => void;
+  allDrivers: CorridorDriver[];
   drivers: CorridorDriver[];
+  deckFilters: DeckFilters;
+  setDeckFilters: (partial: Partial<DeckFilters>) => void;
+  resetDeckFilters: () => void;
   activeDriverIndex: number;
   currentDriver: CorridorDriver | null;
   selectedSafeZone: SafeZone;
@@ -254,6 +260,11 @@ interface AppState {
   bookEverydayRide: (rideId: string) => string | undefined;
   postDriverStreetRide: (ride: Partial<StreetCarpoolRide>) => void;
 
+  // Unified Action Feedback Banner
+  feedbackBanner: { id: number; title: string; subtitle: string; badge?: string } | null;
+  showFeedbackBanner: (title: string, subtitle: string, badge?: string) => void;
+  clearFeedbackBanner: () => void;
+
   // UI Navigation
   activeTab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats';
   setActiveTab: (tab: 'deck' | 'map' | 'matches' | 'pass' | 'safezones' | 'sos' | 'wallet' | 'chats') => void;
@@ -390,6 +401,19 @@ const initialChatThreads: ChatThread[] = [
   },
 ];
 
+const DEFAULT_DECK_FILTERS: DeckFilters = {
+  timeWindow: 'all',
+  acOnly: false,
+  femaleOnly: false,
+  maxFareNgn: null,
+};
+
+const initialRankedDrivers = filterAndRankDrivers(
+  mockCorridorDrivers,
+  defaultCommuteRoute,
+  DEFAULT_DECK_FILTERS
+);
+
 export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
@@ -424,6 +448,7 @@ export const useAppStore = create<AppState>()(
       id: `driver-custom-${Date.now()}`,
       name: data.fullName,
       avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
+      gender: data.fullName.toLowerCase().includes('chioma') || data.fullName.toLowerCase().includes('amara') || data.fullName.toLowerCase().includes('kemi') ? 'female' : 'undisclosed',
       employer: data.employer || 'Corporate Professional',
       employer_domain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
       alumni: 'Lagos Professional Network',
@@ -450,29 +475,37 @@ export const useAppStore = create<AppState>()(
       vibe_tags: ['AC On', 'Quiet Commute', 'Executive'],
     };
 
-    set((state) => ({
-      isAuthenticated: true,
-      activeRole: 'driver',
-      activeTab: 'deck',
-      user: {
-        ...state.user,
-        fullName: data.fullName,
-        email: data.email,
-        phoneNumber: data.phone,
-        employer: data.employer || 'Corporate Executive',
-        employerDomain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
-      },
-      driverVehicle: {
-        make: data.vehicle.make,
-        model: data.vehicle.model,
-        year: data.vehicle.year,
-        color: data.vehicle.color,
-        plate_number: data.vehicle.plate_number,
-        total_seats: data.vehicle.total_seats,
-      },
-      availableSeats: data.vehicle.total_seats,
-      drivers: [newDriverProfile, ...state.drivers],
-    }));
+    set((state) => {
+      const updatedAll = [newDriverProfile, ...state.allDrivers];
+      const ranked = filterAndRankDrivers(updatedAll, state.riderRoute, state.deckFilters);
+      return {
+        isAuthenticated: true,
+        activeRole: 'driver',
+        activeTab: 'deck',
+        user: {
+          ...state.user,
+          fullName: data.fullName,
+          email: data.email,
+          phoneNumber: data.phone,
+          employer: data.employer || 'Corporate Executive',
+          employerDomain: data.email.includes('@') ? data.email.split('@')[1] : 'corp.ng',
+        },
+        driverVehicle: {
+          make: data.vehicle.make,
+          model: data.vehicle.model,
+          year: data.vehicle.year,
+          color: data.vehicle.color,
+          plate_number: data.vehicle.plate_number,
+          total_seats: data.vehicle.total_seats,
+        },
+        availableSeats: data.vehicle.total_seats,
+        allDrivers: updatedAll,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || state.customBidNgn,
+      };
+    });
   },
 
   user: mockCurrentUser,
@@ -481,9 +514,22 @@ export const useAppStore = create<AppState>()(
   updateUserKyc: (status) =>
     set((state) => ({ user: { ...state.user, kycStatus: status } })),
   toggleFemaleOnly: () =>
-    set((state) => ({
-      user: { ...state.user, isFemaleCommuteOnly: !state.user.isFemaleCommuteOnly },
-    })),
+    set((state) => {
+      const nextFemale = !state.user.isFemaleCommuteOnly;
+      const nextFilters: DeckFilters = {
+        ...state.deckFilters,
+        femaleOnly: nextFemale,
+      };
+      const ranked = filterAndRankDrivers(state.allDrivers, state.riderRoute, nextFilters);
+      return {
+        user: { ...state.user, isFemaleCommuteOnly: nextFemale },
+        deckFilters: nextFilters,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || state.customBidNgn,
+      };
+    }),
 
   riderRoute: defaultCommuteRoute,
   lagosLocations: mockLagosLocations,
@@ -512,18 +558,25 @@ export const useAppStore = create<AppState>()(
       }
     });
 
-    set((state) => ({
-      selectedSafeZone: nearestZone,
-      customBidNgn: fairSplit,
-      riderRoute: {
+    set((state) => {
+      const nextRoute: CommuteRoute = {
         ...state.riderRoute,
         origin,
         originCoords: defaultCoords,
         distanceKm: distKm,
         estimatedMinutes: estMinutes,
         recommendedFuelSplitNgn: fairSplit,
-      },
-    }));
+      };
+      const ranked = filterAndRankDrivers(state.allDrivers, nextRoute, state.deckFilters);
+      return {
+        selectedSafeZone: nearestZone,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || fairSplit,
+        riderRoute: nextRoute,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+      };
+    });
   },
 
   setRiderDestination: (destination: string, coords?: Coordinates) => {
@@ -539,17 +592,24 @@ export const useAppStore = create<AppState>()(
     const estMinutes = Math.round(distKm * 1.8);
     const fairSplit = Math.round((distKm * 65 + 400) / 50) * 50;
 
-    set((state) => ({
-      customBidNgn: fairSplit,
-      riderRoute: {
+    set((state) => {
+      const nextRoute: CommuteRoute = {
         ...state.riderRoute,
         destination,
         destinationCoords: defaultCoords,
         distanceKm: distKm,
         estimatedMinutes: estMinutes,
         recommendedFuelSplitNgn: fairSplit,
-      },
-    }));
+      };
+      const ranked = filterAndRankDrivers(state.allDrivers, nextRoute, state.deckFilters);
+      return {
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || fairSplit,
+        riderRoute: nextRoute,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+      };
+    });
   },
 
   swapRiderRoute: () => {
@@ -570,43 +630,96 @@ export const useAppStore = create<AppState>()(
       }
     });
 
-    set((state) => ({
-      commuteDirection: state.commuteDirection === 'morning' ? 'evening' : 'morning',
-      selectedSafeZone: nearestZone,
-      riderRoute: {
+    set((state) => {
+      const nextRoute: CommuteRoute = {
         ...state.riderRoute,
         origin: newOrigin,
         originCoords: newOriginCoords,
         destination: newDest,
         destinationCoords: newDestCoords,
-      },
-    }));
+      };
+      const ranked = filterAndRankDrivers(state.allDrivers, nextRoute, state.deckFilters);
+      return {
+        commuteDirection: state.commuteDirection === 'morning' ? 'evening' : 'morning',
+        selectedSafeZone: nearestZone,
+        riderRoute: nextRoute,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || state.customBidNgn,
+      };
+    });
   },
 
   activeTripMode: 'all',
   setActiveTripMode: (mode: TripCategory) => {
-    let filtered = mockCorridorDrivers;
-    if (mode !== 'all') {
-      filtered = mockCorridorDrivers.filter((d) => d.trip_type === mode);
-      if (filtered.length === 0) filtered = mockCorridorDrivers;
-    }
-    set({
-      activeTripMode: mode,
-      drivers: filtered,
-      activeDriverIndex: 0,
-      currentDriver: filtered[0] || null,
-      customBidNgn: filtered[0]?.corridor.fuel_split_ngn || 1500,
+    const mappedWindow: DeckFilters['timeWindow'] =
+      mode === 'morning' || mode === 'evening' || mode === 'leaving_now' ? mode : 'all';
+    set((state) => {
+      const nextFilters: DeckFilters = {
+        ...state.deckFilters,
+        timeWindow: mappedWindow,
+      };
+      const ranked = filterAndRankDrivers(state.allDrivers, state.riderRoute, nextFilters);
+      return {
+        activeTripMode: mode,
+        deckFilters: nextFilters,
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || 1500,
+      };
     });
   },
 
-  drivers: mockCorridorDrivers,
+  allDrivers: mockCorridorDrivers,
+  drivers: initialRankedDrivers,
+  deckFilters: DEFAULT_DECK_FILTERS,
+  setDeckFilters: (partial) => {
+    set((state) => {
+      const nextFilters: DeckFilters = { ...state.deckFilters, ...partial };
+      const ranked = filterAndRankDrivers(state.allDrivers, state.riderRoute, nextFilters);
+      return {
+        deckFilters: nextFilters,
+        user: {
+          ...state.user,
+          isFemaleCommuteOnly: nextFilters.femaleOnly,
+        },
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || state.customBidNgn,
+      };
+    });
+  },
+  resetDeckFilters: () => {
+    set((state) => {
+      const ranked = filterAndRankDrivers(
+        state.allDrivers,
+        state.riderRoute,
+        DEFAULT_DECK_FILTERS
+      );
+      return {
+        deckFilters: DEFAULT_DECK_FILTERS,
+        activeTripMode: 'all',
+        user: {
+          ...state.user,
+          isFemaleCommuteOnly: false,
+        },
+        drivers: ranked,
+        activeDriverIndex: 0,
+        currentDriver: ranked[0] || null,
+        customBidNgn: ranked[0]?.corridor.fuel_split_ngn || 1500,
+      };
+    });
+  },
   activeDriverIndex: 0,
-  currentDriver: mockCorridorDrivers[0] || null,
+  currentDriver: initialRankedDrivers[0] || null,
   selectedSafeZone: mockSafeZones[0],
   setSelectedSafeZone: (safeZone) => set({ selectedSafeZone: safeZone }),
   safeZones: mockSafeZones,
 
-  customBidNgn: mockCorridorDrivers[0]?.corridor.fuel_split_ngn || 1500,
+  customBidNgn: initialRankedDrivers[0]?.corridor.fuel_split_ngn || 1500,
   setCustomBidNgn: (amount) => set({ customBidNgn: amount }),
   adjustBid: (deltaNgn) =>
     set((state) => {
@@ -695,17 +808,17 @@ export const useAppStore = create<AppState>()(
   },
 
   resetDeck: () => {
-    const mode = get().activeTripMode;
-    let filtered = mockCorridorDrivers;
-    if (mode !== 'all') {
-      filtered = mockCorridorDrivers.filter((d) => d.trip_type === mode);
-      if (filtered.length === 0) filtered = mockCorridorDrivers;
-    }
+    const state = get();
+    const ranked = filterAndRankDrivers(
+      state.allDrivers,
+      state.riderRoute,
+      state.deckFilters
+    );
     set({
-      drivers: filtered,
+      drivers: ranked,
       activeDriverIndex: 0,
-      currentDriver: filtered[0] || null,
-      customBidNgn: filtered[0]?.corridor.fuel_split_ngn || 1500,
+      currentDriver: ranked[0] || null,
+      customBidNgn: ranked[0]?.corridor.fuel_split_ngn || 1500,
     });
   },
 
@@ -1714,6 +1827,18 @@ export const useAppStore = create<AppState>()(
     }));
   },
 
+  feedbackBanner: null,
+  showFeedbackBanner: (title, subtitle, badge) =>
+    set({
+      feedbackBanner: {
+        id: Date.now(),
+        title,
+        subtitle,
+        badge,
+      },
+    }),
+  clearFeedbackBanner: () => set({ feedbackBanner: null }),
+
   activeTab: 'deck',
   setActiveTab: (tab) => set({ activeTab: tab }),
 }),
@@ -1733,6 +1858,7 @@ export const useAppStore = create<AppState>()(
       customAccentHex: state.customAccentHex,
       transparentDock: state.transparentDock,
       matchFeedbackStyle: state.matchFeedbackStyle,
+      deckFilters: state.deckFilters,
       userStreet: state.userStreet,
       selectedDestination: state.selectedDestination,
       selectedDayFilter: state.selectedDayFilter,
@@ -1750,5 +1876,26 @@ export const useAppStore = create<AppState>()(
       boardedRiderIds: state.boardedRiderIds,
       availableSeats: state.availableSeats,
     }),
+    onRehydrateStorage: () => (state) => {
+      if (!state) return;
+      const mergedFilters: DeckFilters = {
+        ...DEFAULT_DECK_FILTERS,
+        ...(state.deckFilters || {}),
+      };
+      const ranked = filterAndRankDrivers(
+        state.allDrivers || mockCorridorDrivers,
+        state.riderRoute || defaultCommuteRoute,
+        mergedFilters
+      );
+      state.deckFilters = mergedFilters;
+      state.drivers = ranked;
+      state.activeDriverIndex = 0;
+      state.currentDriver = ranked[0] || null;
+      state.customBidNgn = ranked[0]?.corridor.fuel_split_ngn || state.customBidNgn || 1500;
+      if (state.user) {
+        state.user.isFemaleCommuteOnly = mergedFilters.femaleOnly;
+      }
+      applyThemeToDocument(state.colorTheme, state.customAccentHex, state.transparentDock);
+    },
   }
 ));

@@ -30,7 +30,7 @@ export const EmergencyBeacon: React.FC = () => {
   return (
     <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in pt-1">
       {/* High-Contrast SOS Header Card */}
-      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-3.5 border border-black/10 dark:border-white/10">
+      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-3.5 border border-[var(--border-subtle)]">
         <div className="flex items-center justify-between">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-600 text-white text-[10px] font-mono font-black uppercase">
             <span className="w-2 h-2 rounded-full bg-white animate-ping" />
@@ -52,7 +52,7 @@ export const EmergencyBeacon: React.FC = () => {
             <Navigation className="w-4 h-4" />
           </div>
           <div className="min-w-0">
-            <span className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[var(--accent-primary)] block">
+            <span className="text-[9.5px] font-mono uppercase tracking-wider font-bold text-[var(--accent-signal)] block">
               LIVE GPS TELEMETRY LOCK
             </span>
             <span className="text-xs font-extrabold text-white block leading-snug mt-0.5">

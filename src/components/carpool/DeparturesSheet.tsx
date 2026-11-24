@@ -64,17 +64,17 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+            <h3 className="text-base font-display font-black text-[var(--text-primary)]">
               Corridor Departures
             </h3>
-            <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+            <span className="text-[11px] text-[var(--text-secondary)]">
               Verified commuters leaving today
             </span>
           </div>
 
           <button
             onClick={handleBack}
-            className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press"
+            className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] flex items-center justify-center active-press"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -88,7 +88,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
             className={`px-3.5 py-1.5 rounded-full font-extrabold whitespace-nowrap transition-all text-xs ${
               selectedTimeFilter === 'all'
                 ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#9BA1AE]'
+                : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)]'
             }`}
           >
             All ({drivers.length})
@@ -100,7 +100,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
               className={`px-3.5 py-1.5 rounded-full font-mono font-bold whitespace-nowrap transition-all text-xs ${
                 selectedTimeFilter === time
                   ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                  : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#9BA1AE]'
+                  : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)]'
               }`}
             >
               {time}
@@ -119,7 +119,7 @@ export const DeparturesSheet: React.FC<DeparturesSheetProps> = ({ isOpen, onClos
                 className={`p-3.5 rounded-[24px] transition-all space-y-2.5 ${
                   isSelected
                     ? 'volt-surface'
-                    : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                    : 'bg-[var(--bg-subtle)] text-[var(--text-primary)]'
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">

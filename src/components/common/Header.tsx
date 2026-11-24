@@ -198,7 +198,7 @@ export const Header: React.FC = () => {
                   triggerHaptic('tap');
                   setShowUserMenu(!showUserMenu);
                 }}
-                className="flex items-center gap-0.5 p-0.5 pr-1.5 rounded-full bg-white dark:bg-[#14161B] border border-black/6 dark:border-white/10 active-press"
+                className="flex items-center gap-0.5 p-0.5 pr-1.5 rounded-full bg-[var(--bg-sheet)] border border-[var(--border-subtle)] active-press"
                 title="Account Menu"
               >
                 <div
@@ -210,7 +210,7 @@ export const Header: React.FC = () => {
                 >
                   {user.fullName.charAt(0)}
                 </div>
-                <ChevronDown className="w-3 h-3 text-[#525866] dark:text-[#9BA1AE]" />
+                <ChevronDown className="w-3 h-3 text-[var(--text-secondary)]" />
               </button>
 
               {showUserMenu && (
@@ -220,16 +220,16 @@ export const Header: React.FC = () => {
                     onClick={() => setShowUserMenu(false)}
                   />
                   <div className="absolute right-0 mt-2 w-60 rounded-[24px] floating-surface p-3.5 z-50 space-y-2.5 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="pb-2.5 border-b border-black/6 dark:border-white/10">
+                    <div className="pb-2.5 border-b border-[var(--border-subtle)]">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                        <span className="text-xs font-extrabold text-[var(--text-primary)] truncate">
                           {user.fullName}
                         </span>
                         <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]">
                           NIN VERIFIED
                         </span>
                       </div>
-                      <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] block truncate mt-0.5">
+                      <span className="text-[10px] text-[var(--text-secondary)] block truncate mt-0.5">
                         {user.email}
                       </span>
                       <span className="text-[10px] font-bold text-[var(--text-primary)] dark:text-[var(--accent-primary)] block mt-0.5">
@@ -243,7 +243,7 @@ export const Header: React.FC = () => {
                           setActiveRole(activeRole === 'rider' ? 'driver' : 'rider');
                           setShowUserMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[#0B0C0E] dark:text-white hover:bg-[#F4F5F7] dark:hover:bg-[#1E2028] flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
                       >
                         {activeRole === 'rider' ? (
                           <>
@@ -261,7 +261,7 @@ export const Header: React.FC = () => {
                       {!isInstalled && (
                         <button
                           onClick={handleInstallClick}
-                          className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[#0B0C0E] dark:text-white hover:bg-[#F4F5F7] dark:hover:bg-[#1E2028] flex items-center gap-2 transition-colors"
+                          className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
                         >
                           <Smartphone className="w-3.5 h-3.5" />
                           <span>Install Mobile App (PWA)</span>
@@ -308,29 +308,29 @@ export const Header: React.FC = () => {
                     <Smartphone className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black text-[#0B0C0E] dark:text-white">
+                    <h3 className="text-sm font-black text-[var(--text-primary)]">
                       Install CAR PULL
                     </h3>
-                    <p className="text-[10px] font-mono text-[#525866] dark:text-[#9BA1AE]">
+                    <p className="text-[10px] font-mono text-[var(--text-secondary)]">
                       FULL-SCREEN MOBILE APP
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowInstallModal(false)}
-                  className="p-1.5 rounded-full hover:bg-[#F4F5F7] dark:hover:bg-[#1E2028] text-[#525866]"
+                  className="p-1.5 rounded-full hover:bg-[var(--bg-subtle)] text-[#525866]"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               <div className="space-y-2.5 text-xs">
-                <div className="p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] space-y-1.5">
-                  <div className="font-extrabold text-[#0B0C0E] dark:text-white flex items-center gap-1.5">
+                <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] space-y-1.5">
+                  <div className="font-extrabold text-[var(--text-primary)] flex items-center gap-1.5">
                     <Share className="w-3.5 h-3.5" />
                     <span>iPhone / iPad (Safari)</span>
                   </div>
-                  <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] leading-relaxed">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     Tap <strong>Share</strong> in Safari, then choose{' '}
                     <strong className="inline-flex items-center gap-1">
                       <PlusSquare className="w-3 h-3 inline" /> Add to Home Screen
@@ -339,12 +339,12 @@ export const Header: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] space-y-1.5">
-                  <div className="font-extrabold text-[#0B0C0E] dark:text-white flex items-center gap-1.5">
+                <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] space-y-1.5">
+                  <div className="font-extrabold text-[var(--text-primary)] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Android (Chrome)</span>
                   </div>
-                  <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] leading-relaxed">
+                  <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     Tap the browser menu (<strong>⋮</strong>) and select <strong>Install app</strong>.
                   </p>
                 </div>

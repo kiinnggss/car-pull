@@ -18,7 +18,6 @@ import {
   Zap,
   Handshake,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { WaitingRider } from '@/lib/types';
 import { IcebreakerChatModal } from './IcebreakerChatModal';
 import { triggerHaptic } from '@/lib/haptics';
@@ -41,6 +40,7 @@ export const DriverSeatDeck: React.FC = () => {
     setActiveTab,
     getOrCreateThreadForRider,
     setActiveThreadId,
+    showFeedbackBanner,
   } = useAppStore();
 
   const [selectedChatRider, setSelectedChatRider] = useState<WaitingRider | null>(null);
@@ -77,23 +77,17 @@ export const DriverSeatDeck: React.FC = () => {
   const handleAcceptRider = (riderId: string) => {
     triggerHaptic('match');
     acceptRiderIntoCarpool(riderId);
-    confetti({
-      particleCount: 40,
-      spread: 55,
-      origin: { y: 0.65 },
-      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
-    });
+    showFeedbackBanner('Rider Added', 'Seat confirmed and escrow locked', 'CABIN');
   };
 
   const handleCompleteDropoff = (riderId: string) => {
     triggerHaptic('success');
     markRiderBoarded(riderId);
-    confetti({
-      particleCount: 55,
-      spread: 65,
-      origin: { y: 0.6 },
-      colors: ['#3B82F6', '#0B0C0E', '#FFFFFF'],
-    });
+    showFeedbackBanner(
+      'Dropoff Settled',
+      'Fuel split credited to your escrow wallet',
+      'PAID'
+    );
   };
 
   const handleSaveSchedule = (e: React.FormEvent) => {
@@ -148,9 +142,9 @@ export const DriverSeatDeck: React.FC = () => {
                 triggerHaptic('tap');
                 setActiveTab('map');
               }}
-              className="px-3 py-1.5 rounded-full bg-[#0B0C0E] text-white text-[11px] font-extrabold flex items-center gap-1 active-press"
+              className="px-3 py-1.5 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] border border-[var(--border-subtle)] text-[11px] font-extrabold flex items-center gap-1 active-press"
             >
-              <Compass className="w-3 h-3 text-[var(--accent-primary)]" />
+              <Compass className="w-3 h-3" />
               <span>Map</span>
             </button>
           </div>
@@ -180,7 +174,7 @@ export const DriverSeatDeck: React.FC = () => {
         </div>
 
         {/* Segmented AM/PM + Seat Stepper Bar */}
-        <div className="bg-[#0B0C0E] text-white rounded-full p-1.5 pl-3.5 flex items-center justify-between gap-2">
+        <div className="bg-[var(--bg-sheet)] text-[var(--text-primary)] rounded-full p-1.5 pl-3.5 flex items-center justify-between gap-2 border border-[var(--border-subtle)]">
           <button
             onClick={() => {
               triggerHaptic('switch');
@@ -188,32 +182,32 @@ export const DriverSeatDeck: React.FC = () => {
             }}
             className="text-left flex items-center gap-2 active-press"
           >
-            <Car className="w-4 h-4 text-[var(--accent-primary)]" />
+            <Car className="w-4 h-4 text-[var(--accent-signal)]" />
             <div>
               <span className="text-[11px] font-extrabold block leading-none">
                 {driverVehicle.make} {driverVehicle.model}
               </span>
-              <span className="text-[9px] font-mono text-[var(--accent-primary)] block mt-0.5">
+              <span className="text-[9px] font-mono text-[var(--text-secondary)] block mt-0.5">
                 {driverVehicle.plate_number} • Tap to flip AM/PM
               </span>
             </div>
           </button>
 
-          <div className="flex items-center gap-1.5 bg-white/10 rounded-full p-1">
+          <div className="flex items-center gap-1.5 bg-[var(--bg-subtle)] rounded-full p-1">
             <button
               onClick={() => handleAdjustSeats(-1)}
               disabled={driverVehicle.total_seats <= 1}
-              className="w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center disabled:opacity-30 active-press"
+              className="w-7 h-7 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center disabled:opacity-30 active-press"
             >
               <Minus className="w-3 h-3" />
             </button>
-            <span className="text-xs font-mono tabular-nums font-black px-1.5 text-[var(--accent-primary)]">
+            <span className="text-xs font-mono tabular-nums font-black px-1.5 text-[var(--text-primary)]">
               {availableSeats}/{driverVehicle.total_seats} Seats
             </span>
             <button
               onClick={() => handleAdjustSeats(1)}
               disabled={driverVehicle.total_seats >= 4}
-              className="w-7 h-7 rounded-full bg-white/15 hover:bg-white/25 text-white flex items-center justify-center disabled:opacity-30 active-press"
+              className="w-7 h-7 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center disabled:opacity-30 active-press"
             >
               <Plus className="w-3 h-3" />
             </button>
@@ -225,10 +219,10 @@ export const DriverSeatDeck: React.FC = () => {
       {acceptedRiders.length > 0 && (
         <div className="floating-surface rounded-[28px] p-4 space-y-2.5">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white">
+            <span className="text-xs font-extrabold text-[var(--text-primary)]">
               Confirmed Cabin Manifest ({acceptedRiders.length})
             </span>
-            <span className="text-[10px] font-mono font-bold text-[#0B0C0E] bg-[var(--accent-primary)] px-2.5 py-0.5 rounded-full">
+            <span className="text-[10px] font-mono font-bold bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] px-2.5 py-0.5 rounded-full">
               ESCROW LOCKED
             </span>
           </div>
@@ -237,7 +231,7 @@ export const DriverSeatDeck: React.FC = () => {
             {acceptedRiders.map((rider) => (
               <div
                 key={rider.id}
-                className="p-3 rounded-[22px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between gap-2"
+                className="p-3 rounded-[22px] bg-[var(--bg-subtle)] flex items-center justify-between gap-2"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
                   <img
@@ -246,10 +240,10 @@ export const DriverSeatDeck: React.FC = () => {
                     className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                   />
                   <div className="min-w-0">
-                    <h4 className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                    <h4 className="text-xs font-extrabold text-[var(--text-primary)] truncate">
                       {rider.name}
                     </h4>
-                    <p className="text-[10px] text-[#525866] dark:text-[#9BA1AE] truncate">
+                    <p className="text-[10px] text-[var(--text-secondary)] truncate">
                       {rider.pickupSafeZone.name} •{' '}
                       <strong className="font-mono text-[var(--text-primary)] dark:text-[var(--accent-primary)]">
                         {formatNgn(rider.bidNgn)}
@@ -265,7 +259,7 @@ export const DriverSeatDeck: React.FC = () => {
                       setActiveThreadId(threadId);
                       setActiveTab('chats');
                     }}
-                    className="px-3 py-2 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white text-[11px] font-bold active-press"
+                    className="px-3 py-2 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[11px] font-bold active-press"
                   >
                     Chat
                   </button>
@@ -286,10 +280,10 @@ export const DriverSeatDeck: React.FC = () => {
       {/* 3. Waiting Corridor Peers (Professional Network Tinder Style Cards) */}
       <div className="space-y-2.5">
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white">
+          <h3 className="text-sm font-display font-black text-[var(--text-primary)]">
             Peers Along Your Corridor
           </h3>
-          <span className="text-[11px] font-mono font-bold text-[#525866] dark:text-[#9BA1AE]">
+          <span className="text-[11px] font-mono font-bold text-[var(--text-secondary)]">
             {filteredRiders.length} waiting
           </span>
         </div>
@@ -309,7 +303,7 @@ export const DriverSeatDeck: React.FC = () => {
               className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold whitespace-nowrap transition-all active-press ${
                 rideFilter === tab.id
                   ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                  : 'bg-white dark:bg-[#14161B] text-[#525866] dark:text-[#9BA1AE]'
+                  : 'bg-[var(--bg-sheet)] text-[var(--text-secondary)]'
               }`}
             >
               {tab.label}
@@ -340,19 +334,19 @@ export const DriverSeatDeck: React.FC = () => {
 
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <h4 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white truncate">
+                      <h4 className="text-sm font-display font-black text-[var(--text-primary)] truncate">
                         {rider.name}
                       </h4>
                       <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)] flex-shrink-0" />
                     </div>
-                    <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] font-semibold flex items-center gap-1 truncate">
+                    <p className="text-[11px] text-[var(--text-secondary)] font-semibold flex items-center gap-1 truncate">
                       <Briefcase className="w-3 h-3 flex-shrink-0" />
                       <span>{rider.employer}</span>
                     </p>
-                    <p className="text-[11px] font-bold text-[#0B0C0E] dark:text-white flex items-center gap-1 mt-0.5 truncate">
+                    <p className="text-[11px] font-bold text-[var(--text-primary)] flex items-center gap-1 mt-0.5 truncate">
                       <MapPin className="w-3 h-3 text-[#FF9F0A] flex-shrink-0" />
                       <span className="truncate">{rider.pickupSafeZone.name}</span>
-                      <span className="text-[#525866] dark:text-[#9BA1AE] font-mono text-[10px]">
+                      <span className="text-[var(--text-secondary)] font-mono text-[10px]">
                         ({rider.departure_time})
                       </span>
                     </p>
@@ -362,7 +356,7 @@ export const DriverSeatDeck: React.FC = () => {
 
               {/* Editorial Trip Quote Pill */}
               {rider.trip_purpose && (
-                <div className="px-3.5 py-2 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white">
+                <div className="px-3.5 py-2 rounded-2xl bg-[var(--bg-subtle)] text-xs font-semibold text-[var(--text-primary)]">
                   &ldquo;{rider.trip_purpose}&rdquo;
                 </div>
               )}
@@ -374,19 +368,19 @@ export const DriverSeatDeck: React.FC = () => {
                     To {rider.destination.split('(')[0].trim()}
                   </span>
                   {rider.conversation_vibe && (
-                    <span className="px-2.5 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[10px] font-bold text-[#525866] dark:text-[#9BA1AE]">
+                    <span className="px-2.5 py-1 rounded-full bg-[var(--bg-subtle)] text-[10px] font-bold text-[var(--text-secondary)]">
                       {rider.conversation_vibe}
                     </span>
                   )}
                 </div>
 
-                <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028]">
+                <div className="inline-flex items-center gap-1.5 p-1 rounded-full bg-[var(--bg-subtle)]">
                   <button
                     onClick={() => {
                       triggerHaptic('tap');
                       removeRiderFromCarpool(rider.id);
                     }}
-                    className="w-8 h-8 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press"
+                    className="w-8 h-8 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center active-press"
                     title="Pass"
                   >
                     <X className="w-4 h-4" />
@@ -414,12 +408,12 @@ export const DriverSeatDeck: React.FC = () => {
           <div className="fixed inset-0 z-[700] bg-black/70 backdrop-blur-xs overflow-y-auto p-3 flex items-end sm:items-center justify-center animate-in fade-in duration-150">
             <div className="w-full max-w-[390px] floating-surface rounded-[32px] p-5 space-y-4 my-auto animate-in slide-in-from-bottom duration-200">
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                <h3 className="text-base font-display font-black text-[var(--text-primary)]">
                   Configure Driver Trip
                 </h3>
                 <button
                   onClick={() => setShowScheduleModal(false)}
-                  className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                  className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -427,50 +421,50 @@ export const DriverSeatDeck: React.FC = () => {
 
               <form onSubmit={handleSaveSchedule} className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                  <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                     Origin Street / Gate
                   </label>
                   <input
                     type="text"
                     value={originDraft}
                     onChange={(e) => setOriginDraft(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-bold text-[#0B0C0E] dark:text-white"
+                    className="w-full px-4 py-2.5 rounded-full bg-[var(--bg-subtle)] font-bold text-[var(--text-primary)]"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                  <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                     Destination Hub
                   </label>
                   <input
                     type="text"
                     value={destDraft}
                     onChange={(e) => setDestDraft(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-bold text-[#0B0C0E] dark:text-white"
+                    className="w-full px-4 py-2.5 rounded-full bg-[var(--bg-subtle)] font-bold text-[var(--text-primary)]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                    <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                       Departure Time
                     </label>
                     <input
                       type="text"
                       value={timeDraft}
                       onChange={(e) => setTimeDraft(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-mono font-bold text-[#0B0C0E] dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-full bg-[var(--bg-subtle)] font-mono font-bold text-[var(--text-primary)]"
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                    <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                       Seat Fuel Split (₦)
                     </label>
                     <input
                       type="number"
                       value={fareDraft}
                       onChange={(e) => setFareDraft(e.target.value)}
-                      className="w-full px-4 py-2.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-mono font-bold text-[#0B0C0E] dark:text-white"
+                      className="w-full px-4 py-2.5 rounded-full bg-[var(--bg-subtle)] font-mono font-bold text-[var(--text-primary)]"
                     />
                   </div>
                 </div>

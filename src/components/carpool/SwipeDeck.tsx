@@ -22,6 +22,7 @@ import {
 import { CorridorDriver } from '@/lib/types';
 import { formatNgn } from '@/lib/utils';
 import { triggerHaptic } from '@/lib/haptics';
+import { scoreDriverForRoute } from '@/lib/routeMatching';
 
 export const SwipeDeck: React.FC = () => {
   const {
@@ -32,11 +33,13 @@ export const SwipeDeck: React.FC = () => {
     swipeLeft,
     swipeRight,
     resetDeck,
+    resetDeckFilters,
     customBidNgn,
     selectedSafeZone,
     setActiveTab,
     offlinePin,
     matchFeedbackStyle,
+    riderRoute,
   } = useAppStore();
 
   const [exitX, setExitX] = useState<number>(0);
@@ -486,51 +489,63 @@ export const SwipeDeck: React.FC = () => {
       document.body
     );
 
+  const matchMeta = currentDriver
+    ? scoreDriverForRoute(currentDriver, riderRoute)
+    : null;
+
   if (!currentDriver) {
+    const isFilterEmpty = drivers.length === 0;
     return (
       <>
         {confirmationOverlay}
-        <div className="flex flex-col items-center justify-center min-h-[420px] p-6 text-center space-y-4">
-          <div
-            className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
-            style={{
-              backgroundColor: 'var(--accent-primary)',
-              color: 'var(--accent-primary-fg)',
-            }}
-          >
-            <Sparkles className="w-7 h-7" />
-          </div>
-          <div className="space-y-1">
-            <h3 className="text-lg font-display font-black">
-              All Corridor Peers Reviewed
-            </h3>
-            <p
-              className="text-xs max-w-xs"
-              style={{ color: 'var(--text-secondary)' }}
-            >
-              You have swiped through every verified driver for this departure window. Reload the deck or explore the live street map.
-            </p>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <button
-              onClick={resetDeck}
-              className="px-5 py-3 btn-electric-mint text-xs font-extrabold rounded-full flex items-center gap-2 active-press"
-            >
-              <RotateCcw className="w-4 h-4" />
-              <span>Reload Deck</span>
-            </button>
-            <button
-              onClick={() => setActiveTab('map')}
-              className="px-5 py-3 rounded-full border text-xs font-extrabold flex items-center gap-2 active-press"
+        <div className="flex flex-col justify-between h-full min-h-0">
+          <RoutePlannerBar />
+          <div className="flex flex-col items-center justify-center flex-1 p-6 text-center space-y-4">
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center shadow-lg"
               style={{
-                backgroundColor: 'var(--bg-sheet)',
-                borderColor: 'var(--border-subtle)',
-                color: 'var(--text-primary)',
+                backgroundColor: 'var(--accent-primary)',
+                color: 'var(--accent-primary-fg)',
               }}
             >
-              <Compass className="w-4 h-4" />
-              <span>Open Map</span>
-            </button>
+              <Sparkles className="w-7 h-7" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-lg font-display font-black">
+                {isFilterEmpty
+                  ? 'No drivers match your filters'
+                  : 'All Corridor Peers Reviewed'}
+              </h3>
+              <p
+                className="text-xs max-w-xs"
+                style={{ color: 'var(--text-secondary)' }}
+              >
+                {isFilterEmpty
+                  ? 'Try clearing a filter chip or switching departure windows to see more verified drivers along this route.'
+                  : 'You have swiped through every verified driver for this departure window. Reload the deck or explore the live street map.'}
+              </p>
+            </div>
+            <div className="flex items-center gap-2.5">
+              <button
+                onClick={isFilterEmpty ? resetDeckFilters : resetDeck}
+                className="px-5 py-3 btn-electric-mint text-xs font-extrabold rounded-full flex items-center gap-2 active-press"
+              >
+                <RotateCcw className="w-4 h-4" />
+                <span>{isFilterEmpty ? 'Reset Filters' : 'Reload Deck'}</span>
+              </button>
+              <button
+                onClick={() => setActiveTab('map')}
+                className="px-5 py-3 rounded-full border text-xs font-extrabold flex items-center gap-2 active-press"
+                style={{
+                  backgroundColor: 'var(--bg-sheet)',
+                  borderColor: 'var(--border-subtle)',
+                  color: 'var(--text-primary)',
+                }}
+              >
+                <Compass className="w-4 h-4" />
+                <span>Open Map</span>
+              </button>
+            </div>
           </div>
         </div>
       </>
@@ -577,7 +592,11 @@ export const SwipeDeck: React.FC = () => {
               PASS
             </motion.div>
 
-            <ProfileCard driver={currentDriver} />
+            <ProfileCard
+              driver={currentDriver}
+              matchPercent={matchMeta?.matchPercent}
+              matchReason={matchMeta?.matchReason}
+            />
           </motion.div>
         </AnimatePresence>
       </div>

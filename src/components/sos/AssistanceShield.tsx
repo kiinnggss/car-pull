@@ -59,22 +59,22 @@ export const AssistanceShield: React.FC = () => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-[#F4F5F7] dark:bg-[#0B0C0E] text-[#0B0C0E] dark:text-white overflow-y-auto px-4 py-4 flex flex-col items-center justify-between max-w-[430px] mx-auto animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 bg-[var(--bg-canvas)] text-[var(--text-primary)] overflow-y-auto px-4 py-4 flex flex-col items-center justify-between max-w-[430px] mx-auto animate-in fade-in duration-150">
       {/* 1. Charlie Waite "The re-designed Uber App" Live Recovery Progress Card */}
       <div className="w-full space-y-3">
         <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 shadow-xl">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
                 AUTHORIZED RECOVERY EN ROUTE
               </span>
               <div className="text-3xl font-display font-black font-mono tabular-nums text-white flex items-center gap-2 mt-1">
-                <Clock className="w-6 h-6 text-[var(--accent-primary)]" />
+                <Clock className="w-6 h-6 text-[var(--accent-signal)]" />
                 <span>{formattedCountdown}</span>
               </div>
             </div>
 
-            <div className="relative w-13 h-13 rounded-full ring-2 ring-[var(--accent-primary)] overflow-hidden flex-shrink-0">
+            <div className="relative w-13 h-13 rounded-full ring-2 ring-[var(--accent-signal)] overflow-hidden flex-shrink-0">
               <img
                 src={selectedProvider.operator_photo}
                 alt={selectedProvider.operator_name}
@@ -113,7 +113,7 @@ export const AssistanceShield: React.FC = () => {
       <div className="w-full my-3 floating-surface rounded-[32px] p-4 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase text-[#525866] dark:text-[#9BA1AE] font-bold block">
+            <span className="text-[10px] font-mono uppercase text-[var(--text-secondary)] font-bold block">
               DISPATCH AUTH CODE
             </span>
             <strong className="text-sm font-mono font-black text-[var(--text-primary)] dark:text-[var(--accent-primary)]">
@@ -130,7 +130,7 @@ export const AssistanceShield: React.FC = () => {
           </a>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between text-xs">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] flex items-center justify-between text-xs">
           <div className="flex items-center gap-2 font-bold">
             <FileCheck className="w-4 h-4 text-[#FF9F0A]" />
             <span>Parts Receipt Verification</span>
@@ -157,7 +157,7 @@ export const AssistanceShield: React.FC = () => {
         <div className="grid grid-cols-2 gap-2">
           <button
             onClick={() => setShieldVisibility(false)}
-            className="py-3 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white font-extrabold text-xs active-press"
+            className="py-3 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] font-extrabold text-xs active-press"
           >
             Minimize Shield
           </button>
@@ -176,28 +176,28 @@ export const AssistanceShield: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
           <div className="w-full max-w-[350px] floating-surface rounded-[32px] p-5 space-y-3.5">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white">
+              <h3 className="text-sm font-display font-black text-[var(--text-primary)]">
                 Parts Purchase Receipt
               </h3>
               <button
                 onClick={() => setShowReceiptModal(false)}
-                className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="bg-[#F4F5F7] dark:bg-[#1E2028] p-3.5 rounded-2xl space-y-1.5 text-xs">
+            <div className="bg-[var(--bg-subtle)] p-3.5 rounded-2xl space-y-1.5 text-xs">
               <div className="flex justify-between">
-                <span className="text-[#525866] dark:text-[#9BA1AE]">Vendor</span>
+                <span className="text-[var(--text-secondary)]">Vendor</span>
                 <span className="font-bold">Ladipo Lekki Express</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-[#525866] dark:text-[#9BA1AE]">Item</span>
+                <span className="text-[var(--text-secondary)]">Item</span>
                 <span className="font-bold">OEM Belt &amp; Coolant</span>
               </div>
               <div className="flex justify-between pt-1">
-                <span className="text-[#525866] dark:text-[#9BA1AE]">Total</span>
+                <span className="text-[var(--text-secondary)]">Total</span>
                 <span className="font-mono font-black text-[var(--text-primary)] dark:text-[var(--accent-primary)]">₦14,500</span>
               </div>
             </div>

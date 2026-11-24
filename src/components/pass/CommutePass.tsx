@@ -78,10 +78,10 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
   return (
     <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in pt-1">
       {/* 1. Pitch Obsidian + Volt Lime Scannable QR Certificate Card */}
-      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 border border-black/10 dark:border-white/10 shadow-xl">
+      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 border border-[var(--border-subtle)] shadow-xl">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
+            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
               LAGOS TRANSPORT REFORM ACT
             </span>
             <h2 className="text-base font-display font-black text-white mt-0.5">
@@ -89,30 +89,30 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             </h2>
           </div>
 
-          <span className="px-3 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#0B0C0E] animate-ping" />
+          <span className="px-3 py-1 rounded-full bg-white text-[#0B0C0E] text-[10px] font-mono font-black flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] animate-ping" />
             EXEMPT
           </span>
         </div>
 
         {/* Scannable QR & Token Row */}
         <div className="p-4 rounded-[24px] bg-[#1E2028] flex items-center gap-4">
-          <div className="bg-[var(--accent-primary)] p-2.5 rounded-2xl flex-shrink-0">
+          <div className="bg-white p-2.5 rounded-2xl flex-shrink-0">
             <svg
               viewBox="0 0 120 120"
               className="w-22 h-22 text-[#0B0C0E] fill-current"
               shapeRendering="crispEdges"
             >
               <rect x="10" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="15" width="20" height="20" fill="var(--accent-primary)" />
+              <rect x="15" y="15" width="20" height="20" fill="#FFFFFF" />
               <rect x="20" y="20" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="80" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="85" y="15" width="20" height="20" fill="var(--accent-primary)" />
+              <rect x="85" y="15" width="20" height="20" fill="#FFFFFF" />
               <rect x="90" y="20" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="10" y="80" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="85" width="20" height="20" fill="var(--accent-primary)" />
+              <rect x="15" y="85" width="20" height="20" fill="#FFFFFF" />
               <rect x="20" y="90" width="10" height="10" fill="#0B0C0E" />
 
               <rect x="45" y="15" width="5" height="5" />
@@ -148,7 +148,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
           </div>
 
           <div className="space-y-1.5 min-w-0">
-            <span className="text-[9px] font-mono uppercase tracking-widest text-[var(--accent-primary)] font-bold block">
+            <span className="text-[9px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
               STATUTORY AUDIT TOKEN
             </span>
             <div className="text-xs font-mono font-black text-white tracking-wider">
@@ -159,14 +159,14 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
             </p>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 text-[10px] font-mono">
               <span className="text-white/60">PIN:</span>
-              <strong className="text-[var(--accent-primary)] font-black tracking-widest">{offlinePin}</strong>
+              <strong className="text-white font-black tracking-widest">{offlinePin}</strong>
             </div>
           </div>
         </div>
 
         {/* Live Telemetry Clock Pill */}
         <div className="px-4 py-2.5 rounded-full bg-white/8 flex items-center justify-between text-[10px] font-mono tabular-nums">
-          <span className="text-[var(--accent-primary)] font-bold">LIVE AUDIT CLOCK</span>
+          <span className="text-[var(--accent-signal)] font-bold">LIVE AUDIT CLOCK</span>
           <span className="text-white font-bold">{currentTime}</span>
         </div>
       </div>
@@ -192,16 +192,16 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
         <div className="floating-surface rounded-[26px] p-4 flex flex-col justify-between min-h-[104px]">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE]">
+            <span className="text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)]">
               COMMERCIAL PROFIT
             </span>
             <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
           </div>
           <div>
-            <span className="text-base font-black font-mono tabular-nums text-[#0B0C0E] dark:text-white block">
+            <span className="text-base font-black font-mono tabular-nums text-[var(--text-primary)] block">
               ₦0.00
             </span>
-            <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] font-semibold block mt-0.5">
+            <span className="text-[10px] text-[var(--text-secondary)] font-semibold block mt-0.5">
               1.2x PMS Fuel Cap Only
             </span>
           </div>
@@ -210,12 +210,12 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
 
       {/* 3. Statutory Notice & Actions Sheet */}
       <div className="floating-surface rounded-[28px] p-4 space-y-3">
-        <div className="p-3.5 rounded-2xl bg-[#FF9F0A]/15 text-[11px] text-[#0B0C0E] dark:text-white space-y-1">
+        <div className="p-3.5 rounded-2xl bg-[#FF9F0A]/15 text-[11px] text-[var(--text-primary)] space-y-1">
           <div className="flex items-center gap-1.5 font-mono font-black text-xs text-[#FF9F0A]">
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
             <span>STATUTORY NOTICE TO OFFICERS</span>
           </div>
-          <p className="leading-relaxed text-[#525866] dark:text-[#9BA1AE]">
+          <p className="leading-relaxed text-[var(--text-secondary)]">
             Under <strong>Lagos State Transport Sector Reform Law (Cap T1, Section 44)</strong>, corporate cost-sharing commuters are exempt from hackney permits and union tickets.
           </p>
         </div>
@@ -231,7 +231,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
         <div className="grid grid-cols-2 gap-2 text-[11px]">
           <a
             href="tel:080000527862"
-            className="py-2.5 px-3 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white font-mono font-bold flex items-center justify-center gap-1.5 active-press"
+            className="py-2.5 px-3 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] font-mono font-bold flex items-center justify-center gap-1.5 active-press"
           >
             <PhoneCall className="w-3.5 h-3.5 text-red-500" />
             <span>LASTMA</span>

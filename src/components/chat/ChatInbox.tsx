@@ -39,7 +39,7 @@ export const ChatInbox: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-lg font-display font-black text-[#0B0C0E] dark:text-white tracking-tight">
+              <h2 className="text-lg font-display font-black text-[var(--text-primary)] tracking-tight">
                 Messages
               </h2>
               {totalUnread > 0 && (
@@ -48,12 +48,12 @@ export const ChatInbox: React.FC = () => {
                 </span>
               )}
             </div>
-            <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] font-medium">
+            <p className="text-[11px] text-[var(--text-secondary)] font-medium">
               Direct pickup coordination with corridor peers
             </p>
           </div>
 
-          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)] text-[10px] font-mono font-bold">
+          <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] dark:text-[var(--accent-primary)] text-[10px] font-mono font-bold">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
             <span>LIVE</span>
           </div>
@@ -67,7 +67,7 @@ export const ChatInbox: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search peers, companies, routes, or plates..."
-            className="w-full pl-10 pr-8 py-2.5 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] dark:placeholder:text-[#9BA1AE] focus:outline-hidden"
+            className="w-full pl-10 pr-8 py-2.5 bg-[var(--bg-subtle)] rounded-full text-xs font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-hidden"
           />
           {searchQuery && (
             <button
@@ -81,7 +81,7 @@ export const ChatInbox: React.FC = () => {
         </div>
 
         {/* Segmented Pill Filter */}
-        <div className="grid grid-cols-3 gap-1 p-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028]">
+        <div className="grid grid-cols-3 gap-1 p-1 rounded-full bg-[var(--bg-subtle)]">
           {(
             [
               { id: 'all', label: 'All Chats' },
@@ -100,7 +100,7 @@ export const ChatInbox: React.FC = () => {
                 className={`py-1.5 rounded-full text-[11px] font-extrabold transition-all active-press ${
                   isActive
                     ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                    : 'text-[#525866] dark:text-[#9BA1AE]'
+                    : 'text-[var(--text-secondary)]'
                 }`}
               >
                 {tab.label}
@@ -115,8 +115,8 @@ export const ChatInbox: React.FC = () => {
         {filteredThreads.length === 0 ? (
           <div className="floating-surface rounded-[28px] p-6 text-center space-y-2">
             <MessageCircle className="w-7 h-7 text-[#525866] mx-auto" />
-            <p className="text-xs font-extrabold text-[#0B0C0E] dark:text-white">No conversations found</p>
-            <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+            <p className="text-xs font-extrabold text-[var(--text-primary)]">No conversations found</p>
+            <p className="text-[11px] text-[var(--text-secondary)]">
               Connect with a driver or co-rider on the Swipe Deck to open a direct thread.
             </p>
           </div>
@@ -161,7 +161,7 @@ export const ChatInbox: React.FC = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between gap-1">
                     <div className="flex items-center gap-1.5 truncate">
-                      <h4 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white truncate">
+                      <h4 className="text-sm font-display font-black text-[var(--text-primary)] truncate">
                         {thread.partnerName}
                       </h4>
                       {isEnRoute && (
@@ -171,13 +171,13 @@ export const ChatInbox: React.FC = () => {
                       )}
                     </div>
 
-                    <span className="text-[10px] font-mono tabular-nums text-[#525866] dark:text-[#9BA1AE] flex-shrink-0">
+                    <span className="text-[10px] font-mono tabular-nums text-[var(--text-secondary)] flex-shrink-0">
                       {thread.lastMessageTimestamp}
                     </span>
                   </div>
 
                   {/* Route & Plate */}
-                  <div className="flex items-center justify-between gap-2 text-[11px] text-[#525866] dark:text-[#9BA1AE] mt-1">
+                  <div className="flex items-center justify-between gap-2 text-[11px] text-[var(--text-secondary)] mt-1">
                     <span className="truncate font-semibold flex items-center gap-1">
                       <Compass className="w-3 h-3 text-[#FF9F0A] flex-shrink-0" />
                       {thread.routeSummary}
@@ -192,14 +192,14 @@ export const ChatInbox: React.FC = () => {
                     <p
                       className={`text-xs truncate ${
                         hasUnread
-                          ? 'font-extrabold text-[#0B0C0E] dark:text-white'
-                          : 'text-[#525866] dark:text-[#9BA1AE]'
+                          ? 'font-extrabold text-[var(--text-primary)]'
+                          : 'text-[var(--text-secondary)]'
                       }`}
                     >
                       {thread.lastMessage}
                     </p>
                     {hasUnread && (
-                      <span className="ml-2 w-5 h-5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)] text-[var(--accent-primary)] dark:text-[#0B0C0E] text-[10px] font-mono font-black flex items-center justify-center flex-shrink-0">
+                      <span className="ml-2 w-5 h-5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black flex items-center justify-center flex-shrink-0">
                         {thread.unreadCount}
                       </span>
                     )}

@@ -11,8 +11,8 @@ import {
   CheckCircle2,
   ExternalLink,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { triggerHaptic } from '@/lib/haptics';
+import { useAppStore } from '@/lib/store/useAppStore';
 
 interface IcebreakerChatModalProps {
   isOpen: boolean;
@@ -39,6 +39,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
   vehiclePlate,
   linkedinHandle,
 }) => {
+  const { showFeedbackBanner } = useAppStore();
   const [mounted, setMounted] = useState(false);
   const [message, setMessage] = useState('');
   const [sentSuccess, setSentSuccess] = useState(false);
@@ -90,12 +91,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
     const finalMsg = message.trim() || icebreakerSuggestions[0];
     const text = `*CAR PULL - Hello ${firstName}*\n\n${finalMsg}\n\n(Coordinating via CAR PULL Non-Commercial Lagos Carpool)`;
 
-    confetti({
-      particleCount: 30,
-      spread: 45,
-      origin: { y: 0.6 },
-      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
-    });
+    showFeedbackBanner('Message Sent', `Sent to ${firstName}`, 'CHAT');
 
     window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     setSentSuccess(true);
@@ -110,12 +106,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
     if (!message.trim()) return;
 
     triggerHaptic('success');
-    confetti({
-      particleCount: 25,
-      spread: 40,
-      origin: { y: 0.6 },
-      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
-    });
+    showFeedbackBanner('Message Sent', `Sent to ${firstName}`, 'CHAT');
 
     setSentSuccess(true);
     setTimeout(() => {
@@ -137,17 +128,17 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
       <div className="w-full max-w-[390px] floating-surface rounded-[32px] p-5 space-y-3.5 max-h-[90vh] flex flex-col my-auto animate-in slide-in-from-bottom duration-200">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+            <h3 className="text-base font-display font-black text-[var(--text-primary)]">
               Quick Pickup Note
             </h3>
-            <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+            <span className="text-[11px] text-[var(--text-secondary)]">
               Direct peer coordination
             </span>
           </div>
 
           <button
             onClick={handleBack}
-            className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+            className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
             title="Close"
           >
             <X className="w-4 h-4" />
@@ -155,7 +146,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
         </div>
 
         {/* Matched Person Capsule */}
-        <div className="bg-[#F4F5F7] dark:bg-[#1E2028] rounded-[24px] p-3.5 space-y-2.5">
+        <div className="bg-[var(--bg-subtle)] rounded-[24px] p-3.5 space-y-2.5">
           <div className="flex items-center gap-3">
             <img
               src={personAvatar}
@@ -164,14 +155,14 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
             />
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
-                <h4 className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                <h4 className="text-xs font-extrabold text-[var(--text-primary)] truncate">
                   {personName}
                 </h4>
                 {vehiclePlate && <span className="plate-badge flex-shrink-0">{vehiclePlate}</span>}
               </div>
 
               {tripPurpose && (
-                <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE] truncate flex items-center gap-1 mt-0.5">
+                <p className="text-[11px] text-[var(--text-secondary)] truncate flex items-center gap-1 mt-0.5">
                   <Compass className="w-3 h-3 text-[#FF9F0A] flex-shrink-0" />
                   <span>{tripPurpose}</span>
                 </p>
@@ -182,7 +173,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
           <button
             type="button"
             onClick={handleOpenLinkedIn}
-            className="w-full py-2 px-3 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white text-xs font-bold flex items-center justify-center gap-1.5 active-press"
+            className="w-full py-2 px-3 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-xs font-bold flex items-center justify-center gap-1.5 active-press"
           >
             <span className="w-4 h-4 bg-[#0A66C2] text-white rounded flex items-center justify-center text-[9px] font-black leading-none">
               in
@@ -194,7 +185,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
 
         {/* Icebreaker Suggestions */}
         <div className="space-y-1.5">
-          <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[#525866] dark:text-[#9BA1AE] flex items-center gap-1">
+          <span className="text-[10px] font-mono uppercase tracking-wider font-extrabold text-[var(--text-secondary)] flex items-center gap-1">
             <Sparkles className="w-3 h-3 text-[#FF9F0A]" />
             TAP TO PRE-FILL
           </span>
@@ -207,7 +198,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
                   triggerHaptic('tap');
                   setMessage(prompt);
                 }}
-                className="w-full text-left p-3 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] text-[11px] text-[#0B0C0E] dark:text-white font-semibold active-press leading-snug"
+                className="w-full text-left p-3 rounded-2xl bg-[var(--bg-subtle)] text-[11px] text-[var(--text-primary)] font-semibold active-press leading-snug"
               >
                 &ldquo;{prompt}&rdquo;
               </button>
@@ -222,7 +213,7 @@ export const IcebreakerChatModal: React.FC<IcebreakerChatModalProps> = ({
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder={`Write a note to ${firstName}...`}
-            className="w-full p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] text-xs font-semibold text-[#0B0C0E] dark:text-white placeholder:text-[#525866] focus:outline-hidden resize-none"
+            className="w-full p-3.5 rounded-2xl bg-[var(--bg-subtle)] text-xs font-semibold text-[var(--text-primary)] placeholder:text-[var(--text-secondary)] focus:outline-hidden resize-none"
           />
 
           <div className="grid grid-cols-2 gap-2">

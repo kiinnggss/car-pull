@@ -16,7 +16,6 @@ import {
   HelpCircle,
   X,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 const NIGERIAN_BANKS = [
   'Guaranty Trust Bank (GTBank)',
@@ -30,7 +29,7 @@ const NIGERIAN_BANKS = [
 ];
 
 export const EscrowWallet: React.FC = () => {
-  const { escrowBalanceNgn, heldEscrowNgn, escrowTransactions, topUpWallet, withdrawFunds, user } = useAppStore();
+  const { escrowBalanceNgn, heldEscrowNgn, escrowTransactions, topUpWallet, withdrawFunds, user, showFeedbackBanner } = useAppStore();
 
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -59,12 +58,11 @@ export const EscrowWallet: React.FC = () => {
     const success = withdrawFunds(numAmount, selectedBank, accountNumber, user.fullName.toUpperCase());
     if (success) {
       setWithdrawSuccess(true);
-      confetti({
-        particleCount: 45,
-        spread: 55,
-        origin: { y: 0.6 },
-        colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
-      });
+      showFeedbackBanner(
+        'Payout Initiated',
+        `${formatNgn(numAmount)} queued to ${selectedBank}`,
+        'NGN'
+      );
       setTimeout(() => {
         setWithdrawSuccess(false);
         setShowWithdrawModal(false);
@@ -114,10 +112,10 @@ export const EscrowWallet: React.FC = () => {
         </div>
 
         {/* Uber Green Bottom Pill Bar Inside Hero */}
-        <div className="bg-white/90 rounded-full p-1.5 pl-3 flex items-center justify-between gap-2">
+        <div className="bg-[var(--bg-sheet)] text-[var(--text-primary)] rounded-full p-1.5 pl-3 flex items-center justify-between gap-2 border border-[var(--border-subtle)]">
           <button
             onClick={() => topUpWallet(10000)}
-            className="flex items-center gap-1.5 py-2 px-3 rounded-full text-xs font-extrabold hover:bg-black/5 active-press"
+            className="flex items-center gap-1.5 py-2 px-3 rounded-full text-xs font-extrabold hover:bg-[var(--bg-subtle)] active-press"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Top-up (+₦10k)</span>
@@ -128,9 +126,9 @@ export const EscrowWallet: React.FC = () => {
               setErrorMessage('');
               setShowWithdrawModal(true);
             }}
-            className="py-2.5 px-5 rounded-full bg-[#0B0C0E] text-white text-xs font-extrabold flex items-center gap-1.5 active-press"
+            className="py-2.5 px-5 rounded-full btn-electric-mint text-xs font-extrabold flex items-center gap-1.5 active-press"
           >
-            <ArrowUpRight className="w-4 h-4 text-[var(--accent-primary)]" />
+            <ArrowUpRight className="w-4 h-4" />
             <span>Withdraw Now</span>
           </button>
         </div>
@@ -138,16 +136,16 @@ export const EscrowWallet: React.FC = () => {
 
       {/* 2. Uber Green "Payment Method" Card */}
       <div className="floating-surface rounded-[28px] p-4 space-y-2.5">
-        <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white block">
+        <span className="text-xs font-extrabold text-[var(--text-primary)] block">
           Payout Rail
         </span>
-        <div className="p-3.5 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between">
+        <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center -space-x-1.5">
               <span className="w-5 h-5 rounded-full bg-red-500 inline-block" />
               <span className="w-5 h-5 rounded-full bg-[#FF9F0A] opacity-90 inline-block" />
             </div>
-            <span className="text-xs font-mono font-bold text-[#0B0C0E] dark:text-white">
+            <span className="text-xs font-mono font-bold text-[var(--text-primary)]">
               NIBSS •••• 1024
             </span>
           </div>
@@ -163,10 +161,10 @@ export const EscrowWallet: React.FC = () => {
       {/* 3. Transaction History Ledger */}
       <div className="space-y-2">
         <div className="flex items-center justify-between px-1">
-          <h3 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white">
+          <h3 className="text-sm font-display font-black text-[var(--text-primary)]">
             Escrow Activity
           </h3>
-          <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] font-mono font-bold">
+          <span className="text-[10px] text-[var(--text-secondary)] font-mono font-bold">
             REAL-TIME
           </span>
         </div>
@@ -184,7 +182,7 @@ export const EscrowWallet: React.FC = () => {
                       ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                       : tx.type === 'FLAKE_PENALTY'
                       ? 'bg-[#FF9F0A] text-[#0B0C0E]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-primary)]'
                   }`}
                 >
                   {tx.type === 'WITHDRAWAL' ? (
@@ -199,21 +197,21 @@ export const EscrowWallet: React.FC = () => {
                 </div>
 
                 <div className="min-w-0">
-                  <h4 className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                  <h4 className="text-xs font-extrabold text-[var(--text-primary)] truncate">
                     {tx.description}
                   </h4>
-                  <div className="text-[10px] text-[#525866] dark:text-[#9BA1AE] font-mono tabular-nums truncate">
+                  <div className="text-[10px] text-[var(--text-secondary)] font-mono tabular-nums truncate">
                     {tx.reference} • {tx.timestamp}
                   </div>
                 </div>
               </div>
 
               <div className="text-right flex-shrink-0">
-                <span className="text-xs font-black font-mono tabular-nums block text-[#0B0C0E] dark:text-white">
+                <span className="text-xs font-black font-mono tabular-nums block text-[var(--text-primary)]">
                   {tx.type === 'TOPUP' ? '+' : '-'}
                   {formatNgn(tx.amountNgn)}
                 </span>
-                <span className="inline-block text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-secondary)] dark:text-[var(--accent-primary)]">
+                <span className="inline-block text-[9px] font-mono uppercase font-black px-2 py-0.5 rounded-full bg-[var(--bg-subtle)] text-[var(--text-secondary)] dark:text-[var(--accent-primary)]">
                   {tx.type === 'WITHDRAWAL' ? 'SENT' : tx.status}
                 </span>
               </div>
@@ -232,17 +230,17 @@ export const EscrowWallet: React.FC = () => {
                   <Building2 className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-display font-black text-[#0B0C0E] dark:text-white">
+                  <h3 className="text-sm font-display font-black text-[var(--text-primary)]">
                     Withdraw to Bank
                   </h3>
-                  <span className="text-[10px] font-mono text-[#525866] dark:text-[#9BA1AE]">
+                  <span className="text-[10px] font-mono text-[var(--text-secondary)]">
                     NIBSS INSTANT PAYOUT
                   </span>
                 </div>
               </div>
               <button
                 onClick={() => setShowWithdrawModal(false)}
-                className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -253,11 +251,11 @@ export const EscrowWallet: React.FC = () => {
                 <div className="w-14 h-14 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-7 h-7" />
                 </div>
-                <h4 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                <h4 className="text-base font-display font-black text-[var(--text-primary)]">
                   Transfer Initiated
                 </h4>
-                <p className="text-xs text-[#525866] dark:text-[#9BA1AE]">
-                  <span className="font-mono tabular-nums font-bold text-[#0B0C0E] dark:text-white">
+                <p className="text-xs text-[var(--text-secondary)]">
+                  <span className="font-mono tabular-nums font-bold text-[var(--text-primary)]">
                     {formatNgn(numAmount)}
                   </span>{' '}
                   sent to {selectedBank}.
@@ -266,13 +264,13 @@ export const EscrowWallet: React.FC = () => {
             ) : (
               <form onSubmit={handleConfirmWithdrawal} className="space-y-3 text-xs">
                 <div>
-                  <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                  <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                     Destination Bank
                   </label>
                   <select
                     value={selectedBank}
                     onChange={(e) => setSelectedBank(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-bold text-[#0B0C0E] dark:text-white focus:outline-hidden"
+                    className="w-full px-4 py-3 bg-[var(--bg-subtle)] rounded-full text-xs font-bold text-[var(--text-primary)] focus:outline-hidden"
                   >
                     {NIGERIAN_BANKS.map((bank) => (
                       <option key={bank} value={bank}>
@@ -283,7 +281,7 @@ export const EscrowWallet: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                  <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                     NUBAN Account Number
                   </label>
                   <input
@@ -292,7 +290,7 @@ export const EscrowWallet: React.FC = () => {
                     value={accountNumber}
                     onChange={(e) => setAccountNumber(e.target.value.replace(/\D/g, ''))}
                     placeholder="0123456789"
-                    className="w-full px-4 py-3 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-mono tabular-nums font-bold text-[#0B0C0E] dark:text-white focus:outline-hidden"
+                    className="w-full px-4 py-3 bg-[var(--bg-subtle)] rounded-full text-xs font-mono tabular-nums font-bold text-[var(--text-primary)] focus:outline-hidden"
                   />
                   {accountNumber.length === 10 && (
                     <div className="mt-1.5 px-3.5 py-1.5 bg-[var(--accent-primary)]/15 rounded-full flex items-center justify-between text-[10px] text-[var(--text-primary)]">
@@ -303,14 +301,14 @@ export const EscrowWallet: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] mb-1">
+                  <label className="block text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)] mb-1">
                     Amount (₦)
                   </label>
                   <input
                     type="number"
                     value={withdrawAmount}
                     onChange={(e) => setWithdrawAmount(e.target.value)}
-                    className="w-full px-4 py-3 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-mono tabular-nums font-bold text-[#0B0C0E] dark:text-white focus:outline-hidden"
+                    className="w-full px-4 py-3 bg-[var(--bg-subtle)] rounded-full text-xs font-mono tabular-nums font-bold text-[var(--text-primary)] focus:outline-hidden"
                   />
                 </div>
 
@@ -339,24 +337,24 @@ export const EscrowWallet: React.FC = () => {
         <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
           <div className="w-full max-w-[360px] floating-surface rounded-[32px] p-5 space-y-4 text-xs">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+              <h3 className="text-base font-display font-black text-[var(--text-primary)]">
                 Escrow Rules
               </h3>
               <button
                 onClick={() => setShowInfoModal(false)}
-                className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
-            <div className="space-y-2.5 text-[#525866] dark:text-[#9BA1AE] text-[11px] leading-relaxed">
-              <div className="p-3 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028]">
-                <strong className="text-[#0B0C0E] dark:text-white block">01. Commuter Deposits</strong>
+            <div className="space-y-2.5 text-[var(--text-secondary)] text-[11px] leading-relaxed">
+              <div className="p-3 rounded-2xl bg-[var(--bg-subtle)]">
+                <strong className="text-[var(--text-primary)] block">01. Commuter Deposits</strong>
                 Unused balance can be withdrawn back to any Nigerian bank via NIBSS instant rails.
               </div>
-              <div className="p-3 rounded-2xl bg-[#F4F5F7] dark:bg-[#1E2028]">
-                <strong className="text-[#0B0C0E] dark:text-white block">02. Fuel Split Release</strong>
+              <div className="p-3 rounded-2xl bg-[var(--bg-subtle)]">
+                <strong className="text-[var(--text-primary)] block">02. Fuel Split Release</strong>
                 Held funds unlock automatically when the rider confirms boarding at the safe hub.
               </div>
             </div>

@@ -74,7 +74,7 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                   />
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5">
-                      <h4 className="text-xs font-display font-black text-[#0B0C0E] dark:text-white truncate">
+                      <h4 className="text-xs font-display font-black text-[var(--text-primary)] truncate">
                         {prov.name}
                       </h4>
                       {isTopPriority && (
@@ -83,7 +83,7 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-1.5 text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+                    <div className="flex items-center gap-1.5 text-[11px] text-[var(--text-secondary)]">
                       <span className="truncate">{prov.operator_name}</span>
                       <span>•</span>
                       <span className="text-[#FF9F0A] font-mono font-bold flex items-center gap-0.5">
@@ -99,15 +99,15 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
 
               {/* Equipment & ETA Pills */}
               <div className="flex items-center gap-1.5 flex-wrap text-[10px]">
-                <span className="px-2.5 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-bold text-[#0B0C0E] dark:text-white flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-full bg-[var(--bg-subtle)] font-bold text-[var(--text-primary)] flex items-center gap-1">
                   <Truck className="w-3 h-3" />
                   {prov.truck_type}
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-mono font-bold text-[#FF9F0A] flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-full bg-[var(--bg-subtle)] font-mono font-bold text-[#FF9F0A] flex items-center gap-1">
                   <Clock className="w-3 h-3" />
                   {prov.traffic_eta_minutes}m ({prov.distance_km} km)
                 </span>
-                <span className="px-2.5 py-1 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] font-mono font-bold text-[#525866] dark:text-[#9BA1AE] flex items-center gap-1">
+                <span className="px-2.5 py-1 rounded-full bg-[var(--bg-subtle)] font-mono font-bold text-[var(--text-secondary)] flex items-center gap-1">
                   <ShieldCheck className="w-3 h-3" />
                   {prov.lasdri_id}
                 </span>
@@ -121,12 +121,12 @@ export const ProviderDispatchDeck: React.FC<ProviderDispatchDeckProps> = ({
               )}
 
               {/* Uber Green Bottom Price & Order Pill Bar */}
-              <div className="bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full p-1.5 pl-4 flex items-center justify-between">
+              <div className="bg-[var(--bg-subtle)] rounded-full p-1.5 pl-4 flex items-center justify-between">
                 <div>
-                  <span className="text-sm font-black font-mono tabular-nums text-[#0B0C0E] dark:text-white block leading-none">
+                  <span className="text-sm font-black font-mono tabular-nums text-[var(--text-primary)] block leading-none">
                     {formatNgn(prov.flat_quote_ngn)}
                   </span>
-                  <span className="text-[8.5px] font-mono uppercase text-[#525866] dark:text-[#9BA1AE] font-bold">
+                  <span className="text-[8.5px] font-mono uppercase text-[var(--text-secondary)] font-bold">
                     FIXED ESCROW
                   </span>
                 </div>

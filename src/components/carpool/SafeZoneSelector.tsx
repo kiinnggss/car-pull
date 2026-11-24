@@ -27,7 +27,7 @@ export const SafeZoneSelector: React.FC = () => {
     <div className="space-y-3">
       <div className="p-4 rounded-[28px] bg-[#FF9F0A]/15 flex items-start gap-2.5">
         <AlertTriangle className="w-4 h-4 text-[#FF9F0A] flex-shrink-0 mt-0.5" />
-        <div className="text-[11px] text-[#0B0C0E] dark:text-white leading-snug">
+        <div className="text-[11px] text-[var(--text-primary)] leading-snug">
           <strong className="font-mono uppercase">ANTI-AGBERO GEOFENCE:</strong> Pickups are restricted to CCTV-monitored off-street hubs with max 45s dwell time.
         </div>
       </div>
@@ -48,7 +48,7 @@ export const SafeZoneSelector: React.FC = () => {
                   className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
                     isSelected
                       ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
                   }`}
                 >
                   {getZoneIcon(zone.zone_type)}

@@ -52,10 +52,10 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
   return (
     <div className="space-y-2.5">
       <div className="flex items-center justify-between px-1">
-        <span className="text-sm font-display font-black text-[#0B0C0E] dark:text-white">
+        <span className="text-sm font-display font-black text-[var(--text-primary)]">
           Select Roadside Incident
         </span>
-        <span className="text-[10px] font-mono text-[#525866] dark:text-[#9BA1AE] font-bold">
+        <span className="text-[10px] font-mono text-[var(--text-secondary)] font-bold">
           4 UNITS NEARBY
         </span>
       </div>
@@ -73,7 +73,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
               className={`p-4 rounded-[28px] text-left flex flex-col justify-between min-h-[128px] transition-all active-press ${
                 useVolt
                   ? 'volt-surface'
-                  : 'floating-surface text-[#0B0C0E] dark:text-white'
+                  : 'floating-surface text-[var(--text-primary)]'
               }`}
             >
               <div className="flex items-start justify-between w-full gap-1">
@@ -83,7 +83,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
                   </h4>
                   <p
                     className={`text-[11px] font-medium mt-0.5 ${
-                      useVolt ? 'opacity-75' : 'text-[#525866] dark:text-[#9BA1AE]'
+                      useVolt ? 'opacity-75' : 'text-[var(--text-secondary)]'
                     }`}
                   >
                     {issue.subtitle}
@@ -98,7 +98,7 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
                   className={`w-9 h-9 rounded-full flex items-center justify-center ${
                     useVolt
                       ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-primary)] dark:text-[var(--accent-primary)]'
                   }`}
                 >
                   {issue.icon}
@@ -107,8 +107,8 @@ export const IssueSelector: React.FC<IssueSelectorProps> = ({ onSelectIssue, sel
                 <span
                   className={`text-[9.5px] font-mono font-black px-2.5 py-0.5 rounded-full ${
                     useVolt
-                      ? 'bg-[#0B0C0E]/12 text-[#0B0C0E]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#525866] dark:text-[#9BA1AE]'
+                      ? 'bg-[var(--bg-sheet)] text-[var(--text-primary)]'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)]'
                   }`}
                 >
                   {issue.badge}

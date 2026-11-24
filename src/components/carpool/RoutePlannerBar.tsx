@@ -27,6 +27,9 @@ export const RoutePlannerBar: React.FC = () => {
     safeZones,
     setSelectedSafeZone,
     drivers,
+    deckFilters,
+    setDeckFilters,
+    resetDeckFilters,
   } = useAppStore();
 
   const [showRouteModal, setShowRouteModal] = useState(false);
@@ -64,6 +67,12 @@ export const RoutePlannerBar: React.FC = () => {
       setShowHubModal(false);
     }
   };
+
+  const allDefaultsActive =
+    deckFilters.timeWindow === 'all' &&
+    !deckFilters.acOnly &&
+    !deckFilters.femaleOnly &&
+    deckFilters.maxFareNgn === null;
 
   return (
     <>
@@ -125,6 +134,145 @@ export const RoutePlannerBar: React.FC = () => {
             </button>
           </div>
         </div>
+
+        {/* Fast Commuter Filter Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1.5 px-0.5">
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              resetDeckFilters();
+            }}
+            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            style={
+              allDefaultsActive
+                ? {
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                    borderColor: 'var(--accent-primary)',
+                  }
+                : {
+                    backgroundColor: 'var(--bg-sheet)',
+                    color: 'var(--text-secondary)',
+                    borderColor: 'var(--border-subtle)',
+                  }
+            }
+          >
+            All
+          </button>
+
+          {(
+            [
+              { id: 'morning', label: 'Morning' },
+              { id: 'evening', label: 'Evening' },
+              { id: 'leaving_now', label: 'Now' },
+            ] as const
+          ).map((item) => {
+            const active = deckFilters.timeWindow === item.id;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => {
+                  triggerHaptic('tap');
+                  setDeckFilters({
+                    timeWindow: active ? 'all' : item.id,
+                  });
+                }}
+                className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+                style={
+                  active
+                    ? {
+                        backgroundColor: 'var(--accent-primary)',
+                        color: 'var(--accent-primary-fg)',
+                        borderColor: 'var(--accent-primary)',
+                      }
+                    : {
+                        backgroundColor: 'var(--bg-sheet)',
+                        color: 'var(--text-secondary)',
+                        borderColor: 'var(--border-subtle)',
+                      }
+                }
+              >
+                {item.label}
+              </button>
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              setDeckFilters({ femaleOnly: !deckFilters.femaleOnly });
+            }}
+            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            style={
+              deckFilters.femaleOnly
+                ? {
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                    borderColor: 'var(--accent-primary)',
+                  }
+                : {
+                    backgroundColor: 'var(--bg-sheet)',
+                    color: 'var(--text-secondary)',
+                    borderColor: 'var(--border-subtle)',
+                  }
+            }
+          >
+            Women
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              setDeckFilters({
+                maxFareNgn: deckFilters.maxFareNgn === 1500 ? null : 1500,
+              });
+            }}
+            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            style={
+              deckFilters.maxFareNgn === 1500
+                ? {
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                    borderColor: 'var(--accent-primary)',
+                  }
+                : {
+                    backgroundColor: 'var(--bg-sheet)',
+                    color: 'var(--text-secondary)',
+                    borderColor: 'var(--border-subtle)',
+                  }
+            }
+          >
+            &le; ₦1.5k
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              triggerHaptic('tap');
+              setDeckFilters({ acOnly: !deckFilters.acOnly });
+            }}
+            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            style={
+              deckFilters.acOnly
+                ? {
+                    backgroundColor: 'var(--accent-primary)',
+                    color: 'var(--accent-primary-fg)',
+                    borderColor: 'var(--accent-primary)',
+                  }
+                : {
+                    backgroundColor: 'var(--bg-sheet)',
+                    color: 'var(--text-secondary)',
+                    borderColor: 'var(--border-subtle)',
+                  }
+            }
+          >
+            AC
+          </button>
+        </div>
       </div>
 
       <DeparturesSheet
@@ -140,19 +288,19 @@ export const RoutePlannerBar: React.FC = () => {
             <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-4 my-auto animate-in slide-in-from-bottom duration-200">
               {/* Top Handle & Title (Uber Green Middle Screen) */}
               <div className="flex items-center justify-between">
-                <h3 className="text-lg font-display font-black text-[#0B0C0E] dark:text-white">
+                <h3 className="text-lg font-display font-black text-[var(--text-primary)]">
                   Plan Commute
                 </h3>
                 <button
                   onClick={closeModalsWithHistory}
-                  className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press"
+                  className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] flex items-center justify-center active-press"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               {/* Uber Green Vertical Dotted Pickup -> Dropoff Timeline */}
-              <div className="p-3.5 rounded-[24px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-between gap-3">
+              <div className="p-3.5 rounded-[24px] bg-[var(--bg-subtle)] flex items-center justify-between gap-3">
                 <div className="flex items-stretch gap-3 flex-1 min-w-0">
                   <div className="flex flex-col items-center justify-between py-2">
                     <MapPin className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
@@ -166,14 +314,14 @@ export const RoutePlannerBar: React.FC = () => {
                       onClick={() => setSelectingType('origin')}
                       className={`w-full text-left p-2 rounded-2xl transition-colors ${
                         selectingType === 'origin'
-                          ? 'bg-white dark:bg-[#14161B] shadow-2xs'
+                          ? 'bg-[var(--bg-sheet)] shadow-2xs'
                           : ''
                       }`}
                     >
-                      <span className="text-[10px] font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                      <span className="text-[10px] font-bold text-[var(--text-secondary)] block">
                         Pickup Point
                       </span>
-                      <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block">
+                      <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block">
                         {riderRoute.origin}
                       </span>
                     </button>
@@ -183,14 +331,14 @@ export const RoutePlannerBar: React.FC = () => {
                       onClick={() => setSelectingType('destination')}
                       className={`w-full text-left p-2 rounded-2xl transition-colors ${
                         selectingType === 'destination'
-                          ? 'bg-white dark:bg-[#14161B] shadow-2xs'
+                          ? 'bg-[var(--bg-sheet)] shadow-2xs'
                           : ''
                       }`}
                     >
-                      <span className="text-[10px] font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                      <span className="text-[10px] font-bold text-[var(--text-secondary)] block">
                         Drop-off Point
                       </span>
-                      <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block">
+                      <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block">
                         {riderRoute.destination}
                       </span>
                     </button>
@@ -203,7 +351,7 @@ export const RoutePlannerBar: React.FC = () => {
                     triggerHaptic('tap');
                     swapRiderRoute();
                   }}
-                  className="w-9 h-9 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white flex items-center justify-center active-press flex-shrink-0"
+                  className="w-9 h-9 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center active-press flex-shrink-0"
                   title="Swap Origin & Destination"
                 >
                   <ArrowUpDown className="w-4 h-4" />
@@ -212,7 +360,7 @@ export const RoutePlannerBar: React.FC = () => {
 
               {/* Uber Green "Additional Wishes" 2-Column Square Bento Cards */}
               <div className="space-y-2">
-                <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white block">
+                <span className="text-xs font-extrabold text-[var(--text-primary)] block">
                   Additional Wishes
                 </span>
                 <div className="grid grid-cols-2 gap-2.5">
@@ -239,17 +387,17 @@ export const RoutePlannerBar: React.FC = () => {
                       setShowRouteModal(false);
                       setShowHubModal(true);
                     }}
-                    className="rounded-[24px] bg-[#F4F5F7] dark:bg-[#1E2028] p-3.5 flex flex-col justify-between min-h-[104px] text-left active-press"
+                    className="rounded-[24px] bg-[var(--bg-subtle)] p-3.5 flex flex-col justify-between min-h-[104px] text-left active-press"
                   >
                     <div>
-                      <span className="text-xs font-extrabold block text-[#0B0C0E] dark:text-white">
+                      <span className="text-xs font-extrabold block text-[var(--text-primary)]">
                         CCTV Safe Hub
                       </span>
-                      <span className="text-[10px] text-[#525866] dark:text-[#9BA1AE] line-clamp-1 mt-0.5">
+                      <span className="text-[10px] text-[var(--text-secondary)] line-clamp-1 mt-0.5">
                         {selectedSafeZone.name}
                       </span>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-white dark:bg-[#14161B] text-[#0B0C0E] dark:text-white flex items-center justify-center mt-2">
+                    <div className="w-8 h-8 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center mt-2">
                       <ShieldCheck className="w-4 h-4" />
                     </div>
                   </button>
@@ -258,7 +406,7 @@ export const RoutePlannerBar: React.FC = () => {
 
               {/* Corridor Stops Selector */}
               <div className="space-y-1.5 max-h-[200px] overflow-y-auto pr-1 no-scrollbar">
-                <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[#525866] dark:text-[#9BA1AE] block">
+                <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-[var(--text-secondary)] block">
                   Select {selectingType === 'origin' ? 'Pickup' : 'Drop-off'} Stop
                 </span>
                 {lagosLocations.map((loc) => {
@@ -281,7 +429,7 @@ export const RoutePlannerBar: React.FC = () => {
                       className={`w-full text-left px-3.5 py-2.5 rounded-2xl transition-all flex items-center justify-between ${
                         isCurrent
                           ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white hover:opacity-90'
+                          : 'bg-[var(--bg-subtle)] text-[var(--text-primary)] hover:opacity-90'
                       }`}
                     >
                       <div>
@@ -306,16 +454,16 @@ export const RoutePlannerBar: React.FC = () => {
             <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-3.5 my-auto animate-in slide-in-from-bottom duration-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                  <h3 className="text-base font-display font-black text-[var(--text-primary)]">
                     CCTV Safe Pickup Hubs
                   </h3>
-                  <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+                  <span className="text-[11px] text-[var(--text-secondary)]">
                     Off-street guarded forecourts • 45s max dwell
                   </span>
                 </div>
                 <button
                   onClick={closeModalsWithHistory}
-                  className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white flex items-center justify-center"
+                  className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] flex items-center justify-center"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -334,7 +482,7 @@ export const RoutePlannerBar: React.FC = () => {
                       className={`w-full text-left p-3.5 rounded-[22px] transition-all flex items-center justify-between ${
                         isSelected
                           ? 'volt-surface'
-                          : 'bg-[#F4F5F7] dark:bg-[#1E2028] dark:text-white'
+                          : 'bg-[var(--bg-subtle)] text-[var(--text-primary)]'
                       }`}
                     >
                       <div className="pr-2">

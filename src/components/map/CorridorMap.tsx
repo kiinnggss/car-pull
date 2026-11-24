@@ -17,7 +17,6 @@ import {
   Crosshair,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
-import confetti from 'canvas-confetti';
 import { triggerHaptic } from '@/lib/haptics';
 import type * as Leaflet from 'leaflet';
 
@@ -46,6 +45,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     setActiveTab,
     setActiveThreadId,
     getOrCreateThreadForDriver,
+    showFeedbackBanner,
   } = useAppStore();
 
   const [selectedRide, setSelectedRide] = useState<StreetCarpoolRide | null>(null);
@@ -318,12 +318,11 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
     const threadId = bookEverydayRide(ride.id);
     setBookedSuccessRide(ride);
 
-    confetti({
-      particleCount: 50,
-      spread: 60,
-      origin: { y: 0.6 },
-      colors: ['#3B82F6', '#0B0C0E', '#DF8E52'],
-    });
+    showFeedbackBanner(
+      'Seat Reserved',
+      `${ride.driverName} · ${formatNgn(ride.fuelSplitNgn)} held`,
+      ride.vehicle.plateNumber
+    );
 
     setTimeout(() => {
       if (threadId) {
@@ -357,10 +356,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             >
               <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)] flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] block leading-none">
+                <span className="text-[8.5px] font-mono uppercase font-bold text-[var(--text-secondary)] block leading-none">
                   PICKUP
                 </span>
-                <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block mt-0.5">
+                <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block mt-0.5">
                   {userStreet.name.split(',')[0]}
                 </span>
               </div>
@@ -378,10 +377,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             >
               <span className="w-2.5 h-2.5 rounded-full bg-[#FF9F0A] flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] font-mono uppercase font-bold text-[#525866] dark:text-[#9BA1AE] block leading-none">
+                <span className="text-[8.5px] font-mono uppercase font-bold text-[var(--text-secondary)] block leading-none">
                   DROP-OFF
                 </span>
-                <span className="text-xs font-extrabold text-[#0B0C0E] dark:text-white truncate block mt-0.5">
+                <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block mt-0.5">
                   {selectedDestination === 'all' ? 'Any Corridor' : selectedDestination}
                 </span>
               </div>
@@ -419,7 +418,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold whitespace-nowrap transition-all active-press ${
                   selectedDayFilter === chip.id
                     ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] shadow-sm'
-                    : 'floating-pill text-[#0B0C0E] dark:text-white'
+                    : 'floating-pill text-[var(--text-primary)]'
                 }`}
               >
                 {chip.label}
@@ -447,7 +446,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       {/* Uber Green Style Bottom Order Sheet Card */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
         <div className="absolute bottom-2.5 left-3 right-3 z-30 max-w-[404px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="floating-surface rounded-[28px] p-3.5 space-y-2.5 text-[#0B0C0E] dark:text-white">
+          <div className="floating-surface rounded-[28px] p-3.5 space-y-2.5 text-[var(--text-primary)]">
             {/* Driver Identity & Rating */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3 min-w-0">
@@ -471,7 +470,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#525866] dark:text-[#9BA1AE] font-medium truncate block">
+                  <span className="text-[11px] text-[var(--text-secondary)] font-medium truncate block">
                     {selectedRide.driverRole}
                   </span>
                 </div>
@@ -483,7 +482,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
             </div>
 
             {/* Uber Green Connected Dotted Pickup -> Dropoff Timeline */}
-            <div className="p-3 rounded-[22px] bg-[#F4F5F7] dark:bg-[#1E2028] flex items-stretch gap-3 text-xs">
+            <div className="p-3 rounded-[22px] bg-[var(--bg-subtle)] flex items-stretch gap-3 text-xs">
               <div className="flex flex-col items-center justify-between py-1">
                 <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)]" />
                 <div className="w-0.5 flex-1 my-1 border-l-2 border-dotted border-[#525866]" />
@@ -492,16 +491,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
               <div className="flex-1 min-w-0 space-y-1.5">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-extrabold text-[#0B0C0E] dark:text-white truncate">
+                  <span className="font-extrabold text-[var(--text-primary)] truncate">
                     {selectedRide.pickupStreetCorner}
                   </span>
-                  <span className="text-[10px] font-mono font-bold text-[#525866] dark:text-[#9BA1AE] flex-shrink-0">
+                  <span className="text-[10px] font-mono font-bold text-[var(--text-secondary)] flex-shrink-0">
                     ~{selectedRide.pickupWalkMinutes}m walk
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-bold text-[#525866] dark:text-[#9BA1AE] truncate">
+                  <span className="font-bold text-[var(--text-secondary)] truncate">
                     {selectedRide.destination}
                   </span>
                   <span className="text-[10px] font-mono font-bold text-[#FF9F0A] flex-shrink-0 flex items-center gap-1">
@@ -514,12 +513,12 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
             {/* Uber Green Signature Bottom Price & Action Pill Bar (`[ ₦1,500 | Order Now ]`) */}
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full p-1.5 pl-4 flex items-center justify-between">
+              <div className="flex-1 bg-[var(--bg-subtle)] rounded-full p-1.5 pl-4 flex items-center justify-between">
                 <div>
-                  <span className="text-base font-black font-mono tabular-nums text-[#0B0C0E] dark:text-white block leading-none">
+                  <span className="text-base font-black font-mono tabular-nums text-[var(--text-primary)] block leading-none">
                     {formatNgn(selectedRide.fuelSplitNgn)}
                   </span>
-                  <span className="text-[9px] font-mono font-bold text-[#525866] dark:text-[#9BA1AE]">
+                  <span className="text-[9px] font-mono font-bold text-[var(--text-secondary)]">
                     {selectedRide.availableSeats} SEATS OPEN
                   </span>
                 </div>
@@ -546,7 +545,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   setActiveThreadId(threadId);
                   setActiveTab('chats');
                 }}
-                className="w-11 h-11 rounded-full bg-[#0B0C0E] dark:bg-[#1E2028] text-[var(--accent-primary)] flex items-center justify-center active-press flex-shrink-0"
+                className="w-11 h-11 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] flex items-center justify-center active-press flex-shrink-0"
                 title="Chat with Driver"
               >
                 <MessageCircle className="w-4 h-4" />
@@ -582,16 +581,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-3.5 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                <h3 className="text-base font-display font-black text-[var(--text-primary)]">
                   Pickup Street
                 </h3>
-                <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+                <p className="text-[11px] text-[var(--text-secondary)]">
                   Find carpool rides passing your street
                 </p>
               </div>
               <button
                 onClick={() => setShowStreetPicker(false)}
-                className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -604,7 +603,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 placeholder="Search street, estate, or area..."
                 value={searchStreetText}
                 onChange={(e) => setSearchStreetText(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-[#F4F5F7] dark:bg-[#1E2028] rounded-full text-xs font-semibold text-[#0B0C0E] dark:text-white focus:outline-hidden"
+                className="w-full pl-10 pr-4 py-2.5 bg-[var(--bg-subtle)] rounded-full text-xs font-semibold text-[var(--text-primary)] focus:outline-hidden"
               />
             </div>
 
@@ -634,7 +633,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   className={`w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between active-press ${
                     userStreet.id === st.id
                       ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-primary)]'
                   }`}
                 >
                   <div>
@@ -655,16 +654,16 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
           <div className="w-full max-w-[400px] floating-surface rounded-[32px] p-5 space-y-3.5 max-h-[85vh] flex flex-col">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="text-base font-display font-black text-[#0B0C0E] dark:text-white">
+                <h3 className="text-base font-display font-black text-[var(--text-primary)]">
                   Drop-off Hub
                 </h3>
-                <p className="text-[11px] text-[#525866] dark:text-[#9BA1AE]">
+                <p className="text-[11px] text-[var(--text-secondary)]">
                   Filter drivers heading your way
                 </p>
               </div>
               <button
                 onClick={() => setShowDestPicker(false)}
-                className="w-8 h-8 rounded-full bg-[#F4F5F7] dark:bg-[#1E2028] flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-[var(--bg-subtle)] flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -690,7 +689,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   className={`w-full text-left px-4 py-3 rounded-2xl transition-all flex items-center justify-between active-press ${
                     selectedDestination === dest.id
                       ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
-                      : 'bg-[#F4F5F7] dark:bg-[#1E2028] text-[#0B0C0E] dark:text-white'
+                      : 'bg-[var(--bg-subtle)] text-[var(--text-primary)]'
                   }`}
                 >
                   <div>
