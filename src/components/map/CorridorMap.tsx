@@ -381,10 +381,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
   return (
     <div className="relative w-full h-full flex flex-col bg-transparent overflow-hidden">
-      {/* Top Floating Pill Command Strip */}
+      {/* Top Floating Command Strip */}
       {!isBackgroundUnderlay && (
-        <div className="absolute top-2.5 left-3 right-3 z-[500] max-w-[404px] mx-auto space-y-2 animate-in fade-in duration-200">
-          <div className="floating-surface rounded-full p-1.5 pl-3.5 flex items-center gap-1">
+        <div className="absolute top-3 left-3 right-3 z-[500] max-w-[404px] mx-auto space-y-2 animate-in fade-in duration-200">
+          <div className="floating-surface rounded-xl p-1.5 pl-3 flex items-center gap-1">
             <button
               onClick={() => {
                 triggerHaptic('tap');
@@ -393,18 +393,18 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               className="flex-1 flex items-center gap-2 py-1 text-left active-press min-w-0"
               title="Change pickup street"
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)] flex-shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[var(--accent-primary)] flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] font-mono uppercase font-bold text-[var(--text-secondary)] block leading-none">
-                  PICKUP
+                <span className="text-[9px] font-mono uppercase font-semibold text-[var(--text-secondary)] block leading-none">
+                  Pickup
                 </span>
-                <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block mt-0.5">
+                <span className="text-xs font-semibold text-[var(--text-primary)] truncate block mt-0.5">
                   {userStreet.name.split(',')[0]}
                 </span>
               </div>
             </button>
 
-            <ArrowRight className="w-3.5 h-3.5 text-[#525866] flex-shrink-0 mx-1" />
+            <ArrowRight className="w-3.5 h-3.5 text-[var(--text-secondary)] flex-shrink-0 mx-1" />
 
             <button
               onClick={() => {
@@ -414,12 +414,12 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               className="flex-1 flex items-center gap-2 py-1 text-left active-press min-w-0"
               title="Filter destination"
             >
-              <span className="w-2.5 h-2.5 rounded-full bg-[#FF9F0A] flex-shrink-0" />
+              <span className="w-2 h-2 rounded-full bg-[#F59E0B] flex-shrink-0" />
               <div className="min-w-0 flex-1">
-                <span className="text-[8.5px] font-mono uppercase font-bold text-[var(--text-secondary)] block leading-none">
-                  DROP-OFF
+                <span className="text-[9px] font-mono uppercase font-semibold text-[var(--text-secondary)] block leading-none">
+                  Drop-off
                 </span>
-                <span className="text-xs font-extrabold text-[var(--text-primary)] truncate block mt-0.5">
+                <span className="text-xs font-semibold text-[var(--text-primary)] truncate block mt-0.5">
                   {selectedDestination === 'all' ? 'Any Corridor' : selectedDestination}
                 </span>
               </div>
@@ -430,15 +430,15 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                 triggerHaptic('switch');
                 setActiveTab('deck');
               }}
-              className="w-9 h-9 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center active-press flex-shrink-0"
-              title="Switch to Swipe Deck"
+              className="w-9 h-9 rounded-lg bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center active-press flex-shrink-0"
+              title="Switch to Discover Deck"
             >
               <Sparkles className="w-4 h-4" />
             </button>
           </div>
 
-          {/* Day Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar px-0.5">
+          {/* Day Filter Chips */}
+          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
             {(
               [
                 { id: 'all', label: 'All Days' },
@@ -454,9 +454,9 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   triggerHaptic('tap');
                   setSelectedDayFilter(chip.id);
                 }}
-                className={`px-3.5 py-1.5 rounded-full text-[11px] font-extrabold whitespace-nowrap transition-all active-press ${
+                className={`h-7 px-3 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-colors active-press ${
                   selectedDayFilter === chip.id
-                    ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] shadow-sm'
+                    ? 'bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]'
                     : 'floating-pill text-[var(--text-primary)]'
                 }`}
               >
@@ -482,10 +482,10 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         </button>
       )}
 
-      {/* Uber Green Style Bottom Order Sheet Card */}
+      {/* Bottom Order Sheet Card */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
-        <div className="absolute bottom-2.5 left-3 right-3 z-30 max-w-[404px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="floating-surface rounded-[28px] p-3.5 space-y-2.5 text-[var(--text-primary)]">
+        <div className="absolute bottom-3 left-3 right-3 z-30 max-w-[404px] mx-auto animate-in slide-in-from-bottom duration-200">
+          <div className="floating-surface rounded-2xl p-3.5 space-y-2.5 text-[var(--text-primary)]">
             {/* Driver Identity & Rating */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3 min-w-0">
@@ -572,23 +572,23 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
               </div>
             </div>
 
-            {/* Uber Green Signature Bottom Price & Action Pill Bar (`[ ₦1,500 | Order Now ]`) */}
+            {/* Price & Reserve Bar */}
             <div className="flex items-center gap-2">
-              <div className="flex-1 bg-[var(--bg-subtle)] rounded-full p-1.5 pl-4 flex items-center justify-between">
+              <div className="flex-1 bg-[var(--bg-subtle)] rounded-xl p-1.5 pl-3 flex items-center justify-between">
                 <div>
-                  <span className="text-base font-black font-mono tabular-nums text-[var(--text-primary)] block leading-none">
+                  <span className="text-base font-bold font-mono tabular-nums text-[var(--text-primary)] block leading-none">
                     {formatNgn(selectedRide.fuelSplitNgn)}
                   </span>
-                  <span className="text-[9px] font-mono font-bold text-[var(--text-secondary)]">
-                    {selectedRide.availableSeats} SEATS OPEN
+                  <span className="text-[10px] font-medium text-[var(--text-secondary)]">
+                    {selectedRide.availableSeats} seats open
                   </span>
                 </div>
 
                 <button
                   onClick={() => handleBookRide(selectedRide)}
-                  className="py-2.5 px-5 btn-electric-mint text-xs font-extrabold rounded-full active-press"
+                  className="h-9 px-4 btn-electric-mint text-xs active-press"
                 >
-                  Reserve Seat
+                  Reserve seat
                 </button>
               </div>
 
@@ -606,7 +606,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   setActiveThreadId(threadId);
                   setActiveTab('chats');
                 }}
-                className="w-11 h-11 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] flex items-center justify-center active-press flex-shrink-0"
+                className="w-11 h-11 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] flex items-center justify-center active-press flex-shrink-0"
                 title="Chat with Driver"
               >
                 <MessageCircle className="w-4 h-4" />

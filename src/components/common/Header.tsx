@@ -4,23 +4,27 @@ import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useAppStore } from '@/lib/store/useAppStore';
 import {
-  ShieldCheck,
   Palette,
   LogOut,
   UserCheck,
   Car,
-  ChevronDown,
   Smartphone,
   X,
   Share,
   PlusSquare,
   CheckCircle2,
+  Wallet,
   Zap,
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { InteractiveLogoCockpit } from './InteractiveLogoCockpit';
 import { ThemeSwitcherModal } from './ThemeSwitcherModal';
 import { triggerHaptic } from '@/lib/haptics';
+
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
 
 export const Header: React.FC = () => {
   const {
@@ -30,38 +34,40 @@ export const Header: React.FC = () => {
     setActiveTab,
     user,
     logout,
-    theme,
-    toggleTheme,
   } = useAppStore();
 
   const [isLogoCockpitOpen, setIsLogoCockpitOpen] = useState(false);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    const id = requestAnimationFrame(() => setMounted(true));
     if (typeof window !== 'undefined') {
       if (window.matchMedia('(display-mode: standalone)').matches) {
-        setIsInstalled(true);
+        requestAnimationFrame(() => setIsInstalled(true));
       }
       const handler = (e: Event) => {
         e.preventDefault();
-        setDeferredPrompt(e);
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
       };
       window.addEventListener('beforeinstallprompt', handler);
-      return () => window.removeEventListener('beforeinstallprompt', handler);
+      return () => {
+        cancelAnimationFrame(id);
+        window.removeEventListener('beforeinstallprompt', handler);
+      };
     }
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const handleInstallClick = async () => {
     triggerHaptic('tap');
     setShowUserMenu(false);
     if (deferredPrompt) {
-      deferredPrompt.prompt();
+      await deferredPrompt.prompt();
       const { outcome } = await deferredPrompt.userChoice;
       if (outcome === 'accepted') {
         setDeferredPrompt(null);
@@ -75,142 +81,120 @@ export const Header: React.FC = () => {
   return (
     <>
       <header
-        className="sticky top-0 z-30 w-full px-3.5 pt-2.5 pb-1.5 backdrop-blur-xl"
-        style={{ backgroundColor: 'color-mix(in srgb, var(--bg-canvas) 88%, transparent)' }}
+        className="sticky top-0 z-30 w-full px-4 py-2.5 border-b backdrop-blur-md"
+        style={{
+          backgroundColor: 'color-mix(in srgb, var(--bg-sheet) 92%, transparent)',
+          borderColor: 'var(--border-subtle)',
+        }}
       >
-        <div className="max-w-[430px] mx-auto flex items-center justify-between gap-2">
-          {/* Left: Brand Pill Trigger */}
-          <button
-            onClick={() => {
-              triggerHaptic('tap');
-              setIsLogoCockpitOpen(true);
-            }}
-            className="flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full active-press transition-transform border"
-            style={{
-              backgroundColor: 'var(--bg-sheet)',
-              borderColor: 'var(--border-subtle)',
-              color: 'var(--text-primary)',
-            }}
-            title="Open Cockpit Shortcuts"
-          >
-            <span
-              className="w-7 h-7 rounded-full flex items-center justify-center"
-              style={{
-                backgroundColor: 'var(--accent-primary)',
-                color: 'var(--accent-primary-fg)',
+        <div className="flex items-center justify-between gap-2">
+          {/* Left: Clean Brand + Role Segmented Toggle */}
+          <div className="flex items-center gap-2.5 min-w-0">
+            <button
+              onClick={() => {
+                triggerHaptic('tap');
+                setIsLogoCockpitOpen(true);
               }}
+              className="flex items-center gap-1.5 active-press flex-shrink-0"
+              title="Open Cockpit Shortcuts"
             >
-              <Zap className="w-3.5 h-3.5 fill-current" />
-            </span>
-            <span className="font-display font-black text-xs tracking-tight">
-              CAR PULL
-            </span>
-          </button>
+              <span
+                className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{
+                  backgroundColor: 'var(--accent-primary)',
+                  color: 'var(--accent-primary-fg)',
+                }}
+              >
+                <Zap className="w-3.5 h-3.5 fill-current" />
+              </span>
+              <span className="font-display font-bold text-sm tracking-tight text-[var(--text-primary)]">
+                CarPull
+              </span>
+            </button>
 
-          {/* Center: Segmented Rider / Driver Pill */}
-          <div
-            className="flex items-center p-0.5 rounded-full border"
-            style={{
-              backgroundColor: 'var(--bg-sheet)',
-              borderColor: 'var(--border-subtle)',
-            }}
-          >
-            <button
-              onClick={() => {
-                triggerHaptic('switch');
-                setActiveRole('rider');
-                setActiveTab('deck');
+            <div
+              className="flex items-center p-0.5 rounded-lg border"
+              style={{
+                backgroundColor: 'var(--bg-subtle)',
+                borderColor: 'var(--border-subtle)',
               }}
-              className="px-3 py-1 rounded-full text-[11px] font-extrabold transition-all"
-              style={
-                activeRole === 'rider'
-                  ? {
-                      backgroundColor: 'var(--accent-primary)',
-                      color: 'var(--accent-primary-fg)',
-                    }
-                  : { color: 'var(--text-secondary)' }
-              }
             >
-              Rider
-            </button>
-            <button
-              onClick={() => {
-                triggerHaptic('switch');
-                setActiveRole('driver');
-                setActiveTab('deck');
-              }}
-              className="px-3 py-1 rounded-full text-[11px] font-extrabold transition-all"
-              style={
-                activeRole === 'driver'
-                  ? {
-                      backgroundColor: 'var(--accent-primary)',
-                      color: 'var(--accent-primary-fg)',
-                    }
-                  : { color: 'var(--text-secondary)' }
-              }
-            >
-              Driver
-            </button>
+              <button
+                onClick={() => {
+                  triggerHaptic('switch');
+                  setActiveRole('rider');
+                  setActiveTab('deck');
+                }}
+                className="px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all"
+                style={
+                  activeRole === 'rider'
+                    ? {
+                        backgroundColor: 'var(--bg-sheet)',
+                        color: 'var(--text-primary)',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
+                      }
+                    : { color: 'var(--text-secondary)' }
+                }
+              >
+                Rider
+              </button>
+              <button
+                onClick={() => {
+                  triggerHaptic('switch');
+                  setActiveRole('driver');
+                  setActiveTab('deck');
+                }}
+                className="px-2.5 py-1 rounded-md text-[11px] font-semibold transition-all"
+                style={
+                  activeRole === 'driver'
+                    ? {
+                        backgroundColor: 'var(--bg-sheet)',
+                        color: 'var(--text-primary)',
+                        boxShadow: '0 1px 2px rgba(0,0,0,0.06)',
+                      }
+                    : { color: 'var(--text-secondary)' }
+                }
+              >
+                Driver
+              </button>
+            </div>
           </div>
 
-          {/* Right: Escrow Pill + Theme Switcher + Profile */}
-          <div className="flex items-center gap-1.5">
+          {/* Right: Wallet Chip + Avatar Menu */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setActiveTab('wallet');
               }}
-              className="px-2.5 py-1 rounded-full text-[11px] font-mono tabular-nums font-extrabold active-press transition-transform"
+              className="h-8 px-2.5 rounded-lg border text-xs font-mono tabular-nums font-bold flex items-center gap-1.5 active-press"
               style={{
-                backgroundColor: 'var(--accent-primary)',
-                color: 'var(--accent-primary-fg)',
-              }}
-              title="Open Escrow Wallet"
-            >
-              {formatNgn(escrowBalanceNgn)}
-            </button>
-
-            <button
-              onClick={() => {
-                triggerHaptic('tap');
-                setIsThemeModalOpen(true);
-              }}
-              className="w-8 h-8 rounded-full border flex items-center justify-center active-press relative"
-              style={{
-                backgroundColor: 'var(--bg-sheet)',
+                backgroundColor: 'var(--bg-subtle)',
                 borderColor: 'var(--border-subtle)',
                 color: 'var(--text-primary)',
               }}
-              title="Appearance & Themes"
-              aria-label="Open Theme Switcher"
+              title="Open Escrow Wallet"
             >
-              <Palette className="w-3.5 h-3.5" />
-              <span
-                className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-white dark:border-black"
-                style={{ backgroundColor: 'var(--accent-primary)' }}
-              />
+              <Wallet className="w-3.5 h-3.5 opacity-70" />
+              <span>{formatNgn(escrowBalanceNgn)}</span>
             </button>
 
-            {/* User Avatar Menu */}
             <div className="relative">
               <button
                 onClick={() => {
                   triggerHaptic('tap');
                   setShowUserMenu(!showUserMenu);
                 }}
-                className="flex items-center gap-0.5 p-0.5 pr-1.5 rounded-full bg-[var(--bg-sheet)] border border-[var(--border-subtle)] active-press"
-                title="Account Menu"
+                className="w-8 h-8 rounded-full font-bold text-xs flex items-center justify-center active-press border"
+                style={{
+                  backgroundColor: 'var(--accent-primary)',
+                  color: 'var(--accent-primary-fg)',
+                  borderColor: 'var(--border-subtle)',
+                }}
+                title="Account & Appearance"
+                aria-label="Account Menu"
               >
-                <div
-                  className="w-7 h-7 rounded-full font-extrabold text-[11px] flex items-center justify-center"
-                  style={{
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                  }}
-                >
-                  {user.fullName.charAt(0)}
-                </div>
-                <ChevronDown className="w-3 h-3 text-[var(--text-secondary)]" />
+                {user.fullName.charAt(0)}
               </button>
 
               {showUserMenu && (
@@ -219,41 +203,52 @@ export const Header: React.FC = () => {
                     className="fixed inset-0 z-40"
                     onClick={() => setShowUserMenu(false)}
                   />
-                  <div className="absolute right-0 mt-2 w-60 rounded-[24px] floating-surface p-3.5 z-50 space-y-2.5 animate-in fade-in zoom-in-95 duration-150">
-                    <div className="pb-2.5 border-b border-[var(--border-subtle)]">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-extrabold text-[var(--text-primary)] truncate">
+                  <div className="absolute right-0 mt-2 w-60 floating-surface p-3 z-50 space-y-2 animate-in fade-in zoom-in-95 duration-150">
+                    <div className="pb-2.5 border-b border-[var(--border-subtle)] px-1">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-bold text-[var(--text-primary)] truncate">
                           {user.fullName}
                         </span>
-                        <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)]">
-                          NIN VERIFIED
+                        <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-md bg-[var(--bg-subtle)] text-[var(--text-primary)]">
+                          Verified
                         </span>
                       </div>
-                      <span className="text-[10px] text-[var(--text-secondary)] block truncate mt-0.5">
+                      <span className="text-[11px] text-[var(--text-secondary)] block truncate mt-0.5">
                         {user.email}
                       </span>
-                      <span className="text-[10px] font-bold text-[var(--text-primary)] dark:text-[var(--accent-primary)] block mt-0.5">
+                      <span className="text-[11px] font-medium text-[var(--text-secondary)] block mt-0.5">
                         {user.employer}
                       </span>
                     </div>
 
-                    <div className="space-y-1">
+                    <div className="space-y-0.5">
+                      <button
+                        onClick={() => {
+                          setShowUserMenu(false);
+                          setIsThemeModalOpen(true);
+                        }}
+                        className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
+                      >
+                        <Palette className="w-3.5 h-3.5 opacity-75" />
+                        <span>Appearance &amp; Themes</span>
+                      </button>
+
                       <button
                         onClick={() => {
                           setActiveRole(activeRole === 'rider' ? 'driver' : 'rider');
                           setShowUserMenu(false);
                         }}
-                        className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
                       >
                         {activeRole === 'rider' ? (
                           <>
-                            <Car className="w-3.5 h-3.5" />
+                            <Car className="w-3.5 h-3.5 opacity-75" />
                             <span>Switch to Driver Console</span>
                           </>
                         ) : (
                           <>
-                            <UserCheck className="w-3.5 h-3.5" />
-                            <span>Switch to Rider Swipe Deck</span>
+                            <UserCheck className="w-3.5 h-3.5 opacity-75" />
+                            <span>Switch to Rider Deck</span>
                           </>
                         )}
                       </button>
@@ -261,10 +256,10 @@ export const Header: React.FC = () => {
                       {!isInstalled && (
                         <button
                           onClick={handleInstallClick}
-                          className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
+                          className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium text-[var(--text-primary)] hover:bg-[var(--bg-subtle)] flex items-center gap-2 transition-colors"
                         >
-                          <Smartphone className="w-3.5 h-3.5" />
-                          <span>Install Mobile App (PWA)</span>
+                          <Smartphone className="w-3.5 h-3.5 opacity-75" />
+                          <span>Install Mobile App</span>
                         </button>
                       )}
 
@@ -273,7 +268,7 @@ export const Header: React.FC = () => {
                           setShowUserMenu(false);
                           logout();
                         }}
-                        className="w-full text-left px-3 py-2 rounded-full text-xs font-bold text-red-600 dark:text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors"
+                        className="w-full text-left px-2.5 py-2 rounded-lg text-xs font-medium text-red-600 dark:text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors"
                       >
                         <LogOut className="w-3.5 h-3.5" />
                         <span>Sign Out</span>
@@ -300,35 +295,35 @@ export const Header: React.FC = () => {
       {showInstallModal &&
         mounted &&
         createPortal(
-          <div className="fixed inset-0 z-[900] bg-black/70 backdrop-blur-xs flex items-end sm:items-center justify-center p-3 animate-in fade-in duration-150">
+          <div className="fixed inset-0 z-[900] bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-4 animate-in fade-in duration-150">
             <div className="w-full max-w-[380px] floating-surface p-5 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
-                    <Smartphone className="w-5 h-5" />
+                  <div className="w-9 h-9 rounded-xl bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] flex items-center justify-center">
+                    <Smartphone className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-black text-[var(--text-primary)]">
-                      Install CAR PULL
+                    <h3 className="text-sm font-bold text-[var(--text-primary)]">
+                      Install CarPull
                     </h3>
-                    <p className="text-[10px] font-mono text-[var(--text-secondary)]">
-                      FULL-SCREEN MOBILE APP
+                    <p className="text-[11px] text-[var(--text-secondary)]">
+                      Add to your home screen
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => setShowInstallModal(false)}
-                  className="p-1.5 rounded-full hover:bg-[var(--bg-subtle)] text-[#525866]"
+                  className="p-1.5 rounded-lg hover:bg-[var(--bg-subtle)] text-[var(--text-secondary)]"
                 >
                   <X className="w-4 h-4" />
                 </button>
               </div>
 
               <div className="space-y-2.5 text-xs">
-                <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] space-y-1.5">
-                  <div className="font-extrabold text-[var(--text-primary)] flex items-center gap-1.5">
+                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] space-y-1">
+                  <div className="font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
                     <Share className="w-3.5 h-3.5" />
-                    <span>iPhone / iPad (Safari)</span>
+                    <span>iPhone &amp; iPad</span>
                   </div>
                   <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
                     Tap <strong>Share</strong> in Safari, then choose{' '}
@@ -339,20 +334,20 @@ export const Header: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] space-y-1.5">
-                  <div className="font-extrabold text-[var(--text-primary)] flex items-center gap-1.5">
+                <div className="p-3.5 rounded-xl bg-[var(--bg-subtle)] space-y-1">
+                  <div className="font-semibold text-[var(--text-primary)] flex items-center gap-1.5">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span>Android (Chrome)</span>
+                    <span>Android</span>
                   </div>
                   <p className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
-                    Tap the browser menu (<strong>⋮</strong>) and select <strong>Install app</strong>.
+                    Open the Chrome menu and select <strong>Install app</strong>.
                   </p>
                 </div>
               </div>
 
               <button
                 onClick={() => setShowInstallModal(false)}
-                className="w-full py-3 btn-electric-mint text-xs font-extrabold rounded-full active-press"
+                className="w-full py-2.5 btn-electric-mint text-xs active-press"
               >
                 Done
               </button>

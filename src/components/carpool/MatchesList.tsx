@@ -143,25 +143,25 @@ export const MatchesList: React.FC = () => {
   }
 
   return (
-    <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3 animate-in fade-in pt-1">
+    <div className="w-full max-w-[404px] mx-auto pb-20 px-3.5 space-y-3.5 animate-in fade-in pt-2">
       {/* Header Row */}
-      <div className="flex items-center justify-between px-1">
+      <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-display font-black text-[var(--text-primary)] tracking-tight">
-            Your Rides
+          <h2 className="text-lg font-display font-bold text-[var(--text-primary)] tracking-tight">
+            Your rides
           </h2>
-          <p className="text-[11px] text-[var(--text-secondary)] font-medium">
+          <p className="text-xs text-[var(--text-secondary)]">
             Live corridor telemetry &amp; zero-cash boarding
           </p>
         </div>
 
-        <span className="px-3 py-1 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-xs font-mono tabular-nums font-black">
-          {activeMatches.length} ACTIVE
+        <span className="px-2.5 py-1 rounded-lg bg-[var(--bg-subtle)] text-[var(--text-primary)] text-xs font-mono tabular-nums font-semibold">
+          {activeMatches.length} active
         </span>
       </div>
 
       {/* Rides Stack */}
-      <div className="space-y-3.5">
+      <div className="space-y-3">
         {activeMatches.map((match) => {
           const isWeeklyLocked = weeklyLockedCommutes.includes(match.driverId);
           const isCompleted = match.status === 'completed';
@@ -179,10 +179,10 @@ export const MatchesList: React.FC = () => {
           return (
             <div
               key={match.id}
-              className="floating-surface rounded-[32px] p-3.5 space-y-3 overflow-hidden"
+              className="floating-surface p-3.5 space-y-3 overflow-hidden"
             >
-              {/* 1. Charlie Waite "The re-designed Uber App" Frosted Dark Car Progress Widget */}
-              <div className="bg-[#0B0C0E] dark:bg-[#1E2028] rounded-[24px] p-4 text-white space-y-3 relative overflow-hidden">
+              {/* Live Car Progress Panel */}
+              <div className="bg-[#0F172A] dark:bg-[#1E2433] rounded-xl p-3.5 text-white space-y-3 relative overflow-hidden">
                 <div className="flex items-center justify-between gap-2">
                   <div>
                     <div className="flex items-center gap-1.5">
@@ -266,7 +266,7 @@ export const MatchesList: React.FC = () => {
                 </div>
               )}
 
-              {/* 3. 4-Button Circular / Pill Action Strip */}
+              {/* 3. 4-Button Action Strip */}
               <div className="grid grid-cols-4 gap-1.5">
                 <button
                   onClick={() => {
@@ -281,7 +281,7 @@ export const MatchesList: React.FC = () => {
                     setActiveThreadId(threadId);
                     setActiveTab('chats');
                   }}
-                  className="py-2 px-2 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[11px] font-extrabold flex items-center justify-center gap-1 active-press"
+                  className="h-9 px-2 rounded-xl bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-xs font-semibold flex items-center justify-center gap-1 active-press"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   <span>Chat</span>
@@ -300,7 +300,7 @@ export const MatchesList: React.FC = () => {
                   }
                   aria-label="Share live trip on WhatsApp"
                   title="Share live trip on WhatsApp"
-                  className="py-2 px-2 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] text-[11px] font-bold flex items-center justify-center gap-1 active-press"
+                  className="h-9 px-2 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] text-xs font-medium flex items-center justify-center gap-1 active-press"
                 >
                   <Share2 className="w-3.5 h-3.5 text-emerald-500" />
                   <span>Share</span>
@@ -308,7 +308,7 @@ export const MatchesList: React.FC = () => {
 
                 <a
                   href="tel:+2348030000000"
-                  className="py-2 px-2 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] text-[11px] font-bold flex items-center justify-center gap-1 active-press"
+                  className="h-9 px-2 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] text-xs font-medium flex items-center justify-center gap-1 active-press"
                 >
                   <Phone className="w-3.5 h-3.5" />
                   <span>Call</span>
@@ -323,9 +323,9 @@ export const MatchesList: React.FC = () => {
                       lockWeeklyCommute(match.driverId);
                     }
                   }}
-                  className={`py-2 px-2 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 active-press ${
+                  className={`h-9 px-2 rounded-xl text-xs font-semibold flex items-center justify-center gap-1 active-press ${
                     isWeeklyLocked
-                      ? 'bg-[#FF9F0A] text-[#0B0C0E] font-extrabold'
+                      ? 'bg-[#F59E0B] text-[#0F172A]'
                       : 'bg-[var(--bg-subtle)] text-[var(--text-secondary)]'
                   }`}
                 >
@@ -334,20 +334,20 @@ export const MatchesList: React.FC = () => {
                 </button>
               </div>
 
-              {/* 4. Uber Green Bottom Pill Bar: Boarding PIN + Confirm Boarding CTA */}
+              {/* 4. Boarding PIN + Confirm Boarding Bar */}
               {!isCompleted ? (
-                <div className="bg-[var(--bg-subtle)] rounded-full p-1.5 pl-4 flex items-center justify-between gap-2">
+                <div className="bg-[var(--bg-subtle)] rounded-xl p-1.5 pl-3 flex items-center justify-between gap-2">
                   <button
                     onClick={() => setActiveTab('pass')}
                     className="flex items-center gap-2 text-left active-press"
                     title="Open Section 44 Pass"
                   >
-                    <QrCode className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
+                    <QrCode className="w-4 h-4 text-[var(--text-primary)]" />
                     <div>
-                      <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-bold block leading-none">
-                        BOARDING PIN
+                      <span className="text-[9px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-semibold block leading-none">
+                        Boarding PIN
                       </span>
-                      <strong className="text-xs font-mono tabular-nums font-black text-[var(--text-primary)] tracking-widest">
+                      <strong className="text-xs font-mono tabular-nums font-bold text-[var(--text-primary)] tracking-widest">
                         {offlinePin}
                       </strong>
                     </div>
@@ -355,16 +355,16 @@ export const MatchesList: React.FC = () => {
 
                   <button
                     onClick={() => handleConfirmBoarding(match.id)}
-                    className="py-2.5 px-5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center gap-1.5 active-press"
+                    className="h-9 px-4 btn-electric-mint text-xs flex items-center gap-1.5 active-press"
                   >
                     <Lock className="w-3.5 h-3.5" />
                     <span>Confirm Boarding</span>
                   </button>
                 </div>
               ) : (
-                <div className="py-2.5 px-4 rounded-full bg-[var(--accent-primary)]/15 text-[var(--text-primary)] text-xs font-extrabold flex items-center justify-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Trip Verified &amp; Fuel Split Released</span>
+                <div className="py-2.5 px-3 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] text-xs font-semibold flex items-center justify-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>Trip verified &amp; fuel split released</span>
                 </div>
               )}
             </div>

@@ -4,31 +4,31 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg-canvas: #F4F5F7;
+  --bg-canvas: #F6F7F9;
   --bg-sheet: #FFFFFF;
-  --bg-subtle: #E9ECF1;
-  --text-primary: #0B0C0E;
-  --text-secondary: #525866;
-  --accent-volt: #0B0C0E;
-  --accent-primary: #0B0C0E;
+  --bg-subtle: #EEF0F4;
+  --text-primary: #0F172A;
+  --text-secondary: #5B6475;
+  --accent-volt: #0F172A;
+  --accent-primary: #0F172A;
   --accent-primary-fg: #FFFFFF;
-  --accent-signal: #3B82F6;
-  --border-subtle: rgba(11, 12, 14, 0.08);
+  --accent-signal: #2563EB;
+  --border-subtle: rgba(15, 23, 42, 0.09);
   --card-border-width: 1px;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --bg-canvas: #0D1117;
-  --bg-sheet: #161B22;
-  --bg-subtle: #21262D;
-  --text-primary: #F0F6FC;
-  --text-secondary: #8B949E;
+  --bg-canvas: #0B0F17;
+  --bg-sheet: #131924;
+  --bg-subtle: #1C2433;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
   --accent-volt: #3B82F6;
   --accent-primary: #3B82F6;
   --accent-primary-fg: #FFFFFF;
   --accent-signal: #60A5FA;
-  --border-subtle: rgba(240, 246, 252, 0.1);
+  --border-subtle: rgba(241, 245, 249, 0.1);
   --card-border-width: 1px;
 }
 
@@ -44,92 +44,83 @@ body {
 
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-outfit), var(--font-jakarta), sans-serif;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Theme-aware Sheet Card */
+/* Clean Editorial Card Surface */
 .floating-surface {
   background: var(--bg-sheet);
   color: var(--text-primary);
-  border-radius: 28px;
+  border-radius: 18px;
   border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 10px 30px -6px rgba(11, 12, 14, 0.12), 0 2px 6px rgba(11, 12, 14, 0.05);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 18px -8px rgba(15, 23, 42, 0.08);
 }
 
 .dark .floating-surface {
   background: var(--bg-sheet);
   color: var(--text-primary);
-  border-radius: 28px;
+  border-radius: 18px;
   border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 14px 36px -8px rgba(0, 0, 0, 0.65);
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.55);
 }
 
 [data-theme="paw-cream"] .floating-surface {
-  box-shadow: 4px 4px 0px #1A1412;
+  box-shadow: 3px 3px 0px #1A1412;
 }
 
-/* Primary Accent Surface */
+/* Primary Accent Card Surface */
 .volt-surface {
   background: var(--accent-primary);
   color: var(--accent-primary-fg);
-  border-radius: 28px;
-  border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 10px 28px -6px color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  border-radius: 18px;
+  border: var(--card-border-width, 1px) solid transparent;
+  box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--accent-primary) 45%, transparent);
 }
 
 [data-theme="paw-cream"] .volt-surface {
-  box-shadow: 4px 4px 0px #1A1412;
+  box-shadow: 3px 3px 0px #1A1412;
 }
 
-/* Warm Signal Amber Quote Block (Professional Network Tinder signature tile) */
+/* Warm Signal Amber Quote Block */
 .amber-quote-surface {
-  background: linear-gradient(145deg, #FFAA2B 0%, #FF9500 100%);
+  background: linear-gradient(145deg, #F59E0B 0%, #D97706 100%);
   color: #FFFFFF;
-  border-radius: 26px;
+  border-radius: 16px;
 }
 
-/* Smoked Glass Pill Tag (Tinder BLK overlay tags) */
+/* Subtle Frosted Overlay Tag for Photo Cards */
 .glass-pill-tag {
-  background: rgba(20, 22, 27, 0.55);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
   color: #FFFFFF;
-  border-radius: 9999px;
+  border-radius: 8px;
 }
 
-/* Floating Pill Control */
+/* Subtle Floating Control */
 .floating-pill {
-  background: #FFFFFF;
-  border: 1px solid rgba(11, 12, 14, 0.08);
-  box-shadow: 0 4px 12px rgba(11, 12, 14, 0.05);
+  background: var(--bg-sheet);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
 .dark .floating-pill {
-  background: #1E2028;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
+  background: var(--bg-sheet);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
 }
 
-/* Minimalist Floating Bottom Dock */
+/* Native Bottom Navigation Bar */
 .floating-dock {
-  background: color-mix(in srgb, var(--bg-sheet) 88%, transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 12px 32px -4px rgba(11, 12, 14, 0.14);
-}
-
-.dark .floating-dock {
-  background: color-mix(in srgb, var(--bg-sheet) 88%, transparent);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 16px 40px -4px rgba(0, 0, 0, 0.75);
+  background: color-mix(in srgb, var(--bg-sheet) 94%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid var(--border-subtle);
 }
 
 [data-transparent-dock="false"] .floating-dock {
@@ -138,71 +129,49 @@ h1, h2, h3, h4, .font-display {
   -webkit-backdrop-filter: none;
 }
 
-[data-theme="paw-cream"] .floating-dock {
-  box-shadow: 3px 3px 0px #1A1412;
-}
-
-/* Primary Pill CTA: Driven by active theme accent */
+/* Primary Action Button */
 .btn-electric-mint {
   background: var(--accent-primary);
   color: var(--accent-primary-fg);
-  border-radius: 9999px;
-  font-weight: 800;
-  transition: transform 160ms var(--ease-out-expo), opacity 160ms var(--ease-out-expo), box-shadow 160ms var(--ease-out-expo);
+  border-radius: 12px;
+  font-weight: 700;
+  transition: transform 140ms var(--ease-out-expo), opacity 140ms var(--ease-out-expo);
 }
 
 .btn-electric-mint:hover {
   opacity: 0.92;
 }
 
-.dark .btn-electric-mint {
-  background: var(--accent-primary);
-  color: var(--accent-primary-fg);
-  box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--accent-primary) 35%, transparent);
-}
-
-.dark .btn-electric-mint:hover {
-  opacity: 0.92;
-}
-
-/* Explicit Accent CTA in both modes */
 .btn-volt {
   background: var(--accent-primary);
   color: var(--accent-primary-fg);
-  border-radius: 9999px;
-  font-weight: 800;
-  box-shadow: 0 6px 20px -4px color-mix(in srgb, var(--accent-primary) 35%, transparent);
-  transition: transform 160ms var(--ease-out-expo), opacity 160ms var(--ease-out-expo);
+  border-radius: 12px;
+  font-weight: 700;
+  transition: transform 140ms var(--ease-out-expo), opacity 140ms var(--ease-out-expo);
 }
 
 .btn-volt:hover {
   opacity: 0.92;
 }
 
-/* Nigerian License Plate Pill */
+/* Nigerian License Plate Badge */
 .plate-badge {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.05em;
-  font-weight: 800;
-  font-size: 10px;
-  padding: 3px 9px;
-  border-radius: 9999px;
-  background: #F4F5F7;
-  color: #0B0C0E;
-  border: 1px solid rgba(11, 12, 14, 0.14);
-}
-
-.dark .plate-badge {
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
   background: var(--bg-subtle);
-  color: var(--accent-primary);
-  border: 1px solid color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
 }
 
-/* Responsive tactile press states */
+/* Tactile Press Feedback */
 .active-press:active,
 .active-spring:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
 /* Hide scrollbars cleanly */
@@ -221,7 +190,7 @@ h1, h2, h3, h4, .font-display {
 }
 
 .dark .leaflet-tile-pane {
-  filter: brightness(0.78) contrast(1.18) saturate(0.8);
+  filter: brightness(0.8) contrast(1.14) saturate(0.82);
 }
 
 @media (prefers-reduced-motion: reduce) {

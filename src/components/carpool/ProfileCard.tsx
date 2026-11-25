@@ -62,10 +62,10 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
     <>
       <div
         onClick={handleCardTap}
-        className="relative w-full h-full min-h-[360px] sm:min-h-[420px] rounded-[30px] overflow-hidden select-none cursor-pointer bg-[#14161B]"
+        className="relative w-full h-full min-h-[360px] sm:min-h-[420px] rounded-2xl overflow-hidden select-none cursor-pointer bg-[#14161B]"
         style={{
           border: 'var(--card-border-width, 1px) solid var(--border-subtle)',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.25)',
+          boxShadow: '0 10px 28px -12px rgba(15, 23, 42, 0.28)',
         }}
       >
         {/* Monogram Fallback behind Portrait */}

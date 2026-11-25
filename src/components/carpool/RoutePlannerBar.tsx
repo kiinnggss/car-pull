@@ -76,9 +76,9 @@ export const RoutePlannerBar: React.FC = () => {
 
   return (
     <>
-      <div className="w-full max-w-[404px] mx-auto px-3 mb-1.5 flex-shrink-0">
-        {/* Slim Single-Row Route Pill */}
-        <div className="floating-surface rounded-full p-1 pl-3 flex items-center justify-between gap-2">
+      <div className="w-full max-w-[404px] mx-auto px-3.5 pt-1 mb-2 flex-shrink-0 space-y-2">
+        {/* Clean Route Bar */}
+        <div className="floating-surface rounded-xl p-1.5 pl-3 flex items-center justify-between gap-2">
           <button
             onClick={() => {
               triggerHaptic('tap');
@@ -90,30 +90,30 @@ export const RoutePlannerBar: React.FC = () => {
           >
             <span
               className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ backgroundColor: 'var(--accent-primary)' }}
+              style={{ backgroundColor: 'var(--accent-signal)' }}
             />
-            <div className="min-w-0 flex-1 flex items-center gap-1.5 text-[11.5px] font-extrabold truncate">
+            <div className="min-w-0 flex-1 flex items-center gap-1.5 text-xs font-semibold truncate">
               <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
               <span style={{ color: 'var(--text-secondary)' }}>→</span>
               <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
             </div>
           </button>
 
-          {/* Right Pill Triggers: Schedule & Safe Hub */}
+          {/* Right Actions: Schedule & Safe Hub */}
           <div className="flex items-center gap-1 flex-shrink-0">
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setShowDeparturesSheet(true);
               }}
-              className="h-7 px-2.5 rounded-full text-[10.5px] font-mono font-extrabold flex items-center gap-1 active-press"
+              className="h-7 px-2 rounded-lg text-[11px] font-mono font-semibold flex items-center gap-1 active-press"
               style={{
                 backgroundColor: 'var(--bg-subtle)',
                 color: 'var(--text-primary)',
               }}
               title="View Departure Schedule"
             >
-              <Clock className="w-3 h-3" style={{ color: 'var(--accent-primary)' }} />
+              <Clock className="w-3 h-3 opacity-75" />
               <span>{drivers.length}</span>
             </button>
 
@@ -122,7 +122,7 @@ export const RoutePlannerBar: React.FC = () => {
                 triggerHaptic('tap');
                 setShowHubModal(true);
               }}
-              className="h-7 px-2.5 rounded-full text-[10.5px] font-extrabold flex items-center gap-1 active-press"
+              className="h-7 px-2.5 rounded-lg text-[11px] font-semibold flex items-center gap-1 active-press"
               style={{
                 backgroundColor: 'var(--accent-primary)',
                 color: 'var(--accent-primary-fg)',
@@ -136,14 +136,14 @@ export const RoutePlannerBar: React.FC = () => {
         </div>
 
         {/* Fast Commuter Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1.5 px-0.5">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => {
               triggerHaptic('tap');
               resetDeckFilters();
             }}
-            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
             style={
               allDefaultsActive
                 ? {
@@ -179,7 +179,7 @@ export const RoutePlannerBar: React.FC = () => {
                     timeWindow: active ? 'all' : item.id,
                   });
                 }}
-                className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+                className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
                 style={
                   active
                     ? {
@@ -205,7 +205,7 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setDeckFilters({ femaleOnly: !deckFilters.femaleOnly });
             }}
-            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
             style={
               deckFilters.femaleOnly
                 ? {
@@ -231,7 +231,7 @@ export const RoutePlannerBar: React.FC = () => {
                 maxFareNgn: deckFilters.maxFareNgn === 1500 ? null : 1500,
               });
             }}
-            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
             style={
               deckFilters.maxFareNgn === 1500
                 ? {
@@ -255,7 +255,7 @@ export const RoutePlannerBar: React.FC = () => {
               triggerHaptic('tap');
               setDeckFilters({ acOnly: !deckFilters.acOnly });
             }}
-            className="h-6 px-2.5 rounded-full text-[10px] font-extrabold whitespace-nowrap border transition-all active-press flex-shrink-0"
+            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
             style={
               deckFilters.acOnly
                 ? {

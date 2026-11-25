@@ -85,9 +85,9 @@ export const CommutePass: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in pt-1">
-      {/* 1. Pitch Obsidian + Volt Lime Scannable QR Certificate Card */}
-      <div className="bg-[#0B0C0E] dark:bg-[#14161B] rounded-[32px] p-5 text-white space-y-4 border border-[var(--border-subtle)] shadow-xl">
+    <div className="w-full max-w-[404px] mx-auto pb-20 px-3.5 space-y-3.5 animate-in fade-in pt-2">
+      {/* 1. Scannable QR Certificate Card */}
+      <div className="bg-[#0F172A] dark:bg-[#131924] rounded-2xl p-4 text-white space-y-3.5 border border-[var(--border-subtle)] shadow-sm">
         <div className="flex items-center justify-between">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
@@ -180,49 +180,49 @@ export const CommutePass: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Uber Green 2-Column Bento Manifest Tiles */}
+      {/* 2. 2-Column Manifest Tiles */}
       <div className="grid grid-cols-2 gap-2.5">
-        <div className="volt-surface rounded-[26px] p-4 flex flex-col justify-between min-h-[104px]">
+        <div className="volt-surface rounded-2xl p-3.5 flex flex-col justify-between min-h-[96px]">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-black opacity-75">
-              VEHICLE
+            <span className="text-[10px] font-mono uppercase font-semibold opacity-75">
+              Vehicle
             </span>
             <Car className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-xs font-extrabold block truncate">
+            <span className="text-xs font-bold block truncate">
               {activeVehicleModel}
             </span>
-            <span className="inline-block mt-1 px-2.5 py-0.5 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] font-mono text-[10px] font-black">
+            <span className="inline-block mt-1 px-2 py-0.5 rounded-md bg-[var(--bg-sheet)] text-[var(--text-primary)] font-mono text-[10px] font-bold">
               {activeVehiclePlate}
             </span>
           </div>
         </div>
 
-        <div className="floating-surface rounded-[26px] p-4 flex flex-col justify-between min-h-[104px]">
+        <div className="floating-surface rounded-2xl p-3.5 flex flex-col justify-between min-h-[96px]">
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-bold text-[var(--text-secondary)]">
-              COMMERCIAL PROFIT
+            <span className="text-[10px] font-mono uppercase font-semibold text-[var(--text-secondary)]">
+              Commercial profit
             </span>
             <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
           </div>
           <div>
-            <span className="text-base font-black font-mono tabular-nums text-[var(--text-primary)] block">
+            <span className="text-base font-bold font-mono tabular-nums text-[var(--text-primary)] block">
               ₦0.00
             </span>
-            <span className="text-[10px] text-[var(--text-secondary)] font-semibold block mt-0.5">
-              1.2x PMS Fuel Cap Only
+            <span className="text-[11px] text-[var(--text-secondary)] font-medium block mt-0.5">
+              1.2x PMS fuel cap only
             </span>
           </div>
         </div>
       </div>
 
       {/* 3. Statutory Notice & Actions Sheet */}
-      <div className="floating-surface rounded-[28px] p-4 space-y-3">
-        <div className="p-3.5 rounded-2xl bg-[#FF9F0A]/15 text-[11px] text-[var(--text-primary)] space-y-1">
-          <div className="flex items-center gap-1.5 font-mono font-black text-xs text-[#FF9F0A]">
+      <div className="floating-surface rounded-2xl p-4 space-y-3">
+        <div className="p-3 rounded-xl bg-[#F59E0B]/12 text-[11px] text-[var(--text-primary)] space-y-1">
+          <div className="flex items-center gap-1.5 font-mono font-bold text-xs text-[#D97706] dark:text-[#FBBF24]">
             <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-            <span>STATUTORY NOTICE TO OFFICERS</span>
+            <span>Statutory notice to officers</span>
           </div>
           <p className="leading-relaxed text-[var(--text-secondary)]">
             Under <strong>Lagos State Transport Sector Reform Law (Cap T1, Section 44)</strong>, corporate cost-sharing commuters are exempt from hackney permits and union tickets.
@@ -231,16 +231,16 @@ export const CommutePass: React.FC = () => {
 
         <button
           onClick={sharePassWhatsApp}
-          className="w-full py-3.5 btn-electric-mint font-extrabold text-xs rounded-full active-press flex items-center justify-center gap-2"
+          className="w-full h-11 btn-electric-mint text-xs active-press flex items-center justify-center gap-2"
         >
           <Share2 className="w-4 h-4" />
           <span>{copied ? 'Live Trip Copied & Shared' : 'Share Live Trip on WhatsApp'}</span>
         </button>
 
-        <div className="grid grid-cols-2 gap-2 text-[11px]">
+        <div className="grid grid-cols-2 gap-2 text-xs">
           <a
             href="tel:080000527862"
-            className="py-2.5 px-3 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] font-mono font-bold flex items-center justify-center gap-1.5 active-press"
+            className="h-10 px-3 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] font-mono font-semibold flex items-center justify-center gap-1.5 active-press"
           >
             <PhoneCall className="w-3.5 h-3.5 text-red-500" />
             <span>LASTMA</span>
@@ -248,7 +248,7 @@ export const CommutePass: React.FC = () => {
 
           <a
             href="tel:112"
-            className="py-2.5 px-3 rounded-full bg-red-500/12 text-red-600 dark:text-red-400 font-mono font-bold flex items-center justify-center gap-1.5 active-press"
+            className="h-10 px-3 rounded-xl bg-red-500/12 text-red-600 dark:text-red-400 font-mono font-semibold flex items-center justify-center gap-1.5 active-press"
           >
             <PhoneCall className="w-3.5 h-3.5" />
             <span>LASEMA (112)</span>
