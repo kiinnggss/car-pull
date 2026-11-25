@@ -16,6 +16,7 @@ import { AuthLanding } from '@/components/auth/AuthLanding';
 import { ChatHub } from '@/components/chat/ChatHub';
 import { ActionFeedbackBanner } from '@/components/common/ActionFeedbackBanner';
 import { applyThemeToDocument } from '@/lib/themes';
+import { subscribeToCorridorRealtime } from '@/lib/supabase/realtime';
 
 export default function Home() {
   const {
@@ -23,11 +24,35 @@ export default function Home() {
     setActiveTab,
     activeRole,
     isAuthenticated,
+    backendMode,
+    user,
+    hydrateSupabaseSession,
+    receiveRemoteChatMessage,
+    receiveRemoteMatchStatus,
     colorTheme,
     customAccentHex,
     transparentDock,
     activeThreadId,
   } = useAppStore();
+
+  useEffect(() => {
+    void hydrateSupabaseSession();
+  }, [hydrateSupabaseSession]);
+
+  useEffect(() => {
+    if (!isAuthenticated || backendMode !== 'supabase') return;
+    return subscribeToCorridorRealtime({
+      currentUserId: user.id,
+      onRemoteChat: receiveRemoteChatMessage,
+      onRemoteMatchStatus: ({ id, status }) => receiveRemoteMatchStatus(id, status),
+    });
+  }, [
+    isAuthenticated,
+    backendMode,
+    user.id,
+    receiveRemoteChatMessage,
+    receiveRemoteMatchStatus,
+  ]);
 
   useEffect(() => {
     applyThemeToDocument(colorTheme, customAccentHex, transparentDock);

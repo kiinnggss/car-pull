@@ -55,6 +55,15 @@ import {
   applyThemeToDocument,
 } from '../themes';
 import { filterAndRankDrivers } from '../routeMatching';
+import { isSupabaseConfigured } from '../supabase/client';
+import {
+  getActiveSupabaseSession,
+  persistRemoteChatMessage,
+  persistRemoteMatch,
+  persistRemoteMatchStatus,
+  signOutFromSupabase,
+  RemoteChatPayload,
+} from '../supabase/realtime';
 
 export interface EscrowTransaction {
   id: string;
@@ -69,6 +78,19 @@ export interface EscrowTransaction {
 interface AppState {
   // Authentication & Session
   isAuthenticated: boolean;
+  backendMode: 'local' | 'supabase';
+  supabaseUserId: string | null;
+  hydrateSupabaseSession: () => Promise<void>;
+  applySupabaseUser: (profile: {
+    userId: string;
+    email?: string;
+    fullName?: string;
+    employer?: string;
+    phone?: string;
+    role?: 'rider' | 'driver';
+  }) => void;
+  receiveRemoteChatMessage: (payload: RemoteChatPayload) => void;
+  receiveRemoteMatchStatus: (matchId: string, status: CommuteMatch['status']) => void;
   login: (emailOrPhone?: string, role?: 'rider' | 'driver') => void;
   logout: () => void;
   registerRider: (data: { fullName: string; email: string; phone: string; employer: string }) => void;
@@ -419,6 +441,87 @@ export const useAppStore = create<AppState>()(
     (set, get) => ({
   // Authentication & Session
   isAuthenticated: false,
+  backendMode: isSupabaseConfigured() ? 'supabase' : 'local',
+  supabaseUserId: null,
+  hydrateSupabaseSession: async () => {
+    if (!isSupabaseConfigured()) {
+      set({ backendMode: 'local', supabaseUserId: null });
+      return;
+    }
+    const session = await getActiveSupabaseSession();
+    if (session?.ok && session.userId) {
+      get().applySupabaseUser({
+        userId: session.userId,
+        email: session.email,
+        fullName: session.fullName,
+        employer: session.employer,
+        phone: session.phone,
+        role: session.role,
+      });
+    } else {
+      set({ backendMode: 'supabase', supabaseUserId: null });
+    }
+  },
+  applySupabaseUser: (profile) => {
+    set((state) => ({
+      isAuthenticated: true,
+      backendMode: 'supabase',
+      supabaseUserId: profile.userId,
+      activeRole: profile.role || state.activeRole,
+      user: {
+        ...state.user,
+        id: profile.userId,
+        email: profile.email || state.user.email,
+        fullName: profile.fullName || state.user.fullName,
+        employer: profile.employer || state.user.employer,
+        phoneNumber: profile.phone || state.user.phoneNumber,
+      },
+    }));
+  },
+  receiveRemoteChatMessage: (payload) => {
+    const state = get();
+    const exists = state.chatThreads.some(
+      (t) => t.id === payload.thread_id && t.messages.some((m) => m.id === payload.id)
+    );
+    if (exists) return;
+
+    const timeStr = new Date(payload.created_at || Date.now()).toLocaleTimeString('en-NG', {
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+    const incoming: ChatMessage = {
+      id: payload.id,
+      senderId: payload.sender_id,
+      senderName: payload.sender_name,
+      text: payload.body,
+      timestamp: timeStr,
+      isUser: false,
+      status: 'delivered',
+    };
+
+    const isViewing = state.activeThreadId === payload.thread_id && state.activeTab === 'chats';
+    const updatedThreads = state.chatThreads.map((t) =>
+      t.id === payload.thread_id
+        ? {
+            ...t,
+            lastMessage: payload.body,
+            lastMessageTimestamp: timeStr,
+            unreadCount: isViewing ? 0 : t.unreadCount + 1,
+            messages: [...t.messages, incoming],
+          }
+        : t
+    );
+
+    const totalUnread = updatedThreads.reduce((acc, curr) => acc + curr.unreadCount, 0);
+    set({ chatThreads: updatedThreads, unreadChatCount: totalUnread });
+  },
+  receiveRemoteMatchStatus: (matchId, status) => {
+    set((state) => ({
+      activeMatches: state.activeMatches.map((m) =>
+        m.id === matchId ? { ...m, status } : m
+      ),
+    }));
+  },
   login: (emailOrPhone, role) => {
     if (role) {
       set({ isAuthenticated: true, activeRole: role });
@@ -427,7 +530,10 @@ export const useAppStore = create<AppState>()(
     }
   },
   logout: () => {
-    set({ isAuthenticated: false, activeTab: 'deck' });
+    if (isSupabaseConfigured()) {
+      void signOutFromSupabase();
+    }
+    set({ isAuthenticated: false, supabaseUserId: null, activeTab: 'deck' });
   },
   registerRider: (data) => {
     set((state) => ({
@@ -805,6 +911,10 @@ export const useAppStore = create<AppState>()(
       heldEscrowNgn: state.heldEscrowNgn + agreedFare,
       escrowTransactions: [newTransaction, ...state.escrowTransactions],
     });
+
+    if (state.backendMode === 'supabase') {
+      void persistRemoteMatch(newMatch, escrowRef);
+    }
   },
 
   resetDeck: () => {
@@ -1477,7 +1587,12 @@ export const useAppStore = create<AppState>()(
 
     set({ chatThreads: updatedThreads });
 
-    // Simulate smart, contextual commuter reply after 1.2s
+    if (state.backendMode === 'supabase') {
+      void persistRemoteChatMessage(threadId, userMsg);
+      return;
+    }
+
+    // Simulate smart, contextual commuter reply after 1.2s in local sandbox mode
     setTimeout(() => {
       const lower = text.toLowerCase();
       let replyText = 'Sounds good! See you in a minute.';
@@ -1571,6 +1686,10 @@ export const useAppStore = create<AppState>()(
         ratingScore: Math.round(((state.user.ratingScore * state.user.tripsCompleted + rating) / (state.user.tripsCompleted + 1)) * 10) / 10,
       },
     });
+
+    if (state.backendMode === 'supabase') {
+      void persistRemoteMatchStatus(matchId, 'completed');
+    }
   },
 
   getOrCreateThreadForDriver: (driverData) => {
@@ -1759,6 +1878,7 @@ export const useAppStore = create<AppState>()(
       employer: ride.driverRole,
     });
 
+    const streetEscrowRef = `STREET-CP-${Date.now().toString().slice(-6)}`;
     set((s) => ({
       escrowBalanceNgn: newBalance,
       heldEscrowNgn: newHeld,
@@ -1769,7 +1889,7 @@ export const useAppStore = create<AppState>()(
           id: `tx-escrow-${Date.now()}`,
           type: 'HOLD_CARPOOL',
           amountNgn: fare,
-          reference: `STREET-CP-${Date.now().toString().slice(-6)}`,
+          reference: streetEscrowRef,
           description: `Escrow hold for ride with ${ride.driverName} (${ride.departureDay})`,
           timestamp: 'Just now',
           status: 'held',
@@ -1777,6 +1897,10 @@ export const useAppStore = create<AppState>()(
         ...s.escrowTransactions,
       ],
     }));
+
+    if (state.backendMode === 'supabase') {
+      void persistRemoteMatch(newMatch, streetEscrowRef);
+    }
 
     return threadId;
   },

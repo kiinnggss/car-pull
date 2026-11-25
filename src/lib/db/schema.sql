@@ -253,3 +253,55 @@ BEGIN
     ORDER BY final_score ASC;
 END;
 $$ LANGUAGE plpgsql;
+
+-- ============================================================================
+-- 11. REALTIME COMMUTER CHAT & SUPABASE MULTI-USER POLICIES
+-- ============================================================================
+
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    thread_id VARCHAR(120) NOT NULL,
+    sender_id VARCHAR(120) NOT NULL,
+    sender_name VARCHAR(150) NOT NULL,
+    body TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_chat_messages_thread_created
+    ON chat_messages (thread_id, created_at ASC);
+
+ALTER TABLE commute_matches ENABLE ROW LEVEL SECURITY;
+ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
+
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE tablename = 'commute_matches' AND policyname = 'Authenticated commuters manage matches'
+    ) THEN
+        CREATE POLICY "Authenticated commuters manage matches"
+            ON commute_matches FOR ALL
+            TO authenticated
+            USING (TRUE)
+            WITH CHECK (TRUE);
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_policies WHERE tablename = 'chat_messages' AND policyname = 'Authenticated commuters access chat'
+    ) THEN
+        CREATE POLICY "Authenticated commuters access chat"
+            ON chat_messages FOR ALL
+            TO authenticated
+            USING (TRUE)
+            WITH CHECK (TRUE);
+    END IF;
+END $$;
+
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_publication WHERE pubname = 'supabase_realtime') THEN
+        ALTER PUBLICATION supabase_realtime ADD TABLE commute_matches;
+        ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
+    END IF;
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;

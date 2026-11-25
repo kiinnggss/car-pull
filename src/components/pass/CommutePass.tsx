@@ -9,6 +9,8 @@ import {
   AlertTriangle,
   Car,
 } from 'lucide-react';
+import { openWhatsAppTripShare } from '@/lib/liveTracking';
+import { triggerHaptic } from '@/lib/haptics';
 
 export const CommutePass: React.FC = () => {
   const {
@@ -18,7 +20,8 @@ export const CommutePass: React.FC = () => {
     acceptedRiders,
     activeMatches,
     offlinePin,
-    commuteDirection,
+    selectedSafeZone,
+    showFeedbackBanner,
   } = useAppStore();
 
   const [currentTime, setCurrentTime] = useState('');
@@ -43,36 +46,42 @@ export const CommutePass: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const activeDriverName = activeRole === 'driver' ? user.fullName : (activeMatches[0]?.driverName || 'Babatunde Adeleke');
-  const activeVehiclePlate = activeRole === 'driver' ? driverVehicle.plate_number : 'APP-842-EY';
-  const activeVehicleModel = activeRole === 'driver' ? `${driverVehicle.make} ${driverVehicle.model}` : 'Toyota Camry (2021)';
+  const activeMatch = activeMatches[0];
+  const activeDriverName = activeRole === 'driver' ? user.fullName : (activeMatch?.driverName || 'Babatunde Adeleke');
+  const activeVehiclePlate = activeRole === 'driver'
+    ? driverVehicle.plate_number
+    : (activeMatch?.plateNumber || 'APP-842-EY');
+  const activeVehicleModel = activeRole === 'driver'
+    ? `${driverVehicle.make} ${driverVehicle.model}`
+    : (activeMatch?.vehicleMake && activeMatch?.vehicleModel
+        ? `${activeMatch.vehicleMake} ${activeMatch.vehicleModel}`
+        : 'Toyota Camry (2021)');
+  const activePickupHub = activeMatch?.pickupSafeZone?.name || selectedSafeZone?.name || 'TotalEnergies Safe Hub, Ajah';
 
   const sharePassWhatsApp = () => {
-    const text = `*LAGOS STATE NON-COMMERCIAL COMMUTE CERTIFICATE*
-Statutory Authority: Lagos State Transport Sector Reform Law 2018 (Cap T1, Section 44)
-Status: Verified Non-Commercial Carpool (Exempt from Commercial Taxi Licensing)
+    triggerHaptic('tap');
+    const result = openWhatsAppTripShare({
+      driverName: activeDriverName,
+      plateNumber: activeVehiclePlate,
+      vehicleModel: activeVehicleModel,
+      pickupHub: activePickupHub,
+      boardingPin: offlinePin,
+      scheduledFor: activeMatch?.scheduledFor || currentTime,
+      corridorLabel: 'Lagos Sec 44 Verified Carpool',
+    });
 
-• Vehicle: ${activeVehicleModel} | Plate: *${activeVehiclePlate}*
-• Driver: ${activeDriverName} (${user.employer})
-• Security PIN: ${offlinePin}
-• Audit Timestamp: ${currentTime}
-
-Manifest:
-• Driver: ${activeDriverName} (NIN/BVN Verified)
-${acceptedRiders.length > 0 ? acceptedRiders.map((r, i) => `• Co-Rider ${i + 1}: ${r.name} (${r.employer})`).join('\n') : '• Co-Rider: Femi Adeyemi (Dangote Group)'}
-
-Zero-Profit Audit: Fuel split capped at 1.2x PMS consumption. Not for hire.
-Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
-
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(text);
+    if (result.copied) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
     }
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    if (typeof window !== 'undefined') {
-      window.open(url, '_blank');
-    }
+
+    showFeedbackBanner(
+      'Live Trip Shared',
+      result.copied
+        ? `Copied & opened in WhatsApp · ${activeVehiclePlate}`
+        : `Opened live pass in WhatsApp · ${activeVehiclePlate}`,
+      'WHATSAPP'
+    );
   };
 
   return (
@@ -225,7 +234,7 @@ Emergency Hotlines: LASTMA: 0800-00-LASTMA | LASEMA: 112 / 767`;
           className="w-full py-3.5 btn-electric-mint font-extrabold text-xs rounded-full active-press flex items-center justify-center gap-2"
         >
           <Share2 className="w-4 h-4" />
-          <span>{copied ? 'Pass Copied to Clipboard' : 'Share Pass on WhatsApp'}</span>
+          <span>{copied ? 'Live Trip Copied & Shared' : 'Share Live Trip on WhatsApp'}</span>
         </button>
 
         <div className="grid grid-cols-2 gap-2 text-[11px]">

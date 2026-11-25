@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { formatNgn } from '@/lib/utils';
 import {
@@ -20,6 +20,11 @@ import {
 import { IcebreakerChatModal } from './IcebreakerChatModal';
 import { CommuteMatch } from '@/lib/types';
 import { triggerHaptic } from '@/lib/haptics';
+import {
+  estimateEtaMinutes,
+  formatEtaLabel,
+  openWhatsAppTripShare,
+} from '@/lib/liveTracking';
 
 export const MatchesList: React.FC = () => {
   const {
@@ -37,6 +42,33 @@ export const MatchesList: React.FC = () => {
   } = useAppStore();
 
   const [activeChatMatch, setActiveChatMatch] = useState<CommuteMatch | null>(null);
+  const [liveProgressByMatch, setLiveProgressByMatch] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLiveProgressByMatch((prev) => {
+        const next = { ...prev };
+        let changed = false;
+        activeMatches.forEach((m, idx) => {
+          if (m.status === 'completed') {
+            if (next[m.id] !== 1) {
+              next[m.id] = 1;
+              changed = true;
+            }
+            return;
+          }
+          const fallback = 0.36 + ((idx * 0.14) % 0.32);
+          const current = typeof next[m.id] === 'number' ? next[m.id] : fallback;
+          const stepped = current >= 0.96 ? 0.36 : Math.min(0.96, current + 0.03);
+          next[m.id] = stepped;
+          changed = true;
+        });
+        return changed ? next : prev;
+      });
+    }, 2000);
+
+    return () => clearInterval(interval);
+  }, [activeMatches]);
 
   const handleConfirmBoarding = (matchId: string) => {
     triggerHaptic('success');
@@ -52,14 +84,27 @@ export const MatchesList: React.FC = () => {
     driverName: string,
     plateNumber: string,
     safeZoneName: string,
-    scheduledFor: string
+    scheduledFor: string,
+    vehicleModel: string,
+    etaLabel?: string
   ) => {
     triggerHaptic('tap');
-    const text = `*CAR PULL - LIVE RIDE MANIFEST*\n• Driver: ${driverName}\n• Plate: *${plateNumber}*\n• Pickup Hub: ${safeZoneName}\n• Departure: ${scheduledFor}\n• Boarding PIN: *${offlinePin}*\n• Protected under Lagos Sec 44 Non-Commercial Carpool`;
-    const url = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    if (typeof window !== 'undefined') {
-      window.open(url, '_blank');
-    }
+    const result = openWhatsAppTripShare({
+      driverName,
+      plateNumber,
+      vehicleModel,
+      pickupHub: safeZoneName,
+      scheduledFor,
+      etaLabel,
+      boardingPin: offlinePin,
+    });
+    showFeedbackBanner(
+      'Live Trip Shared',
+      result.copied
+        ? `Manifest copied & opened in WhatsApp · ${plateNumber}`
+        : `Opened live manifest in WhatsApp · ${plateNumber}`,
+      'WHATSAPP'
+    );
   };
 
   if (activeMatches.length === 0) {
@@ -126,6 +171,10 @@ export const MatchesList: React.FC = () => {
             match.vehicleMake && match.vehicleModel
               ? `${match.vehicleMake} ${match.vehicleModel}`
               : 'Verified Corridor Sedan';
+          const progress = isCompleted ? 1 : liveProgressByMatch[match.id] ?? 0.48;
+          const progressPct = Math.round(progress * 100);
+          const etaMinutes = isCompleted ? 0 : estimateEtaMinutes(11, progress);
+          const etaLabel = isCompleted ? 'Completed' : formatEtaLabel(etaMinutes);
 
           return (
             <div
@@ -136,9 +185,14 @@ export const MatchesList: React.FC = () => {
               <div className="bg-[#0B0C0E] dark:bg-[#1E2028] rounded-[24px] p-4 text-white space-y-3 relative overflow-hidden">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent-signal)] font-bold block">
-                      {isCompleted ? 'TRIP COMPLETED' : 'EN ROUTE TO SAFE HUB'}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      {!isCompleted && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      )}
+                      <span className="text-[10px] font-mono uppercase tracking-wider text-[var(--accent-signal)] font-bold">
+                        {isCompleted ? 'TRIP COMPLETED' : `LIVE · ${etaLabel.toUpperCase()}`}
+                      </span>
+                    </div>
                     <h4 className="text-sm font-display font-black text-white mt-0.5">
                       {match.driverName} •{' '}
                       <span className="text-[#FF9F0A] font-mono text-xs">{plateLabel}</span>
@@ -166,13 +220,12 @@ export const MatchesList: React.FC = () => {
                 <div className="pt-2 pb-1">
                   <div className="relative h-1.5 w-full rounded-full bg-white/20 flex items-center">
                     <div
-                      className={`h-full rounded-full bg-[var(--accent-signal)] transition-all duration-500 ${
-                        isCompleted ? 'w-full' : 'w-[58%]'
-                      }`}
+                      style={{ width: `${progressPct}%` }}
+                      className="h-full rounded-full bg-[var(--accent-signal)] transition-all duration-1000 ease-linear"
                     />
                     <div
-                      style={{ left: isCompleted ? '88%' : '54%' }}
-                      className="absolute -translate-x-1/2 w-9 h-4.5 rounded-full bg-white text-[#0B0C0E] shadow-md flex items-center justify-center border border-[#0B0C0E]"
+                      style={{ left: `${Math.min(92, Math.max(8, progressPct))}%` }}
+                      className="absolute -translate-x-1/2 w-9 h-4.5 rounded-full bg-white text-[#0B0C0E] shadow-md flex items-center justify-center border border-[#0B0C0E] transition-all duration-1000 ease-linear"
                     >
                       <Car className="w-3 h-3 fill-current" />
                     </div>
@@ -240,9 +293,13 @@ export const MatchesList: React.FC = () => {
                       match.driverName,
                       plateLabel,
                       safeZoneLabel,
-                      match.scheduledFor
+                      match.scheduledFor,
+                      vehicleLabel,
+                      etaLabel
                     )
                   }
+                  aria-label="Share live trip on WhatsApp"
+                  title="Share live trip on WhatsApp"
                   className="py-2 px-2 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] text-[11px] font-bold flex items-center justify-center gap-1 active-press"
                 >
                   <Share2 className="w-3.5 h-3.5 text-emerald-500" />

@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { ThemeSwitcherModal } from '@/components/common/ThemeSwitcherModal';
+import { isSupabaseConfigured } from '@/lib/supabase/client';
+import { signInWithSupabase, signUpWithSupabase } from '@/lib/supabase/realtime';
 import {
   Zap,
   Car,
@@ -18,7 +20,8 @@ import {
 } from 'lucide-react';
 
 export const AuthLanding: React.FC = () => {
-  const { login, registerRider, registerDriver } = useAppStore();
+  const { login, registerRider, registerDriver, applySupabaseUser, showFeedbackBanner } = useAppStore();
+  const supabaseLive = isSupabaseConfigured();
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [signupRole, setSignupRole] = useState<'rider' | 'driver'>('rider');
@@ -42,24 +45,85 @@ export const AuthLanding: React.FC = () => {
   const [hasAc, setHasAc] = useState(true);
 
   const [error, setError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSignIn = (e: React.FormEvent) => {
+  const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!signInIdentifier.trim()) {
       setError('Enter your work email or phone number.');
       return;
     }
     setError('');
+
+    if (supabaseLive) {
+      if (!signInIdentifier.includes('@') || !signInPassword.trim()) {
+        setError('Supabase sign-in requires your email and password.');
+        return;
+      }
+      setIsSubmitting(true);
+      const res = await signInWithSupabase(signInIdentifier.trim(), signInPassword);
+      setIsSubmitting(false);
+      if (!res.ok || !res.userId) {
+        setError(res.error || 'Could not sign in with Supabase.');
+        return;
+      }
+      applySupabaseUser({
+        userId: res.userId,
+        email: res.email,
+        fullName: res.fullName,
+        employer: res.employer,
+        phone: res.phone,
+        role: res.role,
+      });
+      showFeedbackBanner('Supabase Connected', 'Live corridor sync active', 'REALTIME');
+      return;
+    }
+
     login(signInIdentifier.trim(), 'rider');
   };
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !email.trim() || !phone.trim()) {
       setError('Complete your name, work email, and phone number.');
       return;
     }
+    if (signupRole === 'driver' && !plateNumber.trim()) {
+      setError('Enter your vehicle plate number.');
+      return;
+    }
     setError('');
+
+    if (supabaseLive) {
+      if (!password.trim() || password.length < 6) {
+        setError('Set a password of at least 6 characters for Supabase Auth.');
+        return;
+      }
+      setIsSubmitting(true);
+      const res = await signUpWithSupabase({
+        email: email.trim(),
+        password,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        employer: employer.trim() || (signupRole === 'driver' ? 'Verified Corporate Driver' : 'Verified Corporate Member'),
+        role: signupRole,
+      });
+      setIsSubmitting(false);
+      if (!res.ok || !res.userId) {
+        setError(res.error || 'Could not create Supabase account.');
+        return;
+      }
+      applySupabaseUser({
+        userId: res.userId,
+        email: res.email,
+        fullName: res.fullName,
+        employer: res.employer,
+        phone: res.phone,
+        role: res.role,
+      });
+      showFeedbackBanner('Account Verified', 'Synced to Supabase Realtime', 'LIVE');
+      return;
+    }
 
     if (signupRole === 'rider') {
       registerRider({
@@ -69,10 +133,6 @@ export const AuthLanding: React.FC = () => {
         employer: employer.trim() || 'Verified Corporate Member',
       });
     } else {
-      if (!plateNumber.trim()) {
-        setError('Enter your vehicle plate number.');
-        return;
-      }
       registerDriver({
         fullName: fullName.trim(),
         email: email.trim(),
@@ -106,8 +166,12 @@ export const AuthLanding: React.FC = () => {
           {/* Top Row: Brand Pill & Theme Switcher */}
           <div className="flex items-center justify-between relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-bold tracking-wider uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent-primary)] animate-pulse" />
-              CAR PULL · SEC 44
+              <span
+                className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                  supabaseLive ? 'bg-emerald-500' : 'bg-[var(--accent-primary)]'
+                }`}
+              />
+              {supabaseLive ? 'CAR PULL · SUPABASE LIVE' : 'CAR PULL · SEC 44'}
             </div>
 
             <button
@@ -282,9 +346,10 @@ export const AuthLanding: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press"
+                disabled={isSubmitting}
+                className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press disabled:opacity-60"
               >
-                <span>Continue to Corridor</span>
+                <span>{isSubmitting ? 'Connecting...' : 'Continue to Corridor'}</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>
@@ -424,9 +489,16 @@ export const AuthLanding: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press"
+                disabled={isSubmitting}
+                className="w-full py-3.5 btn-electric-mint text-xs font-extrabold rounded-full flex items-center justify-center gap-2 active-press disabled:opacity-60"
               >
-                <span>{signupRole === 'driver' ? 'Launch Driver Deck' : 'Join Corridor'}</span>
+                <span>
+                  {isSubmitting
+                    ? 'Creating Account...'
+                    : signupRole === 'driver'
+                      ? 'Launch Driver Deck'
+                      : 'Join Corridor'}
+                </span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             </form>

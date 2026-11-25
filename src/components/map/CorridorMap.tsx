@@ -18,6 +18,12 @@ import {
 } from 'lucide-react';
 import { formatNgn } from '@/lib/utils';
 import { triggerHaptic } from '@/lib/haptics';
+import {
+  interpolateAlongPolyline,
+  estimateEtaMinutes,
+  formatEtaLabel,
+  parseBaseEtaMinutes,
+} from '@/lib/liveTracking';
 import type * as Leaflet from 'leaflet';
 
 interface CorridorMapProps {
@@ -28,7 +34,9 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Leaflet.Map | null>(null);
   const markersRef = useRef<{ [key: string]: Leaflet.Layer }>({});
+  const driverMarkersRef = useRef<{ [key: string]: Leaflet.Marker }>({});
   const polylinesRef = useRef<Leaflet.Layer[]>([]);
+  const rideProgressRef = useRef<Record<string, number>>({});
 
   const {
     userStreet,
@@ -55,6 +63,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
   const [searchStreetText, setSearchStreetText] = useState('');
   const [isLocating, setIsLocating] = useState(false);
   const [bookedSuccessRide, setBookedSuccessRide] = useState<StreetCarpoolRide | null>(null);
+  const [rideProgress, setRideProgress] = useState<Record<string, number>>({});
 
   const filteredRides = useMemo(() => {
     return everydayRides.filter((ride) => {
@@ -88,6 +97,33 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       setSelectedRide(nearest);
     }
   }, [filteredRides, selectedRide]);
+
+  // Step driver markers smoothly along their corridor polylines with a live ticking ETA
+  useEffect(() => {
+    if (filteredRides.length === 0) return;
+
+    const interval = setInterval(() => {
+      const next: Record<string, number> = { ...rideProgressRef.current };
+      filteredRides.forEach((ride, idx) => {
+        const fallback = 0.08 + ((idx * 0.17) % 0.45);
+        const current = typeof next[ride.id] === 'number' ? next[ride.id] : fallback;
+        const stepped = current + 0.035;
+        const wrapped = stepped >= 0.96 ? 0.05 : stepped;
+        next[ride.id] = wrapped;
+
+        const marker = driverMarkersRef.current[ride.id];
+        if (marker && ride.routePath.length > 1) {
+          const [lat, lng] = interpolateAlongPolyline(ride.routePath, wrapped);
+          marker.setLatLng([lat, lng]);
+        }
+      });
+
+      rideProgressRef.current = next;
+      setRideProgress({ ...next });
+    }, 1500);
+
+    return () => clearInterval(interval);
+  }, [filteredRides]);
 
   useEffect(() => {
     if (mapInstanceRef.current) {
@@ -173,6 +209,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
 
     Object.values(markersRef.current).forEach((m) => m.remove());
     markersRef.current = {};
+    driverMarkersRef.current = {};
 
     const userCoords: [number, number] = [userStreet.coordinates.lat, userStreet.coordinates.lng];
 
@@ -234,7 +271,8 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
       });
       polylinesRef.current.push(polyline);
 
-      const driverCoords = ride.routePath[0];
+      const progress = rideProgressRef.current[ride.id] ?? 0.12;
+      const driverCoords = interpolateAlongPolyline(ride.routePath, progress);
       const vehicleHtml = `
         <div class="relative flex flex-col items-center cursor-pointer transform hover:scale-110 transition-transform">
           ${isSelected ? '<span class="absolute -inset-2 rounded-full bg-[var(--accent-primary)]/60 animate-ping"></span>' : ''}
@@ -261,6 +299,7 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         setSelectedRider(null);
       });
       markersRef.current[`driver-${ride.id}`] = driverMarker;
+      driverMarkersRef.current[ride.id] = driverMarker;
     });
 
     neighborhoodRiders.forEach((rider) => {
@@ -504,8 +543,30 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                     {selectedRide.destination}
                   </span>
                   <span className="text-[10px] font-mono font-bold text-[#FF9F0A] flex-shrink-0 flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     <Clock className="w-3 h-3" />
-                    {selectedRide.departureTime.replace('Leaving in ', '')}
+                    {formatEtaLabel(
+                      estimateEtaMinutes(
+                        parseBaseEtaMinutes(
+                          selectedRide.departureTime,
+                          Math.max(5, selectedRide.pickupWalkMinutes + 5)
+                        ),
+                        rideProgress[selectedRide.id] ?? 0.12
+                      )
+                    )}
+                  </span>
+                </div>
+
+                {/* Live Corridor Movement Bar */}
+                <div className="pt-1 flex items-center gap-2">
+                  <div className="flex-1 h-1.5 rounded-full bg-[var(--bg-sheet)] overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-1000 ease-linear"
+                      style={{ width: `${Math.round((rideProgress[selectedRide.id] ?? 0.12) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-[9px] font-mono font-bold text-[var(--text-secondary)] tabular-nums">
+                    LIVE {Math.round((rideProgress[selectedRide.id] ?? 0.12) * 100)}%
                   </span>
                 </div>
               </div>
