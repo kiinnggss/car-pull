@@ -3,7 +3,7 @@
 import React from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
 import { formatNgn, calculateTripCost } from '@/lib/utils';
-import { Minus, Plus, X, RotateCcw, Check } from 'lucide-react';
+import { Minus, Plus, X } from 'lucide-react';
 import { triggerHaptic } from '@/lib/haptics';
 
 interface QuickBidPillsProps {
@@ -12,7 +12,7 @@ interface QuickBidPillsProps {
 }
 
 export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onReject, onAccept }) => {
-  const { currentDriver, customBidNgn, adjustBid, resetDeck, riderRoute } = useAppStore();
+  const { currentDriver, customBidNgn, adjustBid, riderRoute } = useAppStore();
 
   if (!currentDriver) return null;
 
@@ -29,97 +29,50 @@ export const QuickBidPills: React.FC<QuickBidPillsProps> = ({ onReject, onAccept
   };
 
   return (
-    <div className="w-full flex items-center gap-2 pt-2.5 select-none">
-      {/* Rewind Deck */}
-      <button
-        onClick={() => {
-          triggerHaptic('tap');
-          resetDeck();
-        }}
-        className="w-11 h-11 rounded-xl border flex items-center justify-center active-press flex-shrink-0"
-        style={{
-          backgroundColor: 'var(--bg-sheet)',
-          borderColor: 'var(--border-subtle)',
-          color: 'var(--text-secondary)',
-        }}
-        title="Rewind Deck"
-        aria-label="Rewind Deck"
-      >
-        <RotateCcw className="w-4 h-4" />
-      </button>
-
-      {/* Pass */}
+    <div className="w-full flex items-center justify-between gap-3 px-2 pt-3 pb-1 select-none">
+      {/* Left: Pass */}
       <button
         onClick={onReject}
-        className="w-11 h-11 rounded-xl border flex items-center justify-center active-press flex-shrink-0 hover:bg-red-600 hover:text-white hover:border-red-600 transition-colors"
-        style={{
-          backgroundColor: 'var(--bg-sheet)',
-          borderColor: 'var(--border-subtle)',
-          color: 'var(--text-primary)',
-        }}
-        title="Pass on Ride"
-        aria-label="Pass on Ride"
+        className="p-2 text-[var(--text-secondary)] hover:text-red-600 active-press"
+        title="Pass"
+        aria-label="Pass"
       >
-        <X className="w-4 h-4 stroke-[2.2]" />
+        <X className="w-5 h-5 stroke-[2]" />
       </button>
 
-      {/* Clean Fare Stepper */}
-      <div
-        className="flex-1 h-11 rounded-xl px-1.5 flex items-center justify-between border"
-        style={{
-          backgroundColor: 'var(--bg-sheet)',
-          borderColor: 'var(--border-subtle)',
-        }}
-      >
+      {/* Center: Clean Fare Stepper */}
+      <div className="flex items-center gap-3">
         <button
           type="button"
           onClick={() => handleAdjust(-200)}
           disabled={customBidNgn <= 500}
-          className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30 active-press"
-          style={{
-            backgroundColor: 'var(--bg-subtle)',
-            color: 'var(--text-primary)',
-          }}
-          title="Decrease split by ₦200"
+          className="p-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-25 active-press"
+          title="Decrease by ₦200"
         >
-          <Minus className="w-3.5 h-3.5" />
+          <Minus className="w-4 h-4" />
         </button>
 
-        <div className="text-center px-1">
-          <span className="text-sm font-bold font-mono tabular-nums block leading-none">
-            {formatNgn(customBidNgn)}
-          </span>
-          <span
-            className="text-[9px] font-medium block mt-0.5"
-            style={{ color: 'var(--text-secondary)' }}
-          >
-            {customBidNgn >= statutoryMaxSeatBidNgn ? 'Max cap' : 'Fuel split'}
-          </span>
-        </div>
+        <span className="text-base font-bold font-mono tabular-nums min-w-[66px] text-center text-[var(--text-primary)]">
+          {formatNgn(customBidNgn)}
+        </span>
 
         <button
           type="button"
           onClick={() => handleAdjust(200)}
           disabled={customBidNgn >= statutoryMaxSeatBidNgn}
-          className="w-8 h-8 rounded-lg flex items-center justify-center disabled:opacity-30 active-press"
-          style={{
-            backgroundColor: 'var(--bg-subtle)',
-            color: 'var(--text-primary)',
-          }}
-          title="Increase split by ₦200"
+          className="p-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-25 active-press"
+          title="Increase by ₦200"
         >
-          <Plus className="w-3.5 h-3.5" />
+          <Plus className="w-4 h-4" />
         </button>
       </div>
 
-      {/* Primary Book CTA */}
+      {/* Right: Book */}
       <button
         onClick={onAccept}
-        className="h-11 px-4 btn-electric-mint flex items-center justify-center gap-1.5 text-xs active-press flex-shrink-0"
-        title="Reserve Seat & Hold Escrow"
+        className="h-10 px-6 btn-electric-mint text-xs active-press flex-shrink-0"
       >
-        <Check className="w-4 h-4 stroke-[2.5]" />
-        <span>Book</span>
+        Book
       </button>
     </div>
   );

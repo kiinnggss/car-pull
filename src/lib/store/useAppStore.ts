@@ -1465,8 +1465,8 @@ export const useAppStore = create<AppState>()(
   },
 
   // Theme Mode & Multi-Theme Appearance
-  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'dark') ? 'dark' : 'light',
-  colorTheme: 'clean-daylight',
+  theme: (typeof window !== 'undefined' && localStorage.getItem('carpull_theme') === 'light') ? 'light' : 'dark',
+  colorTheme: 'midnight-cobalt',
   customAccentHex: null,
   transparentDock: true,
   matchFeedbackStyle: 'ticket',

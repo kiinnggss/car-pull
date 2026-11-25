@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppStore } from '@/lib/store/useAppStore';
-import {
-  ShieldCheck,
-  PhoneCall,
-  Share2,
-  AlertTriangle,
-  Car,
-} from 'lucide-react';
+import { PhoneCall, Share2 } from 'lucide-react';
 import { openWhatsAppTripShare } from '@/lib/liveTracking';
 import { triggerHaptic } from '@/lib/haptics';
 
@@ -17,7 +11,6 @@ export const CommutePass: React.FC = () => {
     user,
     activeRole,
     driverVehicle,
-    acceptedRiders,
     activeMatches,
     offlinePin,
     selectedSafeZone,
@@ -37,7 +30,7 @@ export const CommutePass: React.FC = () => {
           month: 'short',
           year: 'numeric',
         }) +
-          ' ' +
+          ' · ' +
           now.toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
       );
     };
@@ -85,162 +78,124 @@ export const CommutePass: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[404px] mx-auto pb-20 px-3.5 space-y-3.5 animate-in fade-in pt-2">
-      {/* 1. Scannable QR Certificate Card */}
-      <div className="bg-[#0F172A] dark:bg-[#131924] rounded-2xl p-4 text-white space-y-3.5 border border-[var(--border-subtle)] shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
-              LAGOS TRANSPORT REFORM ACT
-            </span>
-            <h2 className="text-base font-display font-black text-white mt-0.5">
-              Sec 44 Commute Pass
-            </h2>
-          </div>
-
-          <span className="px-3 py-1 rounded-full bg-white text-[#0B0C0E] text-[10px] font-mono font-black flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#3B82F6] animate-ping" />
-            EXEMPT
-          </span>
-        </div>
-
-        {/* Scannable QR & Token Row */}
-        <div className="p-4 rounded-[24px] bg-[#1E2028] flex items-center gap-4">
-          <div className="bg-white p-2.5 rounded-2xl flex-shrink-0">
-            <svg
-              viewBox="0 0 120 120"
-              className="w-22 h-22 text-[#0B0C0E] fill-current"
-              shapeRendering="crispEdges"
-            >
-              <rect x="10" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="15" width="20" height="20" fill="#FFFFFF" />
-              <rect x="20" y="20" width="10" height="10" fill="#0B0C0E" />
-
-              <rect x="80" y="10" width="30" height="30" fill="#0B0C0E" />
-              <rect x="85" y="15" width="20" height="20" fill="#FFFFFF" />
-              <rect x="90" y="20" width="10" height="10" fill="#0B0C0E" />
-
-              <rect x="10" y="80" width="30" height="30" fill="#0B0C0E" />
-              <rect x="15" y="85" width="20" height="20" fill="#FFFFFF" />
-              <rect x="20" y="90" width="10" height="10" fill="#0B0C0E" />
-
-              <rect x="45" y="15" width="5" height="5" />
-              <rect x="55" y="15" width="15" height="5" />
-              <rect x="45" y="25" width="10" height="5" />
-              <rect x="65" y="25" width="5" height="5" />
-              <rect x="45" y="35" width="25" height="5" />
-
-              <rect x="15" y="45" width="15" height="5" />
-              <rect x="35" y="45" width="10" height="5" />
-              <rect x="55" y="45" width="5" height="5" />
-              <rect x="70" y="45" width="15" height="5" />
-              <rect x="95" y="45" width="15" height="5" />
-
-              <rect x="15" y="55" width="5" height="5" />
-              <rect x="25" y="55" width="20" height="5" />
-              <rect x="55" y="55" width="15" height="5" />
-              <rect x="80" y="55" width="10" height="5" />
-              <rect x="100" y="55" width="10" height="5" />
-
-              <rect x="15" y="65" width="20" height="5" />
-              <rect x="45" y="65" width="10" height="5" />
-              <rect x="65" y="65" width="20" height="5" />
-              <rect x="95" y="65" width="15" height="5" />
-
-              <rect x="45" y="85" width="15" height="5" />
-              <rect x="70" y="85" width="5" height="5" />
-              <rect x="85" y="85" width="20" height="5" />
-              <rect x="45" y="95" width="5" height="5" />
-              <rect x="60" y="95" width="25" height="5" />
-              <rect x="95" y="95" width="10" height="5" />
-            </svg>
-          </div>
-
-          <div className="space-y-1.5 min-w-0">
-            <span className="text-[9px] font-mono uppercase tracking-widest text-[var(--accent-signal)] font-bold block">
-              STATUTORY AUDIT TOKEN
-            </span>
-            <div className="text-xs font-mono font-black text-white tracking-wider">
-              LASG-CP-8921-2026
-            </div>
-            <p className="text-[10.5px] text-white/70 leading-snug">
-              Present to LASTMA or Police Officer for instant Section 44 exemption verification.
-            </p>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 text-[10px] font-mono">
-              <span className="text-white/60">PIN:</span>
-              <strong className="text-white font-black tracking-widest">{offlinePin}</strong>
-            </div>
-          </div>
-        </div>
-
-        {/* Live Telemetry Clock Pill */}
-        <div className="px-4 py-2.5 rounded-full bg-white/8 flex items-center justify-between text-[10px] font-mono tabular-nums">
-          <span className="text-[var(--accent-signal)] font-bold">LIVE AUDIT CLOCK</span>
-          <span className="text-white font-bold">{currentTime}</span>
-        </div>
-      </div>
-
-      {/* 2. 2-Column Manifest Tiles */}
-      <div className="grid grid-cols-2 gap-2.5">
-        <div className="volt-surface rounded-2xl p-3.5 flex flex-col justify-between min-h-[96px]">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-semibold opacity-75">
-              Vehicle
-            </span>
-            <Car className="w-4 h-4" />
-          </div>
-          <div>
-            <span className="text-xs font-bold block truncate">
-              {activeVehicleModel}
-            </span>
-            <span className="inline-block mt-1 px-2 py-0.5 rounded-md bg-[var(--bg-sheet)] text-[var(--text-primary)] font-mono text-[10px] font-bold">
-              {activeVehiclePlate}
-            </span>
-          </div>
-        </div>
-
-        <div className="floating-surface rounded-2xl p-3.5 flex flex-col justify-between min-h-[96px]">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono uppercase font-semibold text-[var(--text-secondary)]">
-              Commercial profit
-            </span>
-            <ShieldCheck className="w-4 h-4 text-[var(--text-primary)] dark:text-[var(--accent-primary)]" />
-          </div>
-          <div>
-            <span className="text-base font-bold font-mono tabular-nums text-[var(--text-primary)] block">
-              ₦0.00
-            </span>
-            <span className="text-[11px] text-[var(--text-secondary)] font-medium block mt-0.5">
-              1.2x PMS fuel cap only
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Statutory Notice & Actions Sheet */}
-      <div className="floating-surface rounded-2xl p-4 space-y-3">
-        <div className="p-3 rounded-xl bg-[#F59E0B]/12 text-[11px] text-[var(--text-primary)] space-y-1">
-          <div className="flex items-center gap-1.5 font-mono font-bold text-xs text-[#D97706] dark:text-[#FBBF24]">
-            <AlertTriangle className="w-4 h-4 flex-shrink-0" />
-            <span>Statutory notice to officers</span>
-          </div>
-          <p className="leading-relaxed text-[var(--text-secondary)]">
-            Under <strong>Lagos State Transport Sector Reform Law (Cap T1, Section 44)</strong>, corporate cost-sharing commuters are exempt from hackney permits and union tickets.
+    <div className="w-full pb-20 px-5 pt-4 space-y-6 animate-in fade-in">
+      {/* Header */}
+      <div className="flex items-baseline justify-between pb-3 border-b border-[var(--border-subtle)]">
+        <div>
+          <h2 className="text-xl font-display font-bold text-[var(--text-primary)]">
+            Commute Pass
+          </h2>
+          <p className="text-xs text-[var(--text-secondary)] mt-0.5">
+            Verified non-commercial carpool
           </p>
         </div>
+        <span className="text-xs font-mono font-semibold" style={{ color: 'var(--accent-signal)' }}>
+          Active
+        </span>
+      </div>
 
+      {/* Centered Clean QR Code */}
+      <div className="flex flex-col items-center text-center py-2 space-y-3">
+        <div className="bg-white p-3 rounded-xl border border-[var(--border-subtle)]">
+          <svg
+            viewBox="0 0 120 120"
+            className="w-36 h-36 text-[#0F172A] fill-current"
+            shapeRendering="crispEdges"
+          >
+            <rect x="10" y="10" width="30" height="30" fill="#0F172A" />
+            <rect x="15" y="15" width="20" height="20" fill="#FFFFFF" />
+            <rect x="20" y="20" width="10" height="10" fill="#0F172A" />
+
+            <rect x="80" y="10" width="30" height="30" fill="#0F172A" />
+            <rect x="85" y="15" width="20" height="20" fill="#FFFFFF" />
+            <rect x="90" y="20" width="10" height="10" fill="#0F172A" />
+
+            <rect x="10" y="80" width="30" height="30" fill="#0F172A" />
+            <rect x="15" y="85" width="20" height="20" fill="#FFFFFF" />
+            <rect x="20" y="90" width="10" height="10" fill="#0F172A" />
+
+            <rect x="45" y="15" width="5" height="5" />
+            <rect x="55" y="15" width="15" height="5" />
+            <rect x="45" y="25" width="10" height="5" />
+            <rect x="65" y="25" width="5" height="5" />
+            <rect x="45" y="35" width="25" height="5" />
+
+            <rect x="15" y="45" width="15" height="5" />
+            <rect x="35" y="45" width="10" height="5" />
+            <rect x="55" y="45" width="5" height="5" />
+            <rect x="70" y="45" width="15" height="5" />
+            <rect x="95" y="45" width="15" height="5" />
+
+            <rect x="15" y="55" width="5" height="5" />
+            <rect x="25" y="55" width="20" height="5" />
+            <rect x="55" y="55" width="15" height="5" />
+            <rect x="80" y="55" width="10" height="5" />
+            <rect x="100" y="55" width="10" height="5" />
+
+            <rect x="15" y="65" width="20" height="5" />
+            <rect x="45" y="65" width="10" height="5" />
+            <rect x="65" y="65" width="20" height="5" />
+            <rect x="95" y="65" width="15" height="5" />
+
+            <rect x="45" y="85" width="15" height="5" />
+            <rect x="70" y="85" width="5" height="5" />
+            <rect x="85" y="85" width="20" height="5" />
+            <rect x="45" y="95" width="5" height="5" />
+            <rect x="60" y="95" width="25" height="5" />
+            <rect x="95" y="95" width="10" height="5" />
+          </svg>
+        </div>
+
+        <div className="space-y-0.5">
+          <div className="text-sm font-mono font-bold tracking-wider text-[var(--text-primary)]">
+            LASG-CP-8921-2026
+          </div>
+          <div className="text-xs font-mono text-[var(--text-secondary)]">
+            Boarding PIN <strong className="text-[var(--text-primary)]">{offlinePin}</strong>
+          </div>
+        </div>
+      </div>
+
+      {/* Hairline Key-Value Manifest */}
+      <dl className="divide-y divide-[var(--border-subtle)] border-t border-b border-[var(--border-subtle)] text-xs">
+        <div className="py-2.5 flex items-center justify-between gap-4">
+          <dt className="text-[var(--text-secondary)]">Driver</dt>
+          <dd className="font-semibold text-[var(--text-primary)] truncate">{activeDriverName}</dd>
+        </div>
+        <div className="py-2.5 flex items-center justify-between gap-4">
+          <dt className="text-[var(--text-secondary)]">Vehicle</dt>
+          <dd className="font-semibold text-[var(--text-primary)] truncate">
+            {activeVehicleModel} · <span className="font-mono">{activeVehiclePlate}</span>
+          </dd>
+        </div>
+        <div className="py-2.5 flex items-center justify-between gap-4">
+          <dt className="text-[var(--text-secondary)]">Pickup hub</dt>
+          <dd className="font-semibold text-[var(--text-primary)] truncate">{activePickupHub}</dd>
+        </div>
+        <div className="py-2.5 flex items-center justify-between gap-4">
+          <dt className="text-[var(--text-secondary)]">Fare type</dt>
+          <dd className="font-semibold text-[var(--text-primary)]">Shared fuel cost</dd>
+        </div>
+        <div className="py-2.5 flex items-center justify-between gap-4">
+          <dt className="text-[var(--text-secondary)]">Time</dt>
+          <dd className="font-mono tabular-nums text-[var(--text-primary)]">{currentTime}</dd>
+        </div>
+      </dl>
+
+      {/* Primary Action + Plain Emergency Links */}
+      <div className="space-y-4">
         <button
           onClick={sharePassWhatsApp}
           className="w-full h-11 btn-electric-mint text-xs active-press flex items-center justify-center gap-2"
         >
           <Share2 className="w-4 h-4" />
-          <span>{copied ? 'Live Trip Copied & Shared' : 'Share Live Trip on WhatsApp'}</span>
+          <span>{copied ? 'Live trip copied & shared' : 'Share live trip on WhatsApp'}</span>
         </button>
 
-        <div className="grid grid-cols-2 gap-2 text-xs">
+        <div className="flex items-center justify-center gap-6 text-xs">
           <a
             href="tel:080000527862"
-            className="h-10 px-3 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] font-mono font-semibold flex items-center justify-center gap-1.5 active-press"
+            className="flex items-center gap-1.5 font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] active-press"
           >
             <PhoneCall className="w-3.5 h-3.5 text-red-500" />
             <span>LASTMA</span>
@@ -248,10 +203,10 @@ export const CommutePass: React.FC = () => {
 
           <a
             href="tel:112"
-            className="h-10 px-3 rounded-xl bg-red-500/12 text-red-600 dark:text-red-400 font-mono font-semibold flex items-center justify-center gap-1.5 active-press"
+            className="flex items-center gap-1.5 font-medium text-red-600 dark:text-red-400 active-press"
           >
             <PhoneCall className="w-3.5 h-3.5" />
-            <span>LASEMA (112)</span>
+            <span>LASEMA 112</span>
           </a>
         </div>
       </div>

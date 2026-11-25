@@ -116,31 +116,14 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
             ))}
           </div>
 
-          <div className="flex items-center justify-between gap-2">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <div className="glass-pill-tag px-2.5 py-1 flex items-center gap-2 text-[10.5px] font-mono font-bold">
-                <span className="inline-flex items-center gap-1">
-                  <Star
-                    className="w-3 h-3 fill-current"
-                    style={{ color: 'var(--accent-signal)' }}
-                  />
-                  {driver.rating}
-                </span>
-                <span className="opacity-40">|</span>
-                <span className="inline-flex items-center gap-1">
-                  <Clock className="w-3 h-3 opacity-80" />
-                  {driver.corridor.departure_time}
-                </span>
-              </div>
-
-              {matchPercent !== undefined && (
-                <div
-                  className="glass-pill-tag px-2.5 py-1 text-[10px] font-mono font-black tracking-tight truncate"
-                  title={matchReason}
-                >
-                  {matchPercent}% match
-                </div>
-              )}
+          <div className="flex items-center justify-between gap-2 text-white">
+            <div className="flex items-center gap-2 text-xs font-mono font-medium drop-shadow-xs min-w-0 truncate">
+              <span className="inline-flex items-center gap-1">
+                <Star className="w-3 h-3 fill-current text-[#D1835E]" />
+                {driver.rating}
+              </span>
+              <span className="opacity-50">·</span>
+              <span>{driver.corridor.departure_time}</span>
             </div>
 
             <button
@@ -150,78 +133,29 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({
                 triggerHaptic('tap');
                 setShowTrustModal(true);
               }}
-              className="w-8 h-8 rounded-full bg-white/95 text-[#0B0C0E] flex items-center justify-center shadow-md active-press flex-shrink-0"
-              title="Open Verification Dossier"
-              aria-label="Open Verification Dossier"
+              className="p-1.5 text-white/90 hover:text-white active-press flex-shrink-0"
+              title="Driver details"
+              aria-label="Driver details"
             >
               <Info className="w-4 h-4" />
             </button>
           </div>
         </div>
 
-        {/* SLIDE 0: Clean Portrait Overview */}
+        {/* SLIDE 0: Clean Editorial Portrait Overview */}
         {activeSlide === 0 && (
-          <div className="absolute bottom-4 left-4 right-4 z-20 space-y-2.5">
-            <div className="flex items-center justify-between gap-2">
-              <div className="min-w-0">
-                <span className="text-xs font-extrabold text-white/95 block truncate">
-                  {driver.name}
-                  <span className="text-white/65 font-semibold">
-                    {' '}
-                    · {driver.employer}
-                  </span>
-                </span>
-              </div>
-              <div className="flex items-center -space-x-1.5 flex-shrink-0">
-                <span
-                  className="w-5 h-5 rounded-full text-[8px] font-black flex items-center justify-center ring-1 ring-black/40"
-                  style={{
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                  }}
-                  title={driver.employer}
-                >
-                  {driver.employer.slice(0, 2).toUpperCase()}
-                </span>
-                <span
-                  className="w-5 h-5 rounded-full bg-white text-[#0B0C0E] text-[8px] font-mono font-black flex items-center justify-center ring-1 ring-black/40"
-                  title="Section 44 Verified"
-                >
-                  S44
-                </span>
-              </div>
-            </div>
-
-            <h2 className="font-display text-[19px] font-black text-white leading-[1.15] tracking-tight line-clamp-2">
-              {driver.trip_purpose ||
-                `Daily ${driver.corridor.origin.split('/')[0].trim()} to ${driver.corridor.destination.split('(')[0].trim()} carpool`}
+          <div className="absolute bottom-5 left-5 right-5 z-20 space-y-1 text-white">
+            <h2 className="font-display text-2xl font-bold text-white leading-tight tracking-tight truncate">
+              {driver.name}
             </h2>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {portraitTags.map((tag, idx) => (
-                <span
-                  key={idx}
-                  className="glass-pill-tag px-2.5 py-1 text-[10px] font-bold whitespace-nowrap"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
+            <p className="text-xs text-white/85 truncate">
+              {driver.employer} · {driver.vehicle.make} {driver.vehicle.model}
+            </p>
 
-            <div className="flex items-center justify-between gap-2 text-[10.5px] font-medium text-white/80">
-              <div className="flex items-center gap-1.5 min-w-0">
-                <MapPin
-                  className="w-3 h-3 flex-shrink-0"
-                  style={{ color: 'var(--accent-signal)' }}
-                />
-                <span className="truncate">
-                  {selectedSafeZone.name} → {driver.corridor.destination.split('(')[0].trim()}
-                </span>
-              </div>
-              <span className="text-[9.5px] font-mono uppercase tracking-wider text-white/55 flex-shrink-0">
-                Tap for more
-              </span>
-            </div>
+            <p className="text-xs text-white/70 truncate pt-0.5">
+              {selectedSafeZone.name} → {driver.corridor.destination.split('(')[0].trim()} · {driver.corridor.available_seats} seats
+            </p>
           </div>
         )}
 

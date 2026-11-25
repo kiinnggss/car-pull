@@ -4,31 +4,31 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
-  --bg-canvas: #F6F7F9;
-  --bg-sheet: #FFFFFF;
-  --bg-subtle: #EEF0F4;
-  --text-primary: #0F172A;
-  --text-secondary: #5B6475;
-  --accent-volt: #0F172A;
-  --accent-primary: #0F172A;
-  --accent-primary-fg: #FFFFFF;
-  --accent-signal: #2563EB;
-  --border-subtle: rgba(15, 23, 42, 0.09);
+  --bg-canvas: #ECECE8;
+  --bg-sheet: #F5F4F0;
+  --bg-subtle: #E4E3DD;
+  --text-primary: #161616;
+  --text-secondary: #5A5751;
+  --accent-volt: #161616;
+  --accent-primary: #161616;
+  --accent-primary-fg: #F5F4F0;
+  --accent-signal: #B86544;
+  --border-subtle: rgba(22, 22, 22, 0.11);
   --card-border-width: 1px;
   --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .dark {
-  --bg-canvas: #0B0F17;
-  --bg-sheet: #131924;
-  --bg-subtle: #1C2433;
-  --text-primary: #F1F5F9;
-  --text-secondary: #94A3B8;
-  --accent-volt: #3B82F6;
-  --accent-primary: #3B82F6;
-  --accent-primary-fg: #FFFFFF;
-  --accent-signal: #60A5FA;
-  --border-subtle: rgba(241, 245, 249, 0.1);
+  --bg-canvas: #20150F;
+  --bg-sheet: #261B14;
+  --bg-subtle: #33251D;
+  --text-primary: #F2EFEA;
+  --text-secondary: #A29D98;
+  --accent-volt: #F2EFEA;
+  --accent-primary: #F2EFEA;
+  --accent-primary-fg: #20150F;
+  --accent-signal: #C84B31;
+  --border-subtle: rgba(162, 157, 152, 0.18);
   --card-border-width: 1px;
 }
 
@@ -44,80 +44,55 @@ body {
 
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-outfit), var(--font-jakarta), sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
 }
 
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Clean Editorial Card Surface */
+/* Modal & Sheet Surface (used for overlays/dialogs, not stacked cards) */
 .floating-surface {
   background: var(--bg-sheet);
   color: var(--text-primary);
-  border-radius: 18px;
-  border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 6px 18px -8px rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 12px 32px -12px rgba(15, 23, 42, 0.16);
 }
 
 .dark .floating-surface {
-  background: var(--bg-sheet);
+  background: #12161F;
   color: var(--text-primary);
-  border-radius: 18px;
-  border: var(--card-border-width, 1px) solid var(--border-subtle);
-  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.55);
+  border-radius: 20px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.65);
 }
 
-[data-theme="paw-cream"] .floating-surface {
-  box-shadow: 3px 3px 0px #1A1412;
-}
-
-/* Primary Accent Card Surface */
+/* Primary Accent Surface */
 .volt-surface {
   background: var(--accent-primary);
   color: var(--accent-primary-fg);
-  border-radius: 18px;
-  border: var(--card-border-width, 1px) solid transparent;
-  box-shadow: 0 8px 20px -10px color-mix(in srgb, var(--accent-primary) 45%, transparent);
-}
-
-[data-theme="paw-cream"] .volt-surface {
-  box-shadow: 3px 3px 0px #1A1412;
-}
-
-/* Warm Signal Amber Quote Block */
-.amber-quote-surface {
-  background: linear-gradient(145deg, #F59E0B 0%, #D97706 100%);
-  color: #FFFFFF;
   border-radius: 16px;
 }
 
-/* Subtle Frosted Overlay Tag for Photo Cards */
+/* Subtle Frosted Overlay for Photo Cards */
 .glass-pill-tag {
-  background: rgba(15, 23, 42, 0.58);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #FFFFFF;
-  border-radius: 8px;
+  border-radius: 9999px;
 }
 
-/* Subtle Floating Control */
+/* Flat Minimal Pill */
 .floating-pill {
   background: var(--bg-sheet);
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
 }
 
-.dark .floating-pill {
-  background: var(--bg-sheet);
-  border: 1px solid var(--border-subtle);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-}
-
-/* Native Bottom Navigation Bar */
+/* Native Bottom Tab Bar */
 .floating-dock {
-  background: color-mix(in srgb, var(--bg-sheet) 94%, transparent);
+  background: color-mix(in srgb, var(--bg-sheet) 95%, transparent);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-top: 1px solid var(--border-subtle);
@@ -130,42 +105,28 @@ h1, h2, h3, h4, .font-display {
 }
 
 /* Primary Action Button */
-.btn-electric-mint {
-  background: var(--accent-primary);
-  color: var(--accent-primary-fg);
-  border-radius: 12px;
-  font-weight: 700;
-  transition: transform 140ms var(--ease-out-expo), opacity 140ms var(--ease-out-expo);
-}
-
-.btn-electric-mint:hover {
-  opacity: 0.92;
-}
-
+.btn-electric-mint,
 .btn-volt {
   background: var(--accent-primary);
   color: var(--accent-primary-fg);
   border-radius: 12px;
-  font-weight: 700;
+  font-weight: 600;
   transition: transform 140ms var(--ease-out-expo), opacity 140ms var(--ease-out-expo);
 }
 
+.btn-electric-mint:hover,
 .btn-volt:hover {
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
-/* Nigerian License Plate Badge */
+/* Plain Inline License Plate */
 .plate-badge {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.04em;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 11px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background: var(--bg-subtle);
-  color: var(--text-primary);
-  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
 }
 
 /* Tactile Press Feedback */

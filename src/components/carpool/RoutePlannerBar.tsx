@@ -76,44 +76,33 @@ export const RoutePlannerBar: React.FC = () => {
 
   return (
     <>
-      <div className="w-full max-w-[404px] mx-auto px-3.5 pt-1 mb-2 flex-shrink-0 space-y-2">
-        {/* Clean Route Bar */}
-        <div className="floating-surface rounded-xl p-1.5 pl-3 flex items-center justify-between gap-2">
+      <div className="w-full px-5 py-2.5 mb-1 flex-shrink-0 border-b border-[var(--border-subtle)]">
+        {/* Single Clean Inline Route Line */}
+        <div className="flex items-center justify-between gap-3">
           <button
             onClick={() => {
               triggerHaptic('tap');
               setSelectingType('origin');
               setShowRouteModal(true);
             }}
-            className="flex-1 min-w-0 text-left flex items-center gap-2 active-press"
+            className="flex-1 min-w-0 text-left flex items-center gap-1.5 text-[13px] font-semibold active-press"
             title="Edit pickup and destination"
           >
-            <span
-              className="w-2 h-2 rounded-full flex-shrink-0"
-              style={{ backgroundColor: 'var(--accent-signal)' }}
-            />
-            <div className="min-w-0 flex-1 flex items-center gap-1.5 text-xs font-semibold truncate">
-              <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
-              <span style={{ color: 'var(--text-secondary)' }}>→</span>
-              <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
-            </div>
+            <span className="truncate">{riderRoute.origin.split('/')[0].trim()}</span>
+            <span className="text-[var(--text-secondary)]">→</span>
+            <span className="truncate">{riderRoute.destination.split('(')[0].trim()}</span>
           </button>
 
-          {/* Right Actions: Schedule & Safe Hub */}
-          <div className="flex items-center gap-1 flex-shrink-0">
+          <div className="flex items-center gap-3 flex-shrink-0 text-xs">
             <button
               onClick={() => {
                 triggerHaptic('tap');
                 setShowDeparturesSheet(true);
               }}
-              className="h-7 px-2 rounded-lg text-[11px] font-mono font-semibold flex items-center gap-1 active-press"
-              style={{
-                backgroundColor: 'var(--bg-subtle)',
-                color: 'var(--text-primary)',
-              }}
+              className="flex items-center gap-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] font-mono active-press"
               title="View Departure Schedule"
             >
-              <Clock className="w-3 h-3 opacity-75" />
+              <Clock className="w-3.5 h-3.5" />
               <span>{drivers.length}</span>
             </button>
 
@@ -122,156 +111,14 @@ export const RoutePlannerBar: React.FC = () => {
                 triggerHaptic('tap');
                 setShowHubModal(true);
               }}
-              className="h-7 px-2.5 rounded-lg text-[11px] font-semibold flex items-center gap-1 active-press"
-              style={{
-                backgroundColor: 'var(--accent-primary)',
-                color: 'var(--accent-primary-fg)',
-              }}
+              className="flex items-center gap-1 font-semibold active-press"
+              style={{ color: 'var(--accent-signal)' }}
               title="Select CCTV Safe Pickup Hub"
             >
-              <ShieldCheck className="w-3 h-3" />
+              <ShieldCheck className="w-3.5 h-3.5" />
               <span>Hub</span>
             </button>
           </div>
-        </div>
-
-        {/* Fast Commuter Filter Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic('tap');
-              resetDeckFilters();
-            }}
-            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
-            style={
-              allDefaultsActive
-                ? {
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                    borderColor: 'var(--accent-primary)',
-                  }
-                : {
-                    backgroundColor: 'var(--bg-sheet)',
-                    color: 'var(--text-secondary)',
-                    borderColor: 'var(--border-subtle)',
-                  }
-            }
-          >
-            All
-          </button>
-
-          {(
-            [
-              { id: 'morning', label: 'Morning' },
-              { id: 'evening', label: 'Evening' },
-              { id: 'leaving_now', label: 'Now' },
-            ] as const
-          ).map((item) => {
-            const active = deckFilters.timeWindow === item.id;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                onClick={() => {
-                  triggerHaptic('tap');
-                  setDeckFilters({
-                    timeWindow: active ? 'all' : item.id,
-                  });
-                }}
-                className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
-                style={
-                  active
-                    ? {
-                        backgroundColor: 'var(--accent-primary)',
-                        color: 'var(--accent-primary-fg)',
-                        borderColor: 'var(--accent-primary)',
-                      }
-                    : {
-                        backgroundColor: 'var(--bg-sheet)',
-                        color: 'var(--text-secondary)',
-                        borderColor: 'var(--border-subtle)',
-                      }
-                }
-              >
-                {item.label}
-              </button>
-            );
-          })}
-
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic('tap');
-              setDeckFilters({ femaleOnly: !deckFilters.femaleOnly });
-            }}
-            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
-            style={
-              deckFilters.femaleOnly
-                ? {
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                    borderColor: 'var(--accent-primary)',
-                  }
-                : {
-                    backgroundColor: 'var(--bg-sheet)',
-                    color: 'var(--text-secondary)',
-                    borderColor: 'var(--border-subtle)',
-                  }
-            }
-          >
-            Women
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic('tap');
-              setDeckFilters({
-                maxFareNgn: deckFilters.maxFareNgn === 1500 ? null : 1500,
-              });
-            }}
-            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
-            style={
-              deckFilters.maxFareNgn === 1500
-                ? {
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                    borderColor: 'var(--accent-primary)',
-                  }
-                : {
-                    backgroundColor: 'var(--bg-sheet)',
-                    color: 'var(--text-secondary)',
-                    borderColor: 'var(--border-subtle)',
-                  }
-            }
-          >
-            &le; ₦1.5k
-          </button>
-
-          <button
-            type="button"
-            onClick={() => {
-              triggerHaptic('tap');
-              setDeckFilters({ acOnly: !deckFilters.acOnly });
-            }}
-            className="h-7 px-2.5 rounded-lg text-[11px] font-semibold whitespace-nowrap border transition-colors active-press flex-shrink-0"
-            style={
-              deckFilters.acOnly
-                ? {
-                    backgroundColor: 'var(--accent-primary)',
-                    color: 'var(--accent-primary-fg)',
-                    borderColor: 'var(--accent-primary)',
-                  }
-                : {
-                    backgroundColor: 'var(--bg-sheet)',
-                    color: 'var(--text-secondary)',
-                    borderColor: 'var(--border-subtle)',
-                  }
-            }
-          >
-            AC
-          </button>
         </div>
       </div>
 

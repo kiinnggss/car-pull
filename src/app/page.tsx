@@ -84,7 +84,7 @@ export default function Home() {
 
   if (!isAuthenticated) {
     return (
-      <main className="w-full max-w-[430px] min-h-screen sm:min-h-[820px] sm:max-h-[92vh] sm:my-auto sm:rounded-[28px] bg-[var(--bg-canvas)] sm:border sm:border-[var(--border-subtle)] relative flex flex-col justify-between sm:shadow-2xl text-[var(--text-primary)] overflow-x-hidden">
+      <main className="w-full max-w-[430px] min-h-screen sm:min-h-[820px] sm:max-h-[92vh] sm:my-auto sm:rounded-2xl bg-[var(--bg-sheet)] sm:border sm:border-[var(--border-subtle)] relative flex flex-col justify-between sm:shadow-xl text-[var(--text-primary)] overflow-x-hidden">
         <AuthLanding />
         <ActionFeedbackBanner />
       </main>
@@ -96,7 +96,7 @@ export default function Home() {
   const isChatThreadOpen = activeTab === 'chats' && !!activeThreadId;
 
   return (
-    <main className="w-full max-w-[430px] h-screen h-[100dvh] sm:h-[844px] sm:max-h-[92vh] sm:my-auto sm:rounded-[28px] bg-[var(--bg-canvas)] sm:border sm:border-[var(--border-subtle)] relative flex flex-col justify-between sm:shadow-2xl text-[var(--text-primary)] overflow-hidden">
+    <main className="w-full max-w-[430px] h-screen h-[100dvh] sm:h-[844px] sm:max-h-[92vh] sm:my-auto sm:rounded-2xl bg-[var(--bg-sheet)] sm:border sm:border-[var(--border-subtle)] relative flex flex-col justify-between sm:shadow-xl text-[var(--text-primary)] overflow-hidden">
       {/* Top Application Bar (Hidden when inside full-screen chat thread) */}
       {!isChatThreadOpen && <Header />}
 

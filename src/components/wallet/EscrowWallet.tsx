@@ -71,89 +71,55 @@ export const EscrowWallet: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[404px] mx-auto pb-24 px-3 space-y-3.5 animate-in fade-in pt-1">
-      {/* 1. Uber Green Inspired Volt Escrow Hero Card */}
-      <div className="volt-surface rounded-[32px] p-5 space-y-4">
-        <div className="flex items-center justify-between">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] text-[10px] font-mono font-bold uppercase">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            ZERO-CASH ESCROW
-          </div>
-
+    <div className="w-full pb-20 px-5 pt-4 space-y-6 animate-in fade-in">
+      {/* Open Balance Header */}
+      <div className="space-y-4 pb-5 border-b border-[var(--border-subtle)]">
+        <div className="flex items-baseline justify-between">
+          <h2 className="text-xl font-display font-bold text-[var(--text-primary)]">
+            Wallet
+          </h2>
           <button
             onClick={() => setShowInfoModal(true)}
-            className="px-3 py-1 rounded-full bg-white/80 hover:bg-white text-[#0B0C0E] text-xs font-extrabold flex items-center gap-1 active-press"
-            title="How Escrow Payouts Work"
+            className="text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] active-press"
           >
-            <HelpCircle className="w-3.5 h-3.5" />
-            <span>Rules</span>
+            How it works
           </button>
         </div>
 
-        {/* Concentric Balance Display */}
-        <div className="flex items-end justify-between gap-2 pt-1">
+        <div className="flex items-end justify-between gap-4">
           <div>
-            <span className="text-[10px] font-mono uppercase tracking-wider font-bold opacity-70 block">
-              AVAILABLE TO WITHDRAW
-            </span>
-            <span className="text-3xl font-display font-black font-mono tabular-nums tracking-tight block mt-0.5">
+            <span className="text-xs text-[var(--text-secondary)] block">Available</span>
+            <span className="text-3xl font-display font-bold font-mono tabular-nums tracking-tight block mt-0.5 text-[var(--text-primary)]">
               {formatNgn(escrowBalanceNgn)}
             </span>
           </div>
 
-          <div className="text-right bg-[#0B0C0E]/10 px-3.5 py-2 rounded-2xl">
-            <span className="text-[9px] font-mono uppercase font-bold opacity-75 flex items-center justify-end gap-1">
-              <Lock className="w-2.5 h-2.5" /> HELD IN TRIPS
-            </span>
-            <span className="text-base font-black font-mono tabular-nums block">
+          <div className="text-right">
+            <span className="text-xs text-[var(--text-secondary)] block">Held in trips</span>
+            <span className="text-base font-mono tabular-nums font-semibold block mt-0.5" style={{ color: 'var(--accent-signal)' }}>
               {formatNgn(heldEscrowNgn)}
             </span>
           </div>
         </div>
 
-        {/* Uber Green Bottom Pill Bar Inside Hero */}
-        <div className="bg-[var(--bg-sheet)] text-[var(--text-primary)] rounded-full p-1.5 pl-3 flex items-center justify-between gap-2 border border-[var(--border-subtle)]">
-          <button
-            onClick={() => topUpWallet(10000)}
-            className="flex items-center gap-1.5 py-2 px-3 rounded-full text-xs font-extrabold hover:bg-[var(--bg-subtle)] active-press"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>Top-up (+₦10k)</span>
-          </button>
-
+        <div className="flex items-center gap-3 pt-1">
           <button
             onClick={() => {
               setErrorMessage('');
               setShowWithdrawModal(true);
             }}
-            className="py-2.5 px-5 rounded-full btn-electric-mint text-xs font-extrabold flex items-center gap-1.5 active-press"
+            className="flex-1 h-11 btn-electric-mint text-xs flex items-center justify-center gap-1.5 active-press"
           >
             <ArrowUpRight className="w-4 h-4" />
-            <span>Withdraw Now</span>
+            <span>Withdraw</span>
           </button>
-        </div>
-      </div>
 
-      {/* 2. Uber Green "Payment Method" Card */}
-      <div className="floating-surface rounded-[28px] p-4 space-y-2.5">
-        <span className="text-xs font-extrabold text-[var(--text-primary)] block">
-          Payout Rail
-        </span>
-        <div className="p-3.5 rounded-2xl bg-[var(--bg-subtle)] flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center -space-x-1.5">
-              <span className="w-5 h-5 rounded-full bg-red-500 inline-block" />
-              <span className="w-5 h-5 rounded-full bg-[#FF9F0A] opacity-90 inline-block" />
-            </div>
-            <span className="text-xs font-mono font-bold text-[var(--text-primary)]">
-              NIBSS •••• 1024
-            </span>
-          </div>
           <button
-            onClick={() => setShowWithdrawModal(true)}
-            className="text-[10px] font-mono uppercase font-extrabold text-[var(--text-secondary)] dark:text-[var(--accent-primary)]"
+            onClick={() => topUpWallet(10000)}
+            className="h-11 px-4 rounded-xl border border-[var(--border-subtle)] text-xs font-semibold text-[var(--text-primary)] flex items-center justify-center gap-1.5 active-press"
           >
-            CHANGE
+            <PlusCircle className="w-4 h-4" />
+            <span>Add ₦10k</span>
           </button>
         </div>
       </div>

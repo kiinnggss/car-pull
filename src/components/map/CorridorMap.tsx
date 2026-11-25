@@ -482,14 +482,14 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
         </button>
       )}
 
-      {/* Bottom Order Sheet Card */}
+      {/* Flush Edge-to-Edge Bottom Sheet */}
       {!isBackgroundUnderlay && selectedRide && !bookedSuccessRide && (
-        <div className="absolute bottom-3 left-3 right-3 z-30 max-w-[404px] mx-auto animate-in slide-in-from-bottom duration-200">
-          <div className="floating-surface rounded-2xl p-3.5 space-y-2.5 text-[var(--text-primary)]">
-            {/* Driver Identity & Rating */}
+        <div className="absolute bottom-0 left-0 right-0 z-30 animate-in slide-in-from-bottom duration-200">
+          <div className="bg-[var(--bg-sheet)] border-t border-[var(--border-subtle)] rounded-t-2xl px-5 pt-4 pb-4 space-y-3 text-[var(--text-primary)] shadow-lg">
+            {/* Driver Identity & Plate */}
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-3 min-w-0">
-                <div className="relative w-11 h-11 rounded-full bg-[var(--bg-sheet)] text-[var(--text-primary)] flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 overflow-hidden">
+                <div className="relative w-10 h-10 rounded-full bg-[var(--bg-subtle)] text-[var(--text-primary)] flex items-center justify-center font-mono font-bold text-xs flex-shrink-0 overflow-hidden">
                   <span>{selectedRide.driverName.split(' ').map((n) => n[0]).join('')}</span>
                   <img
                     src={selectedRide.driverAvatar}
@@ -501,116 +501,91 @@ export const CorridorMap: React.FC<CorridorMapProps> = ({ isBackgroundUnderlay =
                   />
                 </div>
                 <div className="min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <h4 className="text-sm font-display font-black truncate">
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-sm font-bold truncate">
                       {selectedRide.driverName}
                     </h4>
-                    <span className="px-2 py-0.5 rounded-full bg-[var(--accent-primary)] text-[var(--accent-primary-fg)] text-[10px] font-mono font-black flex-shrink-0">
+                    <span className="text-xs font-mono text-[var(--text-secondary)]">
                       ★ {selectedRide.driverRating}
                     </span>
                   </div>
-                  <span className="text-[11px] text-[var(--text-secondary)] font-medium truncate block">
-                    {selectedRide.driverRole}
+                  <span className="text-xs text-[var(--text-secondary)] truncate block">
+                    {selectedRide.driverRole} · <span className="font-mono">{selectedRide.vehicle.plateNumber}</span>
                   </span>
                 </div>
               </div>
 
-              <span className="plate-badge flex-shrink-0">
-                {selectedRide.vehicle.plateNumber}
+              <span className="text-xs font-mono font-semibold text-emerald-600 dark:text-emerald-400 flex-shrink-0 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                {formatEtaLabel(
+                  estimateEtaMinutes(
+                    parseBaseEtaMinutes(
+                      selectedRide.departureTime,
+                      Math.max(5, selectedRide.pickupWalkMinutes + 5)
+                    ),
+                    rideProgress[selectedRide.id] ?? 0.12
+                  )
+                )}
               </span>
             </div>
 
-            {/* Uber Green Connected Dotted Pickup -> Dropoff Timeline */}
-            <div className="p-3 rounded-[22px] bg-[var(--bg-subtle)] flex items-stretch gap-3 text-xs">
-              <div className="flex flex-col items-center justify-between py-1">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#0B0C0E] dark:bg-[var(--accent-primary)]" />
-                <div className="w-0.5 flex-1 my-1 border-l-2 border-dotted border-[#525866]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FF9F0A]" />
+            {/* Borderless Route Line + Progress */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-medium truncate">
+                  {selectedRide.pickupStreetCorner} → {selectedRide.destination}
+                </span>
+                <span className="text-[11px] text-[var(--text-secondary)] flex-shrink-0 ml-2">
+                  ~{selectedRide.pickupWalkMinutes}m walk
+                </span>
               </div>
-
-              <div className="flex-1 min-w-0 space-y-1.5">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-extrabold text-[var(--text-primary)] truncate">
-                    {selectedRide.pickupStreetCorner}
-                  </span>
-                  <span className="text-[10px] font-mono font-bold text-[var(--text-secondary)] flex-shrink-0">
-                    ~{selectedRide.pickupWalkMinutes}m walk
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-bold text-[var(--text-secondary)] truncate">
-                    {selectedRide.destination}
-                  </span>
-                  <span className="text-[10px] font-mono font-bold text-[#FF9F0A] flex-shrink-0 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <Clock className="w-3 h-3" />
-                    {formatEtaLabel(
-                      estimateEtaMinutes(
-                        parseBaseEtaMinutes(
-                          selectedRide.departureTime,
-                          Math.max(5, selectedRide.pickupWalkMinutes + 5)
-                        ),
-                        rideProgress[selectedRide.id] ?? 0.12
-                      )
-                    )}
-                  </span>
-                </div>
-
-                {/* Live Corridor Movement Bar */}
-                <div className="pt-1 flex items-center gap-2">
-                  <div className="flex-1 h-1.5 rounded-full bg-[var(--bg-sheet)] overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-1000 ease-linear"
-                      style={{ width: `${Math.round((rideProgress[selectedRide.id] ?? 0.12) * 100)}%` }}
-                    />
-                  </div>
-                  <span className="text-[9px] font-mono font-bold text-[var(--text-secondary)] tabular-nums">
-                    LIVE {Math.round((rideProgress[selectedRide.id] ?? 0.12) * 100)}%
-                  </span>
-                </div>
+              <div className="h-1 rounded-full bg-[var(--bg-subtle)] overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-[var(--accent-primary)] transition-all duration-1000 ease-linear"
+                  style={{ width: `${Math.round((rideProgress[selectedRide.id] ?? 0.12) * 100)}%` }}
+                />
               </div>
             </div>
 
-            {/* Price & Reserve Bar */}
-            <div className="flex items-center gap-2">
-              <div className="flex-1 bg-[var(--bg-subtle)] rounded-xl p-1.5 pl-3 flex items-center justify-between">
-                <div>
-                  <span className="text-base font-bold font-mono tabular-nums text-[var(--text-primary)] block leading-none">
-                    {formatNgn(selectedRide.fuelSplitNgn)}
-                  </span>
-                  <span className="text-[10px] font-medium text-[var(--text-secondary)]">
-                    {selectedRide.availableSeats} seats open
-                  </span>
-                </div>
+            {/* Clean Price & Reserve Row */}
+            <div className="flex items-center justify-between gap-3 pt-1">
+              <div>
+                <span className="text-base font-bold font-mono tabular-nums text-[var(--text-primary)] block leading-none">
+                  {formatNgn(selectedRide.fuelSplitNgn)}
+                </span>
+                <span className="text-[11px] text-[var(--text-secondary)]">
+                  {selectedRide.availableSeats} seats open
+                </span>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => {
+                    triggerHaptic('tap');
+                    const threadId = getOrCreateThreadForDriver({
+                      id: selectedRide.driverId,
+                      name: selectedRide.driverName,
+                      avatar: selectedRide.driverAvatar,
+                      plateNumber: selectedRide.vehicle.plateNumber,
+                      safeZoneName: selectedRide.pickupStreetCorner,
+                      employer: selectedRide.driverRole,
+                    });
+                    setActiveThreadId(threadId);
+                    setActiveTab('chats');
+                  }}
+                  className="p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] active-press"
+                  title="Chat with Driver"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                </button>
 
                 <button
                   onClick={() => handleBookRide(selectedRide)}
-                  className="h-9 px-4 btn-electric-mint text-xs active-press"
+                  className="h-10 px-5 btn-electric-mint text-xs active-press"
                 >
                   Reserve seat
                 </button>
               </div>
-
-              <button
-                onClick={() => {
-                  triggerHaptic('tap');
-                  const threadId = getOrCreateThreadForDriver({
-                    id: selectedRide.driverId,
-                    name: selectedRide.driverName,
-                    avatar: selectedRide.driverAvatar,
-                    plateNumber: selectedRide.vehicle.plateNumber,
-                    safeZoneName: selectedRide.pickupStreetCorner,
-                    employer: selectedRide.driverRole,
-                  });
-                  setActiveThreadId(threadId);
-                  setActiveTab('chats');
-                }}
-                className="w-11 h-11 rounded-xl bg-[var(--bg-subtle)] text-[var(--text-primary)] border border-[var(--border-subtle)] flex items-center justify-center active-press flex-shrink-0"
-                title="Chat with Driver"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </button>
             </div>
           </div>
         </div>

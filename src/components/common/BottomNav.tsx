@@ -30,8 +30,8 @@ export const BottomNav: React.FC = () => {
   ];
 
   return (
-    <nav className="w-full flex-shrink-0 z-40 floating-dock px-2 pt-1.5 pb-2">
-      <div className="grid grid-cols-6 gap-1">
+    <nav className="w-full flex-shrink-0 z-40 floating-dock px-2 pt-2 pb-2.5">
+      <div className="grid grid-cols-6">
         {navItems.map((item) => {
           const Icon = item.icon;
           const isActive = activeTab === item.id;
@@ -44,16 +44,14 @@ export const BottomNav: React.FC = () => {
                   triggerHaptic('warning');
                   setActiveTab('sos');
                 }}
-                className={`relative flex flex-col items-center justify-center py-1.5 rounded-xl transition-colors active-press ${
+                className={`relative flex flex-col items-center justify-center py-1 transition-colors active-press ${
                   isActive || activeIncident
-                    ? 'bg-red-600 text-white'
-                    : 'text-red-600 dark:text-red-400 hover:bg-red-500/10'
+                    ? 'text-red-600 dark:text-red-400 font-bold'
+                    : 'text-red-500/75 dark:text-red-400/75'
                 }`}
               >
-                <Icon className="w-[18px] h-[18px] stroke-[2.1]" />
-                <span className="text-[10px] font-semibold mt-0.5 leading-none">
-                  {item.label}
-                </span>
+                <Icon className="w-[19px] h-[19px] stroke-[2]" />
+                <span className="text-[10px] mt-1 leading-none">{item.label}</span>
               </button>
             );
           }
@@ -65,35 +63,25 @@ export const BottomNav: React.FC = () => {
                 triggerHaptic('tap');
                 setActiveTab(item.id);
               }}
-              className="relative flex flex-col items-center justify-center py-1.5 rounded-xl transition-colors active-press"
-              style={
-                isActive
-                  ? {
-                      color: 'var(--accent-primary)',
-                      backgroundColor: 'var(--bg-subtle)',
-                    }
-                  : { color: 'var(--text-secondary)' }
-              }
+              className="relative flex flex-col items-center justify-center py-1 transition-colors active-press"
+              style={{
+                color: isActive ? 'var(--accent-signal)' : 'var(--text-secondary)',
+              }}
             >
               <div className="relative">
-                <Icon className={`w-[18px] h-[18px] ${isActive ? 'stroke-[2.4]' : 'stroke-[1.9]'}`} />
+                <Icon className={`w-[19px] h-[19px] ${isActive ? 'stroke-[2.3]' : 'stroke-[1.7]'}`} />
                 {item.badge !== undefined && (
                   <span
-                    className="absolute -top-1.5 -right-2.5 min-w-[15px] h-[15px] px-1 rounded-full text-[9px] font-mono tabular-nums font-bold flex items-center justify-center"
+                    className="absolute -top-1 -right-2 min-w-[14px] h-[14px] px-1 rounded-full text-[9px] font-mono tabular-nums font-bold flex items-center justify-center text-white"
                     style={{
-                      backgroundColor: 'var(--accent-primary)',
-                      color: 'var(--accent-primary-fg)',
+                      backgroundColor: 'var(--accent-signal)',
                     }}
                   >
                     {item.badge}
                   </span>
                 )}
               </div>
-              <span
-                className={`text-[10px] mt-0.5 leading-none ${
-                  isActive ? 'font-bold' : 'font-medium'
-                }`}
-              >
+              <span className={`text-[10px] mt-1 leading-none ${isActive ? 'font-semibold' : 'font-normal'}`}>
                 {item.label}
               </span>
             </button>
